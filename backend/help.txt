@@ -1,0 +1,12 @@
+ClientModel.findById(clientId)
+  .populate('sales') // Esto llenará la propiedad sales con los documentos de venta completos en lugar de solo los _id
+  .exec((error, client) => {
+    if (error) {
+      // Manejar el error
+    } else {
+      // Aquí, client.sales será un array de documentos de ventas, no solo _id
+    }
+  });
+
+
+  /// METODO PARA TRAER TODAS LAS SALES Y NO SOLO LOS ID

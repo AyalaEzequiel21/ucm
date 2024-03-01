@@ -1,21 +1,21 @@
-import { Schema, model } from "mongoose";
-import { ClientMongo } from "../schemas/ClientSchema";
+import mongoose, { Schema, model } from "mongoose";
+import { ClientMongoType } from "../schemas/ClientSchema";
 import { categoriesArray } from "../utilities/types/ClientCategory";
 
-const clientSchema = new Schema<ClientMongo>(
+const clientSchema = new Schema<ClientMongoType>(
     {
         fullname: {
             required: true,
             type: String,
-            min: 5,
-            max: 15
+            minLenth: 4,
+            maxLenth: 15
         },
         phone: {
             required: true,
             type: String,
             unique: true,
-            min: 8,
-            max: 15
+            minLenth: 8,
+            maxLenth: 15
         },
         category: {
             required: true,
@@ -29,6 +29,16 @@ const clientSchema = new Schema<ClientMongo>(
             type: Boolean,
             required: true
         },
+        sales: [{
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: "Sale", 
+            default: new Array
+        }],
+        payments: [{
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: "Payment", 
+            default: new Array
+        }], 
         is_active: {
             type: Boolean,
             default: true

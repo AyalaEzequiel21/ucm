@@ -16,9 +16,11 @@ type ClientType = z.infer<typeof newClientSchema>
 const clientMongoSchema = newClientSchema.extend({
     _id: validateObjectId().optional(),
     balance: z.number().optional(),
+    sales: z.array(z.string()).optional(),
+    payments: z.array(z.string()).optional(),
     is_active: z.boolean().optional()
 })
 
-type ClientMongo = z.infer<typeof clientMongoSchema>
+type ClientMongoType = z.infer<typeof clientMongoSchema>
 
-export {newClientSchema, ClientType, clientMongoSchema, ClientMongo}
+export {newClientSchema, ClientType, clientMongoSchema, ClientMongoType}
