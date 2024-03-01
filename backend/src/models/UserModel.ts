@@ -1,9 +1,6 @@
 import { Schema, model } from "mongoose";
 import { UserType } from "../schemas/AuthSchema";
-import { UserRole } from "../schemas/UserRole";
-
-const rolesArray = UserRole.options.map(option => option); // ARRAY WITH EVERYONE ROLES
-
+import { rolesArray } from "../utilities/types/UserRole";
 
 const userSchema = new Schema<UserType>(
     {
