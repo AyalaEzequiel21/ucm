@@ -23,6 +23,10 @@ const productSchema = new Schema<ProductMongoType>(
             type: Boolean,
             default: true
         }
+    },
+    {
+        versionKey: false,
+        timestamps: true
     }
 )
 
