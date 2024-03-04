@@ -18,7 +18,7 @@ const detailSaleSchema = new Schema<DetailSaleType>(
             required: true,
             min: 0.1
         },
-        partial_result: {
+        partial_total: {
             type: Number,
             required: true,
             min: 0.1

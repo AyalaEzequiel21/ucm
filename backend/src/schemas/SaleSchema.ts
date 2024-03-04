@@ -8,7 +8,7 @@ const detailSaleSchema = z.object({
     product_id: validateObjectId().optional(),
     product_name: z.string(),
     quantity: validateAmount(),
-    partial_result: validateAmount()
+    partial_total: validateAmount()
 })
 
 type DetailSaleType = z.infer<typeof detailSaleSchema>
@@ -27,7 +27,6 @@ const newSaleSchema = z.object({
 type SaleType = z.infer<typeof newSaleSchema>
 
 // SALE MONGO
-
 const saleMongoSchema = newSaleSchema.extend({
     _id: validateObjectId()
 })

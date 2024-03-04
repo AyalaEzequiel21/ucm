@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 import { SupplierMongoSchema } from "../schemas/SupplierSchema";
 
 const supplierSchema = new Schema<SupplierMongoSchema>(
@@ -35,3 +35,7 @@ const supplierSchema = new Schema<SupplierMongoSchema>(
         timestamps: true
     }
 )
+
+const SupplierModel = model("Supplier", supplierSchema, "suppliers")
+
+export default SupplierModel

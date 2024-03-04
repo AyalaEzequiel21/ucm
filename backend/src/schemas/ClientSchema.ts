@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { ClientCategory } from "../utilities/types/ClientCategory";
 import { validateObjectId } from "../utilities/validateObjectId";
+import { saleMongoSchema } from "./SaleSchema";
+import { clientPaymentMongoSchema } from "./ClientPaymentSchema";
 
 // CLIENT
 const newClientSchema = z.object({
@@ -16,8 +18,8 @@ type ClientType = z.infer<typeof newClientSchema>
 const clientMongoSchema = newClientSchema.extend({
     _id: validateObjectId().optional(),
     balance: z.number().optional(),
-    sales: z.array(z.string()).optional(),
-    payments: z.array(z.string()).optional(),
+    sales: z.array(saleMongoSchema).optional(),
+    payments: z.array(clientPaymentMongoSchema).optional(),
     is_active: z.boolean().optional()
 })
 

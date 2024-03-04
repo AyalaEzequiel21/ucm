@@ -6,6 +6,7 @@ const productSchema = new Schema<ProductMongoType>(
         product_name: {
             type: String,
             required: true,
+            unique: true,
             minlength: 5,
             maxlength: 18
         },
