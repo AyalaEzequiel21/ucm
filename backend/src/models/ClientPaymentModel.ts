@@ -18,6 +18,7 @@ const clientPaymentSchema = new Schema<ClientPaymentType>(
         },
         payment_method: {
             required: true,
+            type: String,
             enum: paymentMethodsArray
         },
         sale_id: {
@@ -35,6 +36,6 @@ const clientPaymentSchema = new Schema<ClientPaymentType>(
     }
 )
 
-const ClientPaymentModel = model("Client_payment", clientPaymentSchema, "client_payments")
+const ClientPaymentModel = model("ClientPayment", clientPaymentSchema, "clientPayments")
 
 export default ClientPaymentModel

@@ -17,6 +17,7 @@ const userSchema = new Schema<UserType>(
         },
         role: {
             required: true,
+            type: String,
             enum: rolesArray
         }
     },

@@ -19,6 +19,7 @@ const clientSchema = new Schema<ClientMongoType>(
         },
         category: {
             required: true,
+            type: String,
             enum: categoriesArray
         },
         balance: {

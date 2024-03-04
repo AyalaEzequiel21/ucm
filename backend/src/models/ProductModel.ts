@@ -19,6 +19,11 @@ const productSchema = new Schema<ProductMongoType>(
             type: Number,
             min: 0.1
         },
+        stock: {
+            required: true,
+            type: Number,
+            min: 1
+        },
         is_active: {
             type: Boolean,
             default: true
