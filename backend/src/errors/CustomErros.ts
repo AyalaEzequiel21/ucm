@@ -50,7 +50,6 @@ class CheckCredentialsError extends BadRequestError {
     }
 }
 
-
 // NOT AUTHORIZED
 class NotAuthorizedError extends CustomError {
     constructor() {
