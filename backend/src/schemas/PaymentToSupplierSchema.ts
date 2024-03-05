@@ -11,13 +11,13 @@ const newPaymentToSupplierSchema = z.object({
     total_payment: validateAmount()
 })
 
-type PaymentToSupplier = z.infer<typeof newPaymentToSupplierSchema>
+type PaymentToSupplierType = z.infer<typeof newPaymentToSupplierSchema>
 
 // PAYMENT TO SUPLLIER MONGO
 const paymentToSupplierMongoSchema = newPaymentToSupplierSchema.extend({
     _id: validateObjectId()
 })
 
-type PaymentToSupplierMongo = z.infer<typeof paymentToSupplierMongoSchema>
+type PaymentToSupplierMongoType = z.infer<typeof paymentToSupplierMongoSchema>
 
-export { newPaymentToSupplierSchema, PaymentToSupplier, paymentToSupplierMongoSchema, PaymentToSupplierMongo}
+export { newPaymentToSupplierSchema, PaymentToSupplierType, paymentToSupplierMongoSchema, PaymentToSupplierMongoType}
