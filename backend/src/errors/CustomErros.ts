@@ -27,6 +27,14 @@ class ResourceNotFoundError extends CustomError {
     }
 }
 
+// NOT AUTHENTICATED
+class AuthenticationError extends CustomError {
+    constructor() {
+        const message = `Verifica tus credenciales`
+        super("NOT_AUTHENTICATED", message, 404)
+    }
+}
+
 // BAD REQUEST
 class BadRequestError extends CustomError {
     constructor(details: string) {
