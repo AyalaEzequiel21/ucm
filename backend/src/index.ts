@@ -4,7 +4,7 @@ import "dotenv/config"
 import routes from "./routes"
 import mongoConnect from "./config/mongoConnect"
 import cookieParser from 'cookie-parser'
-import { ErrorHandler } from './middleware/ErrorMidd'
+import { errorHandler } from './middleware/ErrorMidd'
 
 const PORT = process.env.PORT || 3001
 
@@ -19,7 +19,7 @@ app.use(cors({
 app.use(cookieParser()) // activate the cookie options
 app.use(express.json({limit: "30mb"}))
 app.use('API-pradera', routes) // path for api and use the routes
-app.use(ErrorHandler)
+app.use(errorHandler)
 
 //  CONNECT TO DB
 mongoConnect().then(() => {
