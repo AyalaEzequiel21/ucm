@@ -11,8 +11,13 @@ const generateToken = (userCookie: UserCookieType) => {
 }
 
 const verifyToken = (jwt: string) => {
-    const isOk = verify(jwt, JWT_SECRET)
-    return isOk
+    try {
+        const decoded = verify(jwt, JWT_SECRET)
+        return decoded
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
 
 export { generateToken, verifyToken }

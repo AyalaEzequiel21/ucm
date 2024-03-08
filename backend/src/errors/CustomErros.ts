@@ -6,7 +6,7 @@ interface ICustomError {
     name: string
 }
 
-// GENERIC ERROR CLASS IMPLEMENTS THE INTERFCE
+// GENERIC ERROR CLASS IMPLEMENTS THE INTERFaCE
 class CustomError extends Error implements ICustomError {
     code: string
     status: number
@@ -48,13 +48,6 @@ class ResourceAlreadyExistsError extends CustomError {
     constructor(resourceName: string) {
         const message = `${resourceName} ya se encuentra registrado`
         super("RESOURCE_ALREADY_EXISTS", message, 400)
-    }
-}
-
-// CHECK CREDENTIALS
-class CheckCredentialsError extends BadRequestError {
-    constructor() {
-        super("Credenciales inválidas o incorrectas");
     }
 }
 
