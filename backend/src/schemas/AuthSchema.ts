@@ -24,6 +24,7 @@ type UserMongoType = z.infer<typeof userMongoSchema>
 // USER COOKIE
 const userCookieSchema = z.object({
     _id: validateObjectId(),
+    username: z.string().min(5),
     role: UserRole
 })
 
@@ -34,5 +35,6 @@ const loginDataSchema = z.object({
     username: z.string().min(5),
     password: z.string().min(8)
 })
+type UserLoginType = z.infer<typeof loginDataSchema>
 
-export { newUserSchema, UserType, userMongoSchema, UserMongoType, userCookieSchema, UserCookieType, loginDataSchema }
+export { newUserSchema, UserType, userMongoSchema, UserMongoType, userCookieSchema, UserCookieType, loginDataSchema, UserLoginType }
