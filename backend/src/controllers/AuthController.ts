@@ -99,3 +99,5 @@ const deleteUserById = async (req: Request, res: Response, next: NextFunction) =
         next(e)
     }
 }
+
+export { registerUser, login, logout, updateUser, findAllUsers, findUserById, deleteUserById }

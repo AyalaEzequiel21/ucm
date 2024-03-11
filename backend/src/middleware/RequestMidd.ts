@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 
-const validateSchemaRequest = <T extends z.ZodTypeAny>(schema: z.ZodSchema<T>) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
+const validateSchemaRequest = <T>(schema: z.ZodSchema<T>) => {
+    return (req: Request, res: Response, next: NextFunction) => {
         try {
             const result = schema.safeParse(req.body)
             if(result.success) {

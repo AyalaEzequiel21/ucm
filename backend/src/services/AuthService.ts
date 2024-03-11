@@ -104,7 +104,7 @@ const getUserById = async (userId: ObjectId|string) => {
     }
 } 
 
-// DELETE
+// DELETE BY ID
 
 const removeUserById = async (userId: ObjectId|string) => {
     try {
