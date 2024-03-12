@@ -7,6 +7,7 @@ const clientSchema = new Schema<ClientMongoType>(
         fullname: {
             required: true,
             type: String,
+            unique: true,
             minLenth: 4,
             maxLenth: 15
         },
