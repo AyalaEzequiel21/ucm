@@ -4,9 +4,8 @@ import { loginDataSchema, newUserSchema, userMongoSchema } from "../schemas/Auth
 import { deleteUserById, findAllUsers, findUserById, login, logout, registerUser, updateUser } from "../controllers/AuthController"
 import { validateUser, validateUserRole } from "../middleware/AuthMidd"
 
-const router = express.Router()
-
 // AUTH ROUTES
+const router = express.Router()
 
 // LOGIN
 router.post("/login", validateSchemaRequest(loginDataSchema), login)
@@ -15,10 +14,10 @@ router.post("/login", validateSchemaRequest(loginDataSchema), login)
 router.post("/logout", logout)
 
 // MIDD FOR VALIDATE THE USER AUTHENTICATION
-router.use(validateUser)
+router.use(validateUser())
 
 // MIDD FOR VALIDATE THE USER ROLE
-router.use(validateUserRole(["admin"]))
+router.use(validateUserRole(['admin']))
 
 // USER REGISTER
 router.post("/user/register", validateSchemaRequest(newUserSchema), registerUser)

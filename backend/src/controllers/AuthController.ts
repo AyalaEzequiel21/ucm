@@ -67,7 +67,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 
 // FIND ALL USERS
 
-const findAllUsers = async (res: Response, next: NextFunction) => {
+const findAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await getAllUsers() // FIND ALL USERS WITH AUTH SERVICES
         res.status(200).json({ok: true, data: users})
@@ -100,4 +100,4 @@ const deleteUserById = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
-export { registerUser, login, logout, updateUser, findAllUsers, findUserById, deleteUserById }
+export { deleteUserById, findAllUsers, findUserById, login, logout, registerUser, updateUser }

@@ -4,7 +4,7 @@ import { verifyToken } from "../utilities/JwtUtils";
 import { UserRoleType } from "../utilities/types/UserRole";
 
 interface RequestWithUser extends Request {
-    user: UserCookieType
+    user?: UserCookieType
 }
 
 // CHECK IF THE USER HAVE A VALID TOKEN
@@ -25,7 +25,7 @@ const validateUser = () => {
 const validateUserRole = (allowedRoles: UserRoleType[] = []) => {
     return (req: RequestWithUser, res: Response, next: NextFunction) => {
         const user = req.user
-        if(allowedRoles.length > 0 && !allowedRoles.includes(user.role)){
+        if(user && allowedRoles.length > 0 && !allowedRoles.includes(user.role)){
             throw new NotAuthorizedError()
         }
         next()
