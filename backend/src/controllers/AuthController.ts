@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { createUser, getAllUsers, getUserById, loginUser, modifyUser, removeUserById } from "../services/AuthService";
 import { UserLoginType, UserMongoType, UserType } from "../schemas/AuthSchema";
+import { AuthenticationError } from "../errors/CustomErros";
 
 /////////////////////////
 // USER CONTROLLER

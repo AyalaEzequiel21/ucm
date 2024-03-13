@@ -66,3 +66,5 @@ class InternalServerError extends CustomError {
         super("INTERNAL_SERVER_ERROR", message, 500)
     }
 }
+
+export {ICustomError, CustomError, AuthenticationError, BadRequestError, NotAuthorizedError, ResourceAlreadyExistsError, ResourceNotFoundError, InternalServerError }

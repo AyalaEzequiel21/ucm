@@ -5,6 +5,7 @@ import { UserLoginType, UserMongoType, UserType } from "../schemas/AuthSchema";
 import { getHashPassword, validatePassword } from "../utilities/BcryptUtils";
 import { generateToken } from "../utilities/JwtUtils";
 import { validateIfExists } from "../utilities/validateIfExists";
+import { AuthenticationError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 
 /////////////////////////
 // AUTH SERVICE

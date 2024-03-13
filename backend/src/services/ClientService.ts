@@ -4,6 +4,7 @@ import ClientModel from "../models/ClientModel";
 import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
 import { ClientCategoryType } from "../utilities/types/ClientCategory";
 import { validateIfExists } from "../utilities/validateIfExists";
+import { ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 
 /////////////////////////
 // CLIENT SERVICE

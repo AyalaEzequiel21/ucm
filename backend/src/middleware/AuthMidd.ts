@@ -3,6 +3,7 @@ import { UserCookieType } from "../schemas/AuthSchema";
 import { verifyToken } from "../utilities/JwtUtils";
 import { UserRoleType } from "../utilities/types/UserRole";
 import { RequestExtended } from "../utilities/interfaces/RequestExtended";
+import { NotAuthorizedError } from "../errors/CustomErros";
 
 
 

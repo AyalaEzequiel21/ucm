@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
+import { BadRequestError, InternalServerError } from "../errors/CustomErros";
 
 const validateSchemaRequest = <T>(schema: z.ZodSchema<T>) => {
     return (req: Request, res: Response, next: NextFunction) => {

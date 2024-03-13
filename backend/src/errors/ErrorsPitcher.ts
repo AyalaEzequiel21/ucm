@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { BadRequestError, CustomError, InternalServerError } from "./CustomErros"
 
 const ErrorsPitcher = (error: Error | unknown) => {
     console.error(error)

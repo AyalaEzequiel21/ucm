@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { CustomError, InternalServerError } from "../errors/CustomErros";
 
 const internalError = new InternalServerError('Error inesperado')
 
