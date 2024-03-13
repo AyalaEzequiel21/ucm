@@ -1,6 +1,6 @@
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import ClientModel from "../models/ClientModel";
-import { ClientType } from "../schemas/ClientSchema";
+import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
 import { validateIfExists } from "../utilities/validateIfExists";
 
 /////////////////////////
@@ -26,6 +26,36 @@ const createClient = async (newClient: ClientType) => {
             in_delivery: in_delivery
         })
         return client
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// UPDATE 
+
+const modifyClient = async (clientUpdated: ClientMongoType) => {
+    const { _id, sales, payments, ...clientFiltered } = clientUpdated
+    try { 
+        const client = await ClientModel.findByIdAndUpdate( // FIND BY ID AND UPDATE THE CLIENT. THEN RETURN THE NEW VERSION
+            _id, 
+            clientFiltered, 
+            {new: true, runValidators: true}
+        )
+        if(!client) { // CHECK THAT CLIENT EXISTS, BUT RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Usuario')
+        }
+        return client
+    }catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// FIND ALL ACTIVES 
+
+const getAllActivesUsers = async () => {
+    try{
+        const users = await ClientModel.find({is_active: true})
+        return users
     } catch(e) {
         ErrorsPitcher(e)
     }

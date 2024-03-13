@@ -22,7 +22,7 @@ class CustomError extends Error implements ICustomError {
 // RESOURCE NOT FOUND
 class ResourceNotFoundError extends CustomError {
     constructor(resourceName: string) {
-        const message = `${resourceName} no encontrado`
+        const message = `${resourceName} no encontrada/o`
         super("RESOURCE_NOT_FOUND", message, 404)
     }
 }
