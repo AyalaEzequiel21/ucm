@@ -20,4 +20,4 @@ const ErrorsPitcher = (error: Error | unknown) => {
     }
 }
 
-export {ErrorsPitcher}
+export { ErrorsPitcher }

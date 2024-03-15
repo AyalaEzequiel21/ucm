@@ -23,7 +23,8 @@ const productSchema = new Schema<ProductMongoType>(
         stock: {
             required: true,
             type: Number,
-            min: 1
+            min: 1,
+            default: 300
         },
         is_active: {
             type: Boolean,
