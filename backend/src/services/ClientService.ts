@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+ import { ObjectId } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import ClientModel from "../models/ClientModel";
 import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
@@ -42,7 +42,7 @@ const modifyClient = async (clientUpdated: ClientMongoType) => {
         const client = await ClientModel.findByIdAndUpdate( // FIND BY ID AND UPDATE THE CLIENT. THEN RETURN THE NEW VERSION
             _id, 
             clientFiltered, 
-            {new: true, runValidators: true}
+            { new: true, runValidators: true }
         )
         if(!client) { // CHECK THAT CLIENT EXISTS, BUT RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')

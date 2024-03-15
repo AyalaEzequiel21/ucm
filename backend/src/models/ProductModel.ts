@@ -15,7 +15,7 @@ const productSchema = new Schema<ProductMongoType>(
             type: Number,
             min: 0.1
         },
-        secondary_price: {
+        second_price: {
             required: true,
             type: Number,
             min: 0.1

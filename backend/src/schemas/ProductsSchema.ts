@@ -6,7 +6,7 @@ import { validateAmount } from "../utilities/validateIsAmount"
 const newProductSchema = z.object({
     product_name: z.string().min(5).max(18),
     first_price: validateAmount(),
-    secondary_price: validateAmount(),
+    second_price: validateAmount(),
     stock: validateAmount()
 })
 
