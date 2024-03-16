@@ -5,7 +5,7 @@ import { ClientCategoryType } from "../utilities/types/ClientCategory";
 import { RequestExtended } from "../utilities/interfaces/RequestExtended";
 
 /////////////////////////
-// USER CONTROLLER
+// CLIENT CONTROLLER
 ///////////////////////
 
 // NEW CLIENT 
@@ -89,7 +89,7 @@ const findClientById = async (req: Request, res: Response, next: NextFunction) =
 const deleteClientById = async (req: Request, res: Response, next: NextFunction) => {
     const clientId = req.params.clientId // GET THE CLIENT ID FROM PARAMS REQUEST
     try {
-        const deletedUser = await removeClientById(clientId) // DELETE CLIENT BY ID WITH CLIENT SERVICE
+        await removeClientById(clientId) // DELETE CLIENT BY ID WITH CLIENT SERVICE
         res.status(204).json({ok: true})
     } catch(e) {
         next(e)

@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import ProductModel from "../models/ProductModel";
@@ -68,3 +69,43 @@ const getAllInactivesProducts = async () => {
         ErrorsPitcher(e)
     }
 }
+
+// FIND BY NAME
+const getProductsByName = async (productName: string) => {
+    try {
+        const productsFound = await ProductModel.find({product_name: { $regex: productName, $options: 'i' }, is_active: true}) // FIND ALL PRODUCTS THAT CONTAINS THE PRODUCTNAME
+        return productsFound
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// FIND BY ID
+const getProductById = async (productId: ObjectId|string) => {
+    try{
+        const productFound = await ProductModel.findById(productId) // FIND PRODUCT BY ID
+        if(!productFound) { // IF PRODUCT IS NOT FOUND, RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Producto')
+        }
+        return productFound
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// DELETE BY ID
+
+const removeProductById = async (productId: ObjectId|string) => {
+    try{
+        const productDeleted = await ProductModel.findById(productId) // FIND PRODUCT BY ID 
+        if(!productDeleted || !productDeleted.is_active) { // IF PRODUCT NOT EXISTS OR HIS PROPERTIE IS_ACTIVE IS FALSE, RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Producto')
+        }
+        productDeleted.is_active = false // SET THE PROPERTIE IS_ACTIVE TO FALSE
+        await productDeleted.save()
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+export { createProduct, modifyProduct, getAllProducts, getAllInactivesProducts, getProductById, getProductsByName, removeProductById }

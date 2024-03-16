@@ -99,9 +99,9 @@ const getClientsByCategory = async (category: ClientCategoryType) => {
 
 // FIND BY ID
 
-const getClientById = async (ClientId: ObjectId|string) => {
+const getClientById = async (clientId: ObjectId|string) => {
     try {
-        const userFound = await ClientModel.findById(ClientId) // FIND USER BY ID
+        const userFound = await ClientModel.findById(clientId) // FIND USER BY ID
         if(!userFound) { // IF USER NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')
         }
@@ -115,10 +115,13 @@ const getClientById = async (ClientId: ObjectId|string) => {
 
 const removeClientById = async (clientId: ObjectId|string) => {
     try{
-        const clientDeleted = await ClientModel.findByIdAndDelete(clientId) // DELETE CLIENT BY ID 
-        if(!clientDeleted) {
+        const clientDeleted = await ClientModel.findById(clientId) // FIND CLIENT BY ID 
+        if(!clientDeleted || !clientDeleted.is_active) { // IF CLIENT NOT EXISTS OR HIS PROPERTIE IS_ACTIVE IS FALSE, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')
         }
+        clientDeleted.is_active = false // SET THE PROPERTIE IS_ACTIVE TO FALSE
+        clientDeleted.save()
+
     } catch(e) {
         ErrorsPitcher(e)
     }
