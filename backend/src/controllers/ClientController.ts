@@ -77,7 +77,7 @@ const findClientsByCategory = async (req: Request, res: Response, next: NextFunc
 const findClientById = async (req: Request, res: Response, next: NextFunction) => {
     const clientId = req.params.clientId // GET THE CLIENT ID FROM PARAMS REQUEST
     try {
-        const client = await getClientById(clientId) // FIND CLIENT BY ID WITH CLIENT SERVICE
+        const client = await getClientById(clientId, undefined) // FIND CLIENT BY ID WITH CLIENT SERVICE
         res.status(200).json({ok: true, data: client})
     } catch(e) {
         next(e)

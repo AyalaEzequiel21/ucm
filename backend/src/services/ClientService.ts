@@ -1,4 +1,4 @@
- import { ObjectId } from "mongoose";
+ import { ObjectId, ClientSession } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import ClientModel from "../models/ClientModel";
 import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
@@ -98,18 +98,24 @@ const getClientsByCategory = async (category: ClientCategoryType) => {
 }
 
 // FIND BY ID
+const getClientById = async (clientId: ObjectId|string, session: ClientSession|undefined) => {
 
-const getClientById = async (clientId: ObjectId|string) => {
+    const findClientWithOptionalSession = (client: ObjectId|string, sess: ClientSession|undefined) => { // FUNCTION TO CHECK IF THE SEARCH IS WITH TRANSACTION OR NOT
+        const query = ClientModel.findById(client)
+        if(sess)  return query.session(sess)
+        return query
+    }
     try {
-        const userFound = await ClientModel.findById(clientId) // FIND USER BY ID
-        if(!userFound) { // IF USER NOT EXISTS, RUN AN EXCEPTION
+        const clientFound = await findClientWithOptionalSession(clientId, session).populate(["sales", "payments"]).exec() // FIND USER BY ID
+        if(!clientFound) { // IF USER NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')
         }
-        return userFound
+        return clientFound
     } catch(e) {
         ErrorsPitcher(e)
     }
 }
+
 
 // DELETE BY ID
 
