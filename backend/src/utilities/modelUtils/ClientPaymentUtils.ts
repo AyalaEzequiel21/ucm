@@ -34,8 +34,9 @@ const addPaymentToClient = async (clientId: string|ObjectId, paymentId: string|O
                 ...payment.toObject(),
                 _id: payment._id.toString()
             }
-            client.payments?.push(paymentForClient)
-            client.balance -= amount
+            client.payments?.push(paymentForClient) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+            client.balance -= amount // UPDATE THE CLIENT BALANCE
+            await client.save()
        }
     } catch(e){
         throw e
@@ -44,7 +45,24 @@ const addPaymentToClient = async (clientId: string|ObjectId, paymentId: string|O
 
 // REMOVE PAYMENT TO CLIENT AND UPDATE THE BALANCE
 const subtractPaymentToClient = async (paymentId: string|ObjectId, clientId: string|ObjectId, amount: number, session: ClientSession) => {
+    try {
+        const client = await getClientById(clientId, session) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
+        if(!client) {
+            throw new ResourceNotFoundError('Cliente')
+        }
+       const payment = await ClientPaymentModel.findById(paymentId).session(session)// FIND CLIENT PAYMENT WITH SESSION, CHECK IF EXISTS OR RUN AN EXCEPTION
+       if(!payment) {
+        throw new ResourceNotFoundError('Pago del cliente')
+       }
+       if(client.payments && client.balance) {
 
+        client.payments = client.payments.filter(payment => payment._id != paymentId) // SUBTRACT PAYMENT TO CLIENT LIST OF PAYMENTS
+        client.balance += amount // UPDATE THE CLIENT BALANCE
+        await client.save()
+   }
+    } catch(e){
+        throw e
+    }
 }
 
 export { getAClientWithId, addPaymentToClient, subtractPaymentToClient }
