@@ -9,7 +9,7 @@ import ClientPaymentModel from "../../models/ClientPaymentModel";
 
 
 // GET A CLIENT WITH ID
-const getAClientWithId = async (clientId: ObjectId| string, session: ClientSession) => {
+const getAClientWithId = async (clientId: ObjectId| string, session: ClientSession|undefined) => {
     try {
         const clientFound = await getClientById(clientId, session) //  FIND CLIENT WITH CLIENT SERVICE
         return clientFound
@@ -18,6 +18,7 @@ const getAClientWithId = async (clientId: ObjectId| string, session: ClientSessi
     }
 }
 
+// ADD PAYMENT TO CLIENT AND UPDATE THE CLIENT BALANCE
 const addPaymentToClient = async (clientId: string|ObjectId, paymentId: string|ObjectId, amount: number, session: ClientSession) => {
     try {
         const client = await getClientById(clientId, session) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
@@ -41,4 +42,9 @@ const addPaymentToClient = async (clientId: string|ObjectId, paymentId: string|O
     }
 }
 
-export { getAClientWithId, addPaymentToClient }
+// REMOVE PAYMENT TO CLIENT AND UPDATE THE BALANCE
+const subtractPaymentToClient = async (paymentId: string|ObjectId, clientId: string|ObjectId, amount: number, session: ClientSession) => {
+
+}
+
+export { getAClientWithId, addPaymentToClient, subtractPaymentToClient }

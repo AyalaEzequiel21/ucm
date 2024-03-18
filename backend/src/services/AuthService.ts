@@ -59,7 +59,7 @@ const loginUser = async (userLogin: UserLoginType) => {
 // UPDATE 
 
 const modifyUser = async (userUpdated: UserMongoType) => {
-    const {_id, username, password, role} = userUpdated
+    const {_id, username, password, role} = userUpdated // EXCLUDES FIELDS
     try {
         const hashPassword = await getHashPassword(password) // HASH THE PASSWORD
         const user = await UserModel.findByIdAndUpdate( // FIND USER BY ID, AND UPDATE
