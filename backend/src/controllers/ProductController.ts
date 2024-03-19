@@ -78,4 +78,4 @@ const deleteProduct = async (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
-export { createProduct, updateProduct, findAllProducts, findAllInactivesProducts,findProductById, findProductByName, deleteProduct }
+export { registerProduct, updateProduct, findAllProducts, findAllInactivesProducts,findProductById, findProductByName, deleteProduct }

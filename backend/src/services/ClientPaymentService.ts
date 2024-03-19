@@ -5,7 +5,7 @@ import ClientPaymentModel from "../models/ClientPaymentModel";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { addPaymentToClient, getAClientWithId, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
 import { ObjectId } from "mongoose";
-import { PaymentMethodType } from "../utilities/types/PaymentMethod";
+import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 
 /////////////////////////
@@ -59,7 +59,7 @@ const removeClientPayment = async (clientPaymentId: string|ObjectId) => {
 }
 
 //FIND ALL
-const getAllClientPaymens = async () => {
+const getAllClientsPayments = async () => {
     try {
         const paymentsFound = await ClientPaymentModel.find() // FIND ALL CLIENTS PAYMENTS
         return paymentsFound
@@ -84,6 +84,9 @@ const getPaymentsByClientId = async (clientId: string|ObjectId) => {
 
 //FIND BY PAYMENT METHOD
 const getPaymentsPaymentMethod = async (paymentMethod: PaymentMethodType) => {
+    if(!paymentMethodsArray.includes(paymentMethod)){
+        throw new BadRequestError("Metodo de pago incorrecto")
+    }
     try {
         const paymentsByMethod = await ClientPaymentModel.find({payment_method: paymentMethod}) // FIND ALL PAYMENTS FROM A CLIENT BY THE METHOD
         return paymentsByMethod
@@ -106,4 +109,4 @@ const getClientsPaymentsByDate = async (date: string) => {
     }
 }
 
-export { createClientPayment, removeClientPayment, getAllClientPaymens, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate }
+export { createClientPayment, removeClientPayment, getAllClientsPayments, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate }
