@@ -1,7 +1,7 @@
 import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { filterGetAll } from '../middleware/GetAllMidd'
-import { createProduct, deleteProduct, findAllInactivesProducts, findAllProducts, findProductById, findProductByName, updateProduct } from '../controllers/ProductController'
+import { deleteProduct, findAllInactivesProducts, findAllProducts, findProductById, findProductByName, registerProduct, updateProduct } from '../controllers/ProductController'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { newProductSchema, productMongoSchema } from '../schemas/ProductsSchema'
 
@@ -24,7 +24,7 @@ router.get("/product/:productId", findProductById)
 //GET ALL INACTIVE PRODUCTS
 router.get("/inactives", findAllInactivesProducts)
 // PRODUCT REGISTER
-router.post("/register", validateSchemaRequest(newProductSchema), createProduct)
+router.post("/register", validateSchemaRequest(newProductSchema), registerProduct)
 // PRODUCT UPDATE
 router.put("/update", validateSchemaRequest(productMongoSchema), updateProduct)
 //  PRODUCT DELETE

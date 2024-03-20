@@ -28,6 +28,8 @@ const createUser = async (newUser: UserType) => {
         })
         return user
     } catch(e) {
+        console.log(e);
+        
         ErrorsPitcher(e)
     }
 }

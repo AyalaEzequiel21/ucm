@@ -18,7 +18,7 @@ app.use(cors({
 })) 
 app.use(cookieParser()) // activate the cookie options
 app.use(express.json({limit: "30mb"}))
-app.use('API-pradera', routes) // path for api and use the routes
+app.use('/API-pradera', routes) // path for api and use the routes
 app.use(errorHandler)
 
 //  CONNECT TO DB

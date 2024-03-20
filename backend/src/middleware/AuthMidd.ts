@@ -16,7 +16,7 @@ const validateUser = () => {
             throw new NotAuthorizedError()
         }
         req.user = userValidated as UserCookieType
-        console.log(`User: ${req.user._id} validated`);
+        console.log(`User: id:${req.user._id}, role: ${req.user.role}.  Validated`);
         next()
     }
 }

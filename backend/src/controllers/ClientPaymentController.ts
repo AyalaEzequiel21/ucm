@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { createClientPayment, getAllClientsPayments, getClientsPaymentsByDate, getPaymentsByClientId, getPaymentsPaymentMethod, removeClientPayment } from "../services/ClientPaymentService";
-import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
+import { PaymentMethodType } from "../utilities/types/PaymentMethod";
 
 /////////////////////////
 // CLIENT PAYMENT CONTROLLER

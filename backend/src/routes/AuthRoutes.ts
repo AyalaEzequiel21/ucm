@@ -14,7 +14,7 @@ router.post("/login", validateSchemaRequest(loginDataSchema), login)
 router.post("/logout", logout)
 
 // MIDD FOR VALIDATE THE USER AUTHENTICATION
-router.use(validateUser())
+router.use(validateUser())   
 
 // MIDD FOR VALIDATE THE USER ROLE
 router.use(validateUserRole(['admin']))
