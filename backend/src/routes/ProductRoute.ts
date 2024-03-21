@@ -12,7 +12,7 @@ const router = express.Router()
 router.use(validateUser())
 
 // GET ALL PRODUCT
-router.get("/", filterGetAll, findAllProducts)
+router.get("/", filterGetAll(), findAllProducts)
 
 // MIDDLEWARE FOR CHECK IF USER ROLE IS VALID
 router.use(validateUserRole(['admin', 'biller']))

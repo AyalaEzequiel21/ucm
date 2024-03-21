@@ -12,7 +12,7 @@ const router = express.Router()
 router.use(validateUser())
 
 // GET ALL CLIENTS
-router.get("/", filterGetAll, findActivesClients)
+router.get("/", filterGetAll(), findActivesClients)
 
 // MIDDLEWARE FOR VALIDATE IF USER ROLE IS VALID
 router.use(validateUserRole(["admin", "biller"]))

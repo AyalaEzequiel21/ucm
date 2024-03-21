@@ -2,9 +2,10 @@
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import ClientModel from "../models/ClientModel";
 import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
-import { ClientCategoryType } from "../utilities/types/ClientCategory";
+import { ClientCategoryType, categoriesArray } from "../utilities/types/ClientCategory";
 import { validateIfExists } from "../utilities/validateIfExists";
-import { ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
+import { BadRequestError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
+import { checkId } from "../utilities/validateObjectId";
 
 /////////////////////////
 // CLIENT SERVICE
@@ -56,8 +57,20 @@ const modifyClient = async (clientUpdated: ClientMongoType) => {
 // FIND ALL ACTIVES 
 
 const getAllActivesClients = async (inDelivery: boolean) => {
+    const getQuery = (confirm: boolean) => {
+        if(confirm) {
+            return {
+                is_active: true,
+                in_delivery: true
+            }
+        } else {
+            return {
+                is_active: true
+            }
+        }
+    }
     try{
-        const activeUsers = await ClientModel.find({is_active: true, in_delivery: inDelivery}) // FIND ALL ACTIVE USERS
+        const activeUsers = await ClientModel.find(getQuery(inDelivery)) // FIND ALL ACTIVE USERS        
         return activeUsers
     } catch(e) {
         ErrorsPitcher(e)
@@ -80,6 +93,9 @@ const getAllInactivesClients = async () => {
 const getClientsByName = async (clientName: string) => {
     try {
         const clientsFound = await ClientModel.find({ fullname: { $regex: clientName, $options: 'i' }, is_active: true}) // FIND ALL CLIENTS WITH FULLANME CONTAINS CLIENTNAME
+        if(clientsFound.length == 0) {
+            throw new ResourceNotFoundError('Usuario')
+        }
         return clientsFound
     } catch (e) {
         ErrorsPitcher(e)
@@ -89,6 +105,9 @@ const getClientsByName = async (clientName: string) => {
 // FIND BY CATEGORY
 
 const getClientsByCategory = async (category: ClientCategoryType) => {
+    if(!categoriesArray.includes(category)){
+        throw new BadRequestError('Categoria invalida')
+    }
     try {
         const clientsFound = await ClientModel.find({category: category, is_active: true}) // FIND CLIENTS BY CATEGORY
         return clientsFound
@@ -99,7 +118,7 @@ const getClientsByCategory = async (category: ClientCategoryType) => {
 
 // FIND BY ID
 const getClientById = async (clientId: ObjectId|string, session: ClientSession|undefined) => {
-
+    checkId(clientId)
     const findClientWithOptionalSession = (client: ObjectId|string, sess: ClientSession|undefined) => { // FUNCTION TO CHECK IF THE SEARCH IS WITH TRANSACTION OR NOT
         const query = ClientModel.findById(client)
         if(sess)  return query.session(sess)
@@ -111,7 +130,7 @@ const getClientById = async (clientId: ObjectId|string, session: ClientSession|u
             throw new ResourceNotFoundError('Usuario')
         }
         return clientFound
-    } catch(e) {
+    } catch(e) {        
         ErrorsPitcher(e)
     }
 }
@@ -120,6 +139,7 @@ const getClientById = async (clientId: ObjectId|string, session: ClientSession|u
 // DELETE BY ID
 
 const removeClientById = async (clientId: ObjectId|string) => {
+    checkId(clientId)
     try{
         const clientDeleted = await ClientModel.findById(clientId) // FIND CLIENT BY ID 
         if(!clientDeleted || !clientDeleted.is_active) { // IF CLIENT NOT EXISTS OR HIS PROPERTIE IS_ACTIVE IS FALSE, RUN AN EXCEPTION
@@ -133,4 +153,4 @@ const removeClientById = async (clientId: ObjectId|string) => {
     }
 }
 
-export { createClient, modifyClient, getClientById, getAllActivesClients, getAllInactivesClients, getClientsByCategory, getClientsByName, removeClientById}
+export { createClient, modifyClient, getClientById, getAllActivesClients, getAllInactivesClients, getClientsByCategory, getClientsByName, removeClientById }

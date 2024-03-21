@@ -1,11 +1,12 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, isValidObjectId } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import UserModel from "../models/UserModel";
 import { UserLoginType, UserMongoType, UserType } from "../schemas/AuthSchema";
 import { getHashPassword, validatePassword } from "../utilities/BcryptUtils";
 import { generateToken } from "../utilities/JwtUtils";
 import { validateIfExists } from "../utilities/validateIfExists";
-import { AuthenticationError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
+import { AuthenticationError, BadRequestError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
+import { checkId } from "../utilities/validateObjectId";
 
 /////////////////////////
 // AUTH SERVICE
@@ -37,7 +38,7 @@ const createUser = async (newUser: UserType) => {
 // LOGIN 
 
 const loginUser = async (userLogin: UserLoginType) => {
-    const {username, password} = userLogin
+    const {username, password} = userLogin    
     try {
         const user = await UserModel.findOne({username: username}) // FIND A USER WITH THE SAME USERNAME
         if(!user) { //IF NOT FOUND USER, THEN RUN AN EXCEPTION
@@ -96,6 +97,7 @@ const getAllUsers = async () => {
 // FIND BY ID
 
 const getUserById = async (userId: ObjectId|string) => {
+    checkId(userId)
     try {
         const userSaved = await UserModel.findById(userId) // FIND USER BY ID
         if(!userSaved) { // IF USER NOT EXISTS RUN AN EXCEPTION
@@ -110,6 +112,7 @@ const getUserById = async (userId: ObjectId|string) => {
 // DELETE BY ID
 
 const removeUserById = async (userId: ObjectId|string) => {
+    checkId(userId)
     try {
         const userRemoved = await UserModel.findByIdAndDelete(userId) // DELETE USER BY ID
         if(!userRemoved) {
