@@ -23,11 +23,13 @@ const clientPaymentSchema = new Schema<ClientPaymentType>(
         },
         sale_id: {
             type: mongoose.Schema.Types.ObjectId, 
-            ref: "Sale"
+            ref: "Sale",
+            required: false
         },
         report_id: {
             type: mongoose.Schema.Types.ObjectId, 
-            ref: "Report"
+            ref: "Report",
+            required: false
         },
     },
     {

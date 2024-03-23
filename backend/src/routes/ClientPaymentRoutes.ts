@@ -2,7 +2,7 @@ import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { newClientPaymentSchema } from '../schemas/ClientPaymentSchema'
-import { deleteClientPaymentById, findAllClientsPayments, findClientPaymentsByClientId, findClientPaymentsByDate, findClientPaymentsByPaymentMethod, registerClientPayment } from '../controllers/ClientPaymentController'
+import { deleteClientPaymentById, findAllClientsPayments, findClientPaymentById, findClientPaymentsByClientId, findClientPaymentsByDate, findClientPaymentsByPaymentMethod, registerClientPayment } from '../controllers/ClientPaymentController'
 
 // CLIENT PAYMENT ROUTES
 const router = express.Router()
@@ -19,6 +19,8 @@ router.get("/", findAllClientsPayments)
 router.post("/register", validateSchemaRequest(newClientPaymentSchema), registerClientPayment)
 // GET CLIENT PAYMENTS BY PAYMENT METHOD
 router.get("/method/:paymentMethod", findClientPaymentsByPaymentMethod)
+// GET CLIENT PAYMENTS BY PAYMENT ID
+router.get("/payment/:paymentId", findClientPaymentById) //
 // GET CLIENT PAYMENTS BY PAYMENT DATE
 router.get("/payment-date", findClientPaymentsByDate)
 // GET ALL CLIENT PAYMENTS BY CLIENT ID    

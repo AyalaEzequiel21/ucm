@@ -8,7 +8,7 @@ const productSchema = new Schema<ProductMongoType>(
             required: true,
             unique: true,
             minlength: 5,
-            maxlength: 18
+            maxlength: 25
         },
         first_price: {
             required: true,
@@ -21,7 +21,6 @@ const productSchema = new Schema<ProductMongoType>(
             min: 0.1
         },
         stock: {
-            required: true,
             type: Number,
             min: 1,
             default: 300

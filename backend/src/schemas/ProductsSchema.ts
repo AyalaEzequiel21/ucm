@@ -4,10 +4,10 @@ import { validateAmount } from "../utilities/validateIsAmount"
 
 // PRODUCT
 const newProductSchema = z.object({
-    product_name: z.string().min(5).max(18),
+    product_name: z.string().min(5).max(25),
     first_price: validateAmount(),
     second_price: validateAmount(),
-    stock: validateAmount()
+    stock: validateAmount().optional()
 })
 
 type ProductType = z.infer<typeof newProductSchema>

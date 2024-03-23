@@ -125,7 +125,8 @@ const getClientById = async (clientId: ObjectId|string, session: ClientSession|u
         return query
     }
     try {
-        const clientFound = await findClientWithOptionalSession(clientId, session).populate(["sales", "payments"]).exec() // FIND USER BY ID
+        // const clientFound = await findClientWithOptionalSession(clientId, session).populate(["sales", "payments"]).exec() // FIND USER BY ID
+        const clientFound = await findClientWithOptionalSession(clientId, session)
         if(!clientFound) { // IF USER NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')
         }

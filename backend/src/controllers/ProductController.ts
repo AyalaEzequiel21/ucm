@@ -42,7 +42,7 @@ const findAllProducts = async (req: RequestExtended, res: Response, next: NextFu
 const findAllInactivesProducts = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const inactivesProducts = await getAllInactivesProducts() // FIND ALL INACTIVES PRODUCTS WITH PRODUCT SERVICE
-        res.send(200).json({ok: true, data: inactivesProducts})
+        res.status(200).json({ok: true, data: inactivesProducts})
     } catch(e) {
         next(e)
     }

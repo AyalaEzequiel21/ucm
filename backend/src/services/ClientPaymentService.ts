@@ -7,6 +7,7 @@ import { addPaymentToClient, getAClientWithId, subtractPaymentToClient } from ".
 import { ObjectId } from "mongoose";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
+import { checkId } from "../utilities/validateObjectId";
 
 /////////////////////////
 // CLIENT PAYMENT SERVICE
@@ -56,6 +57,17 @@ const removeClientPayment = async (clientPaymentId: string|ObjectId) => {
         ErrorsPitcher(e)
     }
     await session.endSession() // END THE TRANSACTION
+}
+
+// FIND BY ID
+const getClientPaymentsById = async (paymentId: string|ObjectId) => {
+    checkId(paymentId)
+    try {
+        const paymentsFound = await ClientPaymentModel.findById(paymentId) // FIND CLIENT PAYMENT BY ID
+        return paymentsFound
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
 }
 
 //FIND ALL
@@ -109,4 +121,4 @@ const getClientsPaymentsByDate = async (date: string) => {
     }
 }
 
-export { createClientPayment, removeClientPayment, getAllClientsPayments, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate }
+export { createClientPayment, removeClientPayment, getClientPaymentsById, getAllClientsPayments, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate }

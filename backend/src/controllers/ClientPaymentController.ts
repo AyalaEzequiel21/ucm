@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
-import { createClientPayment, getAllClientsPayments, getClientsPaymentsByDate, getPaymentsByClientId, getPaymentsPaymentMethod, removeClientPayment } from "../services/ClientPaymentService";
+import { createClientPayment, getAllClientsPayments, getClientPaymentsById, getClientsPaymentsByDate, getPaymentsByClientId, getPaymentsPaymentMethod, removeClientPayment } from "../services/ClientPaymentService";
 import { PaymentMethodType } from "../utilities/types/PaymentMethod";
 
 /////////////////////////
@@ -24,6 +24,17 @@ const deleteClientPaymentById = async (req: Request, res: Response, next: NextFu
     try {
         await removeClientPayment(paymentId) // DELETE THE PAYMENT WITH SERVICE
         res.status(204).json({ok: true})
+    } catch(e) {
+        next(e)
+    }
+}
+
+// FIND CLIENT PAYMENT BY ID
+const findClientPaymentById = async (req: Request, res: Response, next: NextFunction) => {
+    const paymentId = req.params.PaymentId
+    try {
+        const paymentsFound = await getClientPaymentsById(paymentId) // FIND ALL PAYMENTS WITH THE SERVICE
+        res.status(200).json({ok: true, data: paymentsFound})
     } catch(e) {
         next(e)
     }
@@ -72,4 +83,4 @@ const findClientPaymentsByDate = async (req: Request, res: Response, next: NextF
     }
 }
 
-export { registerClientPayment, deleteClientPaymentById, findAllClientsPayments, findClientPaymentsByClientId, findClientPaymentsByDate, findClientPaymentsByPaymentMethod }
+export { registerClientPayment, deleteClientPaymentById, findAllClientsPayments, findClientPaymentById, findClientPaymentsByClientId, findClientPaymentsByDate, findClientPaymentsByPaymentMethod }

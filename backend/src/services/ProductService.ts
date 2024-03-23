@@ -4,6 +4,7 @@ import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import ProductModel from "../models/ProductModel";
 import { ProductMongoType, ProductType } from "../schemas/ProductsSchema";
 import { validateIfExists } from "../utilities/validateIfExists";
+import { checkId } from "../utilities/validateObjectId";
 
 /////////////////////////
 // PRODUCT SERVICE
@@ -82,6 +83,7 @@ const getProductsByName = async (productName: string) => {
 
 // FIND BY ID
 const getProductById = async (productId: ObjectId|string) => {
+    checkId(productId)
     try{
         const productFound = await ProductModel.findById(productId) // FIND PRODUCT BY ID
         if(!productFound) { // IF PRODUCT IS NOT FOUND, RUN AN EXCEPTION
