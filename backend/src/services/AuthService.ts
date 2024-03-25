@@ -28,9 +28,7 @@ const createUser = async (newUser: UserType) => {
             role: role
         })
         return user
-    } catch(e) {
-        console.log(e);
-        
+    } catch(e) {        
         ErrorsPitcher(e)
     }
 }

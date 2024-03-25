@@ -7,6 +7,7 @@ import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { checkIsValidPayments, processPaymentsOfReport } from "../utilities/modelUtils/PaymentsReportUtils";
 import { checkId } from "../utilities/validateObjectId";
 import { startSession } from "../config/startSession";
+import { IdType } from "../utilities/types/IdType";
 
 /////////////////////////
 // PAYMENTS REPORT SERVICE
@@ -113,3 +114,19 @@ import { startSession } from "../config/startSession";
     }
     await session.endSession()
  }
+
+ // DELETE BY ID
+ const removePaymentsReportById = async (reportId: IdType) => {
+    checkId(reportId) // CHECK IF REPORT ID IS VALID
+    try {
+        const reportSaved = await PaymentsReportModel.findById(reportId) //  FIND THE REPORT BY HIS ID
+        if(!reportSaved || reportSaved.report_status === 'aprobado') { // IF HIS STATUS IS APROBADO OR REPORT NOT EXISTS RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Reporte de pagos')
+        }
+        await PaymentsReportModel.findByIdAndDelete(reportId) // DELETE THE REPORT
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+ }
+
+ export { createPaymentsReport, removePaymentsReportById, getAllPaymentsReports, getAllPendingPaymentsReports, getAllValidatedPaymentsReports, getPaymentsReportsByDate }

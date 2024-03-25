@@ -1,7 +1,11 @@
 import { ObjectId, ClientSession } from "mongoose";
 import { getClientById } from "../../services/ClientService";
-import { ResourceNotFoundError } from "../../errors/CustomErros";
-import {ClientPaymentModel} from "../../models";
+import { BadRequestError, ResourceNotFoundError } from "../../errors/CustomErros";
+import { ClientPaymentModel } from "../../models";
+import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
+import { IdType } from "../types/IdType";
+import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
+
 
 /////////////////////////
 // CLIENT PAYMENT UTILS
@@ -65,4 +69,27 @@ const subtractPaymentToClient = async (paymentId: string|ObjectId, clientId: str
     }
 }
 
-export { getAClientWithId, addPaymentToClient, subtractPaymentToClient }
+const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undefined, saleId: IdType|undefined, session: ClientSession ) => {
+    if(!payment.client_id){ // CHECK IF EXISTS CLIENT ID OR RUN AN EXCEPTION IF NOT EXISTS
+        throw new BadRequestError('Algunos datos faltan o son invalidos')
+    }
+    try {
+        const newPaymentdata: ClientPaymentType = { // SET THE PAYMENT OBJECT
+            client_id: payment.client_id,
+            amount: payment.amount,
+            client_name: payment.client_name,
+            payment_method: payment.payment_method,
+            report_id: reportId?.toString(),
+            sale_id: saleId?.toString()
+        }
+        const paymentCreated = await ClientPaymentModel.create([newPaymentdata], {session}) // CREATE THE PAYMENT IN DATA BASE
+        const { amount, client_id, _id} = paymentCreated[0] // GET THE NECESSARY ATRIBUTES
+        const client = await getClientById(payment.client_id, session)  // VERIFY IF CLIENT EXISTS
+        client && addPaymentToClient(client._id, _id.toString(), amount, session)  //  ADD THE PAYMENT TO CLIENT
+        return paymentCreated[0] // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
+    } catch(e) {
+        throw e
+    }
+}
+
+export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment }

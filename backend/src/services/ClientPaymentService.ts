@@ -3,7 +3,7 @@ import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import {ClientPaymentModel} from "../models";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
-import { addPaymentToClient, getAClientWithId, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
+import { getAClientWithId, addPaymentToClient, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
 import { ObjectId } from "mongoose";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
