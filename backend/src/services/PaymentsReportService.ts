@@ -40,6 +40,17 @@ import { IdType } from "../utilities/types/IdType";
     }
  }
 
+ // FIND BY ID
+ const getPaymentsReportById = async (reportId: IdType) => {
+    checkId(reportId) // CHECK IF REPORT ID IS VALID
+    try {
+        const reportSaved = await PaymentsReportModel.findById(reportId) //  FIND THE REPORT BY HIS ID
+        return reportSaved
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+ }
+
  // FIND ALL VALIDATED REPORTS
  const getAllValidatedPaymentsReports = async () => {
     try {
@@ -129,4 +140,4 @@ import { IdType } from "../utilities/types/IdType";
     }
  }
 
- export { createPaymentsReport, removePaymentsReportById, getAllPaymentsReports, getAllPendingPaymentsReports, getAllValidatedPaymentsReports, getPaymentsReportsByDate }
+ export { createPaymentsReport, removePaymentsReportById, getAllPaymentsReports, getPaymentsReportById, getAllPendingPaymentsReports, getAllValidatedPaymentsReports, getPaymentsReportsByDate, modifyPaymentsreport, validatePaymentsReport }
