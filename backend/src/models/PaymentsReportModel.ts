@@ -1,13 +1,13 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import { PaymentsReportMongoType } from "../schemas/PaymentsReportSchema";
 import { reportStatusArray } from "../utilities/types/ReportStatus";
 
-const paymentsReportSchema = new Schema<PaymentsReportMongoType>(
+export const paymentsReportSchema = new Schema<PaymentsReportMongoType>(
     {
         payments: [{
             type: Schema.Types.ObjectId, 
-            ref: "Payment",
-            default: new Array
+            ref: "ClientPayment",
+            default: []
         }],
         payments_dto: [
             Schema.Types.Mixed
@@ -23,7 +23,3 @@ const paymentsReportSchema = new Schema<PaymentsReportMongoType>(
         timestamps: true
     }
 )
-
-const PaymentsReportModel = model("PaymentsReport", paymentsReportSchema, "paymentsReports")
-
-export default PaymentsReportModel

@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { DetailSaleType, SaleType } from "../schemas/SaleSchema";
 
 const detailSaleSchema = new Schema<DetailSaleType>(
@@ -26,7 +26,7 @@ const detailSaleSchema = new Schema<DetailSaleType>(
     }
 )
 
-const saleSchema = new Schema<SaleType>(
+export const saleSchema = new Schema<SaleType>(
     {
         client_id: {
             type: mongoose.Schema.Types.ObjectId, 
@@ -62,7 +62,3 @@ const saleSchema = new Schema<SaleType>(
         timestamps: true
     }
 )
-
-const SaleModel = model("Sale", saleSchema, "sales")
-
-export default SaleModel

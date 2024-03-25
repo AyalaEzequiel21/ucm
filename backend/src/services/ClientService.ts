@@ -1,6 +1,6 @@
  import { ObjectId, ClientSession } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
-import ClientModel from "../models/ClientModel";
+import {ClientModel} from "../models";
 import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
 import { ClientCategoryType, categoriesArray } from "../utilities/types/ClientCategory";
 import { validateIfExists } from "../utilities/validateIfExists";
@@ -38,7 +38,7 @@ const createClient = async (newClient: ClientType) => {
 // UPDATE 
 
 const modifyClient = async (clientUpdated: ClientMongoType) => {
-    const { _id, sales, payments, ...clientFiltered } = clientUpdated
+    const { _id, sales, client_payments, ...clientFiltered } = clientUpdated
     try { 
         const client = await ClientModel.findByIdAndUpdate( // FIND BY ID AND UPDATE THE CLIENT. THEN RETURN THE NEW VERSION
             _id, 
@@ -125,7 +125,7 @@ const getClientById = async (clientId: ObjectId|string, session: ClientSession|u
         return query
     }
     try {
-        // const clientFound = await findClientWithOptionalSession(clientId, session).populate(["sales", "payments"]).exec() // FIND USER BY ID
+        // const clientFound = await findClientWithOptionalSession(clientId, session).populate(["sales", "client_payments"]).exec() // FIND USER BY ID
         const clientFound = await findClientWithOptionalSession(clientId, session)
         if(!clientFound) { // IF USER NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')

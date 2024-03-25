@@ -26,6 +26,6 @@ router.get("/payment-date", findClientPaymentsByDate)
 // GET ALL CLIENT PAYMENTS BY CLIENT ID    
 router.get("/client/:clientId", findClientPaymentsByClientId)
 // CLIENT PAYMENT DELETE
-router.delete("/delete/:paymentId", deleteClientPaymentById)
+router.delete("/delete/:clientPaymentId", deleteClientPaymentById)
 
 export default router

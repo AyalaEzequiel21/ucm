@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
 import { ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
-import ProductModel from "../models/ProductModel";
+import {ProductModel} from "../models";
 import { ProductMongoType, ProductType } from "../schemas/ProductsSchema";
 import { validateIfExists } from "../utilities/validateIfExists";
 import { checkId } from "../utilities/validateObjectId";

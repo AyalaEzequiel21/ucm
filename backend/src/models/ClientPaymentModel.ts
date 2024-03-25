@@ -1,8 +1,8 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { paymentMethodsArray } from "../utilities/types/PaymentMethod";
 
-const clientPaymentSchema = new Schema<ClientPaymentType>(
+export const clientPaymentSchema = new Schema<ClientPaymentType>(
     {
         client_id: {
             type: mongoose.Types.ObjectId, 
@@ -22,12 +22,12 @@ const clientPaymentSchema = new Schema<ClientPaymentType>(
             enum: paymentMethodsArray
         },
         sale_id: {
-            type: mongoose.Schema.Types.ObjectId, 
+            type: mongoose.Types.ObjectId, 
             ref: "Sale",
             required: false
         },
         report_id: {
-            type: mongoose.Schema.Types.ObjectId, 
+            type: mongoose.Types.ObjectId, 
             ref: "Report",
             required: false
         },
@@ -37,7 +37,3 @@ const clientPaymentSchema = new Schema<ClientPaymentType>(
         timestamps: true
     }
 )
-
-const ClientPaymentModel = model("ClientPayment", clientPaymentSchema, "clientPayments")
-
-export default ClientPaymentModel

@@ -19,7 +19,7 @@ const clientMongoSchema = newClientSchema.extend({
     _id: validateObjectId().optional(),
     balance: z.number().optional(),
     sales: z.array(saleMongoSchema).optional(),
-    payments: z.array(clientPaymentMongoSchema).optional(),
+    client_payments: z.array(clientPaymentMongoSchema).optional(),
     is_active: z.boolean().optional()
 })
 

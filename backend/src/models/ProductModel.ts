@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import { ProductMongoType } from "../schemas/ProductsSchema";
 
-const productSchema = new Schema<ProductMongoType>(
+export const productSchema = new Schema<ProductMongoType>(
     {
         product_name: {
             type: String,
@@ -35,7 +35,3 @@ const productSchema = new Schema<ProductMongoType>(
         timestamps: true
     }
 )
-
-const ProductModel = model("product", productSchema, "products")
-
-export default ProductModel

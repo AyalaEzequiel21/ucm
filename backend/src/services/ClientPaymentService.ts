@@ -1,7 +1,7 @@
 import { startSession } from "../config/startSession";
 import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
-import ClientPaymentModel from "../models/ClientPaymentModel";
+import {ClientPaymentModel} from "../models";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { addPaymentToClient, getAClientWithId, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
 import { ObjectId } from "mongoose";
@@ -13,7 +13,7 @@ import { checkId } from "../utilities/validateObjectId";
 // CLIENT PAYMENT SERVICE
 ///////////////////////
 
-//CREATE
+// CREATE
 const createClientPayment = async (clientPayment: ClientPaymentType) => {
     const { client_id, amount, client_name, payment_method } = clientPayment //  GET THE PARAMETERS PAYMENT FROM THE REQUEST 
     const session = await startSession() // INIT A SESSION FOR TRANSACTIOND
@@ -37,8 +37,9 @@ const createClientPayment = async (clientPayment: ClientPaymentType) => {
     await session.endSession() // END THE TRANSACTION
 }
 
-//DELETE
+// DELETE
 const removeClientPayment = async (clientPaymentId: string|ObjectId) => {
+    checkId(clientPaymentId)
     const session = await startSession() // INIT A SESSION FOR TRANSACTIONS
     try {
         const payment = await ClientPaymentModel.findById(clientPaymentId) // FIND THE PAYMENT BY ID 
@@ -82,6 +83,7 @@ const getAllClientsPayments = async () => {
 
 //FIND BY CLIENT ID
 const getPaymentsByClientId = async (clientId: string|ObjectId) => {
+    checkId(clientId)
     try {
         const client = await getAClientWithId(clientId, undefined) // CHECK IF EXISTS AN USER WITH SAME ID
         if(!client) {

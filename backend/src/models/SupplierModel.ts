@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import { SupplierMongoSchema } from "../schemas/SupplierSchema";
 
-const supplierSchema = new Schema<SupplierMongoSchema>(
+export const supplierSchema = new Schema<SupplierMongoSchema>(
     {
         supplier_name: {
             type: String,
@@ -35,7 +35,3 @@ const supplierSchema = new Schema<SupplierMongoSchema>(
         timestamps: true
     }
 )
-
-const SupplierModel = model("Supplier", supplierSchema, "suppliers")
-
-export default SupplierModel

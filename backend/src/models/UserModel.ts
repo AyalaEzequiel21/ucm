@@ -1,8 +1,8 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import { UserType } from "../schemas/AuthSchema";
 import { rolesArray } from "../utilities/types/UserRole";
 
-const userSchema = new Schema<UserType>(
+export const userSchema = new Schema<UserType>(
     {
         username: {
             required: true,
@@ -26,7 +26,3 @@ const userSchema = new Schema<UserType>(
         timestamps: true
     }
 )
-
-const UserModel = model("User", userSchema, "users")
-
-export default UserModel

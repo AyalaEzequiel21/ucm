@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import { DetailSaleListType, SalesListMongoType } from "../schemas/SalesListSchema";
 import { listStatusArray } from "../utilities/types/SalesListStatus";
 
@@ -21,7 +21,7 @@ const detailSaleListSchema = new Schema<DetailSaleListType>({
     }
 })
 
-const salesListSchema = new Schema<SalesListMongoType>(
+export const salesListSchema = new Schema<SalesListMongoType>(
     {
         salesdetail: [detailSaleListSchema],
         status: {
@@ -35,7 +35,3 @@ const salesListSchema = new Schema<SalesListMongoType>(
         timestamps: true
     }
 )
-
-const SalesListModel = model("SalesList", salesListSchema, "salesLists")
-
-export default SalesListModel

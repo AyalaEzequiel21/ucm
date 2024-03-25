@@ -1,6 +1,6 @@
 import { ObjectId, isValidObjectId } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
-import UserModel from "../models/UserModel";
+import { UserModel } from "../models";
 import { UserLoginType, UserMongoType, UserType } from "../schemas/AuthSchema";
 import { getHashPassword, validatePassword } from "../utilities/BcryptUtils";
 import { generateToken } from "../utilities/JwtUtils";

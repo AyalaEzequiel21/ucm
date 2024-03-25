@@ -1,7 +1,7 @@
 import { ObjectId, ClientSession } from "mongoose";
 import { getClientById } from "../../services/ClientService";
 import { ResourceNotFoundError } from "../../errors/CustomErros";
-import ClientPaymentModel from "../../models/ClientPaymentModel";
+import {ClientPaymentModel} from "../../models";
 
 /////////////////////////
 // CLIENT PAYMENT UTILS
@@ -29,12 +29,12 @@ const addPaymentToClient = async (clientId: string|ObjectId, paymentId: string|O
        if(!payment) {
         throw new ResourceNotFoundError('Pago del cliente')
        }
-       if(client.payments && client.balance) {
+       if(client.client_payments && client.balance) {
             const paymentForClient = {
                 ...payment.toObject(),
                 _id: payment._id.toString()
             }
-            client.payments?.push(paymentForClient) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+            client.client_payments?.push(paymentForClient) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
             client.balance -= amount // UPDATE THE CLIENT BALANCE
             await client.save()
        }
@@ -54,9 +54,9 @@ const subtractPaymentToClient = async (paymentId: string|ObjectId, clientId: str
        if(!payment) {
         throw new ResourceNotFoundError('Pago del cliente')
        }
-       if(client.payments && client.balance) {
+       if(client.client_payments && client.balance) {
 
-        client.payments = client.payments.filter(payment => payment._id != paymentId) // SUBTRACT PAYMENT TO CLIENT LIST OF PAYMENTS
+        client.client_payments = client.client_payments.filter(payment => payment._id != paymentId) // SUBTRACT PAYMENT TO CLIENT LIST OF PAYMENTS
         client.balance += amount // UPDATE THE CLIENT BALANCE
         await client.save()
    }

@@ -1,8 +1,8 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ClientMongoType } from "../schemas/ClientSchema";
 import { categoriesArray } from "../utilities/types/ClientCategory";
 
-const clientSchema = new Schema<ClientMongoType>(
+export const clientSchema = new Schema<ClientMongoType>(
     {
         fullname: {
             required: true,
@@ -36,7 +36,7 @@ const clientSchema = new Schema<ClientMongoType>(
             ref: "Sale", 
             default: new Array
         }],
-        payments: [{
+        client_payments: [{
             type: mongoose.Schema.Types.ObjectId, 
             ref: "Payment", 
             default: new Array
@@ -51,7 +51,3 @@ const clientSchema = new Schema<ClientMongoType>(
         timestamps: true
     }
 )
-
-const ClientModel = model("Client", clientSchema, "clients")
-
-export default ClientModel

@@ -1,8 +1,8 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import { PaymentToSupplierType } from "../schemas/PaymentToSupplierSchema";
 import { paymentMethodsArray } from "../utilities/types/PaymentMethod";
 
-const paymentToSupplierSchema = new Schema<PaymentToSupplierType>(
+export const paymentToSupplierSchema = new Schema<PaymentToSupplierType>(
     {
         supplier_id: {
             type: Schema.Types.ObjectId,
@@ -31,7 +31,3 @@ const paymentToSupplierSchema = new Schema<PaymentToSupplierType>(
         timestamps: true
     }
 )
-
-const PaymentToSupplierModel = model("PasymentToSupplier", paymentToSupplierSchema, "paymentsToSuppliers")
-
-export default PaymentToSupplierModel

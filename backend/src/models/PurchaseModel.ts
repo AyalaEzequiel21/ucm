@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import { PurchaseDetailType, PurchaseType } from "../schemas/PurchaseSchema";
 
 const purchaseDetail = new Schema<PurchaseDetailType>(
@@ -31,7 +31,7 @@ const purchaseDetail = new Schema<PurchaseDetailType>(
     }
 )
 
-const purchaseSchema = new Schema<PurchaseType>(
+export const purchaseSchema = new Schema<PurchaseType>(
     {
         supplier_id: {
             type: Schema.Types.ObjectId,
@@ -56,7 +56,3 @@ const purchaseSchema = new Schema<PurchaseType>(
         timestamps: true
     }
 )
-
-const PurchaseModel = model("Purchase", purchaseSchema, "purchases")
-
-export default PurchaseModel
