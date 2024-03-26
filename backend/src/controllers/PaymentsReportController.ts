@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { PaymentsReportType } from "../schemas/PaymentsReportSchema";
-import { createPaymentsReport, getAllPaymentsReports, getPaymentsReportById, removePaymentsReportById } from "../services/PaymentsReportService";
+import { createPaymentsReport, getAllPaymentsReports, getAllPendingPaymentsReports, getPaymentsReportById, removePaymentsReportById } from "../services/PaymentsReportService";
 
 /////////////////////////
 // PAYMENTS REPORT CONTROLLER
@@ -48,3 +48,12 @@ const findAllPaymentsReport = async (req: Request, res: Response, next: NextFunc
         next(e)
     }
 }
+// FIND ALL PENDING REPORTS
+const findPendingReports = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pendingReports = await getAllPendingPaymentsReports()
+        res.status(200).json({ok: true, data: pendingReports})
+    } catch(e) {
+        next(e)
+    }
+} 
