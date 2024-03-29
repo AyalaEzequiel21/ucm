@@ -21,6 +21,7 @@ const createClientPayment = async (clientPayment: ClientPaymentType) => {
         throw new BadRequestError("Faltan datos necesarios")
     }
     try {
+        session.startTransaction() // INIT TRANSACTIONS
         const client = await getAClientWithId(client_id, session) // FIND CLIENTS PAYMENT
         if(!client) { // IF CLIENT NOT EXISTS RUN AN EXCEPTION
             throw new ResourceNotFoundError('Cliente')
@@ -42,6 +43,7 @@ const removeClientPayment = async (clientPaymentId: string|ObjectId) => {
     checkId(clientPaymentId)
     const session = await startSession() // INIT A SESSION FOR TRANSACTIONS
     try {
+        session.startTransaction() // INIT TRANSACTIONS
         const payment = await ClientPaymentModel.findById(clientPaymentId) // FIND THE PAYMENT BY ID 
         if(!payment){ // IF PAYMENT IS NOT FOUND, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Pago')
@@ -65,6 +67,9 @@ const getClientPaymentsById = async (paymentId: string|ObjectId) => {
     checkId(paymentId)
     try {
         const paymentsFound = await ClientPaymentModel.findById(paymentId) // FIND CLIENT PAYMENT BY ID
+        if(!paymentsFound) {
+            throw new ResourceNotFoundError("Pago de cliente")
+        }
         return paymentsFound
     } catch(e) {
         ErrorsPitcher(e)

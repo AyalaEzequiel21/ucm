@@ -21,7 +21,7 @@ router.get("/allPending", findPendingReports)
 // GET PAYMENTS REPORT BY REPORT ID
 router.get("/report/:reportId", findPaymentsReportById) //
 // GET PAYMENTS REPORT BY REPORT DATE
-router.get("/payment-date", findPaymentsReportByDate)
+router.get("/paymentsReport-date", findPaymentsReportByDate)
 
 // MIDDLEWARE FOR CHECK IF USER ROLE IS VALID
 router.use(validateUserRole(['admin', 'biller']))

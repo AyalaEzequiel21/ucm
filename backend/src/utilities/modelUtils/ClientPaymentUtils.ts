@@ -1,6 +1,6 @@
 import { ObjectId, ClientSession } from "mongoose";
 import { getClientById } from "../../services/ClientService";
-import { BadRequestError, ResourceNotFoundError } from "../../errors/CustomErros";
+import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../../errors/CustomErros";
 import { ClientPaymentModel } from "../../models";
 import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
 import { IdType } from "../types/IdType";
@@ -29,7 +29,7 @@ const addPaymentToClient = async (clientId: string|ObjectId, paymentId: string|O
         if(!client) {
             throw new ResourceNotFoundError('Cliente')
         }
-       const payment = await ClientPaymentModel.findById(paymentId).session(session)// FIND CLIENT PAYMENT WITH SESSION, CHECK IF EXISTS OR RUN AN EXCEPTION
+       const payment = await ClientPaymentModel.findById(paymentId)// FIND CLIENT PAYMENT WITH SESSION, CHECK IF EXISTS OR RUN AN EXCEPTION
        if(!payment) {
         throw new ResourceNotFoundError('Pago del cliente')
        }
@@ -40,7 +40,7 @@ const addPaymentToClient = async (clientId: string|ObjectId, paymentId: string|O
             }
             client.client_payments?.push(paymentForClient) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
             client.balance -= amount // UPDATE THE CLIENT BALANCE
-            await client.save()
+            await client.save({session})
        }
     } catch(e){
         throw e
@@ -74,18 +74,23 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
         throw new BadRequestError('Algunos datos faltan o son invalidos')
     }
     try {
-        const newPaymentdata: ClientPaymentType = { // SET THE PAYMENT OBJECT
+        const paymentCreated = await ClientPaymentModel.create([{
+            client_name: payment.client_name,
             client_id: payment.client_id,
             amount: payment.amount,
-            client_name: payment.client_name,
             payment_method: payment.payment_method,
-            report_id: reportId?.toString(),
-            sale_id: saleId?.toString()
+            report_id: reportId,
+            sale_id: saleId
+        }], {session}) // CREATE THE PAYMENT IN DATA BASE
+        if(!paymentCreated){
+            throw new InternalServerError(`No se pudo crear el pago ${payment.client_name}`) 
         }
-        const paymentCreated = await ClientPaymentModel.create([newPaymentdata], {session}) // CREATE THE PAYMENT IN DATA BASE
-        const { amount, client_id, _id} = paymentCreated[0] // GET THE NECESSARY ATRIBUTES
-        const client = await getClientById(payment.client_id, session)  // VERIFY IF CLIENT EXISTS
-        client && addPaymentToClient(client._id, _id.toString(), amount, session)  //  ADD THE PAYMENT TO CLIENT
+        const { amount, _id} = paymentCreated[0] // GET THE NECESSARY ATRIBUTES  FOR ADD THE PAYMENT TO THE CLIENT
+        const client = await getClientById(payment.client_id, session)  // VERIFY IF CLIENT EXISTS OR RUN AN EXCEPTION
+        if(!client) { 
+            throw new ResourceNotFoundError('Cliente')
+        }
+        addPaymentToClient(client._id, _id.toString(), amount, session)  //  ADD THE PAYMENT TO CLIENT
         return paymentCreated[0] // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
     } catch(e) {
         throw e

@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
+import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { PaymentsReportModel } from "../models";
 import { PaymentsReportMongoType, PaymentsReportType } from "../schemas/PaymentsReportSchema";
@@ -45,6 +45,9 @@ import { IdType } from "../utilities/types/IdType";
     checkId(reportId) // CHECK IF REPORT ID IS VALID
     try {
         const reportSaved = await PaymentsReportModel.findById(reportId) //  FIND THE REPORT BY HIS ID
+        if(!reportSaved){
+            throw new ResourceNotFoundError('Reporte de pagos')
+        }
         return reportSaved
     } catch(e) {
         ErrorsPitcher(e)
@@ -109,17 +112,22 @@ import { IdType } from "../utilities/types/IdType";
     checkId(paymentsReportId) // CHECK IF ID IS VALID
     const session = await startSession() // INIT THE SESSION
     try {
+        session.startTransaction() // INIT TRANSACTIONS
         const reportSaved = await PaymentsReportModel.findById(paymentsReportId) // FIND THE REPORT BY HIS ID
         if(!reportSaved || reportSaved.report_status === 'aprobado') { // IF NOT EXISTS OR HIS STATUS IS APROBADO RUN AN EXCEPTIONS
             throw new ResourceNotFoundError('Reporte de pagos')
         }
         const paymentProcess = await processPaymentsOfReport(reportSaved.payments_dto, reportSaved._id, session) // PROCESS ALL PAYMENTS WITH UTILS FUNCTION
+        if(paymentProcess.length === 0){
+            throw new InternalServerError("No se procesaron los datos")
+        }
         reportSaved.payments = paymentProcess //  SET THE PROCESS PAYMENTS 
         reportSaved.payments_dto = [] //  SET THE PAYMENTS DTO AS EMPTY LIST
-        const reportValidated = await reportSaved.save({session}) // SAVE THE CHANGES
+        reportSaved.report_status = "aprobado" //  SET THE NEW REPORT STATUS
+        const reportValidated = await reportSaved.save() // SAVE THE CHANGES
         await session.commitTransaction() //  CONFIRM TRANSACTION
         return reportValidated
-    } catch(e) {
+    } catch(e) {        
         await session.abortTransaction()
         ErrorsPitcher(e)
     }

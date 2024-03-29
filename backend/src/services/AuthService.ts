@@ -1,11 +1,11 @@
-import { ObjectId, isValidObjectId } from "mongoose";
+import { ObjectId } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { UserModel } from "../models";
 import { UserLoginType, UserMongoType, UserType } from "../schemas/AuthSchema";
 import { getHashPassword, validatePassword } from "../utilities/BcryptUtils";
 import { generateToken } from "../utilities/JwtUtils";
 import { validateIfExists } from "../utilities/validateIfExists";
-import { AuthenticationError, BadRequestError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
+import { AuthenticationError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { checkId } from "../utilities/validateObjectId";
 
 /////////////////////////
