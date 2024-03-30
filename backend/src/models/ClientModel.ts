@@ -34,12 +34,12 @@ export const clientSchema = new Schema<ClientMongoType>(
         sales: [{
             type: mongoose.Schema.Types.ObjectId, 
             ref: "Sale", 
-            default: new Array
+            default: []
         }],
         client_payments: [{
             type: mongoose.Schema.Types.ObjectId, 
-            ref: "Payment", 
-            default: new Array
+            ref: "ClientPayment", 
+            default: []
         }], 
         is_active: {
             type: Boolean,

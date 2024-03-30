@@ -108,7 +108,7 @@ import { IdType } from "../utilities/types/IdType";
  }
 
  // VALIDATE REPORT
- const validatePaymentsReport = async (paymentsReportId: string|ObjectId) => {
+ const validatePaymentsReport = async (paymentsReportId: IdType) => {
     checkId(paymentsReportId) // CHECK IF ID IS VALID
     const session = await startSession() // INIT THE SESSION
     try {
@@ -124,7 +124,7 @@ import { IdType } from "../utilities/types/IdType";
         reportSaved.payments = paymentProcess //  SET THE PROCESS PAYMENTS 
         reportSaved.payments_dto = [] //  SET THE PAYMENTS DTO AS EMPTY LIST
         reportSaved.report_status = "aprobado" //  SET THE NEW REPORT STATUS
-        const reportValidated = await reportSaved.save() // SAVE THE CHANGES
+        const reportValidated = await reportSaved.save({session}) // SAVE THE CHANGES
         await session.commitTransaction() //  CONFIRM TRANSACTION
         return reportValidated
     } catch(e) {        
