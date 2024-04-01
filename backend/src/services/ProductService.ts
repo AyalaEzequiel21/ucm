@@ -50,7 +50,7 @@ const getAllProducts = async (inDelivery: boolean) => {
     const productsFiltered = async (delivery: boolean) => { // FUNCTION TO FILTER PRICE PRODUCTS WHRN INDELIVERY IS ACTIVE
         const query = ProductModel.find({is_active: true})
         if(delivery) return query.select("-first_price")
-        return query
+        return query.select("-second_price")
     }
 
     try {

@@ -38,7 +38,7 @@ const createClient = async (newClient: ClientType) => {
 // UPDATE 
 
 const modifyClient = async (clientUpdated: ClientMongoType) => {
-    const { _id, sales, client_payments, ...clientFiltered } = clientUpdated
+    const { _id, sales, payments, ...clientFiltered } = clientUpdated
     try { 
         const client = await ClientModel.findByIdAndUpdate( // FIND BY ID AND UPDATE THE CLIENT. THEN RETURN THE NEW VERSION
             _id, 

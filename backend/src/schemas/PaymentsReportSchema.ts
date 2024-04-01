@@ -1,12 +1,11 @@
 import { z } from "zod";
-import { newClientPaymentSchema } from "./ClientPaymentSchema";
 import { paymentDtoSchema } from "./PaymentDtoSchema";
 import { validateObjectId } from "../utilities/validateObjectId";
 import { ReportStatus } from "../utilities/types/ReportStatus";
 
 // PAYMENTS REPORT 
 const newPaymentsReportSchema = z.object({
-    payments: z.array(newClientPaymentSchema).optional(),
+    payments: z.array(validateObjectId()).optional(),
     payments_dto: z.array(paymentDtoSchema)
 })
 

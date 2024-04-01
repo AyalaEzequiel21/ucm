@@ -1,11 +1,12 @@
 import { Schema } from "mongoose";
 import { PaymentsReportMongoType } from "../schemas/PaymentsReportSchema";
 import { reportStatusArray } from "../utilities/types/ReportStatus";
+import mongoose from "mongoose";
 
 export const paymentsReportSchema = new Schema<PaymentsReportMongoType>(
     {
         payments: [{
-            type: Schema.Types.ObjectId, 
+            type: mongoose.Schema.Types.ObjectId, 
             ref: "ClientPayment",
             default: []
         }],

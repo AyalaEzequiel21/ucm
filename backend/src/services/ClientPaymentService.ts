@@ -34,8 +34,9 @@ const createClientPayment = async (clientPayment: ClientPaymentType) => {
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
+    } finally {
+        await session.endSession() // END THE TRANSACTION
     }
-    await session.endSession() // END THE TRANSACTION
 }
 
 // DELETE
@@ -58,8 +59,9 @@ const removeClientPayment = async (clientPaymentId: string|ObjectId) => {
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
+    }finally{
+        await session.endSession() // END THE TRANSACTION
     }
-    await session.endSession() // END THE TRANSACTION
 }
 
 // FIND BY ID

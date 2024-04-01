@@ -36,7 +36,7 @@ export const clientSchema = new Schema<ClientMongoType>(
             ref: "Sale", 
             default: []
         }],
-        client_payments: [{
+        payments: [{
             type: mongoose.Schema.Types.ObjectId, 
             ref: "ClientPayment", 
             default: []

@@ -1,9 +1,8 @@
-import mongoose, { ClientSession, ObjectId } from "mongoose";
+import { ClientSession } from "mongoose";
 import { BadRequestError } from "../../errors/CustomErros";
 import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
 import { checkId } from "../validateObjectId";
 import { IdType } from "../types/IdType";
-import { ClientPaymentMongoType, ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 import { processOnePayment } from "./ClientPaymentUtils";
 
 /////////////////////////
@@ -22,7 +21,7 @@ const checkIsValidPayments = (payments: PaymentDtoType[]) => {
 }
 
 const processPaymentsOfReport = async (payments: PaymentDtoType[], reportId: IdType, session: ClientSession) => {
-    const paymentsId: ClientPaymentType[] = []
+    const paymentsId: string[] = []
     try {
         for(const paymentDto of payments) {
             const newPayment = await processOnePayment(paymentDto, reportId, undefined, session)

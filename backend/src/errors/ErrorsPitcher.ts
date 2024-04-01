@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { MongooseError } from "mongoose"
 import { BadRequestError, CustomError, InternalServerError } from "./CustomErros"
 
 const ErrorsPitcher = (error: Error | unknown) => {
@@ -13,7 +13,9 @@ const ErrorsPitcher = (error: Error | unknown) => {
         console.log(validationErrors);
         
         throw new BadRequestError(validationErrors)
-    } else if (error instanceof Error) {
+    } else if(error instanceof MongooseError && error.name === 'MongoServerError') {
+        throw new InternalServerError('Ha ocurrido un error durante el procedimiento. Transactions');
+    }else if (error instanceof Error) {
         throw new InternalServerError(error.message);
     } else {
         throw new InternalServerError('Ocurrió un error desconocido');

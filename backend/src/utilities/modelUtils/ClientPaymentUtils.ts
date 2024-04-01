@@ -33,12 +33,12 @@ const addPaymentToClient = async (clientId: IdType, paymentId: IdType, amount: n
             console.log(payment);
             throw new ResourceNotFoundError('Pago del cliente')
        }
-       if(client.client_payments && client.balance !== undefined) {
+       if(client.payments && client.balance !== undefined) {
             const paymentForClient = {
                 ...payment.toObject(),
                 _id: payment._id.toString()
             }
-            client.client_payments?.push(paymentForClient) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+            client.payments.push(paymentForClient._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
             client.balance -= amount // UPDATE THE CLIENT BALANCE
             await client.save({session})
        }
@@ -58,9 +58,9 @@ const subtractPaymentToClient = async (paymentId: IdType, clientId: IdType, amou
        if(!payment) {
         throw new ResourceNotFoundError('Pago del cliente')
        }
-       if(client.client_payments && client.balance) {
+       if(client.payments && client.balance) {
 
-        client.client_payments = client.client_payments.filter(payment => payment._id != paymentId) // SUBTRACT PAYMENT TO CLIENT LIST OF PAYMENTS
+        client.payments = client.payments.filter(payment => payment != paymentId) // SUBTRACT PAYMENT TO CLIENT LIST OF PAYMENTS
         client.balance += amount // UPDATE THE CLIENT BALANCE
         await client.save()
    }
@@ -93,8 +93,8 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
         if(!amount || !_id || !client_id){
             throw new BadRequestError('Faltan algunos datos necesarios')
         }
-        addPaymentToClient(client_id,  _id.toString(), amount, session)  //  ADD THE PAYMENT TO CLIENT
-        return paymentCreated[0] // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
+        await addPaymentToClient(client_id,  _id.toString(), amount, session)  //  ADD THE PAYMENT TO CLIENT
+        return _id.toString() // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
     } catch(e) {
         throw e
     }

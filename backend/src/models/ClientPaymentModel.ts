@@ -5,7 +5,7 @@ import { paymentMethodsArray } from "../utilities/types/PaymentMethod";
 export const clientPaymentSchema = new Schema<ClientPaymentType>(
     {
         client_id: {
-            type: mongoose.Types.ObjectId, 
+            type: mongoose.Schema.Types.ObjectId, 
             ref: "Client", 
             required: true
         },
@@ -22,12 +22,12 @@ export const clientPaymentSchema = new Schema<ClientPaymentType>(
             enum: paymentMethodsArray
         },
         sale_id: {
-            type: mongoose.Types.ObjectId, 
+            type: mongoose.Schema.Types.ObjectId, 
             ref: "Sale",
             required: false
         },
         report_id: {
-            type: mongoose.Types.ObjectId, 
+            type: mongoose.Schema.Types.ObjectId, 
             ref: "Report",
             required: false
         },

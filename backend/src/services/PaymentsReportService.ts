@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { PaymentsReportModel } from "../models";
@@ -113,15 +112,15 @@ import { IdType } from "../utilities/types/IdType";
     const session = await startSession() // INIT THE SESSION
     try {
         session.startTransaction() // INIT TRANSACTIONS
-        const reportSaved = await PaymentsReportModel.findById(paymentsReportId) // FIND THE REPORT BY HIS ID
+        const reportSaved = await PaymentsReportModel.findById(paymentsReportId).session(session) // FIND THE REPORT BY HIS ID
         if(!reportSaved || reportSaved.report_status === 'aprobado') { // IF NOT EXISTS OR HIS STATUS IS APROBADO RUN AN EXCEPTIONS
             throw new ResourceNotFoundError('Reporte de pagos')
         }
-        const paymentProcess = await processPaymentsOfReport(reportSaved.payments_dto, reportSaved._id, session) // PROCESS ALL PAYMENTS WITH UTILS FUNCTION
-        if(paymentProcess.length === 0){
+        const paymentsProcessed = await processPaymentsOfReport(reportSaved.payments_dto, reportSaved._id, session) // PROCESS ALL PAYMENTS WITH UTILS FUNCTION
+        if(paymentsProcessed.length === 0){
             throw new InternalServerError("No se procesaron los datos")
         }
-        reportSaved.payments = paymentProcess //  SET THE PROCESS PAYMENTS 
+        reportSaved.payments = paymentsProcessed //  SET THE PROCESS PAYMENTS 
         reportSaved.payments_dto = [] //  SET THE PAYMENTS DTO AS EMPTY LIST
         reportSaved.report_status = "aprobado" //  SET THE NEW REPORT STATUS
         const reportValidated = await reportSaved.save({session}) // SAVE THE CHANGES
@@ -130,8 +129,9 @@ import { IdType } from "../utilities/types/IdType";
     } catch(e) {        
         await session.abortTransaction()
         ErrorsPitcher(e)
+    } finally {
+        await session.endSession()
     }
-    await session.endSession()
  }
 
  // DELETE BY ID

@@ -7,8 +7,9 @@ import { validateObjectId } from "../utilities/validateObjectId";
 const detailSaleSchema = z.object({
     product_id: validateObjectId().optional(),
     product_name: z.string(),
+    price: validateAmount(),
     quantity: validateAmount(),
-    partial_total: validateAmount()
+    partial_total: validateAmount().optional()
 })
 
 type DetailSaleType = z.infer<typeof detailSaleSchema>
@@ -21,7 +22,6 @@ const newSaleSchema = z.object({
     total_sale: validateAmount().optional(),
     payment_dto: paymentDtoSchema.optional(),
     payment_id: validateObjectId().optional(),
-    payment_total: validateAmount().optional()
 })
 
 type SaleType = z.infer<typeof newSaleSchema>
@@ -31,6 +31,6 @@ const saleMongoSchema = newSaleSchema.extend({
     _id: validateObjectId()
 })
 
-type SaleMongoSchema = z.infer<typeof saleMongoSchema>
+type SaleMongoType = z.infer<typeof saleMongoSchema>
 
-export { detailSaleSchema, DetailSaleType, newSaleSchema, SaleType, saleMongoSchema, SaleMongoSchema}
+export { detailSaleSchema, DetailSaleType, newSaleSchema, SaleType, saleMongoSchema, SaleMongoType}

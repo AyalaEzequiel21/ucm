@@ -1,10 +1,10 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { PurchaseDetailType, PurchaseType } from "../schemas/PurchaseSchema";
 
 const purchaseDetail = new Schema<PurchaseDetailType>(
     {
         product_id: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Product"
         },
         product_name: {
@@ -34,7 +34,7 @@ const purchaseDetail = new Schema<PurchaseDetailType>(
 export const purchaseSchema = new Schema<PurchaseType>(
     {
         supplier_id: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Supplier",
             required: true
         },

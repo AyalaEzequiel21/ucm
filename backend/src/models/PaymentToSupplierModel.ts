@@ -1,11 +1,11 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { PaymentToSupplierType } from "../schemas/PaymentToSupplierSchema";
 import { paymentMethodsArray } from "../utilities/types/PaymentMethod";
 
 export const paymentToSupplierSchema = new Schema<PaymentToSupplierType>(
     {
         supplier_id: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Supplier",
             required: true
         },

@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { SupplierMongoSchema } from "../schemas/SupplierSchema";
 
 export const supplierSchema = new Schema<SupplierMongoSchema>(
@@ -20,14 +20,14 @@ export const supplierSchema = new Schema<SupplierMongoSchema>(
             default: 0.0
         },
         payments: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "PaymentToSupplier",
-            default: new Array
+            default: []
         }, 
         purchases: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Purchases",
-            default: new Array
+            default: []
         }
     },
     {

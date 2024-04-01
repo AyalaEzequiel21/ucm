@@ -4,6 +4,7 @@ import clientRoutes from './ClientRoutes'
 import productRoutes from './ProductRoute'
 import clientPaymentRoutes from './ClientPaymentRoutes'
 import paymentsReportRoutes from './PaymentsReportRoutes'
+import saleRoutes from './SaleRoutes'
 
 const router = express.Router()
 
@@ -12,5 +13,6 @@ router.use("/clients", clientRoutes)
 router.use("/products", productRoutes)
 router.use("/clientPayments", clientPaymentRoutes)
 router.use("/paymentsReport", paymentsReportRoutes)
+router.use("/sales", saleRoutes)
 
 export default router

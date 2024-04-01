@@ -1,7 +1,5 @@
 import { z } from "zod";
 import { validateObjectId } from "../utilities/validateObjectId";
-import { purchaseMongoSchema } from "./PurchaseSchema";
-import { paymentToSupplierMongoSchema } from "./PaymentToSupplierSchema";
 
 // SUPPLIER 
 const newSupplierSchema = z.object({
@@ -15,8 +13,8 @@ type SupplierType = z.infer<typeof newSupplierSchema>
 const supplierMongoSchema = newSupplierSchema.extend({
     _id: validateObjectId(),
     balance: z.number().optional(),
-    purchases: z.array(purchaseMongoSchema).optional(),
-    payments: z.array(paymentToSupplierMongoSchema).optional()
+    purchases: z.array(validateObjectId()).optional(),
+    payments: z.array(validateObjectId()).optional()
 })
 
 type SupplierMongoSchema = z.infer<typeof supplierMongoSchema>

@@ -1,11 +1,11 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { DetailSaleListType, SalesListMongoType } from "../schemas/SalesListSchema";
 import { listStatusArray } from "../utilities/types/SalesListStatus";
 
 const detailSaleListSchema = new Schema<DetailSaleListType>({
     sale_id: {
         required: true,
-        type: Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: "Sale"
     },
     client_name: {
