@@ -3,8 +3,10 @@ import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
+import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { processOnePayment } from "../utilities/modelUtils/ClientPaymentUtils";
-import { addSaleToClient } from "../utilities/modelUtils/SaleUtils";
+import { addSaleToClient, filterSaleForDelivery, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
+import { IdType } from "../utilities/types/IdType";
 import { getClientById } from "./ClientService";
 
 /////////////////////////
@@ -65,7 +67,10 @@ const modifySale = async (saleUpdated: SaleMongoType) => {
         if(!saleSaved) { 
             throw new ResourceNotFoundError('Venta')
         }
-        saleSaved.details = details
+        removeSaleToClient(client_id, _id, session) // REMOVE THE SALE WITH OLD TOTAL SALE
+        saleSaved.details = details // UPDATE THE DETAILS SALE
+        saleSaved.save({session}) // SAVE THE UPDATED SALE
+        addSaleToClient(client_id, _id, session) // ADD THE SALE WITH NEW TOTAL SALE TO CLIENT
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
@@ -75,4 +80,63 @@ const modifySale = async (saleUpdated: SaleMongoType) => {
     }
 }
 
-export { createSale }
+// GET ALL
+const getAllSales = async (inDelivery: boolean) => {
+    try {
+        const sales: SaleMongoType[] = await SaleModel.find()//  FIND ALL SALES
+        if(inDelivery){
+            const salesFiltered = filterSaleForDelivery(sales)
+            return salesFiltered
+        }
+        return sales
+    }catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// GET BY ID
+const getSaleById = async (saleId: IdType) => {
+    try {
+        const sale = await SaleModel.findById(saleId) //  FIND THE SALE BY HIS ID
+        if(!sale) { // CHECK IF EXISTS THE SALE OR RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Venta')
+        }
+        return sale
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// GET BY CLIENT NAME
+const getSalesByClientName = async (inDelivery: boolean, clientName: string) => {
+    try {
+        const sales: SaleMongoType[] = await SaleModel.find({ fullname: { $regex: clientName, $options: 'i' } }) // FIND ALL SALE WITH CLIENT NAME
+        if(inDelivery){
+            const salesFiltered = filterSaleForDelivery(sales) // IF INDELIVERY IS TRUE, THEN FILTERED THE SALES
+            return salesFiltered
+        }
+        return sales
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// GET BY SALE DATE
+const getSalesByDate = async (inDelivery: boolean, date: string) => {
+    if(!validateDate(date)){ // CHECK THAT DATE IS VALID FORMAT OR RUN AN EXCEPTION
+        throw new BadRequestError('Datos ingresados no son validos')
+    }
+    const newFormatDate = convertDateString(date) // CONVERT THE DATE STRING TO DATE WITH VALID FORMAT
+    try {
+        const salesFound: SaleMongoType[] = await SaleModel.find({createdAt: newFormatDate}) // FIND ALL SALES WITH THIS DATE
+        if(inDelivery){
+            const salesFiltered = filterSaleForDelivery(salesFound) // IF INDELIVERY IS TRUE, THEN FILTERED THE SALES, AND RETURN IT
+            return salesFiltered
+        }
+        return salesFound
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+export { createSale, modifySale, getAllSales, getSaleById, getSalesByClientName, getSalesByDate }

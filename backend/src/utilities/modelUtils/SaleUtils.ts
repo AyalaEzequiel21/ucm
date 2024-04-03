@@ -3,6 +3,7 @@ import { IdType } from "../types/IdType";
 import { getClientById } from "../../services/ClientService";
 import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { SaleModel } from "../../models";
+import { SaleMongoType } from "../../schemas/SaleSchema";
 
 
 /////////////////////////
@@ -57,4 +58,21 @@ const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: Cli
     }
 }
 
-export { addSaleToClient, removeSaleToClient }
+const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
+    try {
+        const deliverySales = [];
+        for (const sale of sales) {
+            if (sale.client_id) {
+                const client = await getClientById(sale.client_id, undefined);
+                if (client && client.in_delivery) {
+                    deliverySales.push(sale);
+                }
+            }
+        }
+        return deliverySales;
+    } catch(e) {
+        throw e
+    }
+}
+
+export { addSaleToClient, removeSaleToClient, filterSaleForDelivery }

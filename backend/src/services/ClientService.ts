@@ -6,6 +6,7 @@ import { ClientCategoryType, categoriesArray } from "../utilities/types/ClientCa
 import { validateIfExists } from "../utilities/validateIfExists";
 import { BadRequestError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { checkId } from "../utilities/validateObjectId";
+import { IdType } from "../utilities/types/IdType";
 
 /////////////////////////
 // CLIENT SERVICE
@@ -139,7 +140,7 @@ const getClientById = async (clientId: ObjectId|string, session: ClientSession|u
 
 // DELETE BY ID
 
-const removeClientById = async (clientId: ObjectId|string) => {
+const removeClientById = async (clientId: IdType) => {
     checkId(clientId)
     try{
         const clientDeleted = await ClientModel.findById(clientId) // FIND CLIENT BY ID 

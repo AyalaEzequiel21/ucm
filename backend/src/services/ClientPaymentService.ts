@@ -4,10 +4,10 @@ import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import {ClientPaymentModel} from "../models";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { getAClientWithId, addPaymentToClient, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
-import { ObjectId } from "mongoose";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { checkId } from "../utilities/validateObjectId";
+import { IdType } from "../utilities/types/IdType";
 
 /////////////////////////
 // CLIENT PAYMENT SERVICE
@@ -40,7 +40,7 @@ const createClientPayment = async (clientPayment: ClientPaymentType) => {
 }
 
 // DELETE
-const removeClientPayment = async (clientPaymentId: string|ObjectId) => {
+const removeClientPayment = async (clientPaymentId: IdType) => {
     checkId(clientPaymentId)
     const session = await startSession() // INIT A SESSION FOR TRANSACTIONS
     try {
@@ -65,7 +65,7 @@ const removeClientPayment = async (clientPaymentId: string|ObjectId) => {
 }
 
 // FIND BY ID
-const getClientPaymentsById = async (paymentId: string|ObjectId) => {
+const getClientPaymentsById = async (paymentId: IdType) => {
     checkId(paymentId)
     try {
         const paymentsFound = await ClientPaymentModel.findById(paymentId) // FIND CLIENT PAYMENT BY ID
@@ -89,7 +89,7 @@ const getAllClientsPayments = async () => {
 }
 
 //FIND BY CLIENT ID
-const getPaymentsByClientId = async (clientId: string|ObjectId) => {
+const getPaymentsByClientId = async (clientId: IdType) => {
     checkId(clientId)
     try {
         const client = await getAClientWithId(clientId, undefined) // CHECK IF EXISTS AN USER WITH SAME ID
