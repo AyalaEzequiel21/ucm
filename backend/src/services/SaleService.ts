@@ -32,13 +32,40 @@ const createSale = async (sale: SaleType) => {
 
         const { _id, total_sale } = saleCreated[0] // GET THE ID AND TOTAL_SALE FROM THE SALE CREATED
         if(total_sale !== undefined){
-            await addSaleToClient(client_id, _id.toString(), total_sale, session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
+            await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
         }
         if(payment_dto && payment_dto.client_id === client_id){ // IF THE SALE HAS A PAYMENT, THEN PROCESS IT
             const paymentCreated = await processOnePayment(payment_dto, undefined, _id.toString(), session)
             saleCreated[0].payment_id = paymentCreated // AFTER REGISTER THE PAYMENT, ADD HIS ID TO SALE CREATED
         }
         await saleCreated[0].save({session})
+        await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+    } catch(e) {
+        await session.abortTransaction() //ABORT THE TRANSACTION
+        ErrorsPitcher(e)
+    } finally {
+        await session.endSession() // END THE SESSION
+    }
+}
+
+// UPDATE
+const modifySale = async (saleUpdated: SaleMongoType) => {
+    const {_id, details, client_id} = saleUpdated // GET THE ID AND DETAILS FOR UPDATE THE SALE
+    const session = await startSession() // INIT A SESSION
+    if(!_id || !details || !client_id){
+        throw new BadRequestError('Faltan algunos datos necesarios')
+    }
+    try {
+        session.startTransaction() // START A TRANSACTION
+        const client = await getClientById(client_id, session) // FIND THE CLIENT WITH HIS ID
+        if(!client){ // IF CLIENT IS NOT FOUND, RUN AN EXCELTION
+            throw new ResourceNotFoundError('Cliente')
+        }
+        const saleSaved = await SaleModel.findById(_id).session(session) // FIND THE SALE, IF NOT EXISTS RUN AN EXCEPTION
+        if(!saleSaved) { 
+            throw new ResourceNotFoundError('Venta')
+        }
+        saleSaved.details = details
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
