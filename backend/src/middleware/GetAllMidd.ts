@@ -9,7 +9,6 @@ const filterGetAll = () => {
         } else {
             req.filterDelivery = false
         }
-
         next()
     }
 }

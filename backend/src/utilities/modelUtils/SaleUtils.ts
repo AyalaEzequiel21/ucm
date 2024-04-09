@@ -58,6 +58,17 @@ const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: Cli
     }
 }
 
+const addDifferenceToBalanceClient = async (clientId: IdType, difference: number, session: ClientSession) => {
+    const client = await getClientById(clientId, session) // FIND THE CLIENT 
+    if(!client){
+        throw new ResourceNotFoundError('Cliente') // IF NOT EXISTS RUN AN EXCEPTION
+    }
+    if(client.balance){ // UPDATE THE CLIENT BALANCE, ADD THE DIFFERENCE
+        client.balance += difference
+    }
+    await client.save({session}) // SAVE THE CLIENT UPDATED
+}
+
 const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
     try {
         const deliverySales = [];
@@ -75,4 +86,4 @@ const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
     }
 }
 
-export { addSaleToClient, removeSaleToClient, filterSaleForDelivery }
+export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient }

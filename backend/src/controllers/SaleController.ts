@@ -49,7 +49,7 @@ const findSaleById = async (req: Request, res: Response, next: NextFunction) => 
 
 // FIND SALE BY CLIENT NAME
 const findSalesByClientName = async (req: RequestExtended, res: Response, next: NextFunction) => {
-    const inDelivery = !!req.filterDelivery // GET INDELIVERY FROM PARAMS
+    const inDelivery = !!req.filterDelivery // GET IN DELIVERY FROM PARAMS
     const clientName = req.params.clientName //  GET THE CLIENT NAME FROM PARAMS
     try {
         const sales = await getSalesByClientName(inDelivery, clientName) //  FIND THE SALES WITH THE SERVICE
@@ -62,9 +62,9 @@ const findSalesByClientName = async (req: RequestExtended, res: Response, next: 
 // FIND SALE BY DATE
 const findSalesByDate = async (req: RequestExtended, res: Response, next: NextFunction) => {
     const inDelivery = !!req.filterDelivery // GET INDELIVERY FROM PARAMS
-    const date = req.query // GET THE DATE FROM QUERY REQUEST
+    const {date} = req.query // GET THE DATE FROM QUERY REQUEST
     try {
-        const sales = await getSalesByDate(inDelivery, date.toString()) // FIND SALES WITH THIS DATE WITH THE SERVICE
+        const sales = await getSalesByDate(inDelivery, date as string) // FIND SALES WITH THIS DATE WITH THE SERVICE
         res.status(200).json({ok: true, data: sales})
     } catch(e) {
         next(e)

@@ -56,10 +56,6 @@ export const saleSchema = new Schema<SaleType>(
         total_sale: {
             type: Number,
             min: 0.1
-        },
-        payment_id: {
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: "ClientPayment",
         }
     },
     {

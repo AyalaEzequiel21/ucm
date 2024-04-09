@@ -1,12 +1,12 @@
 import { startSession } from "../config/startSession";
-import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
+import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
-import { processOnePayment } from "../utilities/modelUtils/ClientPaymentUtils";
-import { addSaleToClient, filterSaleForDelivery, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
+import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
+import { checkId } from "../utilities/validateObjectId";
 import { getClientById } from "./ClientService";
 
 /////////////////////////
@@ -15,7 +15,7 @@ import { getClientById } from "./ClientService";
 
 // CREATE 
 const createSale = async (sale: SaleType) => {
-    const { client_id, client_name, details, payment_dto } = sale // GET THE DATA FOR CREATE THE SALE
+    const { client_id, client_name, details } = sale // GET THE DATA FOR CREATE THE SALE
     const session = await startSession() // INIT A SESSION 
     if(!client_id || !details || !client_name){
         throw new BadRequestError('Faltan algunos datos necesarios')
@@ -36,10 +36,6 @@ const createSale = async (sale: SaleType) => {
         if(total_sale !== undefined){
             await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
         }
-        if(payment_dto && payment_dto.client_id === client_id){ // IF THE SALE HAS A PAYMENT, THEN PROCESS IT
-            const paymentCreated = await processOnePayment(payment_dto, undefined, _id.toString(), session)
-            saleCreated[0].payment_id = paymentCreated // AFTER REGISTER THE PAYMENT, ADD HIS ID TO SALE CREATED
-        }
         await saleCreated[0].save({session})
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
     } catch(e) {
@@ -59,18 +55,17 @@ const modifySale = async (saleUpdated: SaleMongoType) => {
     }
     try {
         session.startTransaction() // START A TRANSACTION
-        const client = await getClientById(client_id, session) // FIND THE CLIENT WITH HIS ID
-        if(!client){ // IF CLIENT IS NOT FOUND, RUN AN EXCELTION
-            throw new ResourceNotFoundError('Cliente')
-        }
         const saleSaved = await SaleModel.findById(_id).session(session) // FIND THE SALE, IF NOT EXISTS RUN AN EXCEPTION
         if(!saleSaved) { 
             throw new ResourceNotFoundError('Venta')
         }
-        removeSaleToClient(client_id, _id, session) // REMOVE THE SALE WITH OLD TOTAL SALE
+        const oldTotal = saleSaved.total_sale // GET OLD TOTAL SALE
         saleSaved.details = details // UPDATE THE DETAILS SALE
-        saleSaved.save({session}) // SAVE THE UPDATED SALE
-        addSaleToClient(client_id, _id, session) // ADD THE SALE WITH NEW TOTAL SALE TO CLIENT
+        await saleSaved.save({session}) // SAVE THE UPDATED SALE
+        if(oldTotal !== undefined && saleSaved.total_sale !== undefined){
+            const difference = saleSaved.total_sale - oldTotal // CALCULATE THE DIFFERENCE BEETWEN OLD TOTAL SALE AND THE NEW TOTAL
+            difference !== 0 && await addDifferenceToBalanceClient(client_id, difference, session) // ADD DIFFERENCE TO CLIENT BALANCE
+        }
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
@@ -96,6 +91,7 @@ const getAllSales = async (inDelivery: boolean) => {
 
 // GET BY ID
 const getSaleById = async (saleId: IdType) => {
+    checkId(saleId)
     try {
         const sale = await SaleModel.findById(saleId) //  FIND THE SALE BY HIS ID
         if(!sale) { // CHECK IF EXISTS THE SALE OR RUN AN EXCEPTION
@@ -110,9 +106,9 @@ const getSaleById = async (saleId: IdType) => {
 // GET BY CLIENT NAME
 const getSalesByClientName = async (inDelivery: boolean, clientName: string) => {
     try {
-        const sales: SaleMongoType[] = await SaleModel.find({ fullname: { $regex: clientName, $options: 'i' } }) // FIND ALL SALE WITH CLIENT NAME
+        const sales: SaleMongoType[] = await SaleModel.find({ client_name: { $regex: clientName, $options: 'i' } }) // FIND ALL SALE WITH CLIENT NAME        
         if(inDelivery){
-            const salesFiltered = filterSaleForDelivery(sales) // IF INDELIVERY IS TRUE, THEN FILTERED THE SALES
+            const salesFiltered = filterSaleForDelivery(sales) // IF INDELIVERY IS TRUE, THEN FILTERED THE SALES            
             return salesFiltered
         }
         return sales
