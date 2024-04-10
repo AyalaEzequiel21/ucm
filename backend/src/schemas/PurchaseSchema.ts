@@ -4,10 +4,10 @@ import { validateAmount } from "../utilities/validateIsAmount";
 
 // PURCHASE DETAIL
 const purchaseDetailSchema = z.object({
-    product_id: validateObjectId().optional(),
     product_name: z.string().min(5).max(18).optional(),
     description: z.string().min(5).max(70),
     quantity: validateAmount(),
+    unity_price: validateAmount(),
     partial_total: validateAmount()
 })
 

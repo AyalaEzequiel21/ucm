@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
-import { createSale, getAllSales, getSalesByClientName, getSaleById, modifySale, getSalesByDate } from "../services/SaleService";
+import { createSale, getAllSales, getSalesByClientName, getSaleById, modifySale, getSalesByDate, removeSaleById } from "../services/SaleService";
 import { RequestExtended } from "../utilities/interfaces/RequestExtended";
 
 // REGISTER SALE
@@ -71,4 +71,15 @@ const findSalesByDate = async (req: RequestExtended, res: Response, next: NextFu
     }
 }
 
-export { registerSale, updateSale, findAllSales, findSaleById, findSalesByClientName, findSalesByDate }
+// DELETE SALE BY ID
+const deleteSaleById = async (req: Request, res: Response, next: NextFunction) => {
+    const saleid = req.params.saleId //  GET THE SALE ID FROM PARAMS
+    try {
+        await removeSaleById(saleid) // DELETE THE SALE WITH THE SERVICE
+        res.status(204).json({ok: true})
+    }catch(e) {
+        next(e)
+    }
+}
+
+export { registerSale, updateSale, findAllSales, findSaleById, findSalesByClientName, findSalesByDate, deleteSaleById }

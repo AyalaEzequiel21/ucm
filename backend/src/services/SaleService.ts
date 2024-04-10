@@ -135,4 +135,25 @@ const getSalesByDate = async (inDelivery: boolean, date: string) => {
     }
 }
 
-export { createSale, modifySale, getAllSales, getSaleById, getSalesByClientName, getSalesByDate }
+// DELTE BY ID
+const removeSaleById = async (saleId: IdType) => {
+    checkId(saleId)
+    const session = await startSession() // INIT A SESSION FOR TRANSACTIONS
+    try{
+        const sale = await SaleModel.findById(saleId).session(session) //  FIND SALE BY HIS ID
+        if(!sale){
+            throw new ResourceNotFoundError('Venta') // IF SALE NOT EXISTS, THEN RUN AN EXCEPTION
+        }
+        if(sale.client_id !== undefined){ // IF CLIENT ID EXISTS, THE SUBTRACT THE SALE FROM CLIENT AND UPDATE BALANCE
+            await removeSaleToClient(sale.client_id, saleId, session)
+        }
+        await SaleModel.findByIdAndDelete(saleId) // DELETE SALE
+    } catch(e) {
+        await session.abortTransaction() //ABORT THE TRANSACTION
+        ErrorsPitcher(e)
+    }finally{
+        await session.endSession() // END THE TRANSACTION
+    }
+}
+
+export { createSale, modifySale, getAllSales, getSaleById, getSalesByClientName, getSalesByDate, removeSaleById }

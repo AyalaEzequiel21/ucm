@@ -3,10 +3,6 @@ import { PurchaseDetailType, PurchaseType } from "../schemas/PurchaseSchema";
 
 const purchaseDetail = new Schema<PurchaseDetailType>(
     {
-        product_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product"
-        },
         product_name: {
             type: String,
             minlength: 5,
@@ -19,6 +15,11 @@ const purchaseDetail = new Schema<PurchaseDetailType>(
             maxlength: 70
         },
         quantity: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        unity_price: {
             type: Number,
             required: true,
             min: 1

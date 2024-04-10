@@ -15,6 +15,12 @@ export const supplierSchema = new Schema<SupplierMongoSchema>(
             minlength: 8,
             maxlength: 25
         },
+        primeProduct: {
+            type: String,
+            required: true,
+            minlength: 5,
+            maxlength: 20
+        },
         balance: {
             type: Number,
             default: 0.0

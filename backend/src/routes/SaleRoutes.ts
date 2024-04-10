@@ -2,7 +2,7 @@ import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { newSaleSchema, saleMongoSchema } from '../schemas/SaleSchema'
-import { findAllSales, findSaleById, findSalesByClientName, findSalesByDate, registerSale, updateSale } from '../controllers/SaleController'
+import { deleteSaleById, findAllSales, findSaleById, findSalesByClientName, findSalesByDate, registerSale, updateSale } from '../controllers/SaleController'
 import { filterGetAll } from '../middleware/GetAllMidd'
 
 // SALE ROUTES
@@ -28,7 +28,7 @@ router.post("/register", validateSchemaRequest(newSaleSchema), registerSale)
 // SALE UPDATE
 router.put("/update", validateSchemaRequest(saleMongoSchema), updateSale)
 // SALE DELETE
-router.delete("/delete/:saleId",)
+router.delete("/delete/:saleId", deleteSaleById)
 
 
 export default router

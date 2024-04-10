@@ -5,6 +5,7 @@ import { validateObjectId } from "../utilities/validateObjectId";
 const newSupplierSchema = z.object({
     supplier_name: z.string().min(4).max(15),
     phone: z.string().min(8).max(25),
+    primeProduct: z.string().min(5).max(20)
 })
 
 type SupplierType = z.infer<typeof newSupplierSchema>
