@@ -18,6 +18,6 @@ const supplierMongoSchema = newSupplierSchema.extend({
     payments: z.array(validateObjectId()).optional()
 })
 
-type SupplierMongoSchema = z.infer<typeof supplierMongoSchema>
+type SupplierMongoType = z.infer<typeof supplierMongoSchema>
 
-export { newSupplierSchema, SupplierType, supplierMongoSchema, SupplierMongoSchema }
+export { newSupplierSchema, SupplierType, supplierMongoSchema, SupplierMongoType }

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { SupplierMongoSchema } from "../schemas/SupplierSchema";
+import { SupplierMongoType } from "../schemas/SupplierSchema";
 
-export const supplierSchema = new Schema<SupplierMongoSchema>(
+export const supplierSchema = new Schema<SupplierMongoType>(
     {
         supplier_name: {
             type: String,
@@ -25,16 +25,16 @@ export const supplierSchema = new Schema<SupplierMongoSchema>(
             type: Number,
             default: 0.0
         },
-        payments: {
+        payments: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "PaymentToSupplier",
             default: []
-        }, 
-        purchases: {
+        }], 
+        purchases: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Purchases",
             default: []
-        }
+        }]
     },
     {
         versionKey: false,

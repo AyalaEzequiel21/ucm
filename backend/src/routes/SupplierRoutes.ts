@@ -2,7 +2,7 @@ import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { newSupplierSchema, supplierMongoSchema } from '../schemas/SupplierSchema'
-import { findAllSuppliers, registerSupplier } from '../controllers/SupplierController'
+import { deleteSupplierById, findAllSuppliers, findSupplierById, findSuppliersByName, registerSupplier, updateSupplier } from '../controllers/SupplierController'
 
 // SUPPLIER ROUTES
 const router = express.Router()
@@ -18,13 +18,13 @@ router.get("/", findAllSuppliers)
 // SUPPLIER REGISTER
 router.post("/register", validateSchemaRequest(newSupplierSchema), registerSupplier)
 // SUPPLIER UPDATE
-router.put("/update", validateSchemaRequest(supplierMongoSchema), )
+router.put("/update", validateSchemaRequest(supplierMongoSchema), updateSupplier)
 // GET SUPPLIER BY NAME
-router.get("/supplierName/:supplierName", )
+router.get("/supplierName/:supplierName", findSuppliersByName)
 // GERT SUPPLIER BY ID
-router.get('/supplier/:supplierId', )
+router.get('/supplier/:supplierId', findSupplierById)
 // DELETE SUPPLIER BY ID 
-router.delete("/delete/:supplierId", )
+router.delete("/delete/:supplierId", deleteSupplierById)
 
 
 export default router
