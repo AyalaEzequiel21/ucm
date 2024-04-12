@@ -32,6 +32,13 @@ const purchaseDetail = new Schema<PurchaseDetailType>(
     }
 )
 
+purchaseDetail.pre('validate', function(next) {
+    if (this.quantity && this.unity_price) {
+        this.partial_total = this.quantity * this.unity_price;
+    }
+    next();
+});
+
 export const purchaseSchema = new Schema<PurchaseType>(
     {
         supplier_id: {
@@ -57,3 +64,12 @@ export const purchaseSchema = new Schema<PurchaseType>(
         timestamps: true
     }
 )
+
+purchaseSchema.pre('save', function(next) {
+    if (this.purchaseDetail && this.purchaseDetail.length > 0) {
+        this.total_purchase = this.purchaseDetail.reduce((total, detail) => {
+            return total + (detail.partial_total || 0);
+        }, 0);
+    }
+    next();
+});
