@@ -3,11 +3,15 @@ import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { createSale, getAllSales, getSalesByClientName, getSaleById, modifySale, getSalesByDate, removeSaleById } from "../services/SaleService";
 import { RequestExtended } from "../utilities/interfaces/RequestExtended";
 
+/////////////////////////
+// SALE CONTROLLER
+///////////////////////
+
 // REGISTER SALE
 const registerSale = async (req: Request, res: Response, next: NextFunction) => {
     const sale: SaleType = req.body //  GET THE DATA FOR REGISTER THE SALE
     try{
-        const saleCreated = await createSale(sale)
+        const saleCreated = await createSale(sale) // CREATE THE SALE WITH THE SERVICE
         res.status(201).json({ok: true, data: saleCreated})
     } catch(e) {
         next(e)

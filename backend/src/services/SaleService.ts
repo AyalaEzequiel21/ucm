@@ -1,5 +1,5 @@
 import { startSession } from "../config/startSession";
-import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../errors/CustomErros";
+import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
