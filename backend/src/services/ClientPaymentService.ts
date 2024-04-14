@@ -30,7 +30,7 @@ const createClientPayment = async (clientPayment: ClientPaymentType) => {
         const paymentId = paymentCreated[0]._id // GET THE ID OK PAYMENT CREATED
         await addPaymentToClient(client_id, paymentId.toString(), amount, session) //  ADD PAYMENT TO CLIENT AND UPDATE THE BALANCE
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
-        return paymentCreated
+        return paymentCreated[0]
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)

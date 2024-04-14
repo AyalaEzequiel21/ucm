@@ -16,7 +16,7 @@ import { getSupplierById } from "./SupplierService";
 // CREATE
 const createPurchase = async (purchase: PurchaseType) => {
     const { supplier_id, supplier_name, purchaseDetail } = purchase //  GET THE DATA FOR CREATR THE PURCHASE
-    if(!supplier_id || !supplier_name || !purchaseDetail || purchaseDetail.length === 0){
+    if(!supplier_id || !supplier_name || !purchaseDetail){
         throw new BadRequestError("Faltan algunos datos necesarios") //  IF THE SOME PROPERTIE NOT EXISTS RUN AN EXCEPTION
     }
     const session = await startSession() //  INIT A SESSION
@@ -31,12 +31,11 @@ const createPurchase = async (purchase: PurchaseType) => {
             supplier_name: supplier_name, 
             purchaseDetail: purchaseDetail
         }], {session})
-        const { _id, total_purchase } = purchaseCreated[0] // GET SOME PROPERTIES FOR UPDATE SUPPLIER BALANCE
-        if(total_purchase !== undefined){
-            await addPurchaseToSupplier(supplier_id, _id.toString(), session) // ADD THE PURCHASE TO SUPPLIER AND UPDATE THE BALANCE
+        if(purchaseCreated[0].total_purchase !== undefined){            
+            await addPurchaseToSupplier(supplier_id, purchaseCreated[0]._id.toString(), session) // ADD THE PURCHASE TO SUPPLIER AND UPDATE THE BALANCE
         }
-        await purchaseCreated[0].save({session})
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+        return purchaseCreated[0]
     } catch(e) {        
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
@@ -63,9 +62,10 @@ const modifyPurchase = async (purchaseUpdated: PurchaseMongoType) => {
         await purchaseSaved.save({session}) // SAVE THE UPDATED PURCHASE
         if(oldTotal !== undefined && purchaseSaved.total_purchase !== undefined){
             const difference = purchaseSaved.total_purchase - oldTotal // CALCULATE THE DIFFERENCE BEETWEN OLD TOTAL SALE AND THE NEW TOTAL
-            difference !== 0 && addDiffrenceToBalanceSupplier(supplier_id, difference, session) //  ADD THE DIFFERENCE TO SUPPLIER BALANCE
+            difference !== 0 && await addDiffrenceToBalanceSupplier(supplier_id, difference, session) //  ADD THE DIFFERENCE TO SUPPLIER BALANCE
         }
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+        return purchaseSaved
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
@@ -127,6 +127,7 @@ const removePurchaseById = async (purchaseId: IdType) => {
     checkId(purchaseId)
     const session = await startSession() // INIT A SESSION FOR TRANSACTIONS
     try {
+        session.startTransaction() // INIT THE TRANSACTION
         const purchase = await PurchaseModel.findById(purchaseId).session(session) //  FIND THE PURCHASE BY ID, IF NOT EXISTS RUN AN EXCEPTION
         if(!purchase){
             throw new ResourceNotFoundError('Compra a proveedor')

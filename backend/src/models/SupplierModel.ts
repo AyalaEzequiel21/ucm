@@ -32,7 +32,7 @@ export const supplierSchema = new Schema<SupplierMongoType>(
         }], 
         purchases: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Purchases",
+            ref: "Purchase",
             default: []
         }]
     },

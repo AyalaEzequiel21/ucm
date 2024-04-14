@@ -20,11 +20,11 @@ const addPurchaseToSupplier = async (supplierId: IdType, purchaseId: IdType, ses
         if(!purchase) {
             throw new ResourceNotFoundError('Compra a proveedor')
         }
-        if(supplier.purchases && supplier.balance && purchase.total_purchase !== undefined){
+        if(supplier.purchases !== undefined && supplier.balance !== undefined && purchase.total_purchase !== undefined){            
             const purchaseForSupplier = {
                 ...purchase.toObject(), // CONVERT TE PURCHASE TO OBJECT FOR UPDATE SUPPLIER BALANCE
                 _id: purchase._id.toString()
-            }
+            }            
             supplier.purchases.push(purchaseForSupplier._id) // ADD PURCHASE TO SUPPLIER LIST OF PURCHASES
             supplier.balance += purchase.total_purchase // UPDATE THE SUPPLIER BALANCE
             await supplier.save({session})

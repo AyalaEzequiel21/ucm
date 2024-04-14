@@ -36,8 +36,8 @@ const createSale = async (sale: SaleType) => {
         if(total_sale !== undefined){
             await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
         }
-        await saleCreated[0].save({session})
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+        return saleCreated[0]
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
@@ -140,6 +140,7 @@ const removeSaleById = async (saleId: IdType) => {
     checkId(saleId)
     const session = await startSession() // INIT A SESSION FOR TRANSACTIONS
     try{
+        session.startTransaction() // INIT THE TRANSACTION
         const sale = await SaleModel.findById(saleId).session(session) //  FIND SALE BY HIS ID
         if(!sale){
             throw new ResourceNotFoundError('Venta') // IF SALE NOT EXISTS, THEN RUN AN EXCEPTION
