@@ -6,13 +6,8 @@ const purchaseDetail = new Schema<PurchaseDetailType>(
         product_name: {
             type: String,
             minlength: 5,
-            maxlength: 18
-        },
-        description: {
-            type: String,
-            required: true,
-            minlength: 5,
-            maxlength: 70
+            maxlength: 18,
+            required: true
         },
         quantity: {
             type: Number,
@@ -26,7 +21,6 @@ const purchaseDetail = new Schema<PurchaseDetailType>(
         },
         partial_total: {
             type: Number,
-            required: true,
             min: 0.1
         }
     }
@@ -55,7 +49,6 @@ export const purchaseSchema = new Schema<PurchaseType>(
         purchaseDetail: [purchaseDetail],
         total_purchase: {
             type: Number, 
-            required: true,
             min:1
         }
     },

@@ -2,7 +2,7 @@ import express from "express"
 import { validateUser, validateUserRole } from "../middleware/AuthMidd"
 import { validateSchemaRequest } from "../middleware/RequestMidd"
 import { newPurchaseSchema, purchaseMongoSchema } from "../schemas/PurchaseSchema"
-import { findAllPurchases, findPurchaseById, registerPurchase } from "../controllers/PurchaseController"
+import { deletePurchaseById, findAllPurchases, findPurchaseById, findPurchasesByDate, findPurchasesBySupplierName, registerPurchase, updatePurchase } from "../controllers/PurchaseController"
 
 // PURCHASE ROUTES
 const router = express.Router()
@@ -18,16 +18,16 @@ router.get("/", findAllPurchases)
 // GET PURCHASE BY ID
 router.get("/purchase/:purchaseId", findPurchaseById)
 // GET PURCHASE BY NAME SUPPLIER
-router.get("/supplier/:supplierName", )
+router.get("/supplier/:supplierName", findPurchasesBySupplierName)
 // GET PURCHASE BY DATE
-router.get("/purchaseDate", )
+router.get("/purchaseDate", findPurchasesByDate)
 
 // PURCHASE REGISTER 
 router.post("/register", validateSchemaRequest(newPurchaseSchema), registerPurchase)
 // PURCHASE UPDATE
-router.put("/update", validateSchemaRequest(purchaseMongoSchema), )
+router.put("/update", validateSchemaRequest(purchaseMongoSchema), updatePurchase)
 // PURCHASE DELETE
-router.delete("/delete/:purchaseId", )
+router.delete("/delete/:purchaseId", deletePurchaseById)
 
 
 export default router

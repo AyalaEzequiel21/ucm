@@ -10,7 +10,7 @@ const validateSchemaRequest = <T>(schema: z.ZodSchema<T>) => {
             if(result.success) {
                 req.body = result.data
                 next()
-            } else {
+            } else {                
                 throw new BadRequestError("ZOD_ERROR: Verificar datos ingresados y sus requerimientos")
             }
         } catch (error){       

@@ -49,7 +49,7 @@ const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: Cli
                 ...sale.toObject(),
                 _id: sale._id.toString()
             }
-            client.sales = client.sales.filter(sale => sale != saleForClient._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+            client.sales = client.sales.filter(sale => sale != saleForClient._id) // SUBTRACT SALE TO CLIENT LIST OF SALES
             client.balance -= sale.total_sale // UPDATE THE CLIENT BALANCE
             await client.save({session})
        }
@@ -59,14 +59,18 @@ const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: Cli
 }
 
 const addDifferenceToBalanceClient = async (clientId: IdType, difference: number, session: ClientSession) => {
-    const client = await getClientById(clientId, session) // FIND THE CLIENT 
-    if(!client){
-        throw new ResourceNotFoundError('Cliente') // IF NOT EXISTS RUN AN EXCEPTION
+    try {
+        const client = await getClientById(clientId, session) // FIND THE CLIENT 
+        if(!client){
+            throw new ResourceNotFoundError('Cliente') // IF NOT EXISTS RUN AN EXCEPTION
+        }
+        if(client.balance){ // UPDATE THE CLIENT BALANCE, ADD THE DIFFERENCE
+            client.balance += difference
+        }
+        await client.save({session}) // SAVE THE CLIENT UPDATED
+    } catch(e){
+        throw e
     }
-    if(client.balance){ // UPDATE THE CLIENT BALANCE, ADD THE DIFFERENCE
-        client.balance += difference
-    }
-    await client.save({session}) // SAVE THE CLIENT UPDATED
 }
 
 const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
