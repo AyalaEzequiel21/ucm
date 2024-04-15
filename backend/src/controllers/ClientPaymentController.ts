@@ -63,7 +63,7 @@ const findClientPaymentsByClientId = async (req: Request, res: Response, next: N
 
 // FIND PAYMENTS BY PAYMENTS METHOD
 const findClientPaymentsByPaymentMethod = async (req: Request, res: Response, next: NextFunction) => {
-    const method: PaymentMethodType = req.params.paymentMethod as PaymentMethodType //  FIND THE PAYMENT METHOD FROM PARAMS REQUEST
+    const method = req.params.paymentMethod as PaymentMethodType //  FIND THE PAYMENT METHOD FROM PARAMS REQUEST
     try {
         const paymentsFound = await getPaymentsPaymentMethod(method)
         res.status(200).json({ok: true, data: paymentsFound})

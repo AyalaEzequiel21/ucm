@@ -3,8 +3,10 @@ import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { PaymentToSupplierModel } from "../models";
 import { PaymentToSupplierType } from "../schemas/PaymentToSupplierSchema";
+import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { addPaymentToSupplier, subtractPaymentToSupplier } from "../utilities/modelUtils/PaymentToSupplierUtils";
 import { IdType } from "../utilities/types/IdType";
+import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { checkId } from "../utilities/validateObjectId";
 import { getSupplierById } from "./SupplierService";
 
@@ -62,4 +64,67 @@ const removePaymentToSupplierById = async (paymentSupplierId: IdType) => {
     }
 }
 
-export { createPaymentToSupplier, removePaymentToSupplierById }
+//  FIND ALL 
+const getAllPaymentsToSupplier = async () => {
+    try {
+        const paymentsFound = await PaymentToSupplierModel.find() //  FIND ALL PAYMENTS TO SUPPLIER
+        return paymentsFound
+    } catch(e){
+        ErrorsPitcher(e)
+    }
+}
+
+// FIND BY ID
+const getPaymentToSupplierById = async (paymentSupplierId: IdType) => {
+    checkId(paymentSupplierId)
+    try {
+        const paymentSupplier = await PaymentToSupplierModel.findById(paymentSupplierId) //  FIND THE PAYMENT BY HIS ID
+        return paymentSupplier
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// FIND BY PAYMENT METHOD
+const getPaymentsToSupplierByPaymentMethod = async (paymentMethod: PaymentMethodType) => {
+    if(!paymentMethodsArray.includes(paymentMethod)){ //  IF PAYMENT METHOD IS NOT VALID RUN AN EXCEPTION
+        throw new BadRequestError("Metodo de pago incorrecto")
+    }
+    try {
+        const paymentsFound = await PaymentToSupplierModel.find({payment_method: paymentMethod}) //  FIND ALL PAYMENTS TO SUPPLIER BY HIS PAYMENT METHOD
+        return paymentsFound
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+// FIND BY SUPPLIER ID
+const getPaymentsToSupplierBySupplierId = async (supplierId: IdType) => {
+    checkId(supplierId)
+    try {
+        const supplier = await getSupplierById(supplierId) //  FIND THE SUPPLIER BY HIS ID, IF SUPPLIER NOT EXISTS RUN AN EXCEPTION
+        if(!supplier){
+            throw new ResourceNotFoundError('Proveedor')
+        }
+        const paymentsFound = await PaymentToSupplierModel.find({supplier_id: supplierId}) //  FIND ALL PAYMENTS BY SUPPLIER ID
+        return paymentsFound
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+//  FIND BY DATE
+const getPaymentsToSupplierByDate = async (paymentDate: string) => {
+    if(!validateDate(paymentDate)){ // CHECK THAT THE DATE IS VALID FORMAT
+        throw new BadRequestError('Datos ingresados no son validos')
+    }
+    const newFormatDate = convertDateString(paymentDate) //  CONVERT THE DATE TO FORMAT VALID FOR SEARCH
+    try {
+        const paymentsFound = await PaymentToSupplierModel.find({createdAt: newFormatDate}) //  FIND ALL PAYMENTS WITH THAT DATE
+        return paymentsFound
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
+export { createPaymentToSupplier, removePaymentToSupplierById, getAllPaymentsToSupplier, getPaymentToSupplierById, getPaymentsToSupplierByPaymentMethod, getPaymentsToSupplierBySupplierId, getPaymentsToSupplierByDate }

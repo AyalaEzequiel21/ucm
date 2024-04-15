@@ -78,7 +78,7 @@ const getClientPaymentsById = async (paymentId: IdType) => {
     }
 }
 
-//FIND ALL
+// FIND ALL
 const getAllClientsPayments = async () => {
     try {
         const paymentsFound = await ClientPaymentModel.find() // FIND ALL CLIENTS PAYMENTS
