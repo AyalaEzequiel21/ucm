@@ -16,7 +16,7 @@ import { IdType } from "../utilities/types/IdType";
 // CREATE
 const createClientPayment = async (clientPayment: ClientPaymentType) => {
     const { client_id, amount, client_name, payment_method } = clientPayment //  GET THE PARAMETERS PAYMENT FROM THE REQUEST 
-    const session = await startSession() // INIT A SESSION FOR TRANSACTIOND
+    const session = await startSession() // INIT A SESSION FOR TRANSACTION
     if(!client_id || !amount || !payment_method || !client_name) { // CHECK THAT ALL THE NECESSARY PARAMETERS ARE EXIST, OR RUN AN EXCEPTION
         throw new BadRequestError("Faltan datos necesarios")
     }

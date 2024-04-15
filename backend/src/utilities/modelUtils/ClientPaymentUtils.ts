@@ -30,7 +30,6 @@ const addPaymentToClient = async (clientId: IdType, paymentId: IdType, amount: n
         }
        const payment = await ClientPaymentModel.findById(paymentId).session(session)// FIND CLIENT PAYMENT WITH SESSION, CHECK IF EXISTS OR RUN AN EXCEPTION
        if(!payment) {
-            console.log(payment);
             throw new ResourceNotFoundError('Pago del cliente')
        }
        if(client.payments && client.balance !== undefined) {
@@ -62,7 +61,7 @@ const subtractPaymentToClient = async (paymentId: IdType, clientId: IdType, amou
 
         client.payments = client.payments.filter(payment => payment != paymentId) // SUBTRACT PAYMENT TO CLIENT LIST OF PAYMENTS
         client.balance += amount // UPDATE THE CLIENT BALANCE
-        await client.save()
+        await client.save({session})
    }
     } catch(e){
         throw e
