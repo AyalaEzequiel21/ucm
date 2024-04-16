@@ -19,6 +19,6 @@ router.use("/paymentsReport", paymentsReportRoutes)
 router.use("/sales", saleRoutes)
 router.use('/suppliers', supplierRoutes)
 router.use('/purchases', purchaseRoutes)
-router.use("/paymentsTosupplier", paymentToSupplierRoutes)
+router.use("/paymentsToSupplier", paymentToSupplierRoutes)
 
 export default router

@@ -79,6 +79,9 @@ const getPaymentToSupplierById = async (paymentSupplierId: IdType) => {
     checkId(paymentSupplierId)
     try {
         const paymentSupplier = await PaymentToSupplierModel.findById(paymentSupplierId) //  FIND THE PAYMENT BY HIS ID
+        if(!paymentSupplier){ // IF PAYMENT NOT EXISTS RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Pago a proveedor')
+        }
         return paymentSupplier
     } catch(e) {
         ErrorsPitcher(e)
