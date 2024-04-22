@@ -1,16 +1,40 @@
 import { FlexBetween } from '@/components/FlexBetween'
-import { Typography, useTheme } from '@mui/material'
-import {useState} from 'react'
+import { AppBar, Toolbar, Typography, useTheme, IconButton } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import useScreenSize from '@/hooks/useScreenSize'
+// import {useState} from 'react'
 
-type Props = {}
+type NavBarProps = object
 
-const NavBar = (props: Props) => {
+const NavBar: React.FC<NavBarProps> = () => {
     const {palette} = useTheme()
+    const { isMobile } = useScreenSize()
+
+
   return (
-    <FlexBetween mb={'0.25rem'} p={'0.5rem 1rem'} height={'4rem'} color={palette.grey[100]} bgcolor={palette.secondary.dark}>
-        <Typography variant='h3'>Customer Managment</Typography>
-        <Typography variant='h3'>User</Typography>
-    </FlexBetween>
+    <AppBar
+        sx={{
+            position: 'static',
+            justifyContent: 'center',
+            bgcolor: palette.secondary.dark,
+            height: '4rem',
+            boxShadow: 'none'
+            }}
+    >
+        <Toolbar>
+            <FlexBetween width={'100%'} color={palette.grey[100]}>
+                <FlexBetween>
+                    {isMobile && <IconButton sx={{color: palette.grey[100]}}>
+                        <MenuIcon fontSize='large'/>
+                    </IconButton>}
+                    <Typography variant='h3'>Managment</Typography>
+                </FlexBetween>
+                <FlexBetween>
+                    <Typography variant='h3'>User</Typography>
+                </FlexBetween>
+            </FlexBetween>
+        </Toolbar>
+    </AppBar>
   )
 }
 
