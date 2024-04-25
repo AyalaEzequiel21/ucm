@@ -7,27 +7,27 @@ export const colorTokens = {
         700: "#242427"
       },
       primary: {
-        100: "#3D4B59",
-        300: "#2c3e50",
-        500: "#29323C",
-        700: "#262D34"
+        100: "#178AD7",
+        300: "#3B7CBD",
+        500: "#324E6A",
+        700: "#2C3E50"
       },
       secondary: {
-        100: "#5686A6",
-        300: "#246A99",
-        500: "#2E536B",
-        700: "#2E414E"
-      },
-      tertiary: {
         100: "#CDC2B0",
         300: "#BFA67B",
         500: "#AD8C54",
-        700: "#806E51"
-      },    
+        700: "#003E6A"
+      },
+      // tertiary: {
+      //   100: "#CDC2B0",
+      //   300: "#BFA67B",
+      //   500: "#AD8C54",
+      //   700: "#806E51"
+      // },    
       background: {
         light: "#ecf0f1",
-        main: "#2d2d34",
-        dark: "#1f2026"
+        main: "#596369",
+        dark: "#2F3234"
       }
 }
 
@@ -48,12 +48,12 @@ export const themeSettings = {
             dark: colorTokens.secondary[500],
         },
 
-        tertiary: {
-            ...colorTokens.tertiary,
-            light: colorTokens.tertiary[100],
-            main: colorTokens.tertiary[300],
-            dark: colorTokens.tertiary[500],
-        },
+        // tertiary: {
+        //     ...colorTokens.tertiary,
+        //     light: colorTokens.tertiary[100],
+        //     main: colorTokens.tertiary[300],
+        //     dark: colorTokens.tertiary[500],
+        // },
 
         grey: {
             ...colorTokens.grey,

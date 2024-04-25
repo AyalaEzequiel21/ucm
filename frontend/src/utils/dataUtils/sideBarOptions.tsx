@@ -8,7 +8,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 
-export interface MenuItem {
+export interface IMenuItem {
     label: string;
     icon: React.ReactElement;
     pathKey: string;
@@ -17,47 +17,47 @@ export interface MenuItem {
 export const ListMenuOptions = [
     {
         label: "Clientes",
-        icon: <GroupsIcon />,
+        icon: <GroupsIcon fontSize='large'/>,
         pathKey: "clients"
     },
     {
-        label: "Ventas",
-        icon: <ReceiptIcon/>,
-        pathKey: "sales"
-    },
-    {
         label: "Productos",
-        icon: <ListIcon/>,
+        icon: <ListIcon fontSize='large'/>,
         pathKey: "products"
     },
     {
+        label: "Ventas",
+        icon: <ReceiptIcon fontSize='large'/>,
+        pathKey: "sales"
+    },
+    {
         label: "Pagos",
-        icon: <PaidIcon/>,
+        icon: <PaidIcon fontSize='large'/>,
         pathKey: "payments"
     },
     {
         label: "Reportes",
-        icon: <ListAltIcon/>,
+        icon: <ListAltIcon fontSize='large'/>,
         pathKey: "reports"
     },
     {
-        label: "Usuarios",
-        icon: <SupervisedUserCircleIcon/>,
-        pathKey: "users"
-    },
-    {
         label: "Proveedores",
-        icon: <LocalShippingIcon/>,
+        icon: <LocalShippingIcon fontSize='large'/>,
         pathKey: "suppliers"
     },
     {
         label: "Pagos Proveedor",
-        icon: <AccountBalanceWalletIcon/>,
+        icon: <AccountBalanceWalletIcon fontSize='large'/>,
         pathKey: "paymentsToSupplier"
     },
     {
         label: "Compras",
-        icon: <ShoppingCartIcon/>,
+        icon: <ShoppingCartIcon fontSize='large'/>,
         pathKey: "purchases"
+    },
+    {
+        label: "Usuarios",
+        icon: <SupervisedUserCircleIcon fontSize='large'/>,
+        pathKey: "users"
     }
 ]

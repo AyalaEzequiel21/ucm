@@ -1,9 +1,10 @@
 import { IUser } from "@/utils/interfaces/IUser"
 import { Box, Typography, useTheme } from "@mui/material"
 import { FlexBetween } from "./FlexBetween"
+import useScreenSize from "@/hooks/useScreenSize"
 
 type UserAvatarProps = {
-    user: IUser|null
+    user: IUser|null,
 }
 
 const getFirstLetter = (username: string) => {
@@ -14,7 +15,8 @@ const getFirstLetter = (username: string) => {
 
 const UserAvatar: React.FC<UserAvatarProps> = ({user}) => {
     const firstLetter = user? getFirstLetter(user.username) : ''
-    const usernameUper = user? `${user?.role[0].toUpperCase()}${user?.role.slice(1)}` : ''
+    const role = user? `${user?.role[0].toUpperCase()}${user?.role.slice(1)}` : ''
+    const {isMobile} = useScreenSize()
     const { palette } = useTheme()
     
     return (
@@ -25,20 +27,20 @@ const UserAvatar: React.FC<UserAvatarProps> = ({user}) => {
                 alignItems='center'
                 justifyContent='center'
                 sx={{
-                    bgcolor: palette.primary.main, 
+                    bgcolor: palette.primary.dark, 
                     width: '50px',
                     height: '50px',
                     borderRadius: '50%',
                     border:`1px solid ${palette.secondary.main}`,
                     '&:hover': {
                         cursor: 'pointer',
-                        color: palette.secondary.light
+                        color: palette.secondary.dark
                     }
                 }}
             >
                 <Typography variant="h1">{firstLetter}</Typography>
             </Box>
-            <Typography variant="h3">{usernameUper}</Typography>
+            {!isMobile && <Typography variant="h3">{role}</Typography>}
         </FlexBetween>
     )
 }

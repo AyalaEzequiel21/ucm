@@ -24,22 +24,27 @@ const NavBar: React.FC<NavBarProps> = ({isSidebarOpen, setIsSidebarOpen}) => {
         sx={{
             position: 'static',
             justifyContent: 'center',
-            bgcolor: palette.secondary.dark,
+            bgcolor: palette.primary.dark,
             height: '4rem',
             boxShadow: 'none'
             }}
     >
         <Toolbar>
             <FlexBetween width={'100%'} color={palette.grey[100]}>
-                <FlexBetween>
-                    <IconButton sx={{color: palette.grey[100]}} onClick={handleClickMenu}>
+                <FlexBetween gap={'1rem'}>
+                    <IconButton sx={{color: palette.grey[100], background: 'none', '&:hover': {
+                        color: palette.secondary.main
+                    }}} onClick={handleClickMenu}>
                         <MenuIcon fontSize='large'/>
                     </IconButton>
                     <Typography variant='h3'>Managment</Typography>
                 </FlexBetween>
-                <FlexBetween gap={2}>
+                <FlexBetween gap={'1rem'}>
                     <UserAvatar user={userState.user}/>
-                    <IconButton sx={{color: palette.grey[100]}}>
+                    <IconButton sx={{color: palette.grey[100], '&:hover': {
+                        cursor: 'pointer',
+                        color: palette.secondary.main
+                    }}}>
                         <LogoutIcon fontSize='large'/>
                     </IconButton>
                 </FlexBetween>
