@@ -1,9 +1,10 @@
-import { Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from "@mui/material"
+import { Box, Drawer, IconButton, List, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import logo from "@/assets/logo.jpeg"
-import { ChevronRightOutlined, Close } from "@mui/icons-material"
+import { Close } from "@mui/icons-material"
 import { IMenuItem, ListMenuOptions } from "@/utils/dataUtils/sideBarOptions"
+import { ListItemSidebar } from "./ListItemSidebar"
 
 type SidebarProps = {
     isSidebarOpen: boolean,
@@ -28,6 +29,11 @@ const Sidebar: React.FC<SidebarProps> = ({
     useEffect(()=> {
         setActive(pathname.substring(1))
     }, [pathname])
+
+    const handleClickButtonSidebar = (pathKey: string, label: string) => {
+        // navigate(`/${pathKey}`)
+        setActive(label)
+    }
 
     return (
         <Box component={'nav'}>
@@ -71,59 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       </Box>
                       <List>
                         {ListMenuOptions.map((menuItem: IMenuItem) => {
-                            if(!menuItem.icon){
-                                return (
-                                    <Typography key={menuItem.pathKey}>
-                                        {menuItem.label}
-                                    </Typography>
-                                )
-                            }
-
-                            const lcLabel = menuItem.label.toLocaleLowerCase()
-
-                            return (
-                                <ListItem key={menuItem.pathKey} disablePadding>
-                                    <ListItemButton
-                                        onClick={() => {
-                                            // navigate(`/${menuItem.pathKey}`)
-                                            setActive(lcLabel)
-                                        }}
-                                        sx={{
-                                            backgroundColor:
-                                              active === lcLabel
-                                                ? palette.secondary.main
-                                                : "transparent",
-                                            color:
-                                              active === lcLabel
-                                                ? palette.secondary.main
-                                                : palette.grey[100],
-                                                '&:hover': {
-                                                    backgroundColor: palette.secondary.main
-                                                }
-                                          }}
-                                    >
-                                        <ListItemIcon
-                                        sx={{
-                                            color:
-                                              active === lcLabel
-                                                ? palette.primary.dark
-                                                : palette.grey[100],
-                                        }}
-                                        >
-                                            {menuItem.icon}
-                                        </ListItemIcon>
-                                        <ListItemText primary={menuItem.label} sx={{
-                                            fontWeight: 'bold',
-                                            color: active === lcLabel
-                                            ? palette.primary.dark
-                                            : palette.grey[100],
-                                        }}/>
-                                        {active === lcLabel && (
-                                            <ChevronRightOutlined sx={{ ml: "auto", color: palette.grey[100] }} />
-                                        )}
-                                    </ListItemButton>
-                                </ListItem>
-                            )
+                            return (<ListItemSidebar listItem={menuItem} handleClick={handleClickButtonSidebar} activeOption={active}/>)
                         })}
                       </List>
                     </Box>

@@ -40,7 +40,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({user}) => {
             >
                 <Typography variant="h1">{firstLetter}</Typography>
             </Box>
-            {!isMobile && <Typography variant="h3">{role}</Typography>}
+            {!isMobile && <Typography variant="h4">{role}</Typography>}
         </FlexBetween>
     )
 }

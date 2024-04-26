@@ -84,12 +84,12 @@ export const themeSettings = {
         },
         h4: {
           fontFamily: ["JetBrains Mono", "monospace"].join(","),
-          fontSize: 14,
+          fontSize: 18,
           fontWeight: 600,
         },
         h5: {
           fontFamily: ["JetBrains Mono", "monospace"].join(","),
-          fontSize: 12,
+          fontSize: 16,
           fontWeight: 400,
         },
         h6: {
