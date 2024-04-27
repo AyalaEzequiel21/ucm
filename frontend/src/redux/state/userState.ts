@@ -6,7 +6,6 @@ export interface IUserState {
 }
 
 const initialState: IUserState = {
-    // user: null
     user: {
         _id: '65fb59d664eccd2e931be3a9',
         username: 'checho',
@@ -21,6 +20,7 @@ export const UserSlice = createSlice({
         login: (state, action) => {
             return {...state, ...action.payload}  // REEMPLAZA TODO EL CONTENIDO DEL GLOBAL STATE
         }
+        
     }
 })
 

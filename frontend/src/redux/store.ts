@@ -6,3 +6,7 @@ export const store = configureStore({
         user: UserSlice.reducer
     }
 })
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+
