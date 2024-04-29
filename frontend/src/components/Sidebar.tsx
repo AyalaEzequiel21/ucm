@@ -77,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       </Box>
                       <List>
                         {ListMenuOptions.map((menuItem: IMenuItem) => {
-                            return (<ListItemSidebar listItem={menuItem} handleClick={handleClickButtonSidebar} activeOption={active}/>)
+                            return (<ListItemSidebar  key={menuItem.pathKey} listItem={menuItem} handleClick={handleClickButtonSidebar} activeOption={active}/>)
                         })}
                       </List>
                     </Box>

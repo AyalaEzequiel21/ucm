@@ -15,7 +15,7 @@ const ListItemSidebar: React.FC<ListItemSidebarProps> = ({listItem, handleClick,
 
 
     return (
-        <ListItem key={listItem.pathKey} disablePadding>
+        <ListItem disablePadding>
             <ListItemButton
                 onClick={()=> {handleClick(listItem.pathKey, lcLabel)}}
                 sx={{

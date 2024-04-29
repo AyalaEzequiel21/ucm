@@ -22,7 +22,6 @@ const Layout: React.FC<LayoutProps> = () => {
             />  
             <Box flexGrow={1} bgcolor={palette.background.paper} height={'100%'}>
                 <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
-                Listo
                 <Outlet />
             </Box>
         </Box>
