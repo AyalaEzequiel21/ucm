@@ -13,7 +13,7 @@ const Layout: React.FC<LayoutProps> = () => {
     const {palette} = useTheme()
     
     return (
-        <Box width={'100%'} height={'100%'} p={'0'} display={isMobile? 'block' : 'flex'}>
+        <Box width={'100%'} height={'auto'} p={'0'} display={isMobile? 'block' : 'flex'}>
             <Sidebar
                 isSidebarOpen={isSidebarOpen} 
                 setIsSidebarOpen={setIsSidebarOpen}

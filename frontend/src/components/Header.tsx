@@ -13,15 +13,16 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
     return (
         <Box>
             <Typography
-                variant="h2"
                 color={palette.primary.dark}
+                fontSize={'35px'}
                 fontWeight={'bold'}
-                sx={{ mb: '5px' }}
+
+                sx={{ mb: '3px' }}
             >
                 {title}
             </Typography>
             <Typography
-                variant="h5"
+                variant="h4"
                 color={palette.primary.main}
             >
                 {subtitle}
