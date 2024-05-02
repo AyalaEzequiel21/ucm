@@ -5,6 +5,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { themeSettings } from "./config/theme"
 import { Layout } from "./scenes/layout"
 import { Products } from "./scenes/Products"
+import { Clients } from "./scenes/Clients"
+import { Payments } from "./scenes/Payments"
+import { Users } from "./scenes/Users"
+import { PaymentsReports } from "./scenes/Reports"
+import { Sales } from "./scenes/Sales"
+import { Suppliers } from "./scenes/Suppliers"
+import { PaymentsToSuppliers } from "./scenes/PaymentsToSupplier"
+import { Purchases } from "./scenes/Purchases"
 
 function App() {
 
@@ -18,9 +26,15 @@ function App() {
               <Routes> 
                 <Route element={<Layout />}>
                   <Route path='/' element={<div>Home</div>}/>
-                  <Route path='/clients' element={<div>Clients</div>}/>
+                  <Route path='/clients' element={<Clients />}/>
                   <Route path='/products' element={<Products />}/>
-                  <Route path='/payments' element={<div>Pagos</div>}/>
+                  <Route path='/clientsPayments' element={<Payments />}/>
+                  <Route path='/users' element={<Users />}/>
+                  <Route path='/paymentsReport' element={<PaymentsReports />}/>
+                  <Route path='/sales' element={<Sales />}/>
+                  <Route path='/suppliers' element={<Suppliers />}/>
+                  <Route path='/paymentsToSuppliers' element={<PaymentsToSuppliers />}/>
+                  <Route path='/purchases' element={<Purchases />}/>
                 </Route>
               </Routes>
           </ThemeProvider>

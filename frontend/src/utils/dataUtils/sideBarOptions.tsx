@@ -33,12 +33,12 @@ export const ListMenuOptions = [
     {
         label: "Pagos",
         icon: <PaidIcon fontSize='large'/>,
-        pathKey: "payments"
+        pathKey: "clientsPayments"
     },
     {
         label: "Reportes",
         icon: <ListAltIcon fontSize='large'/>,
-        pathKey: "reports"
+        pathKey: "paymentsReport"
     },
     {
         label: "Proveedores",
@@ -48,7 +48,7 @@ export const ListMenuOptions = [
     {
         label: "Pagos Proveedor",
         icon: <AccountBalanceWalletIcon fontSize='large'/>,
-        pathKey: "paymentsToSupplier"
+        pathKey: "paymentsToSuppliers"
     },
     {
         label: "Compras",

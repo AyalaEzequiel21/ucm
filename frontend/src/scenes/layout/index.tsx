@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps> = () => {
                 isMobile={isMobile}
                 drawerwidthPx={200}
             />  
-            <Box flexGrow={1} bgcolor={palette.background.paper} height={'100%'}>
+            <Box flexGrow={1} bgcolor={palette.background.paper} minHeight={'100vh'}>
                 <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
                 <Outlet />
             </Box>

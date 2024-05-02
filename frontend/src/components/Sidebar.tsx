@@ -1,6 +1,6 @@
 import { Box, Drawer, IconButton, List, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import logo from "@/assets/logo.jpeg"
 import { Close } from "@mui/icons-material"
 import { IMenuItem, ListMenuOptions } from "@/utils/dataUtils/sideBarOptions"
@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
     const { pathname } = useLocation()
     const [active, setActive] = useState('')
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const { palette } = useTheme()
     const widthCalulate = isMobile ? `${drawerwidthPx}px` : `${drawerwidthPx + 30}px`
 
@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     }, [pathname])
 
     const handleClickButtonSidebar = (pathKey: string, label: string) => {
-        // navigate(`/${pathKey}`)
+        navigate(`/${pathKey}`)
         setActive(label)
     }
 

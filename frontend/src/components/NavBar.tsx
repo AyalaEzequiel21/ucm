@@ -22,7 +22,7 @@ const NavBar: React.FC<NavBarProps> = ({isSidebarOpen, setIsSidebarOpen}) => {
   return (
     <AppBar
         sx={{
-            position: 'static',
+            position: 'sticky',
             justifyContent: 'center',
             bgcolor: palette.primary.dark,
             height: '4rem',

@@ -9,5 +9,5 @@ export interface IClient {
     sales: string[],
     payments: string[]
     is_active: boolean,
-    createdAt: Date
+    createdAt: string
 }

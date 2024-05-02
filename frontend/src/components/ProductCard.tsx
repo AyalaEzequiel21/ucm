@@ -18,13 +18,26 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                 backgroundImage: 'none',
                 backgroundColor: palette.primary.dark,
                 borderRadius: '0.55rem',
-                p: '0.2rem 0'
-                
+                p: '0.2rem 0',
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                border: `1px solid ${palette.secondary.main}`,
+                transition: 'box-shadow 0.3s ease-in-out',
+                '&:hover': {
+                    boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
+                    // border: `2px solid  '
+
+                }
             }}
         >
             <CardContent sx={{color: palette.grey[100]}}>
                 <FlexBetween>
-                    <Typography sx={{fontWeight: 'bold', fontSize: isMobile ? '24px' : '22px'}}>{product.product_name}</Typography>
+                    <Typography sx={{
+                        fontWeight: 'bold', 
+                        fontSize: isMobile ? '24px' : '22px', 
+                        color: palette.secondary.main}}
+                    >
+                        {product.product_name}
+                    </Typography>
                     <IconButton 
                         sx={{
                             color: palette.grey[100],
@@ -36,7 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                         <EditIcon fontSize={isMobile ? 'large' : 'medium'} />
                     </IconButton>
                 </FlexBetween>
-                <Typography  sx={{ mb: '1.5rem', fontSize: '17px' }}>
+                <Typography  sx={{ mb: '1.5rem', fontSize: isMobile ? '15px' : '17px' }}>
                     {`Stock: ${product.stock}`}
                 </Typography>
                 <Typography sx={{ mb: '0.5rem', fontSize: '17px', '&:hover': {color: palette.secondary.main} }}>{`Cargador: $${product.first_price ? product.first_price.toFixed(2) : ' -'}`}</Typography>
@@ -46,4 +59,4 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
     )
 }
 
-export {ProductCard}
+export { ProductCard }
