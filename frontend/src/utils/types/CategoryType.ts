@@ -1,0 +1,1 @@
+export type CategoryType = "cat_1" | "cat_2"

@@ -1,17 +1,17 @@
+import { GeneralDatGrid } from "@/components/GeneralDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
 import { getSomeClients } from "@/utils/dataUtils/dataMock"
 import { IClient } from "@/utils/interfaces/IClient"
-import { Box, Button, useTheme } from "@mui/material"
-import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import { Box, Button } from "@mui/material"
+import { GridColDef } from "@mui/x-data-grid"
 
 
 type ClientsProps = object
 
 const Clients: React.FC<ClientsProps> = () => {
 
-    const {palette} = useTheme()
-    const clients = getSomeClients().clients
+    const clients = getSomeClients()
 
     const handleDetailsClick = (client: IClient) => {
         console.log(client)
@@ -41,40 +41,10 @@ const Clients: React.FC<ClientsProps> = () => {
                     mt={'30px'}
                     height={'80vh'}
                 >
-                    <DataGrid 
-                        rows={clients}
-                        getRowId={(row) => row._id}
-                        columns={columns}
-                        pageSizeOptions={[5, 10, 20]}
-                        sx={{
-                            maxWidth: '100%',
-                            "& .MuiDataGrid-root": {
-                                // border: "none",
-                              },
-                              "& .MuiDataGrid-cell": {
-                                // borderBottom: "none",
-                              },
-                              "& .MuiDataGrid-columnHeader": {
-                                color: palette.grey[100],
-                                backgroundColor: palette.primary.dark,
-                                // borderBottom: "none",
-                              },
-                              '& .MuiDataGrid-columnHeader .MuiButtonBase-root .MuiSvgIcon-root': {
-                                fill: palette.grey[100],
-                              },
-                              "& .MuiDataGrid-virtualScroller": {
-                                backgroundColor: palette.grey[100],
-                              },
-                              "& .MuiDataGrid-footerContainer": {
-                                backgroundColor: palette.primary.dark,
-                                color: palette.grey[100],
-                                // borderTop: "none",
-                              },
-                              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                                // color: `${palette.grey[100]} !important`,
-                              },
-                        }}
-                    />
+                  <GeneralDatGrid<IClient> 
+                    rows={clients}
+                    columns={columns}
+                  />
                 </Box>
             </SceneContainer>
     )
