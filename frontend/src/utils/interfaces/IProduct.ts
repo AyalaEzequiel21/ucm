@@ -3,5 +3,6 @@ export interface IProduct {
     first_price: number,
     second_price: number,
     stock: number,
-    is_active: boolean
+    is_active: boolean,
+    createdAt: string
 }
