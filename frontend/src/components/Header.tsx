@@ -2,7 +2,6 @@ import { Box, Typography, useTheme } from "@mui/material"
 import { FlexBetween } from "./FlexBetween"
 import { ToolbarButton } from "./ToolbarButton"
 import AddIcon from '@mui/icons-material/Add'
-import SearchIcon from '@mui/icons-material/Search'
 
 
 type HeaderProps = {
@@ -20,8 +19,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 color={palette.primary.dark}
                 fontSize={'35px'}
                 fontWeight={'bold'}
-
-                sx={{ mb: '3px' }}
+                // sx={{ mb: '3px' }}
             >
                 {title}
             </Typography>
@@ -34,7 +32,6 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
             </Typography>
             <Box display={'flex'} gap={'1rem'}>
                 <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar"/>
-                <ToolbarButton key="buscar" icon={<SearchIcon fontSize="small"/>} label="buscar"/>
             </Box>
             </FlexBetween>
         </Box>

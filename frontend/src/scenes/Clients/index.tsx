@@ -1,9 +1,12 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
+import useScreenSize from "@/hooks/useScreenSize"
 import { getSomeClients } from "@/utils/dataUtils/dataMock"
+import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
+import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { IClient } from "@/utils/interfaces/IClient"
-import { Box, Button } from "@mui/material"
+import { Button } from "@mui/material"
 import { GridColDef } from "@mui/x-data-grid"
 
 
@@ -11,24 +14,35 @@ type ClientsProps = object
 
 const Clients: React.FC<ClientsProps> = () => {
 
+    const {isMobile} = useScreenSize()
     const clients = getSomeClients()
 
     const handleDetailsClick = (client: IClient) => {
         console.log(client)
     }
 
-    const columns: GridColDef[] = [
+    const columns: GridColDef<IClient>[] = [
         { field: 'fullname', headerName: 'Cliente', flex: 1 },
-        { field: 'category', headerName: 'Categoria', flex: 0.5 },
-        { field: 'balance', headerName: 'Balance', flex: 0.5 },
-        { field: 'in_delivery', headerName: 'Reparto', flex: 0.5, renderCell: (value)=> {
-          if(value.row.in_delivery) {
-            return 'si'
+        { field: 'category', headerName: 'Categoria', hideable: !isMobile, flex: 0.5, renderCell(value) {
+          if(value.row.category === 'cat_1'){
+            return 'Cargador'
           } else {
-            return 'no'
+            return 'Carnicero'
           }
-        } },
-        { field: 'createdAt', headerName: 'Reparto', flex: 0.5 },
+        }},
+        { field: 'balance', headerName: 'Balance', flex: 0.5, renderCell(value) {
+            return getFormatedValue(value.row.balance)
+        }},
+        { field: 'in_delivery', headerName: 'Reparto', hideable: !isMobile, flex: 0.5, renderCell(value) {
+          if(value.row.in_delivery) {
+            return 'Si'
+          } else {
+            return 'No'
+          }
+        }},
+        { field: 'createdAt', headerName: 'Registro', hideable: !isMobile, flex: 0.5, renderCell(value){
+          return getFormatedDate(value.row.createdAt)
+        }},
         {
         field: 'details',
         headerName: 'Details',
@@ -44,17 +58,12 @@ const Clients: React.FC<ClientsProps> = () => {
     return (
             <SceneContainer>
                 <Header title="CLIENTES" subtitle="Lista de clientes" />
-                <Box
-                    mt={'30px'}
-                    height={'80vh'}
-                >
-                  <CustomDatGrid<IClient> 
-                    rows={clients}
-                    columns={columns}
-                    isFilterName={true}
-                    fieldValue="fullname"
-                  />
-                </Box>
+                <CustomDatGrid<IClient> 
+                  rows={clients}
+                  columns={columns}
+                  isFilterName={true}
+                  fieldValue="fullname"
+                />
             </SceneContainer>
     )
 }

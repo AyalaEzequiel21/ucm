@@ -175,7 +175,7 @@ const getSomeClients = () => {
       "phone": "123456789",
       "category": "cat_1",
       "in_delivery": true,
-      "balance": 100.50,
+      "balance": 1000000.50,
       "sales": ["Sale 1", "Sale 2"],
       "payments": ["Payment 1", "Payment 2"],
       "is_active": true,
