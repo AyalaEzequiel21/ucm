@@ -1,25 +1,43 @@
+import useScreenSize from "@/hooks/useScreenSize"
 import { Box, useTheme } from "@mui/material"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
 
 type CustomDataGridProps<T> = {
-    columns: GridColDef[],
     rows: T[],
     isFilterName: boolean,
-    fieldValue?: string 
+    fieldValue?: string,
+    columnsBase: GridColDef[],
+    addedColumnsTable: GridColDef[],
+    addedColumnsDesktop: GridColDef[]
+
 }
 
-const CustomDatGrid = <T,>({columns, rows, isFilterName, fieldValue}: CustomDataGridProps<T>) => {
+const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, addedColumnsTable, addedColumnsDesktop}: CustomDataGridProps<T>) => {
 
+    const {isMobile, isTablet, isDesktop } = useScreenSize()
     const {palette} = useTheme()
+
+    const getColumns = () => {
+        let columns: GridColDef[] = [...columnsBase]
+        if(isTablet && (!isMobile && !isDesktop)) {
+            columns = [...columns, ...addedColumnsTable]
+        }
+        if (isDesktop && (!isMobile && !isTablet)) {
+            columns = [...columns, ...addedColumnsTable]
+            columns = [...columns, ...addedColumnsDesktop]
+        }
+        return columns
+    }
+
 
     return (
         <Box
-                mt={'10px'}
-                height={'80vh'}
+            mt={'10px'}
+            height={'80vh'}
         >
             <DataGrid 
                 rows={rows}
-                columns={columns}
+                columns={getColumns()}
                 getRowId={(row) => row._id}
                 initialState={{
                     pagination: {
@@ -38,7 +56,7 @@ const CustomDatGrid = <T,>({columns, rows, isFilterName, fieldValue}: CustomData
 
                 }}
                 sx={{
-                    
+                    maxWidth: '100%',
                     '& .MuiDataGrid-columnHeader': {
                         backgroundColor: palette.primary.dark,
                         color: palette.grey[100],
