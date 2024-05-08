@@ -19,7 +19,7 @@ const Clients: React.FC<ClientsProps> = () => {
   };
 
   const columnsBase: GridColDef<IClient>[] = [
-    { field: 'fullname', headerName: 'Proveedor', flex: 1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.fullname, handleDetailsClick) }},
+    { field: 'fullname', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.fullname, handleDetailsClick) }},
     { field: 'balance', headerName: 'Balance', flex: 0.5, renderCell(value){return getFormatedValue(value.row.balance)}},
 ]
 

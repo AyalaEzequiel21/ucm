@@ -73,6 +73,9 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, addedCo
                         fontSize: '1rem',
                         height: '0.9fr'
                     },
+                    '& .MuiDataGrid-cell:focus-within': {
+                        outline: 'none',
+                      },
                     '& .MuiDataGrid-filler': {
                         height: '0%',
                         display: 'none'

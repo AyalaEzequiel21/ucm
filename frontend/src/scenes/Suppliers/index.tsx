@@ -16,7 +16,7 @@ const Suppliers: React.FC<SuppliersProps> = () => {
     const suppliers = getSomeSuppliers()
 
     const columnsBase: GridColDef<ISupplier>[] = [
-        { field: 'supplier_name', headerName: 'Proveedor', flex: 1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, ()=> {console.log('hola')}) }},
+        { field: 'supplier_name', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, ()=> {console.log('hola')}) }},
         { field: 'balance', headerName: 'Balance', flex: 0.5, renderCell(value){return getFormatedValue(value.row.balance)}},
     ]
 
