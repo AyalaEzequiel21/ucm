@@ -1,9 +1,7 @@
 import { IClient } from "@/utils/interfaces/IClient";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-
 const baseURL = import.meta.env.VITE_API_BASE_URL as string;
-
 
 export const clientApi = createApi({
     reducerPath: 'clientsApi',
@@ -13,8 +11,13 @@ export const clientApi = createApi({
         getClientById: builder.query<IClient, string>({
             query: (id) => `clients/client/${id}`,
             providesTags: ['Client']
-        })
+        }),
+
+        getAllClients: builder.query<IClient[], void>({
+            query: () => 'endpointTest/getClients',
+            providesTags: ['Client']
+          }),
     })
 })
 
-export const { useGetClientByIdQuery } = clientApi
+export const { useGetClientByIdQuery, useGetAllClientsQuery } = clientApi

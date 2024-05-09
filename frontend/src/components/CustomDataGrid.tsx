@@ -7,12 +7,13 @@ type CustomDataGridProps<T> = {
     isFilterName: boolean,
     fieldValue?: string,
     columnsBase: GridColDef[],
+    isLoading: boolean,
     addedColumnsTable: GridColDef[],
     addedColumnsDesktop: GridColDef[]
 
 }
 
-const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, addedColumnsTable, addedColumnsDesktop}: CustomDataGridProps<T>) => {
+const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoading, addedColumnsTable, addedColumnsDesktop}: CustomDataGridProps<T>) => {
 
     const {isMobile, isTablet, isDesktop } = useScreenSize()
     const {palette} = useTheme()
@@ -39,6 +40,7 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, addedCo
                 rows={rows}
                 columns={getColumns()}
                 getRowId={(row) => row._id}
+                loading={isLoading}
                 initialState={{
                     pagination: {
                         paginationModel: {
