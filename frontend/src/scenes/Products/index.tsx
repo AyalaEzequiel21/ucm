@@ -2,16 +2,20 @@ import { Header } from "@/components/Header"
 import { ProductCard } from "@/components/ProductCard"
 import { SceneContainer } from "@/components/SceneContainer"
 import useScreenSize from "@/hooks/useScreenSize"
-import { getSomeProducts } from "@/utils/dataUtils/dataMock"
+import { useGetAllProductsQuery } from "@/redux/api/productApi"
 import { Box } from "@mui/material"
+import { useEffect } from "react"
 
 
 type ProductsProps = object
 
 const Products: React.FC<ProductsProps> = () => {
 
-    const data = getSomeProducts()
+    const {data} = useGetAllProductsQuery()
     const { isMobile } = useScreenSize()
+
+    useEffect(()=> {console.log(data);
+    }, [data])
 
     return (
         <SceneContainer>
@@ -27,7 +31,7 @@ const Products: React.FC<ProductsProps> = () => {
                     '& > div' : { gridColumn: isMobile ? 'span 4' : undefined, mt: ' 1rem' }
                 }}
             >
-                {data.products.map(product => {
+                {data?.data.map(product => {
                     return <ProductCard product={product} isMobile={isMobile}/>
                 })}
             </Box>

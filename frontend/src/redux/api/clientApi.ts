@@ -1,3 +1,4 @@
+import { IApiResponse } from "@/utils/interfaces/IApiResponse";
 import { IClient } from "@/utils/interfaces/IClient";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -8,12 +9,12 @@ export const clientApi = createApi({
     baseQuery: fetchBaseQuery({baseUrl: baseURL}),
     tagTypes: ['Client'],
     endpoints: (builder) => ({
-        getClientById: builder.query<IClient, string>({
+        getClientById: builder.query<IApiResponse<IClient>, string>({
             query: (id) => `clients/client/${id}`,
             providesTags: ['Client']
         }),
 
-        getAllClients: builder.query<IClient[], void>({
+        getAllClients: builder.query<IApiResponse<IClient>, void>({
             query: () => 'endpointTest/getClients',
             providesTags: ['Client']
           }),

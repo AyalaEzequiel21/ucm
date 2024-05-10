@@ -7,19 +7,12 @@ import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal";
 import { IClient } from "@/utils/interfaces/IClient";
 import { GridColDef } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
 
 type ClientsProps = object;
 
 const Clients: React.FC<ClientsProps> = () => {
 
   const {data, isLoading} = useGetAllClientsQuery()
-  const [clients, setClients] = useState<IClient[]>([]) 
-
-  useEffect(()=> {
-    if(data )
-      setClients(data.data)
-  }, [data])
 
   const handleDetailsClick = () => {
     console.log('_id');
@@ -47,7 +40,7 @@ const Clients: React.FC<ClientsProps> = () => {
     <SceneContainer>
       <Header title="CLIENTES" subtitle="Lista de clientes" />
       <CustomDatGrid<IClient>
-        rows={clients || []}
+        rows={data?.data || []}
         isFilterName={true}
         fieldValue="fullname"
         columnsBase={columnsBase}
