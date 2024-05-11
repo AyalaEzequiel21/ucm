@@ -35,6 +35,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         setActive(label)
     }
 
+    const handleClickLogo = () => {
+        navigate('/')
+        setActive('')
+    }
+
     return (
         <Box component={'nav'}>
             {isSidebarOpen && (
@@ -68,9 +73,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                                     component={'img'}
                                     src={logo}
                                     alt="logo-image"
+                                    onClick={handleClickLogo}
                                     sx={{
                                         height: isMobile? 130 : 160, 
                                         width: isMobile? 150 : 200,
+                                        '&: hover': {
+                                            cursor: 'pointer'
+                                        }
                                     }}
                                 />
                             </Box>                        

@@ -1,4 +1,6 @@
 import { IApiResponse } from "@/utils/interfaces/IApiResponse";
+import { ILoginFormValues } from "@/utils/interfaces/ILoginFormValues";
+import { ILoginResponse } from "@/utils/interfaces/ILoginReponse";
 import { UserType } from "@/utils/types/UserType";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -9,6 +11,11 @@ export const userApi = createApi({
     baseQuery: fetchBaseQuery({baseUrl: baseURL}),
     tagTypes: ['User'],
     endpoints: (builder) => ({
+        login: builder.query<ILoginResponse, ILoginFormValues>({
+            query: () => 'auth/login',
+            providesTags: ['User']
+        }),
+        
         getUserById: builder.query<IApiResponse<UserType>, string>({
             query: (id) => `users/user/${id}`,
             providesTags: ['User']
@@ -21,4 +28,4 @@ export const userApi = createApi({
     })
 })
 
-export const { useGetUserByIdQuery, useGetAllUsersQuery } = userApi
+export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginQuery} = userApi

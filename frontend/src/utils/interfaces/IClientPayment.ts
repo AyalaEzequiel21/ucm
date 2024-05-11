@@ -6,5 +6,6 @@ export interface IClientPayment {
     amount: number,
     payment_method: PaymentMethodType,
     sale_id: string|undefined,
-    report_id: string|undefined
+    report_id: string|undefined,
+    createdAt: string
 }

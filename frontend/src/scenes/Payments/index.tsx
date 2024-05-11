@@ -1,14 +1,48 @@
+import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
+import { useGetAllClientPaymentsQuery } from "@/redux/api/clientPaymentApi"
+import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
+import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
+import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
+import { IClientPayment } from "@/utils/interfaces/IClientPayment"
+import { GridColDef } from "@mui/x-data-grid"
 
 
 type PaymentsProps = object
 
 const Payments: React.FC<PaymentsProps> = () => {
 
+    const {data, isLoading} = useGetAllClientPaymentsQuery()
+    const handleDetailsClick = () => {
+        console.log('_id');
+      }
+
+      const columnsBase: GridColDef<IClientPayment>[] = [
+        { field: 'client_name', headerName: 'Cliente', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.client_name, handleDetailsClick) }},
+        { field: 'amount', headerName: 'Total', flex: 0.5, renderCell(value){return getFormatedValue(value.row.amount)}},
+      ]
+    
+      const columnsTablet: GridColDef<IClientPayment>[] = [
+          { field: 'payment_method', headerName: 'Metodo', flex: 0.5 },
+          { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)}},
+      ] 
+      const columnsDesktop: GridColDef<IClientPayment>[] = [
+        //   { field: 'createdAt', headerName: 'Registro', flex: 0.5 },
+      ] 
+
     return(
         <SceneContainer>
-            <Header title="PAGOS A CLIENTES" subtitle="Lista de pagos" />
+            <Header title="PAGOS DE CLIENTES" subtitle="Lista de pagos" />
+            <CustomDatGrid<IClientPayment>
+                rows={data?.data || []}
+                isFilterName={true}
+                fieldValue="fullname"
+                columnsBase={columnsBase}
+                isLoading={isLoading || !data}
+                addedColumnsTable={columnsTablet}
+                addedColumnsDesktop={columnsDesktop}
+            />
         </SceneContainer>
     )
 }
