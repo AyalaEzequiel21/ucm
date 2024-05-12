@@ -11,10 +11,14 @@ export const userApi = createApi({
     baseQuery: fetchBaseQuery({baseUrl: baseURL}),
     tagTypes: ['User'],
     endpoints: (builder) => ({
-        login: builder.query<ILoginResponse, ILoginFormValues>({
-            query: () => 'auth/login',
-            providesTags: ['User']
-        }),
+        login: builder.mutation<ILoginResponse, ILoginFormValues>({
+            query: (credentials) => ({
+              url: 'auth/login',
+              method: 'POST',
+              body: credentials,
+            }),
+            invalidatesTags: ['User'],
+          }),
         
         getUserById: builder.query<IApiResponse<UserType>, string>({
             query: (id) => `users/user/${id}`,
@@ -28,4 +32,4 @@ export const userApi = createApi({
     })
 })
 
-export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginQuery} = userApi
+export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginMutation} = userApi
