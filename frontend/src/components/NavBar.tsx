@@ -1,22 +1,33 @@
 import { FlexBetween } from '@/components/FlexBetween'
 import { AppBar, Toolbar, Typography, useTheme, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { useSelector } from 'react-redux'
-import { IUserState } from '@/redux/state/userState'
+import { useDispatch } from 'react-redux'
 import { UserAvatar } from '@/components/UserAvatar'
 import LogoutIcon from '@mui/icons-material/Logout'
+import { logout } from '@/redux/state/userState'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { useNavigate } from 'react-router-dom'
 
 type NavBarProps = {
     isSidebarOpen: boolean,
-    setIsSidebarOpen: (isActive: boolean)=> void
+    setIsSidebarOpen: (isActive: boolean)=> void,
+    username: string,
+    role: string
 }
 
-const NavBar: React.FC<NavBarProps> = ({isSidebarOpen, setIsSidebarOpen}) => {
+const NavBar: React.FC<NavBarProps> = ({isSidebarOpen, setIsSidebarOpen, username, role}) => {
     const { palette } = useTheme()
-    const userState = useSelector((store: { user: IUserState }) => store.user)
-
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const {logoutLocalUser} = useLocalStorage()
     const handleClickMenu = () => {
         setIsSidebarOpen(!isSidebarOpen)
+    }
+
+    const handleLogout = () => {
+        dispatch(logout());
+        logoutLocalUser()
+        navigate('/login')
     }
 
   return (
@@ -40,11 +51,16 @@ const NavBar: React.FC<NavBarProps> = ({isSidebarOpen, setIsSidebarOpen}) => {
                     <Typography variant='h3'>Managment</Typography>
                 </FlexBetween>
                 <FlexBetween gap={'1rem'}>
-                    <UserAvatar user={userState.user}/>
-                    <IconButton sx={{color: palette.grey[100], '&:hover': {
-                        cursor: 'pointer',
-                        color: palette.secondary.main
-                    }}}>
+                    <UserAvatar username={username} role={role}/>
+                    <IconButton 
+                        onClick={handleLogout}
+                        sx={{
+                            color: palette.grey[100], 
+                            '&:hover': {
+                            cursor: 'pointer',
+                            color: palette.secondary.main
+                        }}}
+                    >
                         <LogoutIcon fontSize='large'/>
                     </IconButton>
                 </FlexBetween>

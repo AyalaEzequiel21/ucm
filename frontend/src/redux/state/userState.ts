@@ -6,11 +6,7 @@ export interface IUserState {
 }
 
 const initialState: IUserState = {
-    user: {
-        _id: '65fb59d664eccd2e931be3a9',
-        username: 'checho',
-        role: 'admin'
-    }
+    user: null
 }
 
 export const UserSlice = createSlice({
@@ -19,9 +15,12 @@ export const UserSlice = createSlice({
     reducers: {
         login: (state, action) => {
             return {...state, ...action.payload}  // REEMPLAZA TODO EL CONTENIDO DEL GLOBAL STATE
+        }, 
+        logout: ()=> {
+            return {user: null}
         }
-        
+
     }
 })
 
-export const { login } = UserSlice.actions
+export const { login, logout } = UserSlice.actions

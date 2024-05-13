@@ -13,6 +13,8 @@ import { Sales } from "./scenes/Sales"
 import { Suppliers } from "./scenes/Suppliers"
 import { PaymentsToSuppliers } from "./scenes/PaymentsToSupplier"
 import { Purchases } from "./scenes/Purchases"
+import { Home } from "./scenes/Home"
+import { Login } from "./scenes/Login"
 
 function App() {
 
@@ -24,8 +26,9 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline />
               <Routes> 
+                <Route path='/login' element={<Login/>}/>
                 <Route element={<Layout />}>
-                  <Route path='/' element={<div>Home</div>}/>
+                  <Route path='/' element={<Home/>}/>
                   <Route path='/clients' element={<Clients />}/>
                   <Route path='/products' element={<Products />}/>
                   <Route path='/clientsPayments' element={<Payments />}/>

@@ -13,7 +13,7 @@ export const userApi = createApi({
     endpoints: (builder) => ({
         login: builder.mutation<ILoginResponse, ILoginFormValues>({
             query: (credentials) => ({
-              url: 'auth/login',
+              url: '/auth/login',
               method: 'POST',
               body: credentials,
             }),
@@ -21,12 +21,12 @@ export const userApi = createApi({
           }),
         
         getUserById: builder.query<IApiResponse<UserType>, string>({
-            query: (id) => `users/user/${id}`,
+            query: (id) => `/users/user/${id}`,
             providesTags: ['User']
         }),
 
         getAllUsers: builder.query<IApiResponse<UserType>, void>({
-            query: () => 'endpointTest/getUsers',
+            query: () => '/endpointTest/getUsers',
             providesTags: ['User']
           }),
     })

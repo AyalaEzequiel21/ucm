@@ -28,12 +28,15 @@ const CustomInput = <T extends FieldValues>({
             type={type}
             autoComplete="current-password"
             label={label}
-            color="secondary"
+            color="primary"
             {...register(value, {
                 required: msgError
             })}
             error={error}
             helperText={helperText}
+            sx={{
+                width: '100%'
+            }}
         />
     )
 }
