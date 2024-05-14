@@ -8,8 +8,8 @@ type UserAvatarProps = {
 }
 
 const getFirstLetter = (username: string) => {
-    const letter = username[0]
-    return letter.toUpperCase()
+    const letter = username[0].toUpperCase()
+    return letter
 }
 
 

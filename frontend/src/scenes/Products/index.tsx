@@ -4,7 +4,7 @@ import { SceneContainer } from "@/components/SceneContainer"
 import useScreenSize from "@/hooks/useScreenSize"
 import { useGetAllProductsQuery } from "@/redux/api/productApi"
 import { Box } from "@mui/material"
-import { useEffect } from "react"
+// import { useEffect } from "react"
 
 
 type ProductsProps = object
@@ -14,8 +14,8 @@ const Products: React.FC<ProductsProps> = () => {
     const {data} = useGetAllProductsQuery()
     const { isMobile } = useScreenSize()
 
-    useEffect(()=> {console.log(data);
-    }, [data])
+    // useEffect(()=> {console.log(data);
+    // }, [data])
 
     return (
         <SceneContainer>
@@ -32,7 +32,7 @@ const Products: React.FC<ProductsProps> = () => {
                 }}
             >
                 {data?.data.map(product => {
-                    return <ProductCard product={product} isMobile={isMobile}/>
+                    return <ProductCard product={product} isMobile={isMobile} key={product._id}/>
                 })}
             </Box>
         </SceneContainer>

@@ -51,7 +51,7 @@ const NavBar: React.FC<NavBarProps> = ({isSidebarOpen, setIsSidebarOpen, usernam
                     <Typography variant='h3'>Managment</Typography>
                 </FlexBetween>
                 <FlexBetween gap={'1rem'}>
-                    <UserAvatar username={username} role={role}/>
+                    {username && role && <UserAvatar username={username} role={role}/>}
                     <IconButton 
                         onClick={handleLogout}
                         sx={{

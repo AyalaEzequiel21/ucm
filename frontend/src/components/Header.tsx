@@ -3,7 +3,6 @@ import { FlexBetween } from "./FlexBetween"
 import { ToolbarButton } from "./ToolbarButton"
 import AddIcon from '@mui/icons-material/Add'
 
-
 type HeaderProps = {
     title: string, 
     subtitle: string
@@ -19,7 +18,6 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 color={palette.primary.dark}
                 fontSize={'35px'}
                 fontWeight={'bold'}
-                // sx={{ mb: '3px' }}
             >
                 {title}
             </Typography>

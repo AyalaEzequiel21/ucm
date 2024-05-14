@@ -27,14 +27,14 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         const token = await loginUser(userData) // GET THE TOKEN WITH AUTH SERVICE
         if(!token) {
             throw new AuthenticationError()
-        }
+        }        
         res.cookie('jwt', token, {
             maxAge: 1000 * 60 * 120,  // SET TIME EXPIRATION COOKIE = 2H
             httpOnly: true // SET ONLY READ 
         })
         .status(200)
         .json({ok: true, message: "Login successful", token: token})
-    } catch(e) {
+    } catch(e) {        
         next(e)
     }
 }

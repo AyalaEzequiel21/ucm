@@ -28,7 +28,7 @@ const Layout: React.FC<LayoutProps> = () => {
         } else {
             const jwtDecoded: IUser = jwtDecode(jwt)
             dispatch(login(jwtDecoded))            
-            setDataUser({username: jwtDecoded.username, role: jwtDecoded.role})
+            setDataUser({username: jwtDecoded.username.toString(), role: jwtDecoded.role.toString()})
         }
     }, [jwt, dispatch, navigate])
     

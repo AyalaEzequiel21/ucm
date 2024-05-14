@@ -31,7 +31,7 @@ class ResourceNotFoundError extends CustomError {
 class AuthenticationError extends CustomError {
     constructor() {
         const message = `Verifica tus credenciales`
-        super("NOT_AUTHENTICATED", message, 404)
+        super("NOT_AUTHENTICATED", message, 401)
     }
 }
 

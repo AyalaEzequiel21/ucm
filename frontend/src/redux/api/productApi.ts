@@ -15,7 +15,7 @@ export const productApi = createApi({
         }),
 
         getAllProducts: builder.query<IApiResponse<IProduct>, void>({
-            query: () => 'endpointTest/getClients',
+            query: () => 'endpointTest/getProducts',
             providesTags: ['Product']
           }),
     })

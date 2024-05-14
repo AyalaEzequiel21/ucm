@@ -35,15 +35,16 @@ const createUser = async (newUser: UserType) => {
 
 // LOGIN 
 
-const loginUser = async (userLogin: UserLoginType) => {
+const loginUser = async (userLogin: UserLoginType) => {    
     const {username, password} = userLogin    
     try {
         const user = await UserModel.findOne({username: username}) // FIND A USER WITH THE SAME USERNAME
+
         if(!user) { //IF NOT FOUND USER, THEN RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')
         }
         const passwordMatch = await validatePassword(password, user.password) // CHECK IF THE PASSWORDS MATCH OR RUN AN EXCEPTION
-        if(!passwordMatch) {
+        if(!passwordMatch) {            
             throw new AuthenticationError()
         }
         const token = generateToken({  // SIGN THE TOKEN WITH JWT, THE FUNCTION NEEDS: _ID, ROLE
