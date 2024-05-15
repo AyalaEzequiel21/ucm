@@ -1,5 +1,5 @@
 import { IUser } from "@/utils/interfaces/IUser"
-import { createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface IUserState {
     user: IUser|null
@@ -13,8 +13,8 @@ export const UserSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        login: (state, action) => {
-            return {...state, ...action.payload}  // REEMPLAZA TODO EL CONTENIDO DEL GLOBAL STATE
+        login: (state, action: PayloadAction<IUserState>) => {
+            return {...state, ...action.payload.user}  // REEMPLAZA TODO EL CONTENIDO DEL GLOBAL STATE
         }, 
         logout: ()=> {
             return {user: null}

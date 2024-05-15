@@ -5,6 +5,8 @@ import logo from "@/assets/logo.jpeg"
 import { Close } from "@mui/icons-material"
 import { IMenuItem, ListMenuOptions } from "@/utils/dataUtils/sideBarOptions"
 import { ListItemSidebar } from "./ListItemSidebar"
+import { useDispatch } from "react-redux"
+import { ViewStateType, setViewState } from "@/redux/state/viewState"
 
 type SidebarProps = {
     isSidebarOpen: boolean,
@@ -25,17 +27,20 @@ const Sidebar: React.FC<SidebarProps> = ({
     const navigate = useNavigate()
     const { palette } = useTheme()
     const widthCalulate = isMobile ? `${drawerwidthPx}px` : `${drawerwidthPx + 30}px`
+    const dispatch = useDispatch()
 
     useEffect(()=> {
         setActive(pathname.substring(1))
     }, [pathname])
 
     const handleClickButtonSidebar = (pathKey: string, label: string) => {
+        dispatch(setViewState(pathKey as ViewStateType))
         navigate(`/${pathKey}`)
         setActive(label)
     }
 
     const handleClickLogo = () => {
+        dispatch(setViewState('home'))
         navigate('/')
         setActive('')
     }

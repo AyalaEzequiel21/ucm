@@ -2,6 +2,10 @@ import { Box, Typography, useTheme } from "@mui/material"
 import { FlexBetween } from "./FlexBetween"
 import { ToolbarButton } from "./ToolbarButton"
 import AddIcon from '@mui/icons-material/Add'
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
+import { useState } from "react"
+import { CustomModal } from "./CustomModal"
 
 type HeaderProps = {
     title: string, 
@@ -11,6 +15,16 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
 
     const {palette} = useTheme()
+    const currentView = useSelector((state: RootState) => state.viewState.currentView)
+    const [openModal, setOpenModal] = useState(false)
+
+    const toogleModal = () => setOpenModal(!openModal)
+    const handleClickAdd = () => {
+        console.log(currentView)
+        toogleModal()
+    }
+
+    const handleCloseModal = () => setOpenModal(false)
     
     return (
         <Box>
@@ -29,9 +43,10 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 {subtitle}
             </Typography>
             <Box display={'flex'} gap={'1rem'}>
-                <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar"/>
+                {currentView !== 'home' && <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
             </Box>
             </FlexBetween>
+            <CustomModal open={openModal} handleClose={handleCloseModal} element={<></>}/>
         </Box>
     )
 }

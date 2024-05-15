@@ -7,8 +7,8 @@ import { Sidebar } from "@/components/Sidebar"
 import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useDispatch } from "react-redux"
 import { jwtDecode } from "jwt-decode"
-import { login } from "@/redux/state/userState"
-import { IUser } from "@/utils/interfaces/IUser"
+import { IUserState, login } from "@/redux/state/userState"
+
 
 type LayoutProps = object
 
@@ -26,9 +26,9 @@ const Layout: React.FC<LayoutProps> = () => {
         if(jwt === null){
             navigate('/login')
         } else {
-            const jwtDecoded: IUser = jwtDecode(jwt)
+            const jwtDecoded: IUserState = {user: jwtDecode(jwt)}
             dispatch(login(jwtDecoded))            
-            setDataUser({username: jwtDecoded.username.toString(), role: jwtDecoded.role.toString()})
+            jwtDecoded.user && setDataUser({username: jwtDecoded?.user.username.toString(), role: jwtDecoded.user.role.toString()})
         }
     }, [jwt, dispatch, navigate])
     
