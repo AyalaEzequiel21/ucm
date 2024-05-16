@@ -17,8 +17,8 @@ const Layout: React.FC<LayoutProps> = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true)
     const [dataUser, setDataUser] = useState<{username: string, role:string}> ({username: '', role: ''})
     const {palette} = useTheme()
-    const {getItemLocalStorage} = useLocalStorage()
-    const jwt = getItemLocalStorage('jwt')
+    const {getJwtLocalStorage} = useLocalStorage()
+    const jwt = getJwtLocalStorage()
     const dispatch = useDispatch()
     const navigate = useNavigate()
 

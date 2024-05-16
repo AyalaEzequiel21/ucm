@@ -1,7 +1,6 @@
 import { TextField } from "@mui/material";
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 
-
 interface ICustonInputProps<T extends FieldValues> {
     type: React.HTMLInputTypeAttribute,
     label: string,
