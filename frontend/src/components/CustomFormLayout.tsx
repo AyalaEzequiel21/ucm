@@ -4,6 +4,7 @@ type CustomFormLayoutProps = {
     handleSubmit: ()=> void,
     children: React.ReactNode,
     labelButton: string,
+    title: string,
     isLoading: boolean,
     errorMessage: string | undefined
 }
@@ -11,6 +12,7 @@ type CustomFormLayoutProps = {
 const CustomFormLayout: React.FC<CustomFormLayoutProps> = ({
     handleSubmit, 
     children, 
+    title,
     labelButton, 
     isLoading,
     errorMessage
@@ -23,7 +25,7 @@ const CustomFormLayout: React.FC<CustomFormLayoutProps> = ({
             <Paper elevation={10} sx={{p: '2rem', borderRadius: '0.5em', width: '320px'}}>
                     <Box component={'form'} onSubmit={handleSubmit} >
                         <Stack spacing={2} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <Typography variant="h2" sx={{textAlign: 'center', fontWeight: 'bold', color: palette.primary.dark}}>Iniciar Sesión</Typography>    
+                            <Typography variant="h2" sx={{textAlign: 'center', fontWeight: 'bold', color: palette.primary.dark}}>{title}</Typography>    
                             {children}
                             <Button
                                 type="submit"

@@ -1,4 +1,5 @@
-import { TextField } from "@mui/material";
+import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
+import { MenuItem, TextField } from "@mui/material";
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 
 interface ICustonInputProps<T extends FieldValues> {
@@ -6,9 +7,12 @@ interface ICustonInputProps<T extends FieldValues> {
     label: string,
     register: UseFormRegister<T>,
     value: Path<T>,
+    isSelect: boolean,
     msgError: string,
     error?: boolean | undefined,
-    helperText?: string
+    helperText?: string,
+    selectOptions?: ISelectOptions[]
+
 }
 
 const CustomInput = <T extends FieldValues>({
@@ -16,9 +20,11 @@ const CustomInput = <T extends FieldValues>({
     label,
     register,
     value, 
+    isSelect,
     msgError,
     error,
-    helperText
+    helperText,
+    selectOptions
 }: ICustonInputProps<T>
 ) => {
     return (
@@ -26,6 +32,7 @@ const CustomInput = <T extends FieldValues>({
             fullWidth 
             type={type}
             autoComplete="current-password"
+            select={isSelect}
             label={label}
             color="primary"
             {...register(value, {
@@ -36,7 +43,13 @@ const CustomInput = <T extends FieldValues>({
             sx={{
                 width: '100%'
             }}
-        />
+        >
+            {selectOptions && selectOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                </MenuItem>
+            ))}
+        </TextField>
     )
 }
 

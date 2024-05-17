@@ -22,8 +22,7 @@ const CustomModal: React.FC<CustomModalProps> = ({element, open, handleClose}) =
         >
             <Box
                 sx={{
-                    height: '350px',
-                    width: '300px',
+
                     backgroundColor: palette.grey[300]
                 }}
             >

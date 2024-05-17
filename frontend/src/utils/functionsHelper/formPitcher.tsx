@@ -5,5 +5,8 @@ export const formPitcher = (currentView: ViewStateType) => {
     switch(currentView){
         case 'clients':
             return <ClientAddForm />
+        default:
+            return <>Otro</>
+        
     }
 }

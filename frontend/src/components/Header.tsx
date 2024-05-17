@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
 import { useState } from "react"
 import { CustomModal } from "./CustomModal"
+import { formPitcher } from "@/utils/functionsHelper/formPitcher"
 
 type HeaderProps = {
     title: string, 
@@ -46,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 {currentView !== 'home' && <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
             </Box>
             </FlexBetween>
-            <CustomModal open={openModal} handleClose={handleCloseModal} element={<></>}/>
+            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView)}/>
         </Box>
     )
 }

@@ -62,6 +62,7 @@ const Login: React.FC<LoginProps> = () => {
     >
       <CustomFormLayout 
         handleSubmit={handleSubmit(onSubmit)}
+        title="Iniciar Sesion"
         labelButton="Iniciar"
         isLoading={isLoading}
         errorMessage={errorMessage}
@@ -76,6 +77,7 @@ const Login: React.FC<LoginProps> = () => {
           type="text"
           label="Usuario"
           register={register}
+          isSelect={false}
           value="username"
           msgError="Por favor ingrese su nombre de usuario"
           error={!!errors.username}
@@ -85,6 +87,7 @@ const Login: React.FC<LoginProps> = () => {
           type="password"
           label="Contraseña"
           register={register}
+          isSelect={false}
           value="password"
           msgError="Por favor ingrese su contraseña"
           error={!!errors.password}
