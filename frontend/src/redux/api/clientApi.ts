@@ -14,6 +14,15 @@ export const clientApi = createApi({
             providesTags: ['Client']
         }),
 
+        addClient: builder.mutation<IApiResponse<IClient>, Partial<IClient>>({
+            query: (newClient) => ({
+                url: 'clients/register',
+                method: 'POST',
+                body: newClient
+            }),
+            invalidatesTags: ['Client']
+        }),
+
         getAllClients: builder.query<IApiResponse<IClient>, void>({
             query: () => 'endpointTest/getClients',
             providesTags: ['Client']
@@ -21,4 +30,4 @@ export const clientApi = createApi({
     })
 })
 
-export const { useGetClientByIdQuery, useGetAllClientsQuery } = clientApi
+export const { useGetClientByIdQuery, useGetAllClientsQuery, useAddClientMutation } = clientApi

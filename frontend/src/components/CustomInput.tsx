@@ -34,6 +34,7 @@ const CustomInput = <T extends FieldValues>({
             autoComplete="current-password"
             select={isSelect}
             label={label}
+            defaultValue={selectOptions ? selectOptions[0].value : null}
             color="primary"
             {...register(value, {
                 required: msgError

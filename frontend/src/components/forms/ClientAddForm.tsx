@@ -3,10 +3,18 @@ import { CustomFormLayout } from "../CustomFormLayout"
 import { CustomInput } from "../CustomInput"
 import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
 import { ISelectOptions } from "@/utils/interfaces/ISelectOptions"
+import { CustomRadioGroup } from "../CustomRadioGroup"
+import { IRadioOptions } from "@/utils/interfaces/IRadioOption"
+import { useAddClientMutation } from "@/redux/api/clientApi"
+import { useState } from "react"
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 
 type ClientAddFormProps = object
 
 const ClientAddForm: React.FC<ClientAddFormProps> = () => {
+
+    const [addClient, {isLoading, data, isSuccess}] = useAddClientMutation()
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
     const {
         register, 
@@ -14,7 +22,17 @@ const ClientAddForm: React.FC<ClientAddFormProps> = () => {
         formState: {errors}
     } = useForm<INewClientValues>()
 
-    const onSubmit = () => {}
+    const onSubmit = async (data: INewClientValues) => {
+        console.log(data)
+        try{
+            const response = await addClient(data).unwrap()
+            console.log(response);
+            
+        } catch(e){
+            const err = e as ApiErrorResponseType
+            setErrorMessage(err.data.message)
+        }
+    }
 
     const categoriesOptions: ISelectOptions[] = [
         {
@@ -27,13 +45,24 @@ const ClientAddForm: React.FC<ClientAddFormProps> = () => {
         }
     ]
 
+    const inDeliveryOptions: IRadioOptions[] = [
+        {
+            label: 'SI',
+            value: true
+        },
+        {
+            label: 'NO',
+            value: false
+        }
+    ]
+
     return (
         <CustomFormLayout
             handleSubmit={handleSubmit(onSubmit)}
             title="Agregar Cliente"
-            labelButton="Agregar cliente"
-            isLoading={false}
-            errorMessage={undefined}
+            labelButton="Agregar"
+            isLoading={isLoading}
+            errorMessage={errorMessage}
         >
             <CustomInput 
                 type="text"
@@ -66,7 +95,12 @@ const ClientAddForm: React.FC<ClientAddFormProps> = () => {
                 helperText={errors.category?.message}
                 selectOptions={categoriesOptions}
             />
-            
+            <CustomRadioGroup 
+                label="Reparto"
+                propertie="in_delivery"
+                options={inDeliveryOptions}
+                register={register}
+            />
         </CustomFormLayout>
     )
 }
