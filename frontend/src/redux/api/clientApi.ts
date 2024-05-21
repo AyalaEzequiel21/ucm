@@ -6,7 +6,10 @@ const baseURL = import.meta.env.VITE_API_BASE_URL as string;
 
 export const clientApi = createApi({
     reducerPath: 'clientsApi',
-    baseQuery: fetchBaseQuery({baseUrl: baseURL}),
+    baseQuery: fetchBaseQuery({
+        baseUrl: baseURL, 
+        // credentials: 'include'
+    }),
     tagTypes: ['Client'],
     endpoints: (builder) => ({
         getClientById: builder.query<IApiResponse<IClient>, string>({

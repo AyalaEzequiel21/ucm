@@ -28,10 +28,11 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         if(!token) {
             throw new AuthenticationError()
         }        
-        res.cookie('jwt', token, {
-            maxAge: 1000 * 60 * 120,  // SET TIME EXPIRATION COOKIE = 2H
-            httpOnly: true // SET ONLY READ 
-        })
+        // res.cookie('jwt', token, {
+        //     maxAge: 1000 * 60 * 120,  // SET TIME EXPIRATION COOKIE = 2H
+        //     httpOnly: true // SET ONLY READ 
+        // })
+        res.setHeader('Authorization', `Bearer ${token}`)
         .status(200)
         .json({ok: true, message: "Login successful", token: token})
     } catch(e) {        

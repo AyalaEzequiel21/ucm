@@ -52,6 +52,8 @@ const loginUser = async (userLogin: UserLoginType) => {
             username: user.username,
             role: user.role
         })
+        console.log(token, 'authservices');
+        
         return token
     } catch(e) {
         ErrorsPitcher(e)

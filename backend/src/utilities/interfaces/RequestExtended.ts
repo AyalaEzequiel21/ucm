@@ -3,7 +3,8 @@ import { UserCookieType } from "../../schemas/AuthSchema";
 
 interface RequestExtended extends Request {
     user?: UserCookieType,
-    filterDelivery?: boolean
+    filterDelivery?: boolean,
+    cookies: {jwt: string}
 }
 
 export {RequestExtended}

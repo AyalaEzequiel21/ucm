@@ -10,10 +10,18 @@ import { NotAuthorizedError } from "../errors/CustomErros";
 // CHECK IF THE USER HAVE A VALID TOKEN
 const validateUser = () => {
     return (req: RequestExtended, res: Response, next: NextFunction) => {
-        const token = req.cookies.jwt
+        // const token = req.cookies.jwt     
+        const token = req.headers.authorization?.split(' ')[1]   
+        
+        if (!token) {
+            console.log(token);
+            throw new NotAuthorizedError();
+        }
         const userValidated =  verifyToken(token)
-        if(!userValidated) {
+        
+        if(!userValidated) {            
             throw new NotAuthorizedError()
+            
         }
         req.user = userValidated as UserCookieType
         console.log(`User: id:${req.user._id}, role: ${req.user.role}.  Validated`);
@@ -26,6 +34,7 @@ const validateUserRole = (allowedRoles: UserRoleType[] = []) => {
     return (req: RequestExtended, res: Response, next: NextFunction) => {
         const user = req.user
         if(user && allowedRoles.length > 0 && !allowedRoles.includes(user.role)){
+            
             throw new NotAuthorizedError()
         }
         next()

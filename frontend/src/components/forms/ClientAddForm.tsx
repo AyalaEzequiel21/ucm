@@ -30,6 +30,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = () => {
             
         } catch(e){
             const err = e as ApiErrorResponseType
+            console.log(e);
+            
             setErrorMessage(err.data.message)
         }
     }
