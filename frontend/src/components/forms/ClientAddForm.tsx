@@ -13,20 +13,22 @@ type ClientAddFormProps = object
 
 const ClientAddForm: React.FC<ClientAddFormProps> = () => {
 
-    const [addClient, {isLoading, data, isSuccess}] = useAddClientMutation()
+    const [addClient, {isLoading, isSuccess}] = useAddClientMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
     const {
         register, 
         handleSubmit,
+        reset,
         formState: {errors}
     } = useForm<INewClientValues>()
 
-    const onSubmit = async (data: INewClientValues) => {
-        console.log(data)
+    const onSubmit = async (dataForm: INewClientValues) => {
+        console.log(dataForm)
         try{
-            const response = await addClient(data).unwrap()
+            const response = await addClient(dataForm).unwrap()
             console.log(response);
+            reset()
             
         } catch(e){
             const err = e as ApiErrorResponseType

@@ -8,7 +8,15 @@ export const clientApi = createApi({
     reducerPath: 'clientsApi',
     baseQuery: fetchBaseQuery({
         baseUrl: baseURL, 
-        // credentials: 'include'
+        credentials: 'include',
+        prepareHeaders: (headers) => {
+            const token = localStorage.getItem('jwt');
+            if (token) {
+                const jwt = JSON.parse(token)
+                headers.set('authorization', `Bearer ${jwt.value}`);
+            }
+            return headers;
+        },
     }),
     tagTypes: ['Client'],
     endpoints: (builder) => ({
@@ -19,9 +27,10 @@ export const clientApi = createApi({
 
         addClient: builder.mutation<IApiResponse<IClient>, Partial<IClient>>({
             query: (newClient) => ({
-                url: 'clients/register',
+                url: 'clients/testRegister',
                 method: 'POST',
-                body: newClient
+                body: newClient,
+                
             }),
             invalidatesTags: ['Client']
         }),

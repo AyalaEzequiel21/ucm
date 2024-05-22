@@ -21,7 +21,6 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
 
     const toogleModal = () => setOpenModal(!openModal)
     const handleClickAdd = () => {
-        console.log(currentView)
         toogleModal()
     }
 
