@@ -23,10 +23,19 @@ const ClientAddForm: React.FC<ClientAddFormProps> = () => {
         formState: {errors}
     } = useForm<INewClientValues>()
 
+    const processBoolean = (response: 'true' | 'false') => {
+        return response === 'true'
+    }
+
     const onSubmit = async (dataForm: INewClientValues) => {
         console.log(dataForm)
+        const inDelivery = dataForm.in_delivery.toString() as ('true'|'false')
+        const processedDataForm = {
+            ...dataForm,
+            in_delivery: processBoolean(inDelivery)
+        };
         try{
-            const response = await addClient(dataForm).unwrap()
+            const response = await addClient(processedDataForm).unwrap()
             console.log(response);
             reset()
             

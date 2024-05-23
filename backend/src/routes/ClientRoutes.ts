@@ -11,6 +11,7 @@ const router = express.Router()
 // MIDDLEWARE FOR VALIDATE IF USER IS AUTHENTICATED
 router.use(validateUser())
 
+// router.post("/testRegister", registerClient)
 // GET ALL CLIENTS
 router.get("/", filterGetAll(), findActivesClients)
 

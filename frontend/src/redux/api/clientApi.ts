@@ -27,7 +27,7 @@ export const clientApi = createApi({
 
         addClient: builder.mutation<IApiResponse<IClient>, Partial<IClient>>({
             query: (newClient) => ({
-                url: 'clients/testRegister',
+                url: 'clients/register',
                 method: 'POST',
                 body: newClient,
                 

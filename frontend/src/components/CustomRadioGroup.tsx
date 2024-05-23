@@ -21,7 +21,7 @@ const CustomRadioGroup = <T extends FieldValues>({ label, propertie, options, re
             >
                 {options.map(option => (
                     <FormControlLabel
-                        value={option.value}
+                        value={option.value.toString()}
                         control={<Radio {...register(propertie)} />}
                         label={option.label}
                         key={option.label}

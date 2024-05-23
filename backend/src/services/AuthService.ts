@@ -51,9 +51,7 @@ const loginUser = async (userLogin: UserLoginType) => {
             _id:  user._id.toString(),
             username: user.username,
             role: user.role
-        })
-        console.log(token, 'authservices');
-        
+        })        
         return token
     } catch(e) {
         ErrorsPitcher(e)

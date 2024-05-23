@@ -27,11 +27,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         const token = await loginUser(userData) // GET THE TOKEN WITH AUTH SERVICE
         if(!token) {
             throw new AuthenticationError()
-        }        
-        // res.cookie('jwt', token, {
-        //     maxAge: 1000 * 60 * 120,  // SET TIME EXPIRATION COOKIE = 2H
-        //     httpOnly: true // SET ONLY READ 
-        // })
+        }
         res.setHeader('Authorization', `Bearer ${token}`)
         .status(200)
         .json({ok: true, message: "Login successful", token: token})
@@ -44,8 +40,8 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
 const logout = (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.clearCookie('jwt') // CLEAR COOKIE WITH NAME JWT
-        res.status(200).json({ok: true, message: "Logout successful"})
+        res.setHeader('', '')
+        .status(200).json({ok: true, message: "Logout successful"})
     } catch(e) {
         next(e)
     }
