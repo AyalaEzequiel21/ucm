@@ -9,9 +9,11 @@ import { useAddClientMutation } from "@/redux/api/clientApi"
 import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 
-type ClientAddFormProps = object
+type ClientAddFormProps = {
+    onCloseModal: ()=> void
+}
 
-const ClientAddForm: React.FC<ClientAddFormProps> = () => {
+const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
 
     const [addClient, {isLoading, isSuccess}] = useAddClientMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
@@ -32,12 +34,14 @@ const ClientAddForm: React.FC<ClientAddFormProps> = () => {
         const inDelivery = dataForm.in_delivery.toString() as ('true'|'false')
         const processedDataForm = {
             ...dataForm,
+            phone: dataForm.phone.toString(),
             in_delivery: processBoolean(inDelivery)
         };
         try{
             const response = await addClient(processedDataForm).unwrap()
             console.log(response);
             reset()
+            onCloseModal()
             
         } catch(e){
             const err = e as ApiErrorResponseType
@@ -88,7 +92,7 @@ const ClientAddForm: React.FC<ClientAddFormProps> = () => {
                 helperText={errors.fullname?.message}
             />
             <CustomInput 
-                type="text"
+                type="number"
                 label="Telefono del Cliente"
                 register={register}
                 isSelect={false}

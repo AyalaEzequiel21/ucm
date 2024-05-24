@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 {currentView !== 'home' && <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
             </Box>
             </FlexBetween>
-            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView)}/>
+            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView, handleCloseModal)}/>
         </Box>
     )
 }

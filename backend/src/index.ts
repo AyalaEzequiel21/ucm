@@ -14,7 +14,7 @@ const app = express()
 // CONFIGURATION
 app.use(cors({
     origin: "http://localhost:5173",
-    credentials: true,  // config to cors - available for everyone but using credentials 
+    // credentials: true,  // config to cors - available for everyone but using credentials 
 })) 
 app.use(cookieParser()) // activate the cookie options
 app.use(express.json({limit: "30mb"}))

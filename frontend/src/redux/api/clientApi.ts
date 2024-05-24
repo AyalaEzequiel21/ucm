@@ -8,7 +8,7 @@ export const clientApi = createApi({
     reducerPath: 'clientsApi',
     baseQuery: fetchBaseQuery({
         baseUrl: baseURL, 
-        credentials: 'include',
+        // credentials: 'include',
         prepareHeaders: (headers) => {
             const token = localStorage.getItem('jwt');
             if (token) {

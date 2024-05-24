@@ -27,6 +27,7 @@ const CustomInput = <T extends FieldValues>({
     selectOptions
 }: ICustonInputProps<T>
 ) => {
+
     return (
         <TextField
             fullWidth 
@@ -36,14 +37,23 @@ const CustomInput = <T extends FieldValues>({
             label={label}
             defaultValue={selectOptions ? selectOptions[0].value : null}
             color="primary"
-            {...register(value, {
+            {...register(value,
+                {
                 required: msgError
-            })}
+                }
+            )}
             error={error}
             helperText={helperText}
             sx={{
-                width: '100%'
-            }}
+                width: '100%',
+                '& input[type="number"]::-webkit-inner-spin-button, & input[type="number"]::-webkit-outer-spin-button': {
+                    '-webkit-appearance': 'none',
+                    margin: 0,
+                },
+                '& input[type="number"]': {
+                    '-moz-appearance': 'textfield'
+                },
+            }}            
         >
             {selectOptions && selectOptions.map(option => (
                 <MenuItem key={option.value} value={option.value}>
