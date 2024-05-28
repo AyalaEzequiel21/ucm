@@ -8,6 +8,7 @@ import { IRadioOptions } from "@/utils/interfaces/IRadioOption"
 import { useAddClientMutation } from "@/redux/api/clientApi"
 import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
+import { CustomSucessAlert } from "../CustomSucessAlert"
 
 type ClientAddFormProps = {
     onCloseModal: ()=> void
@@ -15,7 +16,8 @@ type ClientAddFormProps = {
 
 const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
 
-    const [addClient, {isLoading, isSuccess}] = useAddClientMutation()
+    const [addClient, {isLoading}] = useAddClientMutation()
+    const [sucessAlertState, setSucessAlertState] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
     const {
@@ -25,21 +27,19 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
         formState: {errors}
     } = useForm<INewClientValues>()
 
-    const processBoolean = (response: 'true' | 'false') => {
-        return response === 'true'
-    }
 
     const onSubmit = async (dataForm: INewClientValues) => {
-        console.log(dataForm)
-        const inDelivery = dataForm.in_delivery.toString() as ('true'|'false')
+        console.log(errors);
+        const inDelivery = dataForm.in_delivery.toString()
         const processedDataForm = {
             ...dataForm,
             phone: dataForm.phone.toString(),
-            in_delivery: processBoolean(inDelivery)
+            in_delivery: inDelivery === 'true'
         };
         try{
             const response = await addClient(processedDataForm).unwrap()
             console.log(response);
+            setSucessAlertState(true)
             reset()
             onCloseModal()
             
@@ -64,13 +64,14 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
 
     const inDeliveryOptions: IRadioOptions[] = [
         {
-            label: 'SI',
-            value: true
-        },
-        {
             label: 'NO',
             value: false
+        },
+        {
+            label: 'SI',
+            value: true
         }
+        
     ]
 
     return (
@@ -90,6 +91,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
                 msgError="Por favor ingrese el nombre del cliente"
                 error={!!errors.fullname}
                 helperText={errors.fullname?.message}
+                minLength={4}
+                maxLength={15}
             />
             <CustomInput 
                 type="number"
@@ -100,6 +103,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
                 msgError="Por favor ingrese el telefono del cliente"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
+                minLength={8}
+                maxLength={15}
             />
             <CustomInput 
                 type="text"
@@ -115,8 +120,14 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
             <CustomRadioGroup 
                 label="Reparto"
                 propertie="in_delivery"
+                error={!!errors.in_delivery}
                 options={inDeliveryOptions}
                 register={register}
+            />
+            <CustomSucessAlert
+                open={sucessAlertState}    
+                label="Cliente registrado con exito"
+                onCLose={()=> setSucessAlertState(false)}
             />
         </CustomFormLayout>
     )

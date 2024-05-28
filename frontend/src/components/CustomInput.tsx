@@ -11,7 +11,9 @@ interface ICustonInputProps<T extends FieldValues> {
     msgError: string,
     error?: boolean | undefined,
     helperText?: string,
-    selectOptions?: ISelectOptions[]
+    selectOptions?: ISelectOptions[],
+    minLength?: number
+    maxLength?: number
 
 }
 
@@ -24,7 +26,10 @@ const CustomInput = <T extends FieldValues>({
     msgError,
     error,
     helperText,
-    selectOptions
+    selectOptions,
+    minLength,
+    maxLength
+    
 }: ICustonInputProps<T>
 ) => {
 
@@ -39,20 +44,22 @@ const CustomInput = <T extends FieldValues>({
             color="primary"
             {...register(value,
                 {
-                required: msgError
+                required: msgError,
+                minLength: minLength ? {value: minLength, message: `El ${label} debe tener al menos ${minLength} caracteres`} : undefined,
+                maxLength: maxLength ?  {value: maxLength, message: `El ${label} debe tener al menos ${maxLength} caracteres`}: undefined
                 }
             )}
             error={error}
             helperText={helperText}
             sx={{
                 width: '100%',
-                '& input[type="number"]::-webkit-inner-spin-button, & input[type="number"]::-webkit-outer-spin-button': {
-                    '-webkit-appearance': 'none',
-                    margin: 0,
-                },
-                '& input[type="number"]': {
-                    '-moz-appearance': 'textfield'
-                },
+                // '& input[type="number"]::-webkit-inner-spin-button, & input[type="number"]::-webkit-outer-spin-button': {
+                //     '-webkit-appearance': 'none',
+                //     margin: 0,
+                // },
+                // '& input[type="number"]': {
+                //     '-moz-appearance': 'textfield'
+                // },
             }}            
         >
             {selectOptions && selectOptions.map(option => (
