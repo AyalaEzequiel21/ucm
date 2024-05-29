@@ -7,6 +7,7 @@ import { RootState } from "@/redux/store"
 import { useState } from "react"
 import { CustomModal } from "./CustomModal"
 import { formPitcher } from "@/utils/functionsHelper/formPitcher"
+import { CustomSucessAlert } from "./CustomSucessAlert"
 
 type HeaderProps = {
     title: string, 
@@ -18,6 +19,9 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
     const {palette} = useTheme()
     const currentView = useSelector((state: RootState) => state.viewState.currentView)
     const [openModal, setOpenModal] = useState(false)
+    const [sucessAlertState, setSucessAlertState] = useState(false)
+    const [sucessMessage, setSucessMessage] = useState('')
+
 
     const toogleModal = () => setOpenModal(!openModal)
     const handleClickAdd = () => {
@@ -25,6 +29,10 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
     }
 
     const handleCloseModal = () => setOpenModal(false)
+    const handleSucessAlert = (message: string) => {
+        setSucessMessage(message)
+        setSucessAlertState(true)
+    }
     
     return (
         <Box>
@@ -46,7 +54,12 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 {currentView !== 'home' && <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
             </Box>
             </FlexBetween>
-            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView, handleCloseModal)}/>
+            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView, handleCloseModal, handleSucessAlert)}/>
+            <CustomSucessAlert
+                open={sucessAlertState}    
+                label={sucessMessage}
+                onCLose={()=> setSucessAlertState(false)}
+            />
         </Box>
     )
 }

@@ -1,10 +1,10 @@
 import { ClientAddForm } from "@/components/forms/ClientAddForm";
 import { ViewStateType } from "@/redux/state/viewState";
 
-export const formPitcher = (currentView: ViewStateType, onClose: ()=> void) => {
+export const formPitcher = (currentView: ViewStateType, onClose: ()=> void, handleSucessAlert: (message: string)=> void) => {
     switch(currentView){
         case 'clients':
-            return <ClientAddForm onCloseModal={onClose}/>
+            return <ClientAddForm onCloseModal={onClose} confirmAlertSucess={handleSucessAlert}/>
         default:
             return <>Otro</>
         

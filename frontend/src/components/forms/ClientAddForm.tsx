@@ -8,16 +8,16 @@ import { IRadioOptions } from "@/utils/interfaces/IRadioOption"
 import { useAddClientMutation } from "@/redux/api/clientApi"
 import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
-import { CustomSucessAlert } from "../CustomSucessAlert"
 
 type ClientAddFormProps = {
-    onCloseModal: ()=> void
+    onCloseModal: ()=> void,
+    confirmAlertSucess: (message: string)=> void
+
 }
 
-const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
+const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlertSucess}) => {
 
     const [addClient, {isLoading}] = useAddClientMutation()
-    const [sucessAlertState, setSucessAlertState] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
     const {
@@ -29,7 +29,6 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
 
 
     const onSubmit = async (dataForm: INewClientValues) => {
-        console.log(errors);
         const inDelivery = dataForm.in_delivery.toString()
         const processedDataForm = {
             ...dataForm,
@@ -38,8 +37,7 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
         };
         try{
             const response = await addClient(processedDataForm).unwrap()
-            console.log(response);
-            setSucessAlertState(true)
+            confirmAlertSucess(`El cliente se registro con exito`)
             reset()
             onCloseModal()
             
@@ -123,11 +121,6 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal}) => {
                 error={!!errors.in_delivery}
                 options={inDeliveryOptions}
                 register={register}
-            />
-            <CustomSucessAlert
-                open={sucessAlertState}    
-                label="Cliente registrado con exito"
-                onCLose={()=> setSucessAlertState(false)}
             />
         </CustomFormLayout>
     )
