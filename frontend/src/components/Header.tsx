@@ -7,7 +7,7 @@ import { RootState } from "@/redux/store"
 import { useState } from "react"
 import { CustomModal } from "./CustomModal"
 import { formPitcher } from "@/utils/functionsHelper/formPitcher"
-import { CustomSucessAlert } from "./CustomSucessAlert"
+import { CustomAlert } from "./CustomAlert"
 
 type HeaderProps = {
     title: string, 
@@ -21,6 +21,8 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
     const [openModal, setOpenModal] = useState(false)
     const [sucessAlertState, setSucessAlertState] = useState(false)
     const [sucessMessage, setSucessMessage] = useState('')
+    const [errorAlertState, setErrorAlertState] = useState(false)
+    
 
 
     const toogleModal = () => setOpenModal(!openModal)
@@ -33,6 +35,8 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
         setSucessMessage(message)
         setSucessAlertState(true)
     }
+
+    const handleErrorAlert = () => setErrorAlertState(true)
     
     return (
         <Box>
@@ -54,11 +58,18 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 {currentView !== 'home' && <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
             </Box>
             </FlexBetween>
-            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView, handleCloseModal, handleSucessAlert)}/>
-            <CustomSucessAlert
+            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView, handleCloseModal, handleSucessAlert, handleErrorAlert)}/>
+            <CustomAlert
                 open={sucessAlertState}    
                 label={sucessMessage}
                 onCLose={()=> setSucessAlertState(false)}
+                type="success"
+            />
+            <CustomAlert
+                open={errorAlertState}    
+                label={"Ha ocurrido un error"}
+                onCLose={()=> setErrorAlertState(false)}
+                type="error"
             />
         </Box>
     )

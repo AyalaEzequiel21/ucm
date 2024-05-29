@@ -12,10 +12,11 @@ import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 type ClientAddFormProps = {
     onCloseModal: ()=> void,
     confirmAlertSucess: (message: string)=> void
+    confirmErrorAlert: ()=> void
 
 }
 
-const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlertSucess}) => {
+const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlertSucess, confirmErrorAlert}) => {
 
     const [addClient, {isLoading}] = useAddClientMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
@@ -36,15 +37,16 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
             in_delivery: inDelivery === 'true'
         };
         try{
-            const response = await addClient(processedDataForm).unwrap()
+            // const response = 
+            await addClient(processedDataForm).unwrap()
             confirmAlertSucess(`El cliente se registro con exito`)
             reset()
             onCloseModal()
             
         } catch(e){
             const err = e as ApiErrorResponseType
-            console.log(e);
-            
+            confirmErrorAlert()
+            console.log(err.data.message);
             setErrorMessage(err.data.message)
         }
     }
