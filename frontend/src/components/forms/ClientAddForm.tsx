@@ -64,11 +64,11 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
 
     const inDeliveryOptions: IRadioOptions[] = [
         {
-            label: 'NO',
+            label: 'No',
             value: false
         },
         {
-            label: 'SI',
+            label: 'Si',
             value: true
         }
         

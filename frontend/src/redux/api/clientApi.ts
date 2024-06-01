@@ -1,3 +1,4 @@
+import { setHeaders } from "@/utils/functionsHelper/setHeaders";
 import { IApiResponse } from "@/utils/interfaces/IApiResponse";
 import { IClient } from "@/utils/interfaces/IClient";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -8,15 +9,7 @@ export const clientApi = createApi({
     reducerPath: 'clientsApi',
     baseQuery: fetchBaseQuery({
         baseUrl: baseURL, 
-        // credentials: 'include',
-        prepareHeaders: (headers) => {
-            const token = localStorage.getItem('jwt');
-            if (token) {
-                const jwt = JSON.parse(token)
-                headers.set('authorization', `Bearer ${jwt.value}`);
-            }
-            return headers;
-        },
+        prepareHeaders: setHeaders
     }),
     tagTypes: ['Client'],
     endpoints: (builder) => ({
