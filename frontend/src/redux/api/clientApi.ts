@@ -13,23 +13,20 @@ export const clientApi = createApi({
     }),
     tagTypes: ['Client'],
     endpoints: (builder) => ({
-        getClientById: builder.query<IApiResponse<IClient>, string>({
-            query: (id) => `clients/client/${id}`,
-            providesTags: ['Client']
-        }),
-
         addClient: builder.mutation<IApiResponse<IClient>, Partial<IClient>>({
             query: (newClient) => ({
-                url: 'clients/register',
+                url: '/clients/register',
                 method: 'POST',
                 body: newClient,
-                
             }),
             invalidatesTags: ['Client']
         }),
-
+        getClientById: builder.query<IApiResponse<IClient>, string>({
+            query: (id) => `/clients/client/${id}`,
+            providesTags: ['Client']
+        }),
         getAllClients: builder.query<IApiResponse<IClient>, void>({
-            query: () => 'endpointTest/getClients',
+            query: () => '/clients',
             providesTags: ['Client']
           }),
     })

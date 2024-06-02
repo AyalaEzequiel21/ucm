@@ -13,7 +13,6 @@ type ClientAddFormProps = {
     onCloseModal: ()=> void,
     confirmAlertSucess: (message: string)=> void
     confirmErrorAlert: ()=> void
-
 }
 
 const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlertSucess, confirmErrorAlert}) => {
@@ -91,8 +90,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
                 msgError="Por favor ingrese el nombre del cliente"
                 error={!!errors.fullname}
                 helperText={errors.fullname?.message}
-                minLength={4}
-                maxLength={15}
+                min={4}
+                max={15}
             />
             <CustomInput 
                 type="number"
@@ -103,8 +102,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
                 msgError="Por favor ingrese el telefono del cliente"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
-                minLength={8}
-                maxLength={15}
+                min={8}
+                max={15}
             />
             <CustomInput 
                 type="text"

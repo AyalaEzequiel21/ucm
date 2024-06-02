@@ -1,3 +1,4 @@
+import { setHeaders } from "@/utils/functionsHelper/setHeaders";
 import { IApiResponse } from "@/utils/interfaces/IApiResponse";
 import { ILoginFormValues } from "@/utils/interfaces/ILoginFormValues";
 import { ILoginResponse } from "@/utils/interfaces/ILoginReponse";
@@ -8,7 +9,10 @@ const baseURL = import.meta.env.VITE_API_BASE_URL as string;
 
 export const userApi = createApi({
     reducerPath: 'usersApi',
-    baseQuery: fetchBaseQuery({baseUrl: baseURL}),
+    baseQuery: fetchBaseQuery({
+      baseUrl: baseURL,
+      prepareHeaders: setHeaders
+    }),
     tagTypes: ['User'],
     endpoints: (builder) => ({
         login: builder.mutation<ILoginResponse, ILoginFormValues>({
@@ -26,7 +30,7 @@ export const userApi = createApi({
         }),
 
         getAllUsers: builder.query<IApiResponse<UserType>, void>({
-            query: () => '/endpointTest/getUsers',
+            query: () => '/auth/users',
             providesTags: ['User']
           }),
     })
