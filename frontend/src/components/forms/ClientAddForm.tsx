@@ -8,6 +8,7 @@ import { IRadioOptions } from "@/utils/interfaces/IRadioOption"
 import { useAddClientMutation } from "@/redux/api/clientApi"
 import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 
 type ClientAddFormProps = {
     onCloseModal: ()=> void,
@@ -32,6 +33,7 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
         const inDelivery = dataForm.in_delivery.toString()
         const processedDataForm = {
             ...dataForm,
+            fullname: getCapitalizeString(dataForm.fullname),
             phone: dataForm.phone.toString(),
             in_delivery: inDelivery === 'true'
         };
@@ -102,8 +104,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
                 msgError="Por favor ingrese el telefono del cliente"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
-                min={8}
-                max={15}
+                // min={8}
+                // max={15}
             />
             <CustomInput 
                 type="text"

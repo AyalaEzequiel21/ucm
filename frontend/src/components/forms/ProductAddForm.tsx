@@ -4,6 +4,8 @@ import { useState } from "react"
 import { CustomInput } from "../CustomInput"
 import { useForm } from "react-hook-form"
 import { INewProductValues } from "@/utils/interfaces/registerModels/INewProductValue"
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 
 
 type ProductAddFormProps = {
@@ -24,8 +26,25 @@ const ProductAddForm: React.FC<ProductAddFormProps> = ({confirmAlertSucess, conf
         formState: {errors}
     } = useForm<INewProductValues>()
 
-    const onSubmit = () => {
-
+    const onSubmit = async (dataForm: INewProductValues) => {
+        console.log(dataForm)
+        const processDataForm = {
+            ...dataForm,
+            product_name: getCapitalizeString(dataForm.product_name),
+            first_price: Number(dataForm.first_price),
+            second_price: Number(dataForm.second_price)
+        }
+        try{
+            await addProduct(processDataForm).unwrap()
+            confirmAlertSucess('El producto se registro con exito')
+            onCloseModal()
+            reset()
+        }catch (e){
+            const err = e as ApiErrorResponseType
+            confirmErrorAlert()
+            console.log(err)
+            setErrorMessage(err.data.message)
+        }
     }
 
     return (
@@ -57,8 +76,8 @@ const ProductAddForm: React.FC<ProductAddFormProps> = ({confirmAlertSucess, conf
                 msgError="Por favor ingrese el primer precio del producto"
                 error={!!errors.first_price}
                 helperText={errors.first_price?.message}
-                min={0}
-                max={100000}
+                min={1}
+                max={9999}
             />
             <CustomInput 
                 type="number"
@@ -69,8 +88,8 @@ const ProductAddForm: React.FC<ProductAddFormProps> = ({confirmAlertSucess, conf
                 msgError="Por favor ingrese el segundo precio del producto"
                 error={!!errors.second_price}
                 helperText={errors.second_price?.message}
-                min={0}
-                max={100000}
+                min={1}
+                max={9999}
             />
         </CustomFormLayout>
     )
