@@ -13,6 +13,14 @@ export const supplierApi = createApi({
     }),
     tagTypes: ['Supplier'],
     endpoints: (builder) => ({
+        addSupplier: builder.mutation<IApiResponse<ISupplier>, Partial<ISupplier>>({
+            query: (newSupplier) => ({
+                url: './suppliers/register',
+                method: 'POST',
+                body: newSupplier
+            }),
+            invalidatesTags: ['Supplier']
+        }),
         getSupplierById: builder.query<IApiResponse<ISupplier>, string>({
             query: (id) => `/suppliers/supplier/${id}`,
             providesTags: ['Supplier']
@@ -25,4 +33,4 @@ export const supplierApi = createApi({
     })
 })
 
-export const { useGetSupplierByIdQuery, useGetAllSuppliersQuery } = supplierApi
+export const { useGetSupplierByIdQuery, useGetAllSuppliersQuery, useAddSupplierMutation } = supplierApi

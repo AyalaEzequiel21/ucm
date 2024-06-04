@@ -6,15 +6,10 @@ import { useForm } from "react-hook-form"
 import { INewProductValues } from "@/utils/interfaces/registerModels/INewProductValue"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
+import { FormAddProps } from "@/utils/types/FormAddProps"
 
 
-type ProductAddFormProps = {
-    onCloseModal: ()=> void,
-    confirmAlertSucess: (message: string)=> void,
-    confirmErrorAlert: ()=> void
-}
-
-const ProductAddForm: React.FC<ProductAddFormProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const ProductAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
     const [addProduct, {isLoading}] = useAddProductMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
@@ -28,14 +23,14 @@ const ProductAddForm: React.FC<ProductAddFormProps> = ({confirmAlertSucess, conf
 
     const onSubmit = async (dataForm: INewProductValues) => {
         console.log(dataForm)
-        const processDataForm = {
+        const processedDataForm = {
             ...dataForm,
             product_name: getCapitalizeString(dataForm.product_name),
             first_price: Number(dataForm.first_price),
             second_price: Number(dataForm.second_price)
         }
         try{
-            await addProduct(processDataForm).unwrap()
+            await addProduct(processedDataForm).unwrap()
             confirmAlertSucess('El producto se registro con exito')
             onCloseModal()
             reset()
@@ -64,8 +59,8 @@ const ProductAddForm: React.FC<ProductAddFormProps> = ({confirmAlertSucess, conf
                 msgError="Por favor ingrese el nombre del producto"
                 error={!!errors.product_name}
                 helperText={errors.product_name?.message}
-                min={5}
-                max={25}
+                minLength={5}
+                maxLength={25}
             />
             <CustomInput 
                 type="number"

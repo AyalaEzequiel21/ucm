@@ -14,6 +14,8 @@ interface ICustonInputProps<T extends FieldValues> {
     selectOptions?: ISelectOptions[],
     min?: number
     max?: number
+    minLength?: number
+    maxLength?: number
 
 }
 
@@ -28,7 +30,10 @@ const CustomInput = <T extends FieldValues>({
     helperText,
     selectOptions,
     min,
-    max
+    max,
+    minLength,
+    maxLength
+
     
 }: ICustonInputProps<T>
 ) => {
@@ -45,10 +50,10 @@ const CustomInput = <T extends FieldValues>({
             {...register(value,
                 {
                 required: msgError,
-                minLength: min && type !== 'number' ? {value: min, message: `El ${label} debe tener al menos ${min} caracteres`} : undefined,
-                maxLength: max && type !== 'number' ?  {value: max, message: `El ${label} debe tener al menos ${max} caracteres`}: undefined,
-                min: min && value !== 'phone'? {value: min, message: `El ${label} debe ser mayor o igual a ${min}`} : undefined,
-                max: max && value !== 'phone' ? {value: max, message: `El ${label} debe ser menor a ${max}`} : undefined,
+                minLength: minLength ? {value: minLength, message: `El ${label} debe tener al menos ${minLength} caracteres`} : undefined,
+                maxLength: maxLength ?  {value: maxLength, message: `El ${label} debe tener al menos ${maxLength} caracteres`}: undefined,
+                min: min ? {value: min, message: `El ${label} debe ser mayor o igual a ${min}`} : undefined,
+                max: max ? {value: max, message: `El ${label} debe ser menor a ${max}`} : undefined,
                 }
             )}
             error={error}

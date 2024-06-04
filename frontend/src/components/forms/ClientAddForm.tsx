@@ -9,14 +9,10 @@ import { useAddClientMutation } from "@/redux/api/clientApi"
 import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
+import { FormAddProps } from "@/utils/types/FormAddProps"
 
-type ClientAddFormProps = {
-    onCloseModal: ()=> void,
-    confirmAlertSucess: (message: string)=> void
-    confirmErrorAlert: ()=> void
-}
 
-const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlertSucess, confirmErrorAlert}) => {
+const ClientAddForm: React.FC<FormAddProps> = ({onCloseModal, confirmAlertSucess, confirmErrorAlert}) => {
 
     const [addClient, {isLoading}] = useAddClientMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
@@ -92,8 +88,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
                 msgError="Por favor ingrese el nombre del cliente"
                 error={!!errors.fullname}
                 helperText={errors.fullname?.message}
-                min={4}
-                max={15}
+                minLength={4}
+                maxLength={15}
             />
             <CustomInput 
                 type="number"
@@ -104,8 +100,8 @@ const ClientAddForm: React.FC<ClientAddFormProps> = ({onCloseModal, confirmAlert
                 msgError="Por favor ingrese el telefono del cliente"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
-                // min={8}
-                // max={15}
+                minLength={8}
+                maxLength={15}
             />
             <CustomInput 
                 type="text"
