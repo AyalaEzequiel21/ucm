@@ -32,7 +32,7 @@ const ClientAddForm: React.FC<FormAddProps> = ({onCloseModal, confirmAlertSucess
             fullname: getCapitalizeString(dataForm.fullname),
             phone: dataForm.phone.toString(),
             in_delivery: inDelivery === 'true'
-        };
+        }
         try{
             // const response = 
             await addClient(processedDataForm).unwrap()

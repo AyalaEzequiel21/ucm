@@ -2,6 +2,7 @@ import { setHeaders } from "@/utils/functionsHelper/setHeaders";
 import { IApiResponse } from "@/utils/interfaces/IApiResponse";
 import { ILoginFormValues } from "@/utils/interfaces/ILoginFormValues";
 import { ILoginResponse } from "@/utils/interfaces/ILoginReponse";
+import { IUser } from "@/utils/interfaces/IUser";
 import { UserType } from "@/utils/types/UserType";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -23,7 +24,14 @@ export const userApi = createApi({
             }),
             invalidatesTags: ['User'],
           }),
-        
+        addUser: builder.mutation<IApiResponse<IUser>, Partial<IUser>>({
+          query: (newUser) => ({
+            url: '/auth/user/register',
+            method: 'POST',
+            body: newUser
+          }),
+          invalidatesTags: ['User']
+        }),
         getUserById: builder.query<IApiResponse<UserType>, string>({
             query: (id) => `/users/user/${id}`,
             providesTags: ['User']
@@ -36,4 +44,4 @@ export const userApi = createApi({
     })
 })
 
-export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginMutation} = userApi
+export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginMutation , useAddUserMutation} = userApi

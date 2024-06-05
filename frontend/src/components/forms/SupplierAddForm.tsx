@@ -75,7 +75,7 @@ const SupplierAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
             />
             <CustomInput
                 type="text"
-                label="Producto o materia"
+                label="Producto o Materia"
                 register={register}
                 isSelect={false}
                 value="primeProduct"

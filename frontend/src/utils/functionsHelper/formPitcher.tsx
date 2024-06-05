@@ -1,6 +1,7 @@
 import { ClientAddForm } from "@/components/forms/ClientAddForm";
 import { ProductAddForm } from "@/components/forms/ProductAddForm";
 import { SupplierAddForm } from "@/components/forms/SupplierAddForm";
+import { UserAddForm } from "@/components/forms/UserAddForm";
 import { ViewStateType } from "@/redux/state/viewState";
 
 export const formPitcher = (currentView: ViewStateType, onClose: ()=> void, handleSucessAlert: (message: string)=> void, handleErrorAlert: ()=> void) => {
@@ -11,6 +12,8 @@ export const formPitcher = (currentView: ViewStateType, onClose: ()=> void, hand
             return <ProductAddForm onCloseModal={onClose} confirmAlertSucess={handleSucessAlert} confirmErrorAlert={handleErrorAlert}/>
         case 'suppliers':
             return <SupplierAddForm onCloseModal={onClose} confirmAlertSucess={handleSucessAlert} confirmErrorAlert={handleErrorAlert}/>
+            case 'users':
+                return <UserAddForm onCloseModal={onClose} confirmAlertSucess={handleSucessAlert} confirmErrorAlert={handleErrorAlert}/>        
         default:
             return <>Otro</>
         
