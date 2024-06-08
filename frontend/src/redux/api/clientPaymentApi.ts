@@ -13,6 +13,14 @@ export const clientPaymentApi = createApi({
     }),
     tagTypes: ['Client Payment'],
     endpoints: (builder) => ({
+        addClientPayment: builder.mutation<IApiResponse<IClientPayment>, Partial<IClientPayment>>({
+            query: (newPayment) => ({
+                url: '/clientPayments/register',
+                method: 'POST',
+                body: newPayment,
+            }),
+            invalidatesTags: ['Client Payment']
+        }),
         getClientpaymentById: builder.query<IApiResponse<IClientPayment>, string>({
             query: (id) => `clientPayments/clientPayment/${id}`,
             providesTags: ['Client Payment']
@@ -25,4 +33,4 @@ export const clientPaymentApi = createApi({
     })
 })
 
-export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery } = clientPaymentApi
+export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery, useAddClientPaymentMutation } = clientPaymentApi

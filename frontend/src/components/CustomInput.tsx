@@ -52,7 +52,7 @@ const CustomInput = <T extends FieldValues>({
                 required: msgError,
                 minLength: minLength ? {value: minLength, message: `El ${label} debe tener al menos ${minLength} caracteres`} : undefined,
                 maxLength: maxLength ?  {value: maxLength, message: `El ${label} debe tener al menos ${maxLength} caracteres`}: undefined,
-                min: min ? {value: min, message: `El ${label} debe ser mayor o igual a ${min}`} : undefined,
+                min: min ? {value: min, message: `El ${label} debe ser mayor a ${min - 1}`} : undefined,
                 max: max ? {value: max, message: `El ${label} debe ser menor a ${max}`} : undefined,
                 }
             )}

@@ -1,4 +1,5 @@
 import { ClientAddForm } from "@/components/forms/ClientAddForm";
+import { PaymentAddForm } from "@/components/forms/PaymentAddForm";
 import { ProductAddForm } from "@/components/forms/ProductAddForm";
 import { SupplierAddForm } from "@/components/forms/SupplierAddForm";
 import { UserAddForm } from "@/components/forms/UserAddForm";
@@ -14,6 +15,8 @@ export const formPitcher = (currentView: ViewStateType, onClose: ()=> void, hand
             return <SupplierAddForm onCloseModal={onClose} confirmAlertSucess={handleSucessAlert} confirmErrorAlert={handleErrorAlert}/>
             case 'users':
                 return <UserAddForm onCloseModal={onClose} confirmAlertSucess={handleSucessAlert} confirmErrorAlert={handleErrorAlert}/>        
+            case 'clientsPayments':
+                return <PaymentAddForm onCloseModal={onClose} confirmAlertSucess={handleSucessAlert} confirmErrorAlert={handleErrorAlert}/>        
         default:
             return <>Otro</>
         
