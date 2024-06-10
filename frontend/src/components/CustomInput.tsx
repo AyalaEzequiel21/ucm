@@ -2,7 +2,7 @@ import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
 import { MenuItem, TextField } from "@mui/material";
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 
-interface ICustonInputProps<T extends FieldValues> {
+export interface ICustonInputProps<T extends FieldValues> {
     type: React.HTMLInputTypeAttribute,
     label: string,
     register: UseFormRegister<T>,

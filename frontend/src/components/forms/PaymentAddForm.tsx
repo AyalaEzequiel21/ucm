@@ -2,12 +2,12 @@ import { useAddClientPaymentMutation } from "@/redux/api/clientPaymentApi";
 import { INewClientPaymentValues } from "@/utils/interfaces/registerModels/INewClientPaymentValues";
 import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomInput } from "../CustomInput";
 import { useGetAllClientsQuery } from "@/redux/api/clientApi";
 import { IClient } from "@/utils/interfaces/IClient";
-import { Autocomplete } from "@mui/material";
+import { CustomAutocomplete } from "../CustomAutocomplete";
 
 const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
@@ -19,6 +19,7 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
         register, 
         handleSubmit,
         reset,
+        control,
         formState: {errors}
     } = useForm<INewClientPaymentValues>()
 
@@ -49,29 +50,12 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
             isLoading={isLoading}
             errorMessage={errorMessage}
         >
-            <Autocomplete
-                    disablePortal
-                    options={clientOptions}
-                    getOptionLabel={(option) => option.label}
-                    // value={value ? clientOptions.find(option => option.id === value) : null}
-                    // onChange={(event, item) => {
-                    //     onChange(item ? item.id : '');
-                    // }}
-                    renderInput={(params) => (
-                        <CustomInput 
-                            // {...params}
-                            type="text"
-                            label="Nombre del Cliente"
-                            register={register}
-                            value="client_name"
-                            isSelect={false}
-                            msgError="Ingrese el nombre de un cliente"
-                            error={!!errors.client_name}
-                            helperText={errors.client_name?.message}
-                        />
-                    )}  
-                    />
-
+            <CustomAutocomplete 
+                control={control}
+                label="Ingrese el nombre del cliente"
+                name="client_name"
+                options={clientOptions}
+            />
             <CustomInput 
                 type="number"
                 label="Total del Pago"
