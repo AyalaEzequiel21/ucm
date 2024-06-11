@@ -8,6 +8,7 @@ import { CustomInput } from "../CustomInput";
 import { useGetAllClientsQuery } from "@/redux/api/clientApi";
 import { IClient } from "@/utils/interfaces/IClient";
 import { CustomAutocomplete } from "../CustomAutocomplete";
+import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
 
 const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
@@ -37,8 +38,15 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
         id: client._id
     })) || []
 
+    const paymentMethodOptions: ISelectOptions[] = [
+        { label: 'Efectivo', value: 'efectivo'},
+        { label: 'Transf. Bancaria', value: 'banco'},
+        { label: 'Mercadopago', value: 'mercadopago'},
+        { label: 'Cheque', value: 'cheque'},
+    ]
+
     useEffect(()=> {
-        console.log(clientsData);
+                console.log(clientsData);
     }, [clientsData])
 
 
@@ -52,7 +60,7 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
         >
             <CustomAutocomplete 
                 control={control}
-                label="Ingrese el nombre del cliente"
+                label="Ingrese el cliente"
                 name="client_name"
                 options={clientOptions}
             />
@@ -65,6 +73,18 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
                 msgError="Por favor ingrese un monto mayor a 0"
                 error={!!errors.amount}
                 helperText={errors.amount?.message}
+                min={1}
+            />
+            <CustomInput 
+                type="text"
+                label="Metodo de Pago"
+                register={register}
+                isSelect={true}
+                selectOptions={paymentMethodOptions}
+                value="payment_method"
+                msgError="Por favor ingrese el metodo de pago"
+                error={!!errors.payment_method}
+                helperText={errors.payment_method?.message}
                 min={1}
             />
         </CustomFormLayout>

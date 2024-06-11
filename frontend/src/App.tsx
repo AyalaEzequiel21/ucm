@@ -15,31 +15,35 @@ import { PaymentsToSuppliers } from "./scenes/PaymentsToSupplier"
 import { Purchases } from "./scenes/Purchases"
 import { Home } from "./scenes/Home"
 import { Login } from "./scenes/Login"
+import { FormProvider, useForm } from "react-hook-form"
 
 function App() {
 
   const theme = useMemo(()=> createTheme(themeSettings), [])
+  const methods = useForm()
 
   return (
     <div className="app">
       <BrowserRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-              <Routes> 
-                <Route path='/login' element={<Login/>}/>
-                <Route element={<Layout />}>
-                  <Route path='/' element={<Home/>}/>
-                  <Route path='/clients' element={<Clients />}/>
-                  <Route path='/products' element={<Products />}/>
-                  <Route path='/clientsPayments' element={<Payments />}/>
-                  <Route path='/users' element={<Users />}/>
-                  <Route path='/paymentsReport' element={<PaymentsReports />}/>
-                  <Route path='/sales' element={<Sales />}/>
-                  <Route path='/suppliers' element={<Suppliers />}/>
-                  <Route path='/paymentsToSuppliers' element={<PaymentsToSuppliers />}/>
-                  <Route path='/purchases' element={<Purchases />}/>
-                </Route>
-              </Routes>
+            <FormProvider {...methods}>
+                <Routes> 
+                  <Route path='/login' element={<Login/>}/>
+                  <Route element={<Layout />}>
+                    <Route path='/' element={<Home/>}/>
+                    <Route path='/clients' element={<Clients />}/>
+                    <Route path='/products' element={<Products />}/>
+                    <Route path='/clientsPayments' element={<Payments />}/>
+                    <Route path='/users' element={<Users />}/>
+                    <Route path='/paymentsReport' element={<PaymentsReports />}/>
+                    <Route path='/sales' element={<Sales />}/>
+                    <Route path='/suppliers' element={<Suppliers />}/>
+                    <Route path='/paymentsToSuppliers' element={<PaymentsToSuppliers />}/>
+                    <Route path='/purchases' element={<Purchases />}/>
+                  </Route>
+                </Routes>
+              </FormProvider>
           </ThemeProvider>
       </BrowserRouter>
     </div>

@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material"
-import { Control, Controller, FieldValues, Path } from "react-hook-form"
+import { Control, Controller, FieldValues, Path, useFormContext } from "react-hook-form"
 
 interface CustomAutocompleteProps<T extends FieldValues> {
     options: {label: string, id: string}[]
@@ -15,20 +15,31 @@ const CustomAutocomplete = <T extends FieldValues>({
     label
 }: CustomAutocompleteProps<T>) => {
 
+    const { setValue } = useFormContext()
 
     return (
         <Controller
             name={name}
             control={control}
-            render={({field}) => {
+            render={({field: {onChange, value, ref}}) => {
                 return (<Autocomplete
-                    {...field}
+                    // {...field}
                     options={options}
+                    value={value || null}
                     getOptionLabel={(option) => option.label}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
                     renderInput={(params) => (
-                        <TextField {...params} label={label} />
+                        <TextField {...params} label={label} inputRef={ref}/>
                     )}
-                    onChange={(_, data) => field.onChange(data)}
+                    onChange={(_, newValue) => {
+                        setValue('client_name', newValue ? newValue.label : '')
+                        setValue('client_id', newValue ? newValue.id : '')
+                        onChange(newValue ? newValue.label : '')
+                      }}
+            
+                    sx={{
+                        width: '100%'
+                    }}
                 />)
             }}
         />
