@@ -53,7 +53,6 @@ const CustomFormLayout: React.FC<CustomFormLayoutProps> = ({
                         </Stack>
                     </Box>
                 </Paper>
-
         </Box>
     )
 }

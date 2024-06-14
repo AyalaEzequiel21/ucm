@@ -9,6 +9,7 @@ import { useGetAllClientsQuery } from "@/redux/api/clientApi";
 import { IClient } from "@/utils/interfaces/IClient";
 import { CustomAutocomplete } from "../CustomAutocomplete";
 import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 
 const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
@@ -23,7 +24,23 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
     } = methods
 
     const onSubmit = async (dataForm: INewClientPaymentValues) => {
-        console.log(dataForm);
+        const dataProsseced = {
+            ...dataForm,
+            amount: Number(dataForm.amount)
+        }
+        // console.log(dataForm);
+        try{
+            const response = await addClientPayment(dataProsseced).unwrap()
+            console.log(response);
+            confirmAlertSucess('El producto se registro con exito')
+            onCloseModal()
+            reset()
+        } catch(e){
+            const err = e as ApiErrorResponseType
+            confirmErrorAlert()
+            console.log(err)
+            setErrorMessage(err.data.message)
+        }
     }
 
     interface AutocompleteOption {
