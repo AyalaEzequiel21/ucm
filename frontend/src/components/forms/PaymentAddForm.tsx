@@ -2,7 +2,7 @@ import { useAddClientPaymentMutation } from "@/redux/api/clientPaymentApi";
 import { INewClientPaymentValues } from "@/utils/interfaces/registerModels/INewClientPaymentValues";
 import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomInput } from "../CustomInput";
 import { useGetAllClientsQuery } from "@/redux/api/clientApi";
@@ -15,14 +15,12 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
     const [addClientPayment, {isLoading}] = useAddClientPaymentMutation()
     const { data: clientsData } = useGetAllClientsQuery()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-
+    const methods = useForm<INewClientPaymentValues>()
     const {
-        register, 
         handleSubmit,
         reset,
-        control,
         formState: {errors}
-    } = useForm<INewClientPaymentValues>()
+    } = methods
 
     const onSubmit = async (dataForm: INewClientPaymentValues) => {
         console.log(dataForm);
@@ -51,43 +49,43 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
 
 
     return (
-        <CustomFormLayout
-            handleSubmit={handleSubmit(onSubmit)}
-            title="Crear Pago"
-            labelButton="Crear"
-            isLoading={isLoading}
-            errorMessage={errorMessage}
-        >
-            <CustomAutocomplete 
-                control={control}
-                label="Ingrese el cliente"
-                name="client_name"
-                options={clientOptions}
-            />
-            <CustomInput 
-                type="number"
-                label="Total del Pago"
-                register={register}
-                isSelect={false}
-                value="amount"
-                msgError="Por favor ingrese un monto mayor a 0"
-                error={!!errors.amount}
-                helperText={errors.amount?.message}
-                min={1}
-            />
-            <CustomInput 
-                type="text"
-                label="Metodo de Pago"
-                register={register}
-                isSelect={true}
-                selectOptions={paymentMethodOptions}
-                value="payment_method"
-                msgError="Por favor ingrese el metodo de pago"
-                error={!!errors.payment_method}
-                helperText={errors.payment_method?.message}
-                min={1}
-            />
-        </CustomFormLayout>
+        <FormProvider {...methods}>
+            <CustomFormLayout
+                handleSubmit={handleSubmit(onSubmit)}
+                title="Crear Pago"
+                labelButton="Crear"
+                isLoading={isLoading}
+                errorMessage={errorMessage}
+            >
+                <CustomAutocomplete 
+                    label="Ingrese el cliente"
+                    name="client_name"
+                    idName="client_id"
+                    options={clientOptions}
+                />
+                <CustomInput 
+                    type="number"
+                    label="Total del Pago"
+                    isSelect={false}
+                    value="amount"
+                    msgError="Por favor ingrese un monto mayor a 0"
+                    error={!!errors.amount}
+                    helperText={errors.amount?.message}
+                    min={1}
+                />
+                <CustomInput 
+                    type="text"
+                    label="Metodo de Pago"
+                    isSelect={true}
+                    selectOptions={paymentMethodOptions}
+                    value="payment_method"
+                    msgError="Por favor ingrese el metodo de pago"
+                    error={!!errors.payment_method}
+                    helperText={errors.payment_method?.message}
+                    min={1}
+                />
+            </CustomFormLayout>
+        </FormProvider>
     )
 
 }

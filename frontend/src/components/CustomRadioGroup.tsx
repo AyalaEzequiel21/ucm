@@ -1,16 +1,17 @@
 import { IRadioOptions } from "@/utils/interfaces/IRadioOption"
 import { FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from "@mui/material"
-import { FieldValues, Path, UseFormRegister } from "react-hook-form"
+import { FieldValues, Path, useFormContext } from "react-hook-form"
 
 interface ICustomRadioGroupProps<T extends FieldValues>  {
     label: string,
     propertie: Path<T>,
     error?: boolean | undefined,
     options: IRadioOptions[],
-    register: UseFormRegister<T>,
 }
 
-const CustomRadioGroup = <T extends FieldValues>({ label, propertie, error, options, register }: ICustomRadioGroupProps<T>) => {
+const CustomRadioGroup = <T extends FieldValues>({ label, propertie, error, options }: ICustomRadioGroupProps<T>) => {
+
+    const { register } = useFormContext()
 
     return (
         <FormControl component={'fieldset'} error={error} sx={{width: '100%'}}>

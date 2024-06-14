@@ -1,7 +1,6 @@
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { CustomFormLayout } from "../CustomFormLayout"
 import { CustomInput } from "../CustomInput"
-import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
 import { ISelectOptions } from "@/utils/interfaces/ISelectOptions"
 import { CustomRadioGroup } from "../CustomRadioGroup"
 import { IRadioOptions } from "@/utils/interfaces/IRadioOption"
@@ -10,19 +9,15 @@ import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { FormAddProps } from "@/utils/types/FormAddProps"
+import { INewClientValues } from "@/utils/interfaces/registerModels/INewClientValues"
 
 
 const ClientAddForm: React.FC<FormAddProps> = ({onCloseModal, confirmAlertSucess, confirmErrorAlert}) => {
 
     const [addClient, {isLoading}] = useAddClientMutation()
-    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-
-    const {
-        register, 
-        handleSubmit,
-        reset,
-        formState: {errors}
-    } = useForm<INewClientValues>()
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined) 
+    const methods = useForm<INewClientValues>()
+    const { handleSubmit, reset, formState: {errors} } = methods
 
 
     const onSubmit = async (dataForm: INewClientValues) => {
@@ -72,56 +67,54 @@ const ClientAddForm: React.FC<FormAddProps> = ({onCloseModal, confirmAlertSucess
     ]
 
     return (
-        <CustomFormLayout
+        <FormProvider {...methods}>
+            <CustomFormLayout
             handleSubmit={handleSubmit(onSubmit)}
             title="Agregar Cliente"
             labelButton="Agregar"
             isLoading={isLoading}
             errorMessage={errorMessage}
-        >
-            <CustomInput 
-                type="text"
-                label="Nombre del Cliente"
-                register={register}
-                isSelect={false}
-                value="fullname"
-                msgError="Por favor ingrese el nombre del cliente"
-                error={!!errors.fullname}
-                helperText={errors.fullname?.message}
-                minLength={4}
-                maxLength={15}
-            />
-            <CustomInput 
-                type="number"
-                label="Telefono del Cliente"
-                register={register}
-                isSelect={false}
-                value="phone"
-                msgError="Por favor ingrese el telefono del cliente"
-                error={!!errors.phone}
-                helperText={errors.phone?.message}
-                minLength={8}
-                maxLength={15}
-            />
-            <CustomInput 
-                type="text"
-                label="Categoria"
-                register={register}
-                isSelect={true}
-                value="category"
-                msgError="Seleccione una categoria para el cliente"
-                error={!!errors.category}
-                helperText={errors.category?.message}
-                selectOptions={categoriesOptions}
-            />
-            <CustomRadioGroup 
-                label="Reparto"
-                propertie="in_delivery"
-                error={!!errors.in_delivery}
-                options={inDeliveryOptions}
-                register={register}
-            />
-        </CustomFormLayout>
+            >
+                <CustomInput 
+                    type="text"
+                    label="Nombre del Cliente"
+                    isSelect={false}
+                    value="fullname"
+                    msgError="Por favor ingrese el nombre del cliente"
+                    error={!!errors.fullname}
+                    helperText={errors.fullname?.message}
+                    minLength={4}
+                    maxLength={15}
+                />
+                <CustomInput 
+                    type="number"
+                    label="Telefono del Cliente"
+                    isSelect={false}
+                    value="phone"
+                    msgError="Por favor ingrese el telefono del cliente"
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message}
+                    minLength={8}
+                    maxLength={15}
+                />
+                <CustomInput 
+                    type="text"
+                    label="Categoria"
+                    isSelect={true}
+                    value="category"
+                    msgError="Seleccione una categoria para el cliente"
+                    error={!!errors.category}
+                    helperText={errors.category?.message}
+                    selectOptions={categoriesOptions}
+                />
+                <CustomRadioGroup 
+                    label="Reparto"
+                    propertie="in_delivery"
+                    error={!!errors.in_delivery}
+                    options={inDeliveryOptions}
+                />
+            </CustomFormLayout>
+        </FormProvider>
     )
 }
 

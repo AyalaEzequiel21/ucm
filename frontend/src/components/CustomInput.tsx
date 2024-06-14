@@ -1,11 +1,10 @@
 import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
 import { MenuItem, TextField } from "@mui/material";
-import { FieldValues, Path, UseFormRegister } from "react-hook-form";
+import { FieldValues, Path, useFormContext } from "react-hook-form";
 
 export interface ICustonInputProps<T extends FieldValues> {
     type: React.HTMLInputTypeAttribute,
     label: string,
-    register: UseFormRegister<T>,
     value: Path<T>,
     isSelect: boolean,
     msgError: string,
@@ -22,7 +21,6 @@ export interface ICustonInputProps<T extends FieldValues> {
 const CustomInput = <T extends FieldValues>({
     type, 
     label,
-    register,
     value, 
     isSelect,
     msgError,
@@ -33,10 +31,10 @@ const CustomInput = <T extends FieldValues>({
     max,
     minLength,
     maxLength
-
-    
 }: ICustonInputProps<T>
 ) => {
+
+    const { register } = useFormContext()
 
     return (
         <TextField

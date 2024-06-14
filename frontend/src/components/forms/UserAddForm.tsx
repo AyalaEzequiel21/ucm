@@ -2,7 +2,7 @@ import { useAddUserMutation } from "@/redux/api/userApi";
 import { INewUserValues } from "@/utils/interfaces/registerModels/INewUserValues";
 import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomInput } from "../CustomInput";
 import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
@@ -13,13 +13,12 @@ const UserAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
 
     const [addUser, {isLoading}] = useAddUserMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-
+    const methods = useForm<INewUserValues>()
     const {
-        register, 
         handleSubmit,
         reset,
         formState: {errors}
-    } = useForm<INewUserValues>()
+    } = methods
 
     const onSubmit = async (dataForm: INewUserValues) => {
         const processedDataForm = {
@@ -53,49 +52,48 @@ const UserAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
     ]
 
     return (
-        <CustomFormLayout
-            handleSubmit={handleSubmit(onSubmit)}
-            title="Agregar Usuario"
-            labelButton="Agregar"
-            isLoading={isLoading}
-            errorMessage={errorMessage}
-        >
-            <CustomInput 
-                type="text"
-                label="Nombre del Usuario"
-                register={register}
-                isSelect={false}
-                value="username"
-                msgError="Por favor ingrese el nombre del usuario"
-                error={!!errors.username}
-                helperText={errors.username?.message}
-                minLength={5}
-                maxLength={15}
-            />
-            <CustomInput 
-                type="password"
-                label="Contraseña"
-                register={register}
-                isSelect={false}
-                value="password"
-                msgError="Por favor ingrese una contraseña"
-                error={!!errors.password}
-                helperText={errors.password?.message}
-                minLength={8}
-                maxLength={15}
-            />
-            <CustomInput 
-                type="text"
-                label="Role"
-                register={register}
-                isSelect={true}
-                value="role"
-                msgError="Por favor seleccione el rol del usuario"
-                error={!!errors.role}
-                helperText={errors.role?.message}
-                selectOptions={roleOptions}
-            />
-        </CustomFormLayout>
+        <FormProvider {...methods}>
+            <CustomFormLayout
+                handleSubmit={handleSubmit(onSubmit)}
+                title="Agregar Usuario"
+                labelButton="Agregar"
+                isLoading={isLoading}
+                errorMessage={errorMessage}
+            >
+                <CustomInput 
+                    type="text"
+                    label="Nombre del Usuario"
+                    isSelect={false}
+                    value="username"
+                    msgError="Por favor ingrese el nombre del usuario"
+                    error={!!errors.username}
+                    helperText={errors.username?.message}
+                    minLength={5}
+                    maxLength={15}
+                />
+                <CustomInput 
+                    type="password"
+                    label="Contraseña"
+                    isSelect={false}
+                    value="password"
+                    msgError="Por favor ingrese una contraseña"
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                    minLength={8}
+                    maxLength={15}
+                />
+                <CustomInput 
+                    type="text"
+                    label="Role"
+                    isSelect={true}
+                    value="role"
+                    msgError="Por favor seleccione el rol del usuario"
+                    error={!!errors.role}
+                    helperText={errors.role?.message}
+                    selectOptions={roleOptions}
+                />
+            </CustomFormLayout>
+        </FormProvider>
     )
 }
 

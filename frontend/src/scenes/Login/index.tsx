@@ -4,7 +4,7 @@ import {
   Container,
   useTheme,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.jpeg";
 import { CustomInput } from "@/components/CustomInput";
@@ -22,11 +22,11 @@ type LoginProps = object;
 
 const Login: React.FC<LoginProps> = () => {
   const { palette } = useTheme();
+  const methods = useForm<ILoginFormValues>()
   const {
-    register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginFormValues>();
+  } = methods
   const [loginUser, { isLoading }] = useLoginMutation();
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
@@ -60,40 +60,40 @@ const Login: React.FC<LoginProps> = () => {
         justifyContent: "center",
       }}
     >
-      <CustomFormLayout 
-        handleSubmit={handleSubmit(onSubmit)}
-        title="Iniciar Sesion"
-        labelButton="Iniciar"
-        isLoading={isLoading}
-        errorMessage={errorMessage}
-    >
-        <Box
-          component="img"
-          src={logo}
-          alt="logo"
-          sx={{ height: 170, width: 220 }}
-        />
-        <CustomInput
-          type="text"
-          label="Usuario"
-          register={register}
-          isSelect={false}
-          value="username"
-          msgError="Por favor ingrese su nombre de usuario"
-          error={!!errors.username}
-          helperText={errors.username?.message}
-        />
-        <CustomInput
-          type="password"
-          label="Contraseña"
-          register={register}
-          isSelect={false}
-          value="password"
-          msgError="Por favor ingrese su contraseña"
-          error={!!errors.password}
-          helperText={errors.password?.message}
-        />
-      </CustomFormLayout>
+      <FormProvider {...methods}>
+        <CustomFormLayout 
+          handleSubmit={handleSubmit(onSubmit)}
+          title="Iniciar Sesion"
+          labelButton="Iniciar"
+          isLoading={isLoading}
+          errorMessage={errorMessage}
+      >
+          <Box
+            component="img"
+            src={logo}
+            alt="logo"
+            sx={{ height: 170, width: 220 }}
+          />
+          <CustomInput
+            type="text"
+            label="Usuario"
+            isSelect={false}
+            value="username"
+            msgError="Por favor ingrese su nombre de usuario"
+            error={!!errors.username}
+            helperText={errors.username?.message}
+          />
+          <CustomInput
+            type="password"
+            label="Contraseña"
+            isSelect={false}
+            value="password"
+            msgError="Por favor ingrese su contraseña"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
+        </CustomFormLayout>
+      </FormProvider>
     </Container>
   );
 };

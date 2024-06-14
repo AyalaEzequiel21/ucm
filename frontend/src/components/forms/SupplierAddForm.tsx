@@ -2,7 +2,7 @@ import { useAddSupplierMutation } from "@/redux/api/supplierApi";
 import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { CustomFormLayout } from "../CustomFormLayout";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { INewSupplier } from "@/utils/interfaces/registerModels/INewSupplier";
 import { CustomInput } from "../CustomInput";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
@@ -12,13 +12,12 @@ const SupplierAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
 
     const [addSupplier, {isLoading}] = useAddSupplierMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-
+    const methods = useForm<INewSupplier>()
     const {
-        register, 
         handleSubmit,
         reset,
         formState: {errors}
-    } = useForm<INewSupplier>()
+    } = methods
 
     const onSubmit = async (dataForm: INewSupplier) => {
         const processedDataForm = {
@@ -42,50 +41,49 @@ const SupplierAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     }
 
     return (
-        <CustomFormLayout
-            handleSubmit={handleSubmit(onSubmit)}
-            title="Agregar Proveedor"
-            labelButton="Agregar"
-            isLoading={isLoading}
-            errorMessage={errorMessage}
-        >
-            <CustomInput
-                type="text"
-                label="Nombre del Proveedor"
-                register={register}
-                isSelect={false}
-                value="supplier_name"
-                msgError="Por favor ingrese el nombre del proveedor"
-                error={!!errors.supplier_name}
-                helperText={errors.supplier_name?.message}
-                minLength={4}
-                maxLength={15}
-            />
-            <CustomInput
-                type="number"
-                label="Telefono del Proveedor"
-                register={register}
-                isSelect={false}
-                value="phone"
-                msgError="Por favor ingrese el telefono del proveedor"
-                error={!!errors.phone}
-                helperText={errors.phone?.message}
-                minLength={8}
-                maxLength={25}
-            />
-            <CustomInput
-                type="text"
-                label="Producto o Materia"
-                register={register}
-                isSelect={false}
-                value="primeProduct"
-                msgError="Por favor ingrese el nombre del producto o materia"
-                error={!!errors.primeProduct}
-                helperText={errors.primeProduct?.message}
-                minLength={5}
-                maxLength={20}
-            />
-        </CustomFormLayout>
+        <FormProvider {...methods}>
+            <CustomFormLayout
+                handleSubmit={handleSubmit(onSubmit)}
+                title="Agregar Proveedor"
+                labelButton="Agregar"
+                isLoading={isLoading}
+                errorMessage={errorMessage}
+            >
+                <CustomInput
+                    type="text"
+                    label="Nombre del Proveedor"
+                    isSelect={false}
+                    value="supplier_name"
+                    msgError="Por favor ingrese el nombre del proveedor"
+                    error={!!errors.supplier_name}
+                    helperText={errors.supplier_name?.message}
+                    minLength={4}
+                    maxLength={15}
+                />
+                <CustomInput
+                    type="number"
+                    label="Telefono del Proveedor"
+                    isSelect={false}
+                    value="phone"
+                    msgError="Por favor ingrese el telefono del proveedor"
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message}
+                    minLength={8}
+                    maxLength={25}
+                />
+                <CustomInput
+                    type="text"
+                    label="Producto o Materia"
+                    isSelect={false}
+                    value="primeProduct"
+                    msgError="Por favor ingrese el nombre del producto o materia"
+                    error={!!errors.primeProduct}
+                    helperText={errors.primeProduct?.message}
+                    minLength={5}
+                    maxLength={20}
+                />
+            </CustomFormLayout>
+        </FormProvider>
     )
 }
 

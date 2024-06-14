@@ -1,21 +1,21 @@
 import { Autocomplete, TextField } from "@mui/material"
-import { Control, Controller, FieldValues, Path, useFormContext } from "react-hook-form"
+import { Controller, FieldValues, Path, useFormContext } from "react-hook-form"
 
 interface CustomAutocompleteProps<T extends FieldValues> {
     options: {label: string, id: string}[]
-    control: Control<T>,
-    name: Path<T>
+    name: string
+    idName: string
     label: string
 }
 
 const CustomAutocomplete = <T extends FieldValues>({
     options,
-    control, 
     name,
+    idName,
     label
 }: CustomAutocompleteProps<T>) => {
 
-    const { setValue } = useFormContext()
+    const { setValue, control } = useFormContext()
 
     return (
         <Controller
@@ -23,7 +23,7 @@ const CustomAutocomplete = <T extends FieldValues>({
             control={control}
             render={({field: {onChange, value, ref}}) => {
                 return (<Autocomplete
-                    // {...field}
+                    
                     options={options}
                     value={value || null}
                     getOptionLabel={(option) => option.label}
@@ -32,8 +32,8 @@ const CustomAutocomplete = <T extends FieldValues>({
                         <TextField {...params} label={label} inputRef={ref}/>
                     )}
                     onChange={(_, newValue) => {
-                        setValue('client_name', newValue ? newValue.label : '')
-                        setValue('client_id', newValue ? newValue.id : '')
+                        setValue(name , newValue ? newValue.label : '')
+                        setValue(idName, newValue ? newValue.id : '')
                         onChange(newValue ? newValue.label : '')
                       }}
             
@@ -47,3 +47,7 @@ const CustomAutocomplete = <T extends FieldValues>({
 }
 
 export {CustomAutocomplete}
+
+///////////////////////////////////////////////////////////////////////
+
+// TRATAR DE SOLUCIONAR EL TEMA DEL SETEO XQ DEVUELVE UNDEFINED.

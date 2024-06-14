@@ -2,7 +2,7 @@ import { useAddProductMutation } from "@/redux/api/productApi"
 import { CustomFormLayout } from "../CustomFormLayout"
 import { useState } from "react"
 import { CustomInput } from "../CustomInput"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { INewProductValues } from "@/utils/interfaces/registerModels/INewProductValue"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
@@ -13,13 +13,12 @@ const ProductAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
     
     const [addProduct, {isLoading}] = useAddProductMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-
+    const methods = useForm<INewProductValues>()
     const {
-        register, 
         handleSubmit,
         reset,
         formState: {errors}
-    } = useForm<INewProductValues>()
+    } = methods
 
     const onSubmit = async (dataForm: INewProductValues) => {
         console.log(dataForm)
@@ -43,50 +42,49 @@ const ProductAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
     }
 
     return (
-        <CustomFormLayout
-            handleSubmit={handleSubmit(onSubmit)}
-            title="Agregar Producto"
-            labelButton="Agregar"
-            isLoading={isLoading}
-            errorMessage={errorMessage}
-        >
-            <CustomInput 
-                type="text"
-                label="Nombre del Producto"
-                register={register}
-                isSelect={false}
-                value="product_name"
-                msgError="Por favor ingrese el nombre del producto"
-                error={!!errors.product_name}
-                helperText={errors.product_name?.message}
-                minLength={5}
-                maxLength={25}
-            />
-            <CustomInput 
-                type="number"
-                label="Primer Precio"
-                register={register}
-                isSelect={false}
-                value="first_price"
-                msgError="Por favor ingrese el primer precio del producto"
-                error={!!errors.first_price}
-                helperText={errors.first_price?.message}
-                min={1}
-                max={9999}
-            />
-            <CustomInput 
-                type="number"
-                label="Segundo Precio"
-                register={register}
-                isSelect={false}
-                value="second_price"
-                msgError="Por favor ingrese el segundo precio del producto"
-                error={!!errors.second_price}
-                helperText={errors.second_price?.message}
-                min={1}
-                max={9999}
-            />
-        </CustomFormLayout>
+        <FormProvider {...methods}>
+            <CustomFormLayout
+                handleSubmit={handleSubmit(onSubmit)}
+                title="Agregar Producto"
+                labelButton="Agregar"
+                isLoading={isLoading}
+                errorMessage={errorMessage}
+            >
+                <CustomInput 
+                    type="text"
+                    label="Nombre del Producto"
+                    isSelect={false}
+                    value="product_name"
+                    msgError="Por favor ingrese el nombre del producto"
+                    error={!!errors.product_name}
+                    helperText={errors.product_name?.message}
+                    minLength={5}
+                    maxLength={25}
+                />
+                <CustomInput 
+                    type="number"
+                    label="Primer Precio"
+                    isSelect={false}
+                    value="first_price"
+                    msgError="Por favor ingrese el primer precio del producto"
+                    error={!!errors.first_price}
+                    helperText={errors.first_price?.message}
+                    min={1}
+                    max={9999}
+                />
+                <CustomInput 
+                    type="number"
+                    label="Segundo Precio"
+                    isSelect={false}
+                    value="second_price"
+                    msgError="Por favor ingrese el segundo precio del producto"
+                    error={!!errors.second_price}
+                    helperText={errors.second_price?.message}
+                    min={1}
+                    max={9999}
+                />
+            </CustomFormLayout>
+        </FormProvider>
     )
 }
 
