@@ -7,10 +7,12 @@ import { productApi } from "./api/productApi";
 import { supplierApi } from "./api/supplierApi";
 import { clientPaymentApi } from "./api/clientPaymentApi";
 import { ViewSlice } from "./state/viewState";
+import { ClientSlice } from "./state/clientState";
 
 export const store = configureStore({
     reducer: {
         user: UserSlice.reducer,
+        client: ClientSlice.reducer,
         viewState: ViewSlice.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [clientApi.reducerPath]: clientApi.reducer,

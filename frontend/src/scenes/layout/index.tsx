@@ -7,7 +7,11 @@ import { Sidebar } from "@/components/Sidebar"
 import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useDispatch } from "react-redux"
 import { jwtDecode } from "jwt-decode"
-import { IUserState, login } from "@/redux/state/userState"
+import { login, setUsers } from "@/redux/state/userState"
+import { IUser } from "@/utils/interfaces/IUser"
+import { useGetAllUsersQuery } from "@/redux/api/userApi"
+import { useGetAllClientsQuery } from "@/redux/api/clientApi"
+import { setClients } from "@/redux/state/clientState"
 
 
 type LayoutProps = object
@@ -21,16 +25,28 @@ const Layout: React.FC<LayoutProps> = () => {
     const jwt = getJwtLocalStorage()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const { data: users } = useGetAllUsersQuery()
+    const { data: clients } = useGetAllClientsQuery()
+
 
     useEffect(()=> {
         if(jwt === null){
             navigate('/login')
         } else {
-            const jwtDecoded: IUserState = {user: jwtDecode(jwt)}
+            const jwtDecoded: IUser = jwtDecode(jwt)
             dispatch(login(jwtDecoded))            
-            jwtDecoded.user && setDataUser({username: jwtDecoded?.user.username.toString(), role: jwtDecoded.user.role.toString()})
+            jwtDecoded && setDataUser({username: jwtDecoded?.username.toString(), role: jwtDecoded.role.toString()})
         }
     }, [jwt, dispatch, navigate])
+
+    useEffect(()=> {
+        if(users){
+            dispatch(setUsers(users.data))
+        }
+        if(clients){
+            dispatch(setClients(clients.data))
+        }
+    }, [users, clients, dispatch])
     
     return (
         <Box width={'100%'} height={'auto'} p={'0'} display={isMobile? 'block' : 'flex'}>
