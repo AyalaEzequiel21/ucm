@@ -7,11 +7,19 @@ import { Sidebar } from "@/components/Sidebar"
 import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useDispatch } from "react-redux"
 import { jwtDecode } from "jwt-decode"
-import { login, setUsers } from "@/redux/state/userState"
+import { login, setAllUsers } from "@/redux/state/userState"
 import { IUser } from "@/utils/interfaces/IUser"
 import { useGetAllUsersQuery } from "@/redux/api/userApi"
 import { useGetAllClientsQuery } from "@/redux/api/clientApi"
 import { setClients } from "@/redux/state/clientState"
+import { useGetAllProductsQuery } from "@/redux/api/productApi"
+import { setProducts } from "@/redux/state/productState"
+import { useGetAllSuppliersQuery } from "@/redux/api/supplierApi"
+import { setSuppliers } from "@/redux/state/supplierState"
+import { useGetAllClientPaymentsQuery } from "@/redux/api/clientPaymentApi"
+import { setClientsPayments } from "@/redux/state/clientsPaymentsState"
+import { useGetAllPurchasesQuery } from "@/redux/api/purchaseApi"
+import { setPurchases } from "@/redux/state/purchaseState"
 
 
 type LayoutProps = object
@@ -25,9 +33,12 @@ const Layout: React.FC<LayoutProps> = () => {
     const jwt = getJwtLocalStorage()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { data: users } = useGetAllUsersQuery()
-    const { data: clients } = useGetAllClientsQuery()
-
+    const { data: users, isLoading: usersLoading } = useGetAllUsersQuery()
+    const { data: clients, isLoading: clientsLoading } = useGetAllClientsQuery()
+    const { data: products, isLoading: productsLoading } = useGetAllProductsQuery()
+    const { data: suppliers, isLoading: suppliersLoading } = useGetAllSuppliersQuery()
+    const { data: clientsPayments, isLoading: clientsPaymentsLoading } = useGetAllClientPaymentsQuery()
+    const { data: purchases, isLoading: purchasesLoading } = useGetAllPurchasesQuery()
 
     useEffect(()=> {
         if(jwt === null){
@@ -41,12 +52,38 @@ const Layout: React.FC<LayoutProps> = () => {
 
     useEffect(()=> {
         if(users){
-            dispatch(setUsers(users.data))
+            dispatch(setAllUsers({users:users.data, usersLoading: usersLoading}))
         }
         if(clients){
-            dispatch(setClients(clients.data))
+            dispatch(setClients({clients: clients.data, clientsLoading: clientsLoading}))
         }
-    }, [users, clients, dispatch])
+        if(products){
+            dispatch(setProducts({products: products.data, productsLoading: productsLoading}))
+        }
+        if(suppliers){
+            dispatch(setSuppliers({suppliers: suppliers.data, suppliersLoading: suppliersLoading}))
+        }
+        if(clientsPayments){
+            dispatch(setClientsPayments({clientsPayments: clientsPayments.data, clientsPaymentsLoading: clientsPaymentsLoading}))
+        }
+        if(purchases){
+            dispatch(setPurchases({purchases: purchases.data, purchaseLoading: purchasesLoading}))
+        }
+    }, [
+        users, 
+        clients, 
+        clientsPayments, 
+        products, 
+        purchases,
+        suppliers, 
+        dispatch, 
+        usersLoading, 
+        clientsLoading, 
+        clientsPaymentsLoading,
+        productsLoading, 
+        purchasesLoading,
+        suppliersLoading
+    ])
     
     return (
         <Box width={'100%'} height={'auto'} p={'0'} display={isMobile? 'block' : 'flex'}>

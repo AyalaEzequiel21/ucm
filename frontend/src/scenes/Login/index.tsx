@@ -40,7 +40,7 @@ const Login: React.FC<LoginProps> = () => {
     try {
       const response = await loginUser(dataForm).unwrap();
       const decodedToken = jwtDecode<IUser>(response.token);
-      dispatch(login({ user: decodedToken }));
+      dispatch(login(decodedToken ));
       loginLocalUser(response.token);
       navigate("/");
     } catch (e) {

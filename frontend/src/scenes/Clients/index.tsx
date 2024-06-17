@@ -1,18 +1,19 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid";
 import { Header } from "@/components/Header";
 import { SceneContainer } from "@/components/SceneContainer";
-import { useGetAllClientsQuery } from "@/redux/api/clientApi";
+import { RootState } from "@/redux/store";
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal";
 import { IClient } from "@/utils/interfaces/IClient";
 import { GridColDef } from "@mui/x-data-grid";
+import { useSelector } from "react-redux";
 
 type ClientsProps = object;
 
 const Clients: React.FC<ClientsProps> = () => {
 
-  const {data, isLoading} = useGetAllClientsQuery()
+  const {clients, clientsLoading} = useSelector((state: RootState) => state.client.allClients)
 
   const handleDetailsClick = () => {
     console.log('_id');
@@ -40,11 +41,11 @@ const Clients: React.FC<ClientsProps> = () => {
     <SceneContainer>
       <Header title="CLIENTES" subtitle="Lista de clientes" />
       <CustomDatGrid<IClient>
-        rows={data?.data || []}
+        rows={clients || []}
         isFilterName={true}
         fieldValue="fullname"
         columnsBase={columnsBase}
-        isLoading={isLoading || !data}
+        isLoading={clientsLoading || !clients}
         addedColumnsTable={columnsTablet}
         addedColumnsDesktop={columnsDesktop}
       />

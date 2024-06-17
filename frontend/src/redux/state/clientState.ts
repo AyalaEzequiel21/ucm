@@ -1,20 +1,28 @@
 import { IClient } from "@/utils/interfaces/IClient";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-export interface IClientState {
-    clients: IClient[]
+export interface IAllClients {
+    clients: IClient[],
+    clientsLoading: boolean
+}
+
+interface IClientState {
+    allClients: IAllClients
 }
 
 const initialState: IClientState = {
-    clients: []
+    allClients: {
+        clients: [],
+        clientsLoading: false
+    }
 }
 
 export const ClientSlice = createSlice({
     name: 'client',
     initialState,
     reducers: {
-        setClients: (state, action: PayloadAction<IClient[]>) => {
-            state.clients = action.payload
+        setClients: (state, action: PayloadAction<IAllClients>) => {
+            state.allClients = action.payload
         }
     }
 })

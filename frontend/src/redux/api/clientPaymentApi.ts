@@ -3,7 +3,7 @@ import { IApiResponse } from "@/utils/interfaces/IApiResponse";
 import { IClientPayment } from "@/utils/interfaces/IClientPayment";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL as string;
+const baseURL = import.meta.env.VITE_API_BASE_URL as string
 
 export const clientPaymentApi = createApi({
     reducerPath: 'clientPaymentApi',
@@ -22,7 +22,7 @@ export const clientPaymentApi = createApi({
             invalidatesTags: ['Client Payment']
         }),
         getClientpaymentById: builder.query<IApiResponse<IClientPayment>, string>({
-            query: (id) => `clientPayments/clientPayment/${id}`,
+            query: (id) => `/clientPayments/clientPayment/${id}`,
             providesTags: ['Client Payment']
         }),
 

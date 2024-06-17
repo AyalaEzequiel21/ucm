@@ -2,14 +2,22 @@ import { IUser } from "@/utils/interfaces/IUser"
 import { UserType } from "@/utils/types/UserType"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
+export interface IAllUsers {
+    users: UserType[],
+    usersLoading: boolean
+}
+
 export interface IUserState {
-    user: IUser|null,
-    users: UserType[]
+    userLogin: IUser|null,
+    allUsers: IAllUsers
 }
 
 const initialState: IUserState = {
-    user: null,
-    users: []
+    userLogin: null,
+    allUsers: {
+        users: [],
+        usersLoading: false
+    }
 }
 
 export const UserSlice = createSlice({
@@ -17,15 +25,15 @@ export const UserSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action: PayloadAction<IUser>) => {
-            state.user = action.payload  // REEMPLAZA TODO EL CONTENIDO DEL GLOBAL STATE
+            state.userLogin = action.payload  // REEMPLAZA TODO EL CONTENIDO DEL GLOBAL STATE
         }, 
         logout: (state)=> {
-            state.user = null
+            state.userLogin = null
         },
-        setUsers: (state, action: PayloadAction<UserType[]>) => {
-            state.users = action.payload
+        setAllUsers: (state, action: PayloadAction<IAllUsers>) => {
+            state.allUsers = action.payload
         }
     }
 })
 
-export const { login, logout, setUsers } = UserSlice.actions
+export const { login, logout, setAllUsers } = UserSlice.actions

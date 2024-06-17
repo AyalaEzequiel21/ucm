@@ -1,19 +1,20 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
-import { useGetAllSuppliersQuery } from "@/redux/api/supplierApi"
+import { RootState } from "@/redux/store"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { ISupplier } from "@/utils/interfaces/ISupplier"
 import { GridColDef } from "@mui/x-data-grid"
+import { useSelector } from "react-redux"
 
 
 type SuppliersProps = object
 
 const Suppliers: React.FC<SuppliersProps> = () => {
 
-    const {data, isLoading} = useGetAllSuppliersQuery()
+    const {suppliers, suppliersLoading} = useSelector((state: RootState) => state.supplier.allSuppliers)
 
     const handleDetailsClick = () => {
         console.log('_id');
@@ -36,10 +37,10 @@ const Suppliers: React.FC<SuppliersProps> = () => {
         <SceneContainer>
             <Header title="PROVEEDORES" subtitle="Lista de proveedores" />
             <CustomDatGrid<ISupplier>
-                rows={data?.data || []}
+                rows={suppliers || []}
                 isFilterName= {true}
                 fieldValue="supplier_name"
-                isLoading={isLoading}
+                isLoading={suppliersLoading}
                 columnsBase={columnsBase}
                 addedColumnsTable={columnsTablet}
                 addedColumnsDesktop={columnsDesktop}

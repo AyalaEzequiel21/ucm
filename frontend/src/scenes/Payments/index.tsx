@@ -1,19 +1,20 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
-import { useGetAllClientPaymentsQuery } from "@/redux/api/clientPaymentApi"
+import { RootState } from "@/redux/store"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 import { GridColDef } from "@mui/x-data-grid"
+import { useSelector } from "react-redux"
 
 
 type PaymentsProps = object
 
 const Payments: React.FC<PaymentsProps> = () => {
 
-    const {data, isLoading} = useGetAllClientPaymentsQuery()
+    const {clientsPayments, clientsPaymentsLoading} = useSelector((state: RootState) => state.clientPayment.allClientsPayments)
     const handleDetailsClick = () => {
         console.log('_id');
       }
@@ -35,11 +36,11 @@ const Payments: React.FC<PaymentsProps> = () => {
         <SceneContainer>
             <Header title="PAGOS DE CLIENTES" subtitle="Lista de pagos" />
             <CustomDatGrid<IClientPayment>
-                rows={data?.data || []}
+                rows={clientsPayments || []}
                 isFilterName={true}
                 fieldValue="fullname"
                 columnsBase={columnsBase}
-                isLoading={isLoading || !data}
+                isLoading={clientsPaymentsLoading || !clientsPayments}
                 addedColumnsTable={columnsTablet}
                 addedColumnsDesktop={columnsDesktop}
             />
