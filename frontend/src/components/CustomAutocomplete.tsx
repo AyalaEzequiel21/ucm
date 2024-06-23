@@ -47,7 +47,3 @@ const CustomAutocomplete = <T extends FieldValues>({
 }
 
 export {CustomAutocomplete}
-
-///////////////////////////////////////////////////////////////////////
-
-// TRATAR DE SOLUCIONAR EL TEMA DEL SETEO XQ DEVUELVE UNDEFINED.

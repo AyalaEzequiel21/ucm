@@ -21,34 +21,16 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     const {suppliers} = useSelector((state: RootState) => state.supplier.allSuppliers)
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const [details, setDetails] = useState<IPurchaseDetails[]>([]);
-    const methods = useForm<INewPurchaseValues>({
-        defaultValues: {
-            purchaseDetails: [
-                {
-                    product_name:'alga',
-                    quantity: 10,
-                    unity_price: 500
-                },
-                {
-                    product_name:'lechuga',
-                    quantity: 10,
-                    unity_price: 500
-                }
-            ]
-        }
-    })
+    const methods = useForm<INewPurchaseValues>()
     const {
         handleSubmit,
-        control,
-        reset,
-        setValue, 
-        getValues,
+        reset, control, setValue, getValues,
         formState: {errors}
     } = methods
 
     const onSubmit = (dataForm: INewPurchaseValues) => {
-        const values = getValues('purchaseDetails')
-        console.log(dataForm, values)
+        
+        console.log(dataForm)
     }
 
     const supplierOptions: AutocompleteOption[] = suppliers.map((supplier: ISupplier) => ({
@@ -56,30 +38,17 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
         id: supplier._id
     })) || []
 
-    // const addDetail = () => {
-    //     const detail = getValues('purchaseDetails')
-    //     setDetails([...details, { 
-    //         product_id: detail[1], 
-    //         product_name: detail[0], 
-    //         quantity: Number(detail[2]), 
-    //         unity_price: Number(detail[3]) 
-    //     }])
-    //     reset({
-    //         purchaseDetails: [{ product_id: '', product_name: '', quantity: 1, price: 0 }]
-    //     })
-    // }
-
     const addDetail = () => {
-        const values = getValues('purchaseDetails')
-        console.log(values);
-        
-        // setDetails([...details], {
-        //     product_id: values[0], 
-        //     product_name: values[0], 
-        //     quantity: Number(values[2]), 
-        //     unity_price: Number(values[3])
-        // })
-
+        const currentValues = getValues();
+        const newDetail: IPurchaseDetails = {
+            product_name: currentValues.purchaseDetails[0].product_name,
+            quantity: Number(currentValues.purchaseDetails[0].quantity),
+            unity_price: Number(currentValues.purchaseDetails[0].unity_price),
+        };
+        setDetails([...details, newDetail]);
+        setValue('purchaseDetails.product_name', '');
+        setValue('purchaseDetails.quantity', 1);
+        setValue('purchaseDetails.unity_price', 0);
     }
 
     return (
@@ -108,24 +77,24 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                             helperText={errors.purchaseDetails?.message}
                         />
                         <Stack direction='row' spacing={1}>
-                            <CustomInput 
+                            <CustomInput
                                 type="number"
                                 label="Cantidad"
                                 isSelect={false}
-                                value="purchaseDetails.quantity"
+                                value="quantity"
                                 msgError="Por favor ingrese un monto mayor a 0"
                                 error={!!errors.purchaseDetails}
-                                helperText={errors.purchaseDetails?.quantity.message}
+                                helperText={errors.quantity?.message}
                                 min={1}
                             />
                             <CustomInput 
                                 type="number"
                                 label="Precio"
                                 isSelect={false}
-                                value="purchaseDetails.unity_price"
+                                value="unity_price"
                                 msgError="Por favor ingrese un monto mayor a 0"
                                 error={!!errors.purchaseDetails}
-                                helperText={errors.purchaseDetails?.unity_price.message}
+                                helperText={errors.unity_price?.message}
                                 min={1}
                             />
                             <Button variant="outlined" onClick={addDetail}>Agregar</Button>
@@ -133,10 +102,10 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                         <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                         <Box>
                             {details.map((detail, index) => (
-                                <Stack key={index} direction="row" spacing={2} alignItems="center">
-                                <Typography>{detail.product_name} - Cantidad: {detail.quantity} - Precio: ${detail.unity_price}</Typography>
-                                <Button variant="outlined" color="error" onClick={() => {}}>Eliminar</Button>
-                            </Stack>
+                                <Stack key={index} direction="row" spacing={1} alignItems="center">
+                                    <Typography variant="h6">{detail.product_name}: {detail.quantity}kg x ${detail.unity_price}</Typography>
+                                    <Button variant="outlined" color="error" onClick={() => {}}>Eliminar</Button>
+                                </Stack>
                             ))}
                         </Box>
                    </Stack>

@@ -20,7 +20,6 @@ export interface AutocompleteOption {
 const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
     const [addClientPayment, {isLoading}] = useAddClientPaymentMutation()
-    // const { data: clientsData } = useGetAllClientsQuery()
     const {clients} = useSelector((state: RootState) => state.client.allClients)
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
     const methods = useForm<INewClientPaymentValues>()
@@ -35,7 +34,6 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
             ...dataForm,
             amount: Number(dataForm.amount)
         }
-        // console.log(dataForm);
         try{
             const response = await addClientPayment(dataProsseced).unwrap()
             console.log(response);
