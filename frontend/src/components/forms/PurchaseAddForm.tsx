@@ -21,6 +21,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     const [addPurchase, {isLoading}] = useAddPurchaseMutation()
     const {suppliers} = useSelector((state: RootState) => state.supplier.allSuppliers)
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
+    const [detailsPurchase, setDetailsPurchase] = useState<IPurchaseDetails[]>([])
     const methods = useForm<INewPurchaseValues>({
         defaultValues: {
             supplier_id: '',
@@ -30,18 +31,13 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     })
     const {
         handleSubmit,
-        reset, control, getValues, setValue,
+        getValues, setValue,
         formState: {errors}
     } = methods
 
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: "purchaseDetails"
-    })
-
     const onSubmit = (dataForm: INewPurchaseValues) => {
         
-        console.log(dataForm)
+        console.log(dataForm, detailsPurchase)
     }
 
     const supplierOptions: AutocompleteOption[] = suppliers.map((supplier: ISupplier) => ({
@@ -51,15 +47,17 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
 
     const addDetail = () => {
         const currentValues = getValues('purchaseDetails')[0];
-        const newDetail: IPurchaseDetails = {
-            product_name: currentValues.product_name,
-            quantity: Number(currentValues.quantity),
-            unity_price: Number(currentValues.unity_price),
-        }
-        if(newDetail.product_name){
-            append(newDetail)
-            setValue('purchaseDetails.0', {product_name: '', quantity: 0, unity_price: 0})
-        }
+        setDetailsPurchase((details => [...details, currentValues]))
+        setValue('purchaseDetails', detailsPurchase)
+        // const newDetail: IPurchaseDetails = {
+        //     product_name: currentValues.product_name,
+        //     quantity: Number(currentValues.quantity),
+        //     unity_price: Number(currentValues.unity_price),
+        // }
+        // if(newDetail.product_name){
+        //     append(newDetail)
+        //     setValue('purchaseDetails.0', {product_name: '', quantity: 0, unity_price: 0})
+        // }
     }
 
     return (
@@ -112,10 +110,10 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                         </Stack>
                         <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                         <Box>
-                            {fields.map((detail, index) => (
+                            {detailsPurchase.map((detail, index) => (
                                 <Stack key={index} direction="row" spacing={1} alignItems="center" justifyContent={'center'}>
                                     <Typography sx={{fontSize: '15px', fontWeight: 'bold', color: palette.primary.main, textAlign: 'start', width: '100%'}}>- {detail.product_name}: {detail.quantity}kg x ${detail.unity_price}</Typography>
-                                    <IconButton  color="error" onClick={() => remove(index)}><Close /></IconButton>
+                                    <IconButton onClick={() => remove(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
                                 </Stack>
                             ))}
                         </Box>
@@ -128,7 +126,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
 export {PurchaseAddForm}
 
 
-///   SOLUCIONAR EL PROBLEMA QUE SE AGREGA UNO MAS SIEMPRE
+// NO PUEDO ENCONTRAR SOLUCION, PENSAR EN HACER UN FORM  MAS PERSOSNALISADO SIN UTILIZAR CUSTOMINPUT Y USAR TEXTFIELD PARA HCERLO MAS FLEXIBLE 
 
-///   
-///  
+// /   
+// /  
