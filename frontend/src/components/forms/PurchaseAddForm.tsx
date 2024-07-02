@@ -1,18 +1,18 @@
 import { useAddPurchaseMutation } from "@/redux/api/purchaseApi";
 import { RootState } from "@/redux/store";
-import { INewPurchaseValues } from "@/utils/interfaces/registerModels/INewPurchase";
+import { INewPurchaseValues, IOnlyPurchase } from "@/utils/interfaces/registerModels/INewPurchase";
 import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { AutocompleteOption } from "./PaymentAddForm";
 import { ISupplier } from "@/utils/interfaces/ISupplier";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomAutocomplete } from "../CustomAutocomplete";
 import { IPurchaseDetails } from "@/utils/interfaces/IPurchase";
-import { Box, Button, IconButton, Stack, Typography, useTheme } from "@mui/material";
-import { CustomInput } from "../CustomInput";
+import { Box,IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { PurchaseDetailsForm } from "./PurchaseDetailsForm";
 
 
 const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
@@ -22,22 +22,30 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     const {suppliers} = useSelector((state: RootState) => state.supplier.allSuppliers)
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const [detailsPurchase, setDetailsPurchase] = useState<IPurchaseDetails[]>([])
-    const methods = useForm<INewPurchaseValues>({
+    const methods = useForm<IOnlyPurchase>({
         defaultValues: {
             supplier_id: '',
             supplier_name: '',
-            purchaseDetails: []
         }
     })
     const {
         handleSubmit,
-        getValues, setValue,
         formState: {errors}
     } = methods
 
-    const onSubmit = (dataForm: INewPurchaseValues) => {
-        
-        console.log(dataForm, detailsPurchase)
+    const onAddDetail = (detail: IPurchaseDetails) => {
+        setDetailsPurchase(prev => [...prev, detail])
+    }
+
+    const onRemoveDetail = (index: number) => {
+        setDetailsPurchase(prev => prev.filter((_, i) => i !== index));
+      }
+
+    const onSubmit = async(dataForm: IOnlyPurchase) => {
+        if(dataForm.supplier_id && detailsPurchase.length > 0){
+            const data: INewPurchaseValues = {...dataForm, purchaseDetails: detailsPurchase }
+            console.log(data)
+        }
     }
 
     const supplierOptions: AutocompleteOption[] = suppliers.map((supplier: ISupplier) => ({
@@ -45,20 +53,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
         id: supplier._id
     })) || []
 
-    const addDetail = () => {
-        const currentValues = getValues('purchaseDetails')[0];
-        setDetailsPurchase((details => [...details, currentValues]))
-        setValue('purchaseDetails', detailsPurchase)
-        // const newDetail: IPurchaseDetails = {
-        //     product_name: currentValues.product_name,
-        //     quantity: Number(currentValues.quantity),
-        //     unity_price: Number(currentValues.unity_price),
-        // }
-        // if(newDetail.product_name){
-        //     append(newDetail)
-        //     setValue('purchaseDetails.0', {product_name: '', quantity: 0, unity_price: 0})
-        // }
-    }
+   
 
     return (
         <FormProvider {...methods}>
@@ -76,44 +71,13 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                         options={supplierOptions}
                     />
                    <Stack direction="column" spacing={2.5}>
-                        <CustomInput
-                            type="text"
-                            label="Producto"
-                            isSelect={false}
-                            value="purchaseDetails.0.product_name"
-                            msgError="Por favor ingrese un producto"
-                            error={!!errors.purchaseDetails?.[0]?.product_name}
-                            helperText={errors.purchaseDetails?.[0]?.product_name?.message}
-                        />
-                        <Stack direction='row' spacing={1}>
-                            <CustomInput
-                                type="number"
-                                label="Cantidad"
-                                isSelect={false}
-                                value="purchaseDetails.0.quantity"
-                                msgError="Por favor ingrese un monto mayor a 0"
-                                error={!!errors.purchaseDetails?.[0]?.quantity}
-                                helperText={errors.purchaseDetails?.[0]?.quantity?.message}
-                                min={1}
-                            />
-                            <CustomInput 
-                                type="number"
-                                label="Precio"
-                                isSelect={false}
-                                value="purchaseDetails.0.unity_price"
-                                msgError="Por favor ingrese un monto mayor a 0"
-                                error={!!errors.purchaseDetails?.[0]?.unity_price}
-                                helperText={errors.purchaseDetails?.[0]?.unity_price?.message}
-                                min={1}
-                            />
-                            <Button variant="outlined" onClick={addDetail}>Agregar</Button>
-                        </Stack>
+                        <PurchaseDetailsForm onAddDetail={onAddDetail}/>
                         <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                         <Box>
                             {detailsPurchase.map((detail, index) => (
                                 <Stack key={index} direction="row" spacing={1} alignItems="center" justifyContent={'center'}>
                                     <Typography sx={{fontSize: '15px', fontWeight: 'bold', color: palette.primary.main, textAlign: 'start', width: '100%'}}>- {detail.product_name}: {detail.quantity}kg x ${detail.unity_price}</Typography>
-                                    <IconButton onClick={() => remove(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
+                                    <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
                                 </Stack>
                             ))}
                         </Box>
