@@ -13,6 +13,7 @@ import { IPurchaseDetails } from "@/utils/interfaces/IPurchase";
 import { Box,IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { PurchaseDetailsForm } from "./PurchaseDetailsForm";
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 
 
 const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
@@ -43,9 +44,20 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
 
     const onSubmit = async(dataForm: IOnlyPurchase) => {
         if(dataForm.supplier_id && detailsPurchase.length > 0){
-            const data: INewPurchaseValues = {...dataForm, purchaseDetails: detailsPurchase }
+            const data: INewPurchaseValues = {...dataForm, purchaseDetail: detailsPurchase }
             console.log(data)
-        }
+            try {
+                await addPurchase(data).unwrap();
+                confirmAlertSucess('Compra registrada');
+                onCloseModal();
+              } catch (error) {
+                setErrorMessage(`Error al agregar la compra`)
+                console.log(error)
+                confirmErrorAlert()
+              } 
+        } else {
+            setErrorMessage('Seleccione un proveedor y agregue al menos un detalle.');
+          }
     }
 
     const supplierOptions: AutocompleteOption[] = suppliers.map((supplier: ISupplier) => ({
@@ -76,7 +88,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                         <Box>
                             {detailsPurchase.map((detail, index) => (
                                 <Stack key={index} direction="row" spacing={1} alignItems="center" justifyContent={'center'}>
-                                    <Typography sx={{fontSize: '15px', fontWeight: 'bold', color: palette.primary.main, textAlign: 'start', width: '100%'}}>- {detail.product_name}: {detail.quantity}kg x ${detail.unity_price}</Typography>
+                                    <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>- {getCapitalizeString(detail.product_name)}: {detail.quantity}kg x ${detail.unity_price}</Typography>
                                     <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
                                 </Stack>
                             ))}

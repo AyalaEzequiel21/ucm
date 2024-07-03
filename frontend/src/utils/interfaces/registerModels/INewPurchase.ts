@@ -8,6 +8,6 @@ export interface IOnlyPurchase {
 export interface INewPurchaseValues {
     supplier_id: string,
     supplier_name: string,
-    purchaseDetails: IPurchaseDetails[],
+    purchaseDetail: IPurchaseDetails[],
     total_purchase?: number
 }

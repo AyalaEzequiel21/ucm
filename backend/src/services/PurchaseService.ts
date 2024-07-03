@@ -17,7 +17,7 @@ import { getSupplierById } from "./SupplierService";
 const createPurchase = async (purchase: PurchaseType) => {
     const { supplier_id, supplier_name, purchaseDetail } = purchase //  GET THE DATA FOR CREATR THE PURCHASE
     if(!supplier_id || !supplier_name || !purchaseDetail){
-        throw new BadRequestError("Faltan algunos datos necesarios") //  IF THE SOME PROPERTIE NOT EXISTS RUN AN EXCEPTION
+        throw new BadRequestError("Faltan algunos datos necesarios") //  IF THE SOME PROPERTIE NOT EXISTS RUN AN EXCEPTION        
     }
     const session = await startSession() //  INIT A SESSION
     try {

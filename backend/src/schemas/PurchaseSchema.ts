@@ -15,7 +15,7 @@ type PurchaseDetailType = z.infer<typeof purchaseDetailSchema>
 // PURCHASE
 const newPurchaseSchema = z.object({
     supplier_id: validateObjectId().optional(),
-    supplier_name: z.string().min(4).max(14),
+    supplier_name: z.string().min(4).max(25),
     purchaseDetail: z.array(purchaseDetailSchema),
     total_purchase: validateAmount().optional()
 })

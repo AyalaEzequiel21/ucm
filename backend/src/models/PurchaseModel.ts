@@ -44,7 +44,7 @@ export const purchaseSchema = new Schema<PurchaseType>(
             type: String,
             required: true,
             minlength: 4,
-            maxlength: 15
+            maxlength: 25
         },
         purchaseDetail: [purchaseDetail],
         total_purchase: {

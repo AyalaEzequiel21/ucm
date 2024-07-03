@@ -11,9 +11,13 @@ const validateSchemaRequest = <T>(schema: z.ZodSchema<T>) => {
                 req.body = result.data
                 next()
             } else {                
+                console.log('Errores de validación:', result.error.errors);
+
                 throw new BadRequestError("Error de valores ingresados: Verifica los datos ingresados y sus requerimientos")
             }
-        } catch (error){                   
+        } catch (error){  
+            console.log('Error en el middleware:', error);
+                 
             throw error
         }
     }
