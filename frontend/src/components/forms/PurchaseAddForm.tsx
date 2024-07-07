@@ -31,7 +31,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     })
     const {
         handleSubmit,
-        formState: {errors}
+        // formState: {errors}
     } = methods
 
     const onAddDetail = (detail: IPurchaseDetails) => {
