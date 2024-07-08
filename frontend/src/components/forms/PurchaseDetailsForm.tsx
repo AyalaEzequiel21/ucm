@@ -64,8 +64,8 @@ const PurchaseDetailsForm: React.FC<PurchaseDetailsProps> = ({onAddDetail}) => {
             isSelect={false}
             msgError="Por favor ingrese un monto mayor a 0"
             error={!!errors.unity_price}
-            helperText={errors.unity_price ? 'Por favor ingrese un monto mayor a 0' : ''}
-            min={0}
+            helperText={errors.unity_price ? 'El monto debe ser mayor a 0' : ''}
+            min={1}
               />
             <Button onClick={handleSubmit(onSubmit)} variant="outlined" sx={{borderColor: palette.primary.dark, color: palette.primary.dark}}>Agregar</Button>
           </Stack>

@@ -15,32 +15,51 @@ const CustomAutocomplete = <T extends FieldValues>({
     label
 }: CustomAutocompleteProps<T>) => {
 
-    const { setValue, control } = useFormContext()
+
+    const { 
+        setValue, 
+        control,
+        formState: { errors }
+    } = useFormContext()
+
+    const error = !!errors[name]
 
     return (
         <Controller
             name={name}
+            rules={{ required: "Debes ingresar un opcion" }}
             control={control}
             render={({field: {onChange, value, ref}}) => {
                 return (
-                <Autocomplete
-                    options={options}
-                    value={options.find(option => option.label === value) || null}
-                    getOptionLabel={(option) => option.label || ""}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                    renderInput={(params) => (
-                        <TextField {...params} label={label} inputRef={ref}/>
-                    )}
-                    onChange={(_, newValue) => {
-                        setValue(name, newValue ? (newValue.label as unknown as T[typeof name]) : ('' as unknown as T[typeof name]));
-                        setValue(idName, newValue ? (newValue.id as unknown as T[typeof idName]) : ('' as unknown as T[typeof idName]));
-                        onChange(newValue ? newValue.label : '')
-                      }}
-            
-                    sx={{
-                        width: '100%'
-                    }}
-                />)
+                    <Autocomplete
+                        options={options}
+                        value={options.find(option => option.label === value) || null}
+                        getOptionLabel={(option) => option.label || ""}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        renderInput={(params) => (
+                            <TextField 
+                                {...params} 
+                                label={label} 
+                                inputRef={ref}
+                                error={error}
+                                helperText={error ? (errors[name]?.message as string) : ""}
+                                // sx={{
+                                //     "& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline": {
+                                //         borderColor: "red",
+                                //     },
+                                // }}
+                            />
+                        )}
+                        onChange={(_, newValue) => {
+                            setValue(name, newValue ? (newValue.label as unknown as T[typeof name]) : ('' as unknown as T[typeof name]));
+                            setValue(idName, newValue ? (newValue.id as unknown as T[typeof idName]) : ('' as unknown as T[typeof idName]));
+                            onChange(newValue ? newValue.label : '')
+                        }}
+                
+                        sx={{
+                            width: '100%'
+                        }}
+                    />)
             }}
         />
     )
