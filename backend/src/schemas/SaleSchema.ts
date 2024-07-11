@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { validateAmount } from "../utilities/validateIsAmount";
-import { paymentDtoSchema } from "./PaymentDtoSchema";
 import { validateObjectId } from "../utilities/validateObjectId";
 
 // DETAIL SALE
