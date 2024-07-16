@@ -69,7 +69,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     return (
         <FormProvider {...methods}>
                 <CustomFormLayout
-                    handleSubmit={(handleSubmit(onSubmit))}
+                    handleSubmit={handleSubmit(onSubmit)}
                     title="Crear Compra"
                     labelButton="Crear"
                     isLoading={isLoading}

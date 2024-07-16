@@ -13,6 +13,8 @@ import { SupplierSlice } from "./state/supplierState";
 import { ClientsPaymentsSlice } from "./state/clientsPaymentsState";
 import { PurchaseSlice } from "./state/purchaseState";
 import { purchaseApi } from "./api/purchaseApi";
+import { SaleSlice } from "./state/saleState";
+import { saleApi } from "./api/saleApi";
 
 export const store = configureStore({
     reducer: {
@@ -21,12 +23,14 @@ export const store = configureStore({
         clientPayment: ClientsPaymentsSlice.reducer,
         product: ProductSlice.reducer,
         purchase: PurchaseSlice.reducer,
+        sale: SaleSlice.reducer,
         supplier: SupplierSlice.reducer,
         viewState: ViewSlice.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [clientApi.reducerPath]: clientApi.reducer,
         [productApi.reducerPath]: productApi.reducer,
         [purchaseApi.reducerPath]: purchaseApi.reducer,
+        [saleApi.reducerPath]: saleApi.reducer,
         [supplierApi.reducerPath]: supplierApi.reducer,
         [clientPaymentApi.reducerPath]: clientPaymentApi.reducer,
 
