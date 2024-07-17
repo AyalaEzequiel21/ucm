@@ -8,10 +8,16 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomAutocomplete } from "../CustomAutocomplete";
+import { AutocompleteOption } from "./PaymentAddForm";
+import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
+import { SaleDetailsForm } from "./SaleDetailsForm";
 
 
 const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
 
+    const {palette} = useTheme()
     const [addSale, {isLoading}] = useAddSaleMutation()
     const {clients} = useSelector((state: RootState) => state.client.allClients)
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
@@ -69,7 +75,22 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                     idName="client_id"
                     options={clientsOptions}
                 />
-
+                <Stack direction={"column"} spacing={2.5}>
+                    <SaleDetailsForm onAddDetail={onAddDetail}/>
+                    <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
+                    <Box>
+                        {detailsSale.map((detail, index) => (
+                            <>
+                                <Stack key={index} direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
+                                    <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>
+                                        -{getCapitalizeString(detail.product_name)}: {detail.quantity}kg x ${detail.price} = ${(detail.quantity * detail.price).toFixed(2)}
+                                    </Typography>
+                                    <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
+                                </Stack>
+                            </>
+                        ))}
+                    </Box>
+                </Stack>
             </CustomFormLayout>
         </FormProvider>
     )

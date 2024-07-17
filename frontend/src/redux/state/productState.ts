@@ -7,11 +7,11 @@ export interface IAllProducts {
 }
 
 interface IProductState {
-    allProdcuts: IAllProducts
+    allProducts: IAllProducts
 }
 
 const initialState: IProductState = {
-    allProdcuts: {
+    allProducts: {
         products: [],
         productsLoading: false
     }
@@ -22,7 +22,7 @@ export const ProductSlice = createSlice({
     initialState,
     reducers: {
         setProducts: (state, action: PayloadAction<IAllProducts>) => {
-            state.allProdcuts = action.payload
+            state.allProducts = action.payload
         }
     }
 })

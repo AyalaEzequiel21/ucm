@@ -88,7 +88,9 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                             {detailsPurchase.map((detail, index) => (
                                 <>
                                     <Stack key={index} direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
-                                        <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>-{getCapitalizeString(detail.product_name)}: {detail.quantity}kg x ${detail.unity_price} = ${(detail.quantity * detail.unity_price).toFixed(2)}</Typography>
+                                        <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>
+                                            -{getCapitalizeString(detail.product_name)}: {detail.quantity}kg x ${detail.unity_price} = ${(detail.quantity * detail.unity_price).toFixed(2)}
+                                        </Typography>
                                         <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
                                     </Stack>
                                     <Divider />

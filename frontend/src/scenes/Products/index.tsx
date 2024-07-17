@@ -11,7 +11,7 @@ type ProductsProps = object
 
 const Products: React.FC<ProductsProps> = () => {
 
-    const {products, productsLoading} = useSelector((state: RootState) => state.product.allProdcuts)
+    const {products, productsLoading} = useSelector((state: RootState) => state.product.allProducts)
     const { isMobile } = useScreenSize()
 
     return (
