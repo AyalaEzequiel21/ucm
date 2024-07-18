@@ -8,6 +8,6 @@ export interface IOnlySale {
 export interface INewSaleValues {
     client_id: string,
     client_name: string,
-    saleDetails: ISaleDetails[],
+    details: ISaleDetails[],
     total_sale?: number
 }

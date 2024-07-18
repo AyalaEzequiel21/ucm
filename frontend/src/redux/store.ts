@@ -40,6 +40,7 @@ export const store = configureStore({
         clientApi.middleware, 
         supplierApi.middleware, 
         productApi.middleware,
+        saleApi.middleware,
         purchaseApi.middleware,
         clientPaymentApi.middleware
     ),        

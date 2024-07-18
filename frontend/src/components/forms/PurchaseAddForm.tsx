@@ -86,15 +86,15 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                         <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                         <Box>
                             {detailsPurchase.map((detail, index) => (
-                                <>
-                                    <Stack key={index} direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
+                                <Box key={detail.product_name}>
+                                    <Stack  direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
                                         <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>
                                             -{getCapitalizeString(detail.product_name)}: {detail.quantity}kg x ${detail.unity_price} = ${(detail.quantity * detail.unity_price).toFixed(2)}
                                         </Typography>
                                         <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
                                     </Stack>
                                     <Divider />
-                                </>
+                                </Box>
                             ))}
                         </Box>
                    </Stack>
@@ -104,9 +104,3 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
 }
 
 export {PurchaseAddForm}
-
-
-// NO PUEDO ENCONTRAR SOLUCION, PENSAR EN HACER UN FORM  MAS PERSOSNALISADO SIN UTILIZAR CUSTOMINPUT Y USAR TEXTFIELD PARA HCERLO MAS FLEXIBLE 
-
-// /   
-// /  

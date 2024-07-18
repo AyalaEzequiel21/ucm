@@ -39,7 +39,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
 
     const onSubmit = async(dataForm: IOnlySale) => {
         if(dataForm.client_id && detailsSale.length > 0){
-            const data: INewSaleValues = {...dataForm, saleDetails: detailsSale }
+            const data: INewSaleValues = {...dataForm, details: detailsSale }
             console.log(data)
             try {
                 await addSale(data).unwrap();
@@ -80,14 +80,14 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                     <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                     <Box>
                         {detailsSale.map((detail, index) => (
-                            <>
-                                <Stack key={index} direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
+                            <Box key={detail.product_id}>
+                                <Stack  direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
                                     <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>
                                         -{getCapitalizeString(detail.product_name)}: {detail.quantity}kg x ${detail.price} = ${(detail.quantity * detail.price).toFixed(2)}
                                     </Typography>
                                     <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
                                 </Stack>
-                            </>
+                            </Box>
                         ))}
                     </Box>
                 </Stack>
