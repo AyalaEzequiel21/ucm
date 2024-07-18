@@ -27,6 +27,7 @@ const Sales: React.FC<SalesProps> = () => {
 
     const columnsTablet: GridColDef<ISale>[] = [
         { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)}},
+        { field: 'details', headerName: 'Productos', flex: 0.5, renderCell(value){return value.row.details.length}},
     ]
 
     const columnsDesktop: GridColDef<ISale>[] = [

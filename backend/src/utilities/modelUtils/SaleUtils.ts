@@ -20,15 +20,18 @@ const addSaleToClient = async (clientId: IdType, saleId: IdType, session: Client
        if(!sale) {
             throw new ResourceNotFoundError('Venta')
        }
-       if(client.sales && client.balance && sale.total_sale !== undefined) {
-            const saleForClient = {
-                ...sale.toObject(),
-                _id: sale._id.toString()
-            }
-            client.sales.push(saleForClient._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
-            client.balance += sale.total_sale // UPDATE THE CLIENT BALANCE
-            await client.save({session})
-       }
+       console.log(sale.total_sale, client.balance, client.sales)
+    //    if(client.sales && client.balance && sale.total_sale) {
+    // }
+    const saleForClient = {
+        ...sale.toObject(),
+        _id: sale._id.toString()
+    }
+    client.sales?.push(saleForClient._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+    console.log(client.balance)
+    client.balance += sale.total_sale || 0 // UPDATE THE CLIENT BALANCE
+    console.log(client.balance)
+    await client.save({session})
     } catch(e){
         throw e
     }

@@ -33,9 +33,8 @@ const createSale = async (sale: SaleType) => {
         }], {session})
 
         const { _id, total_sale } = saleCreated[0] // GET THE ID AND TOTAL_SALE FROM THE SALE CREATED
-        if(total_sale !== undefined){
-            await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
-        }
+        console.log(total_sale)
+        await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
         return saleCreated[0]
     } catch(e) {

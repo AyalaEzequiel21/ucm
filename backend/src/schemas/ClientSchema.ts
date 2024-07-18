@@ -16,7 +16,7 @@ type ClientType = z.infer<typeof newClientSchema>
 // CLIENT MONGO
 const clientMongoSchema = newClientSchema.extend({
     _id: validateObjectId().optional(),
-    balance: z.number().optional(),
+    balance: z.number(),
     sales: z.array(validateObjectId()).optional(),
     payments: z.array(validateObjectId()).optional(),
     is_active: z.boolean().optional()
