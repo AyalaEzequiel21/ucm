@@ -21,8 +21,6 @@ const addSaleToClient = async (clientId: IdType, saleId: IdType, session: Client
             throw new ResourceNotFoundError('Venta')
        }
        console.log(sale.total_sale, client.balance, client.sales)
-    //    if(client.sales && client.balance && sale.total_sale) {
-    // }
     const saleForClient = {
         ...sale.toObject(),
         _id: sale._id.toString()

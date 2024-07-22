@@ -15,9 +15,9 @@ type PaymentsProps = object
 const Payments: React.FC<PaymentsProps> = () => {
 
     const {clientsPayments, clientsPaymentsLoading} = useSelector((state: RootState) => state.clientPayment.allClientsPayments)
-    const handleDetailsClick = () => {
-        console.log('_id');
-      }
+      const handleDetailsClick = () => {
+          console.log('_id');
+        }
 
       const columnsBase: GridColDef<IClientPayment>[] = [
         { field: 'client_name', headerName: 'Cliente', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.client_name, handleDetailsClick) }},

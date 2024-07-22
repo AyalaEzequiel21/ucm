@@ -22,6 +22,8 @@ import { useGetAllPurchasesQuery } from "@/redux/api/purchaseApi"
 import { setPurchases } from "@/redux/state/purchaseState"
 import { useGetAllSalesQuery } from "@/redux/api/saleApi"
 import { setSales } from "@/redux/state/saleState"
+import { useGetAllPaymentsToSuppliersQuery } from "@/redux/api/paymentToSupplierApi"
+import { setPaymentsToSupplier } from "@/redux/state/paymentToSupplierState"
 
 
 type LayoutProps = object
@@ -42,6 +44,7 @@ const Layout: React.FC<LayoutProps> = () => {
     const { data: clientsPayments, isLoading: clientsPaymentsLoading } = useGetAllClientPaymentsQuery()
     const { data: purchases, isLoading: purchasesLoading } = useGetAllPurchasesQuery()
     const { data: sales, isLoading: salesLoading } = useGetAllSalesQuery()
+    const { data: paymentsToSuppliers, isLoading: paymentToSuppliersLoading } = useGetAllPaymentsToSuppliersQuery()
 
     useEffect(()=> {
         if(jwt === null){
@@ -75,6 +78,9 @@ const Layout: React.FC<LayoutProps> = () => {
         if(sales){
             dispatch(setSales({sales: sales.data, saleLoading: salesLoading}))
         }
+        if(paymentsToSuppliers){
+            dispatch(setPaymentsToSupplier({paymentsToSupplier: paymentsToSuppliers.data, paymentToSupplierLoading: paymentToSuppliersLoading}))
+        }
     }, [
         users, 
         clients, 
@@ -82,6 +88,7 @@ const Layout: React.FC<LayoutProps> = () => {
         products, 
         purchases,
         suppliers, 
+        paymentsToSuppliers,
         sales,
         dispatch, 
         usersLoading, 
@@ -90,6 +97,7 @@ const Layout: React.FC<LayoutProps> = () => {
         productsLoading, 
         purchasesLoading,
         suppliersLoading,
+        paymentToSuppliersLoading,
         salesLoading
     ])
     

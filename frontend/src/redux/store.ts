@@ -15,6 +15,8 @@ import { PurchaseSlice } from "./state/purchaseState";
 import { purchaseApi } from "./api/purchaseApi";
 import { SaleSlice } from "./state/saleState";
 import { saleApi } from "./api/saleApi";
+import { PaymentToSupplierSlice } from "./state/paymentToSupplierState";
+import { paymentToSupplierApi } from "./api/paymentToSupplierApi";
 
 export const store = configureStore({
     reducer: {
@@ -25,6 +27,7 @@ export const store = configureStore({
         purchase: PurchaseSlice.reducer,
         sale: SaleSlice.reducer,
         supplier: SupplierSlice.reducer,
+        paymentToSupplier: PaymentToSupplierSlice.reducer,
         viewState: ViewSlice.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [clientApi.reducerPath]: clientApi.reducer,
@@ -32,6 +35,7 @@ export const store = configureStore({
         [purchaseApi.reducerPath]: purchaseApi.reducer,
         [saleApi.reducerPath]: saleApi.reducer,
         [supplierApi.reducerPath]: supplierApi.reducer,
+        [paymentToSupplierApi.reducerPath]: paymentToSupplierApi.reducer,
         [clientPaymentApi.reducerPath]: clientPaymentApi.reducer,
 
     },
@@ -42,6 +46,7 @@ export const store = configureStore({
         productApi.middleware,
         saleApi.middleware,
         purchaseApi.middleware,
+        paymentToSupplierApi.middleware,
         clientPaymentApi.middleware
     ),        
 })

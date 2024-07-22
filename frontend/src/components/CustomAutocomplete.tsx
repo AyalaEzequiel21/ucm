@@ -43,11 +43,6 @@ const CustomAutocomplete = <T extends FieldValues>({
                                 inputRef={ref}
                                 error={error}
                                 helperText={error ? (errors[name]?.message as string) : ""}
-                                // sx={{
-                                //     "& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline": {
-                                //         borderColor: "red",
-                                //     },
-                                // }}
                             />
                         )}
                         onChange={(_, newValue) => {

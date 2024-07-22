@@ -14,7 +14,6 @@ import { Close } from "@mui/icons-material";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { SaleDetailsForm } from "./SaleDetailsForm";
 
-
 const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
 
     const {palette} = useTheme()
@@ -59,6 +58,8 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         label: client.fullname,
         id: client._id
     })) || []
+    
+    
 
     return(
         <FormProvider {...methods}>
