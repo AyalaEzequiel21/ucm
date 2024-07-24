@@ -79,7 +79,7 @@ const Layout: React.FC<LayoutProps> = () => {
             dispatch(setSales({sales: sales.data, saleLoading: salesLoading}))
         }
         if(paymentsToSuppliers){
-            dispatch(setPaymentsToSupplier({paymentsToSupplier: paymentsToSuppliers.data, paymentToSupplierLoading: paymentToSuppliersLoading}))
+            dispatch(setPaymentsToSupplier({paymentsToSupplier: paymentsToSuppliers.data, paymentsToSupplierLoading: paymentToSuppliersLoading}))
         }
     }, [
         users, 

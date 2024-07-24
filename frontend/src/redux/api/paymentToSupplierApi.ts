@@ -23,7 +23,7 @@ export const paymentToSupplierApi = createApi({
         }),
         addPaymentToSupplier: builder.mutation<IApiResponse<IPaymentToSupplier>, Partial<IPaymentToSupplier>>({
             query: (newPayment) => ({
-                url: '/paymentsToSupplier',
+                url: '/paymentsToSupplier/register',
                 method: 'POST',
                 body: newPayment
             }),

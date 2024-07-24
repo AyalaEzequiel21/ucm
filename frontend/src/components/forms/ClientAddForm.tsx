@@ -9,7 +9,7 @@ import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { FormAddProps } from "@/utils/types/FormAddProps"
-import { INewClientValues } from "@/utils/interfaces/registerModels/INewClientValues"
+import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
 
 
 const ClientAddForm: React.FC<FormAddProps> = ({onCloseModal, confirmAlertSucess, confirmErrorAlert}) => {

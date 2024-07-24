@@ -9,7 +9,6 @@ import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 
-
 type PaymentsProps = object
 
 const Payments: React.FC<PaymentsProps> = () => {

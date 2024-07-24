@@ -5,7 +5,6 @@ import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { AutocompleteOption } from "./PaymentAddForm";
 import { ISupplier } from "@/utils/interfaces/ISupplier";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomAutocomplete } from "../CustomAutocomplete";
@@ -14,6 +13,7 @@ import { Box,Divider,IconButton, Stack, Typography, useTheme } from "@mui/materi
 import { Close } from "@mui/icons-material";
 import { PurchaseDetailsForm } from "./PurchaseDetailsForm";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
+import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 
 
 const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
@@ -59,7 +59,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
           }
     }
 
-    const supplierOptions: AutocompleteOption[] = suppliers.map((supplier: ISupplier) => ({
+    const supplierOptions: IAutocompleteOption[] = suppliers.map((supplier: ISupplier) => ({
         label: supplier.supplier_name,
         id: supplier._id
     })) || []

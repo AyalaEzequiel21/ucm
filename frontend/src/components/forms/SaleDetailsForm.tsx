@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomInput } from "../CustomInput";
-import { AutocompleteOption } from "./PaymentAddForm";
+import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 
 interface SaleDetailsProps {
     onAddDetail: (detail: ISaleDetails) => void
@@ -36,7 +36,7 @@ const SaleDetailsForm: React.FC<SaleDetailsProps> = ({onAddDetail}) => {
         }
       }
 
-      const productsOptions: AutocompleteOption[] = products.map((product) => ({
+      const productsOptions: IAutocompleteOption[] = products.map((product) => ({
         label: product.product_name,
         id: product._id  
       })) || []

@@ -30,7 +30,6 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoadi
         return columns
     }
 
-
     return (
         <Box
             mt={'10px'}

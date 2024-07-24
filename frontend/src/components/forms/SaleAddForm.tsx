@@ -8,11 +8,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomAutocomplete } from "../CustomAutocomplete";
-import { AutocompleteOption } from "./PaymentAddForm";
 import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { SaleDetailsForm } from "./SaleDetailsForm";
+import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 
 const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
 
@@ -54,7 +54,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
           }
     }
 
-    const clientsOptions: AutocompleteOption[] = clients.map((client) => ({
+    const clientsOptions: IAutocompleteOption[] = clients.map((client) => ({
         label: client.fullname,
         id: client._id
     })) || []

@@ -18,6 +18,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
 
     const {palette} = useTheme()
     const currentView = useSelector((state: RootState) => state.viewState.currentView)
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const [openModal, setOpenModal] = useState(false)
     const [sucessAlertState, setSucessAlertState] = useState(false)
     const [sucessMessage, setSucessMessage] = useState('')
@@ -55,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 {subtitle}
             </Typography>
             <Box display={'flex'} gap={'1rem'}>
-                {currentView !== 'home' && <ToolbarButton key="agregar" icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
+                {currentView !== 'home' && <ToolbarButton key="agregar" disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport')} icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
             </Box>
             </FlexBetween>
             <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView, handleCloseModal, handleSucessAlert, handleErrorAlert)}/>

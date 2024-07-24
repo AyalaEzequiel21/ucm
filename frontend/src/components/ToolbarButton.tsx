@@ -5,16 +5,18 @@ import { Button, useTheme } from "@mui/material"
 type ToolbarButtonProps = {
     icon: React.ReactNode | null,
     label: string,
-    handleClick: ()=> void
+    handleClick: ()=> void,
+    disabled?: boolean
 }
 
-const ToolbarButton: React.FC<ToolbarButtonProps> = ({icon, label, handleClick}) => {
+const ToolbarButton: React.FC<ToolbarButtonProps> = ({icon, label, handleClick, disabled}) => {
     const { palette } = useTheme()
     const { isMobile }  = useScreenSize()
 
     return (
         <Button
             onClick={handleClick}
+            disabled={disabled}
             sx={{
                 border: ` 2px solid ${palette.primary.dark}`,
                 borderRadius: '0.33rem',

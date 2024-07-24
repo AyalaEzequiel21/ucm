@@ -1,21 +1,17 @@
 import { useAddClientPaymentMutation } from "@/redux/api/clientPaymentApi";
 import { INewClientPaymentValues } from "@/utils/interfaces/registerModels/INewClientPaymentValues";
 import { FormAddProps } from "@/utils/types/FormAddProps";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomInput } from "../CustomInput";
 import { IClient } from "@/utils/interfaces/IClient";
 import { CustomAutocomplete } from "../CustomAutocomplete";
-import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
-export interface AutocompleteOption {
-    label: string,
-    id: string
-}
+import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
+import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions.";
 
 const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
@@ -48,24 +44,10 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
         }
     }
 
-    
-
-    const clientOptions: AutocompleteOption[] = clients?.map((client: IClient) => ({
+    const clientOptions: IAutocompleteOption[] = clients?.map((client: IClient) => ({
         label: client.fullname,
         id: client._id
     })) || []
-
-    const paymentMethodOptions: ISelectOptions[] = [
-        { label: 'Efectivo', value: 'efectivo'},
-        { label: 'Transf. Bancaria', value: 'banco'},
-        { label: 'Mercadopago', value: 'mercadopago'},
-        { label: 'Cheque', value: 'cheque'},
-    ]
-
-    useEffect(()=> {
-                console.log(clients);
-    }, [clients])
-
 
     return (
         <FormProvider {...methods}>
