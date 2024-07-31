@@ -17,6 +17,8 @@ import { SaleSlice } from "./state/saleState";
 import { saleApi } from "./api/saleApi";
 import { PaymentToSupplierSlice } from "./state/paymentToSupplierState";
 import { paymentToSupplierApi } from "./api/paymentToSupplierApi";
+import { PaymentsReportsSlice } from "./state/paymentsReportState";
+import { paymentsReportApi } from "./api/paymentsReportApi";
 
 export const store = configureStore({
     reducer: {
@@ -28,6 +30,7 @@ export const store = configureStore({
         sale: SaleSlice.reducer,
         supplier: SupplierSlice.reducer,
         paymentToSupplier: PaymentToSupplierSlice.reducer,
+        paymentsReport: PaymentsReportsSlice.reducer,
         viewState: ViewSlice.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [clientApi.reducerPath]: clientApi.reducer,
@@ -36,8 +39,8 @@ export const store = configureStore({
         [saleApi.reducerPath]: saleApi.reducer,
         [supplierApi.reducerPath]: supplierApi.reducer,
         [paymentToSupplierApi.reducerPath]: paymentToSupplierApi.reducer,
+        [paymentsReportApi.reducerPath]: paymentsReportApi.reducer,
         [clientPaymentApi.reducerPath]: clientPaymentApi.reducer,
-
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
         userApi.middleware, 
@@ -47,6 +50,7 @@ export const store = configureStore({
         saleApi.middleware,
         purchaseApi.middleware,
         paymentToSupplierApi.middleware,
+        paymentsReportApi.middleware,
         clientPaymentApi.middleware
     ),        
 })
