@@ -2,17 +2,15 @@ import { useAddPaymentsReportMutation } from "@/redux/api/paymentsReportApi";
 import { IClientPayment } from "@/utils/interfaces/IClientPayment";
 import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport";
 import { FormAddProps } from "@/utils/types/FormAddProps";
-import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { ReportDetailsForm } from "./ReportDetailsForm";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
-import { Close } from "@mui/icons-material";
+import { DetailsFormLayout } from "./DetailsFormLayout";
 
 const PaymentsReportAddFotm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
-    const {palette} = useTheme()
     const [addPaymentsReport, {isLoading}] = useAddPaymentsReportMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
     const [detailsReport, setDetailsReport] = useState<Partial<IClientPayment>[]>([])
@@ -62,16 +60,11 @@ const PaymentsReportAddFotm: React.FC<FormAddProps> = ({confirmAlertSucess, conf
                 <ReportDetailsForm
                     onAddDetail={onAddDetail}
                 />
-                {detailsReport.map((detail, index) => (
-                    <Box key={detail.client_name}>
-                        <Stack direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
-                        <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>
-                                        -{getCapitalizeString(detail.client_name || '')}: ${detail.amount || '-'} - {getCapitalizeString(detail.payment_method || '-')}
-                                    </Typography>
-                                    <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
-                        </Stack>
-                    </Box>
-                ))}
+                <DetailsFormLayout
+                    details={detailsReport}
+                    renderDetail={(detail) => `-${getCapitalizeString(detail.client_name || '')}: ${detail.amount || '-'} - ${getCapitalizeString(detail.payment_method || '-')}`}
+                    onRemoveDetail={onRemoveDetail}
+                />
             </CustomFormLayout>
         </FormProvider>
     )

@@ -9,11 +9,11 @@ import { ISupplier } from "@/utils/interfaces/ISupplier";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomAutocomplete } from "../CustomAutocomplete";
 import { IPurchaseDetails } from "@/utils/interfaces/IPurchase";
-import { Box,Divider,IconButton, Stack, Typography, useTheme } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Stack, Typography, useTheme } from "@mui/material";
 import { PurchaseDetailsForm } from "./PurchaseDetailsForm";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
+import { DetailsFormLayout } from "./DetailsFormLayout";
 
 
 const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
@@ -84,19 +84,11 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                    <Stack direction="column" spacing={2.5}>
                         <PurchaseDetailsForm onAddDetail={onAddDetail}/>
                         <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
-                        <Box>
-                            {detailsPurchase.map((detail, index) => (
-                                <Box key={detail.product_name}>
-                                    <Stack  direction="row" spacing={1} alignItems="center" justifyContent={'center'} paddingBottom={'0.3rem'}>
-                                        <Typography sx={{fontSize: '13px', fontWeight: 'bold', color: palette.primary.dark, textAlign: 'start', width: '100%'}}>
-                                            -{getCapitalizeString(detail.product_name)}: {detail.quantity}kg x ${detail.unity_price} = ${(detail.quantity * detail.unity_price).toFixed(2)}
-                                        </Typography>
-                                        <IconButton onClick={() => onRemoveDetail(index)}><Close sx={{color: palette.primary.dark}}/></IconButton>
-                                    </Stack>
-                                    <Divider />
-                                </Box>
-                            ))}
-                        </Box>
+                        <DetailsFormLayout
+                            details={detailsPurchase}
+                            renderDetail={detail => `-${getCapitalizeString(detail.product_name)}: ${detail.quantity}kg x ${detail.unity_price} = ${(detail.quantity * detail.unity_price).toFixed(2)}`}
+                            onRemoveDetail={onRemoveDetail}
+                        />
                    </Stack>
                 </CustomFormLayout>
         </FormProvider>
