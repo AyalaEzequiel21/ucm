@@ -13,6 +13,7 @@ import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString
 import { SaleDetailsForm } from "./SaleDetailsForm";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { DetailsFormLayout } from "./DetailsFormLayout";
+import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 
 const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
 
@@ -81,8 +82,9 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                     <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                     <DetailsFormLayout
                         details={detailsSale}
-                        renderDetail={detail => `${getCapitalizeString(detail.product_name)}: ${detail.quantity}kg x ${detail.price} = ${(detail.quantity * detail.price).toFixed(2)}`}
+                        renderDetail={detail => `${getCapitalizeString(detail.product_name)}:\n${detail.quantity}kg x ${detail.price} = ${getFormatedValue(detail.quantity * detail.price)}`}
                         onRemoveDetail={onRemoveDetail}
+                        totalAdd={detailsSale.length > 0 ? detailsSale.reduce((total, detail) => total + (detail.quantity * detail.price), 0): undefined}
                     />
                 </Stack>
             </CustomFormLayout>
