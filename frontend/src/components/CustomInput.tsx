@@ -14,7 +14,8 @@ export interface ICustonInputProps<T extends FieldValues> {
     min?: number
     max?: number
     minLength?: number
-    maxLength?: number
+    maxLength?: number,
+    defaultValue?: number
 
 }
 
@@ -30,12 +31,21 @@ const CustomInput = <T extends FieldValues>({
     min,
     max,
     minLength,
-    maxLength
+    maxLength,
+    defaultValue
 }: ICustonInputProps<T>
 ) => {
 
     const { register } = useFormContext()
-
+    const getDefaultValue = () => {
+        if(defaultValue){
+            return defaultValue
+        }
+        if(selectOptions){
+            return selectOptions[0].value
+        }
+        return null
+    }
     return (
         <TextField
             fullWidth 
@@ -43,7 +53,7 @@ const CustomInput = <T extends FieldValues>({
             autoComplete="current-password"
             select={isSelect}
             label={label}
-            defaultValue={selectOptions ? selectOptions[0].value : null}
+            defaultValue={getDefaultValue()}
             color="primary"
             {...register(value,
                 {

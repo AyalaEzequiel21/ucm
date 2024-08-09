@@ -89,6 +89,7 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
                             details={detailsPurchase}
                             renderDetail={detail => `-${getCapitalizeString(detail.product_name)}:\n${detail.quantity}kg x ${detail.unity_price} = ${getFormatedValue(detail.quantity * detail.unity_price)}`}
                             onRemoveDetail={onRemoveDetail}
+                            totalAdd={detailsPurchase.length > 0 ? detailsPurchase.reduce((total, detail) => total + detail.quantity * detail.unity_price, 0) : undefined}
                         />
                    </Stack>
                 </CustomFormLayout>

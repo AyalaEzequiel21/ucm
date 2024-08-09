@@ -3,7 +3,7 @@ import { RootState } from "@/redux/store";
 import { ISaleDetails } from "@/utils/interfaces/ISale";
 import { INewSaleValues, IOnlySale } from "@/utils/interfaces/registerModels/INewSale";
 import { FormAddProps } from "@/utils/types/FormAddProps";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { CustomFormLayout } from "../CustomFormLayout";
@@ -14,6 +14,7 @@ import { SaleDetailsForm } from "./SaleDetailsForm";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { DetailsFormLayout } from "./DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
+import { CategoryType } from "@/utils/types/CategoryType";
 
 const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
 
@@ -22,13 +23,14 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
     const {clients} = useSelector((state: RootState) => state.client.allClients)
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const [detailsSale, setDetailsSale] = useState<ISaleDetails[]>([])
+    const [selectedClientCategory, setSelectedClientCategory] = useState<CategoryType | null>(null)
     const methods = useForm<IOnlySale>({
         defaultValues: {
             client_id: '',
             client_name: '',
         }
     })
-    const { handleSubmit } = methods
+    const { handleSubmit, watch } = methods
     const onAddDetail = (detail: ISaleDetails) => {
         setDetailsSale(prev => [...prev, detail])
     }
@@ -60,7 +62,14 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         id: client._id
     })) || []
     
-    
+    const selectedClientId = watch('client_id')
+
+    useEffect(()=> {
+        const client = clients.find(c => c._id === selectedClientId)
+        if(client){
+            setSelectedClientCategory(client.category)
+        }
+    }, [selectedClientId, clients])
 
     return(
         <FormProvider {...methods}>
@@ -78,7 +87,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                     options={clientsOptions}
                 />
                 <Stack direction={"column"} spacing={2.5}>
-                    <SaleDetailsForm onAddDetail={onAddDetail}/>
+                    <SaleDetailsForm onAddDetail={onAddDetail} clientCategory={selectedClientCategory}/>
                     <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                     <DetailsFormLayout
                         details={detailsSale}

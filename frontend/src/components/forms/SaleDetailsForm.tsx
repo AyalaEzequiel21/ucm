@@ -6,12 +6,15 @@ import { RootState } from "@/redux/store";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomInput } from "../CustomInput";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
+import { CategoryType } from "@/utils/types/CategoryType";
+import { useEffect } from "react";
 
 interface SaleDetailsProps {
-    onAddDetail: (detail: ISaleDetails) => void
+    onAddDetail: (detail: ISaleDetails) => void,
+    clientCategory: CategoryType | null
 }
 
-const SaleDetailsForm: React.FC<SaleDetailsProps> = ({onAddDetail}) => {
+const SaleDetailsForm: React.FC<SaleDetailsProps> = ({onAddDetail, clientCategory}) => {
     const {palette} = useTheme()
     const methods = useForm<ISaleDetails>({
         defaultValues: {
@@ -25,6 +28,8 @@ const SaleDetailsForm: React.FC<SaleDetailsProps> = ({onAddDetail}) => {
     const {
         handleSubmit,
         reset,
+        watch,
+        setValue,
         formState: { errors },
       } = methods
 
@@ -40,6 +45,15 @@ const SaleDetailsForm: React.FC<SaleDetailsProps> = ({onAddDetail}) => {
         label: product.product_name,
         id: product._id  
       })) || []
+      const selectedProductId = watch("product_id")
+
+      useEffect(() => {
+        const product = products.find(p => p._id === selectedProductId)
+        if (product) {
+            const price = clientCategory === 'cat_1' ? product.first_price : product.second_price            
+            setValue('price', price, {shouldDirty: true})
+        }
+      }, [clientCategory, selectedProductId, products, setValue])
 
       return (
         <FormProvider {...methods}>
