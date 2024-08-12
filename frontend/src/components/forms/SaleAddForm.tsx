@@ -32,7 +32,15 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
     })
     const { handleSubmit, watch } = methods
     const onAddDetail = (detail: ISaleDetails) => {
-        setDetailsSale(prev => [...prev, detail])
+        setDetailsSale(prev => {
+            const exists = prev.some(item => item.product_id === detail.product_id)
+            if(exists){
+                setErrorMessage(`Ya se agrego el producto ${getCapitalizeString(detail.product_name)}`)
+                return prev
+            }
+            setErrorMessage(undefined)
+            return [...prev, detail]
+        })
     }
 
     const onRemoveDetail = (index: number) => {

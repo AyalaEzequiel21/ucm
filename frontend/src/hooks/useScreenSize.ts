@@ -1,5 +1,6 @@
 import { useMediaQuery, useTheme } from "@mui/material";
 
+// HOOK PARA OBTENER EL TAMANIO DE LA PANTALLA UTILIZADA
 const useScreenSize = () => {
     const theme = useTheme()
 

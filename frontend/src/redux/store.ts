@@ -20,7 +20,9 @@ import { paymentToSupplierApi } from "./api/paymentToSupplierApi";
 import { PaymentsReportsSlice } from "./state/paymentsReportState";
 import { paymentsReportApi } from "./api/paymentsReportApi";
 
+//  CONFIGURACION DEL STORE CENTRAL DE REDUX , QUE MANEJARA EL ESTADO DE LA APLICACION.
 export const store = configureStore({
+    // Reducers para cada slice del estado, que manejan diferentes partes de la aplicación.
     reducer: {
         user: UserSlice.reducer,
         client: ClientSlice.reducer,
@@ -42,6 +44,7 @@ export const store = configureStore({
         [paymentsReportApi.reducerPath]: paymentsReportApi.reducer,
         [clientPaymentApi.reducerPath]: clientPaymentApi.reducer,
     },
+    // Reducers para manejar las integraciones de APIs creadas con RTK Query.
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
         userApi.middleware, 
         clientApi.middleware, 
@@ -54,9 +57,10 @@ export const store = configureStore({
         clientPaymentApi.middleware
     ),        
 })
-
+// Configura listeners para el store, lo que permite manejar actualizaciones en tiempo real.
 setupListeners(store.dispatch)
 
+// Tipos de TypeScript para facilitar el uso de 'RootState' y 'AppDispatch' en toda la app.
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 

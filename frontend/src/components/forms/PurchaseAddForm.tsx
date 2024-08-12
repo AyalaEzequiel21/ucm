@@ -35,7 +35,15 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
     } = methods
 
     const onAddDetail = (detail: IPurchaseDetails) => {
-        setDetailsPurchase(prev => [...prev, detail])
+        setDetailsPurchase(prev => {
+            const exists = prev.some(item => item.product_name === detail.product_name)
+            if(exists){
+                setErrorMessage(`Ya se agrego el producto ${getCapitalizeString(detail.product_name)}`)
+                return prev
+            }
+            setErrorMessage(undefined)
+            return [...prev, detail]
+        })
     }
 
     const onRemoveDetail = (index: number) => {

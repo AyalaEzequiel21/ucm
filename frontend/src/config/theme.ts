@@ -1,3 +1,4 @@
+// CONFIGURACION DE COLORES Y SUS PALETAS, (PRINCIPAL, SECUNDARIO, FONDOS)
 
 export const colorTokens = {
     grey: {
@@ -32,6 +33,8 @@ export const colorTokens = {
 }
 
 // MUI THEME SETTINGS
+
+// CONFIGURACION DE THEME MUI (COLORES, TAMANIO DE TIPOGRAFIAS)
 export const themeSettings = {
     palette: {
         primary: {

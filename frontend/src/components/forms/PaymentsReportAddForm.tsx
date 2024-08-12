@@ -8,6 +8,7 @@ import { CustomFormLayout } from "../CustomFormLayout";
 import { ReportDetailsForm } from "./ReportDetailsForm";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { DetailsFormLayout } from "./DetailsFormLayout";
+import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 
 const PaymentsReportAddFotm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
     
@@ -62,7 +63,7 @@ const PaymentsReportAddFotm: React.FC<FormAddProps> = ({confirmAlertSucess, conf
                 />
                 <DetailsFormLayout
                     details={detailsReport}
-                    renderDetail={(detail) => `-${getCapitalizeString(detail.client_name || '')}: ${detail.amount || '-'} - ${getCapitalizeString(detail.payment_method || '-')}`}
+                    renderDetail={(detail) => `-${getCapitalizeString(detail.client_name || '')}: ${getFormatedValue(detail.amount || 0) || '-'} - ${getCapitalizeString(detail.payment_method || '-')}`}
                     onRemoveDetail={onRemoveDetail}
                 />
             </CustomFormLayout>
