@@ -3,16 +3,20 @@ import { IApiResponse } from "@/utils/interfaces/IApiResponse";
 import { IClient } from "@/utils/interfaces/IClient";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+// URL BASE DE LA API
 const baseURL = import.meta.env.VITE_API_BASE_URL as string;
 
+// DEFINICION DE LAS PETICIONES A LA API
 export const clientApi = createApi({
-    reducerPath: 'clientsApi',
-    baseQuery: fetchBaseQuery({
+    reducerPath: 'clientsApi', // NOMBRE DEL PATH
+    baseQuery: fetchBaseQuery({ // CONFIGURACION DE URL Y HEADERS PARA LAS PETICIONES
         baseUrl: baseURL, 
         prepareHeaders: setHeaders
     }),
     tagTypes: ['Client'],
+    // DEFINICION DE LOS ENDPOINTS
     endpoints: (builder) => ({
+        // METODO AGREGAR
         addClient: builder.mutation<IApiResponse<IClient>, Partial<IClient>>({
             query: (newClient) => ({
                 url: '/clients/register',
@@ -21,10 +25,12 @@ export const clientApi = createApi({
             }),
             invalidatesTags: ['Client']
         }),
+        // METODO BUSCAR POR ID
         getClientById: builder.query<IApiResponse<IClient>, string>({
             query: (id) => `/clients/client/${id}`,
             providesTags: ['Client']
         }),
+        // METODO LISTAR TODOS
         getAllClients: builder.query<IApiResponse<IClient>, void>({
             query: () => '/clients',
             providesTags: ['Client']
