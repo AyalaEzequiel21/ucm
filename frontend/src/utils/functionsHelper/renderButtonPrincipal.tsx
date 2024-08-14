@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-
+// Funcion que renderiza un boton principal utilizado en las tablas
 export const renderButtonPrincipal = (_id: string, label: string, handleClick: ()=>void) => {
     
     return (

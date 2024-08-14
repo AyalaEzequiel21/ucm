@@ -12,8 +12,14 @@ import { useSelector } from "react-redux"
 
 type SalesProps = object
 
+/**
+ * Componente `Sales`:
+ * Este componente muestra una lista de ventas en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const Sales: React.FC<SalesProps> = () => {
 
+    // Obtiene la lista de ventas y el estado de carga desde el store de Redux.
     const {sales, saleLoading} = useSelector((state: RootState) => state.sale.allSales)
 
     const handleDetailsClick = () => {

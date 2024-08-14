@@ -27,8 +27,18 @@ import { setPaymentsToSupplier } from "@/redux/state/paymentToSupplierState"
 import { useGetAllPaymentsReportsQuery } from "@/redux/api/paymentsReportApi"
 import { setPaymentsReports } from "@/redux/state/paymentsReportState"
 
-
 type LayoutProps = object
+
+/**
+ * Componente Layout:
+ * Este componente organiza y estructura la interfaz principal de la aplicación, 
+ * proporcionando un diseño consistente para todas las vistas. 
+ * Incluye una barra lateral (sidebar) para la navegación, 
+ * un encabezado (navbar) que muestra información del usuario, y un área principal donde se renderizan las vistas 
+ * según la ruta actual. El componente también maneja la autenticación del usuario, 
+ * verificando la existencia de un token JWT en el local storage, y carga datos relevantes de la aplicación 
+ * a través de consultas API, sincronizándolos con el store de Redux.
+ */
 
 const Layout: React.FC<LayoutProps> = () => {
     const { isMobile } = useScreenSize()
@@ -49,6 +59,12 @@ const Layout: React.FC<LayoutProps> = () => {
     const { data: paymentsToSuppliers, isLoading: paymentToSuppliersLoading } = useGetAllPaymentsToSuppliersQuery()
     const { data: paymentsReports, isLoading: paymentsReportsLoading } = useGetAllPaymentsReportsQuery()
 
+    /**
+     * useEffect para manejar la autenticación del usuario:
+     * - Si no hay un JWT en el local storage, redirige al usuario a la página de login.
+     * - Si hay un JWT, decodifica el token para obtener los datos del usuario y despacha una acción para iniciar sesión.
+     * - También se actualizan los datos del usuario en el estado local.
+     */
     useEffect(()=> {
         if(jwt === null){
             navigate('/login')
@@ -59,6 +75,11 @@ const Layout: React.FC<LayoutProps> = () => {
         }
     }, [jwt, dispatch, navigate])
 
+    /**
+     * useEffect para despachar los datos obtenidos desde la API al store de Redux:
+     * - Despacha la acción correspondiente para actualizar el estado en Redux con los datos de cada entidad (usuarios, clientes, productos, etc.).
+     * - Cada entidad se maneja de forma independiente para evitar que las actualizaciones de una afecten a las demás.
+     */
     useEffect(()=> {
         if(users){
             dispatch(setAllUsers({users:users.data, usersLoading: usersLoading}))

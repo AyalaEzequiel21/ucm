@@ -8,12 +8,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 
+//  ESTRUCTURA DE UN ITEM DE NAVEGACION
 export interface IMenuItem {
     label: string;
     icon: React.ReactElement;
     pathKey: string;
   }  
 
+  // LISTA DE OPCIONE DEL MENU DE NAVEGACION
 export const ListMenuOptions = [
     {
         label: "Clientes",

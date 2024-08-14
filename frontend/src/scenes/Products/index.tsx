@@ -9,8 +9,14 @@ import { useSelector } from "react-redux"
 
 type ProductsProps = object
 
+/**
+ * Componente `Products`:
+ * Este componente muestra una lista de productos en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const Products: React.FC<ProductsProps> = () => {
 
+    // Obtiene la lista de productos y el estado de carga desde el store de Redux.
     const {products, productsLoading} = useSelector((state: RootState) => state.product.allProducts)
     const { isMobile } = useScreenSize()
 

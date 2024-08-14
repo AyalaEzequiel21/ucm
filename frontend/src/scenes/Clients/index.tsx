@@ -11,8 +11,14 @@ import { useSelector } from "react-redux";
 
 type ClientsProps = object;
 
+/**
+ * Componente `Clients`:
+ * Este componente muestra una lista de clientes en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const Clients: React.FC<ClientsProps> = () => {
 
+    // Obtiene la lista de clientes y el estado de carga desde el store de Redux.
   const {clients, clientsLoading} = useSelector((state: RootState) => state.client.allClients)
 
   const handleDetailsClick = () => {

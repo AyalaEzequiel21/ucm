@@ -11,8 +11,14 @@ import { useSelector } from "react-redux"
 
 type PaymentsReportsProps = object
 
+/**
+ * Componente `Reports`:
+ * Este componente muestra una lista de reporte de pagos en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const PaymentsReports: React.FC<PaymentsReportsProps> = () => {
 
+    // Obtiene la lista de reporte de pagos y el estado de carga desde el store de Redux.
     const {paymentsReports, paymentsReportsLoading} = useSelector((state: RootState) => state.paymentsReport.allPaymentsReports)
     const handleDetailsClick = () => {
         console.log('_id');

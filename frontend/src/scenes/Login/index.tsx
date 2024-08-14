@@ -20,6 +20,15 @@ import { CustomFormLayout } from "@/components/CustomFormLayout";
 
 type LoginProps = object;
 
+/**
+ * Componente Login:
+ * Este componente renderiza la pantalla de inicio de sesión de la aplicación. 
+ * Utiliza un formulario gestionado por React Hook Form para capturar las credenciales del usuario 
+ * (nombre de usuario y contraseña), las cuales se envían a la API para la autenticación. 
+ * Si la autenticación es exitosa, el token JWT recibido se decodifica, se almacena en el local storage, 
+ * y se actualiza el estado de la aplicación con la información del usuario. 
+ * En caso de error, se muestra un mensaje de error en la pantalla.
+ */
 const Login: React.FC<LoginProps> = () => {
   const { palette } = useTheme();
   const methods = useForm<ILoginFormValues>()

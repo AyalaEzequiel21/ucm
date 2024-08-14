@@ -12,8 +12,14 @@ import { useSelector } from "react-redux"
 
 type SuppliersProps = object
 
+/**
+ * Componente `Suppliers`:
+ * Este componente muestra una lista de proveedores en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const Suppliers: React.FC<SuppliersProps> = () => {
 
+    // Obtiene la lista de proveedores y el estado de carga desde el store de Redux.
     const {suppliers, suppliersLoading} = useSelector((state: RootState) => state.supplier.allSuppliers)
 
     const handleDetailsClick = () => {

@@ -1,3 +1,4 @@
+//  funcion para capitalizar las primeras letras de cada palabra en un string
 const getCapitalizeString = (text: string) => {
     const words = text.split(' ')
     const capitalizeWords = words.map(word => {

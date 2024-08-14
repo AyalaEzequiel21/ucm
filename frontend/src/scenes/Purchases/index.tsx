@@ -12,8 +12,14 @@ import { useSelector } from "react-redux"
 
 type PurchasesProps = object
 
+/**
+ * Componente `Purchases`:
+ * Este componente muestra una lista de compras en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const Purchases: React.FC<PurchasesProps> = () => {
 
+    // Obtiene la lista de compras y el estado de carga desde el store de Redux.
     const {purchases, purchaseLoading} = useSelector((state: RootState) => state.purchase.allPurchases)
 
     const handleDetailsClick = () => {

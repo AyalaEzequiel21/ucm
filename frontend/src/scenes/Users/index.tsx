@@ -11,8 +11,14 @@ import { useSelector } from "react-redux"
 
 type UsersProps = object
 
+/**
+ * Componente `Users`:
+ * Este componente muestra una lista de usuarios en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const Users: React.FC<UsersProps> = () => {
 
+    // Obtiene la lista de usuarios y el estado de carga desde el store de Redux.
     const {users, usersLoading} = useSelector((state: RootState) => state.user.allUsers)
 
     const handleDetailsClick = () => {

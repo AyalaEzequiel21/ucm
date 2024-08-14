@@ -12,8 +12,14 @@ import { useSelector } from "react-redux"
 
 type PaymentsToSuppliersProps = object
 
+/**
+ * Componente `PaymentsToSuppliers`:
+ * Este componente muestra una lista de pagos a proveedores en un formato de tabla con columnas adaptativas según el dispositivo (base, tablet, desktop).
+ * También incluye un encabezado con el título y subtítulo de la vista.
+ */
 const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
 
+    // Obtiene la lista de pagos a proveedor y el estado de carga desde el store de Redux.
     const {paymentsToSupplier, paymentsToSupplierLoading} = useSelector((state: RootState) => state.paymentToSupplier.allPaymentsToSupplier)
 
     const handleDetailsClick = () => {

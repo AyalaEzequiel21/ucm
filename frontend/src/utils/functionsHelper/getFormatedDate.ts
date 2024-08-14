@@ -1,3 +1,4 @@
+// Funcion para convertir un tipo Date a un tipo String con formato dd/mm/yyyy
 export const getFormatedDate = (dateString: string) => {
     const date = new Date(dateString)
     let day = date.getDate().toString()
