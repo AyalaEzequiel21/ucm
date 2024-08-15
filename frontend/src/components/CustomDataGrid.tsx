@@ -2,15 +2,20 @@ import useScreenSize from "@/hooks/useScreenSize"
 import { Box, useTheme } from "@mui/material"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
 
+/**
+ * Componente CustomDatGrid:
+ * Este componente es una tabla de datos personalizada que se adapta a diferentes tamaños de pantalla (móvil, tablet, y escritorio).
+ * Utiliza Material-UI `DataGrid` para renderizar los datos y proporciona flexibilidad en la configuración de columnas y filtros.
+ * Es útil para mostrar listas de datos que requieren paginación, ordenamiento, y filtrado adaptativos según el dispositivo.
+ */
 type CustomDataGridProps<T> = {
-    rows: T[],
-    isFilterName: boolean,
-    fieldValue?: string,
-    columnsBase: GridColDef[],
-    isLoading: boolean,
-    addedColumnsTable: GridColDef[],
-    addedColumnsDesktop: GridColDef[]
-
+    rows: T[], // Lista de datos que se mostrarán en la tabla.
+    isFilterName: boolean, // Indica si se debe aplicar un filtro basado en un campo específico.
+    fieldValue?: string, // Nombre del campo para aplicar el filtro (opcional).
+    columnsBase: GridColDef[], // Definición de columnas base que siempre se mostrarán.
+    isLoading: boolean, // Indica si los datos están cargando, para mostrar un indicador de carga.
+    addedColumnsTable: GridColDef[], // Columnas adicionales que se agregarán en vista tablet.
+    addedColumnsDesktop: GridColDef[] // Columnas adicionales que se agregarán en vista escritorio.
 }
 
 const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoading, addedColumnsTable, addedColumnsDesktop}: CustomDataGridProps<T>) => {

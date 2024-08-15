@@ -8,25 +8,30 @@ import { ListItemSidebar } from "./ListItemSidebar"
 import { useDispatch } from "react-redux"
 import { ViewStateType, setViewState } from "@/redux/state/viewState"
 
+/**
+ * Componente Sidebar:
+ * Muestra una barra lateral (sidebar) que puede ser abierta o cerrada.
+ * La apariencia y el comportamiento del sidebar se ajustan en función de si el dispositivo es móvil o no.
+ */
 type SidebarProps = {
-    isSidebarOpen: boolean,
-    setIsSidebarOpen: (isActive: boolean)=> void,
-    isMobile: boolean,
-    drawerwidthPx: number
+    isSidebarOpen: boolean, // Indica si el sidebar está abierto o cerrado.
+    setIsSidebarOpen: (isActive: boolean) => void, // Función para actualizar el estado del sidebar.
+    isMobile: boolean, // Indica si la vista actual es en un dispositivo móvil.
+    drawerWidthPx: number // Ancho del sidebar en píxeles.
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
     isSidebarOpen,
     setIsSidebarOpen,
     isMobile, 
-    drawerwidthPx
+    drawerWidthPx
 }) => {
 
     const { pathname } = useLocation()
     const [active, setActive] = useState('')
     const navigate = useNavigate()
     const { palette } = useTheme()
-    const widthCalulate = isMobile ? `${drawerwidthPx}px` : `${drawerwidthPx + 30}px`
+    const widthCalulate = isMobile ? `${drawerWidthPx}px` : `${drawerWidthPx + 30}px`
     const dispatch = useDispatch()
 
     useEffect(()=> {

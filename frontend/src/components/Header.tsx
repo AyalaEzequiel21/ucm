@@ -9,9 +9,15 @@ import { CustomModal } from "./CustomModal"
 import { formPitcher } from "@/utils/functionsHelper/formPitcher"
 import { CustomAlert } from "./CustomAlert"
 
+/**
+ * Componente Header:
+ * Este componente es un encabezado que muestra un título y un subtítulo, y también proporciona una serie de funcionalidades y estados, como la apertura de un modal, la gestión de alertas de éxito y error, y la renderización condicional de un botón de agregar.
+ * Utiliza `useSelector` para obtener el estado actual de la vista y la información del usuario desde el store de Redux.
+ * Es útil en vistas principales donde se necesita un encabezado con interactividad.
+ */
 type HeaderProps = {
-    title: string, 
-    subtitle: string
+    title: string, // El título principal que se muestra en el encabezado.
+    subtitle: string // El subtítulo que se muestra debajo del título principal.
 }
 
 const Header: React.FC<HeaderProps> = ({title, subtitle}) => {

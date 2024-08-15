@@ -1,12 +1,18 @@
 import { Box, Button, CircularProgress, Paper, Stack, Typography, useTheme } from "@mui/material"
 
+/**
+ * Componente CustomFormLayout:
+ * Este componente proporciona una estructura de formulario reutilizable con un diseño centrado.
+ * Es ideal para formularios de autenticación, registro o cualquier otro tipo de formulario que requiera un diseño consistente y estilizado.
+ * Incluye un manejo de errores y un botón con un indicador de carga cuando se está procesando la solicitud.
+ */
 type CustomFormLayoutProps = {
-    handleSubmit: ()=> void,
-    children: React.ReactNode,
-    labelButton: string,
-    title: string,
-    isLoading: boolean,
-    errorMessage: string | undefined
+    handleSubmit: () => void, // Función que se ejecuta al enviar el formulario.
+    children: React.ReactNode, // Elementos del formulario que se renderizarán dentro del layout.
+    labelButton: string, // Texto del botón de envío.
+    title: string, // Título del formulario.
+    isLoading: boolean, // Estado de carga que desactiva el botón y muestra un spinner.
+    errorMessage: string | undefined // Mensaje de error a mostrar en caso de que ocurra un fallo.
 }
 
 const CustomFormLayout: React.FC<CustomFormLayoutProps> = ({

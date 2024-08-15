@@ -1,11 +1,17 @@
 import { Autocomplete, TextField } from "@mui/material"
 import { Controller, FieldValues, Path, useFormContext } from "react-hook-form"
 
+/**
+ * Componente CustomAutocomplete:
+ * Este componente es un campo de autocompletado personalizado que se integra con `react-hook-form`.
+ * Permite al usuario seleccionar una opción de una lista desplegable, y actualiza automáticamente los valores del formulario.
+ * Es útil en formularios donde se requiere la selección de una opción específica con un identificador asociado.
+ */
 interface CustomAutocompleteProps<T extends FieldValues> {
-    options: {label: string, id: string}[]
-    name: Path<T>
-    idName: Path<T>
-    label: string
+    options: { label: string, id: string }[]; // Lista de opciones disponibles para el autocompletado.
+    name: Path<T>; // Nombre del campo en el formulario para el valor seleccionado.
+    idName: Path<T>; // Nombre del campo en el formulario para el ID de la opción seleccionada.
+    label: string; // Etiqueta que se muestra en el campo de texto del autocompletado.
 }
 
 const CustomAutocomplete = <T extends FieldValues>({

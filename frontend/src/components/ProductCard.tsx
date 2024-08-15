@@ -3,9 +3,14 @@ import { Card, CardContent, IconButton, Typography, useTheme } from "@mui/materi
 import EditIcon from '@mui/icons-material/Edit';
 import { FlexBetween } from "./FlexBetween";
 
+/**
+ * Componente ProductCard:
+ * Muestra una tarjeta de producto con información detallada.
+ * La apariencia de la tarjeta se ajusta según si el dispositivo es móvil o no.
+ */
 type ProductCardProps = {
-    product: IProduct,
-    isMobile: boolean
+    product: IProduct, // Información del producto que se mostrará en la tarjeta.
+    isMobile: boolean // Indica si la vista actual es en un dispositivo móvil.
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
@@ -24,8 +29,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                 transition: 'box-shadow 0.3s ease-in-out',
                 '&:hover': {
                     boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
-                    // border: `2px solid  '
-
                 }
             }}
         >

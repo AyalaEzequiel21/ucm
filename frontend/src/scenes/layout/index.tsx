@@ -136,7 +136,7 @@ const Layout: React.FC<LayoutProps> = () => {
                 isSidebarOpen={isSidebarOpen} 
                 setIsSidebarOpen={setIsSidebarOpen}
                 isMobile={isMobile}
-                drawerwidthPx={200}
+                drawerWidthPx={200}
             />  
             <Box flexGrow={1} bgcolor={palette.background.paper} minHeight={'100vh'}>
                 <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} role={dataUser.role} username={dataUser.username}/>

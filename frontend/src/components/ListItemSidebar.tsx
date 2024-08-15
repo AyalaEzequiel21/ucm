@@ -2,10 +2,16 @@ import { IMenuItem } from "@/utils/dataUtils/sideBarOptions"
 import { ChevronRightOutlined } from "@mui/icons-material"
 import { ListItem, ListItemButton, ListItemIcon, Typography, useTheme } from "@mui/material"
 
+/**
+ * Componente ListItemSidebar:
+ * Este componente representa un elemento individual en la barra lateral (sidebar) de la aplicación.
+ * Cada elemento del sidebar puede estar activo o inactivo, dependiendo de la opción seleccionada.
+ * Además, permite al usuario navegar a diferentes secciones de la aplicación mediante la función `handleClick`.
+ */
 type ListItemSidebarProps = {
-    listItem: IMenuItem,
-    handleClick: (pathKey: string, label: string)=> void,
-    activeOption: string
+    listItem: IMenuItem, // Objeto que representa la opción del menú, incluyendo su etiqueta, icono y clave de ruta.
+    handleClick: (pathKey: string, label: string) => void, // Función que maneja el evento de clic en el elemento, redirigiendo a la ruta asociada.
+    activeOption: string // Cadena que indica la opción actualmente activa en la barra lateral.
 }
 
 const ListItemSidebar: React.FC<ListItemSidebarProps> = ({listItem, handleClick, activeOption}) => {

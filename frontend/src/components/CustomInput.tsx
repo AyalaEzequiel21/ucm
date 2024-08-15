@@ -2,21 +2,25 @@ import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
 import { MenuItem, TextField } from "@mui/material";
 import { FieldValues, Path, useFormContext } from "react-hook-form";
 
+/**
+ * Componente CustomInput:
+ * Este componente crea un campo de entrada (`input`) altamente configurable y reutilizable, compatible con formularios gestionados por `react-hook-form`.
+ * Puede ser utilizado tanto para entradas de texto como para selectores (comboboxes), y maneja validaciones comunes como longitud mínima/máxima y valores numéricos.
+ */
 export interface ICustonInputProps<T extends FieldValues> {
-    type: React.HTMLInputTypeAttribute,
-    label: string,
-    value: Path<T>,
-    isSelect: boolean,
-    msgError: string,
-    error?: boolean | undefined,
-    helperText?: string,
-    selectOptions?: ISelectOptions[],
-    min?: number
-    max?: number
-    minLength?: number
-    maxLength?: number,
-    defaultValue?: number
-
+    type: React.HTMLInputTypeAttribute, // Tipo de entrada (e.g., 'text', 'password', 'number').
+    label: string, // Etiqueta asociada al campo de entrada.
+    value: Path<T>, // Nombre del campo del formulario gestionado por `react-hook-form`.
+    isSelect: boolean, // Define si el campo debe comportarse como un `select` (combobox).
+    msgError: string, // Mensaje de error que se muestra si el campo es requerido y no se ha completado.
+    error?: boolean | undefined, // Indica si el campo está en estado de error.
+    helperText?: string, // Texto de ayuda o mensaje de error que se muestra debajo del campo.
+    selectOptions?: ISelectOptions[], // Opciones disponibles si el campo es de tipo `select`.
+    min?: number, // Valor mínimo permitido para entradas numéricas.
+    max?: number, // Valor máximo permitido para entradas numéricas.
+    minLength?: number, // Longitud mínima permitida para el campo de entrada.
+    maxLength?: number, // Longitud máxima permitida para el campo de entrada.
+    defaultValue?: number // Valor por defecto del campo de entrada.
 }
 
 const CustomInput = <T extends FieldValues>({

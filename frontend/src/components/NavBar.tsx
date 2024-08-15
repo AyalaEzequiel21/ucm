@@ -8,11 +8,17 @@ import { logout } from '@/redux/state/userState'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useNavigate } from 'react-router-dom'
 
+/**
+ * Componente NavBar:
+ * Este componente representa la barra de navegación superior de la aplicación.
+ * Contiene opciones para abrir/cerrar la barra lateral (sidebar) y para cerrar sesión (logout).
+ * Además, muestra el nombre de usuario y el rol del usuario actual.
+ */
 type NavBarProps = {
-    isSidebarOpen: boolean,
-    setIsSidebarOpen: (isActive: boolean)=> void,
-    username: string,
-    role: string
+    isSidebarOpen: boolean, // Estado que indica si la barra lateral está abierta o cerrada.
+    setIsSidebarOpen: (isActive: boolean) => void, // Función para actualizar el estado de la barra lateral.
+    username: string, // Nombre de usuario actual.
+    role: string // Rol del usuario actual.
 }
 
 const NavBar: React.FC<NavBarProps> = ({isSidebarOpen, setIsSidebarOpen, username, role}) => {
