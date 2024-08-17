@@ -15,6 +15,7 @@ import { PaymentsToSuppliers } from "./scenes/PaymentsToSupplier"
 import { Purchases } from "./scenes/Purchases"
 import { Home } from "./scenes/Home"
 import { Login } from "./scenes/Login"
+import { ClientDetails } from "./scenes/Clients/ClientDetails"
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
                 <Route element={<Layout />}>
                   <Route path='/' element={<Home/>}/>
                   <Route path='/clients' element={<Clients />}/>
+                  <Route path='/clients/client/:id' element={<ClientDetails />}/>
                   <Route path='/products' element={<Products />}/>
                   <Route path='/clientsPayments' element={<Payments />}/>
                   <Route path='/users' element={<Users />}/>

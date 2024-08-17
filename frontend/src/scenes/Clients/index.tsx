@@ -8,6 +8,7 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { IClient } from "@/utils/interfaces/IClient";
 import { GridColDef } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 type ClientsProps = object;
 
@@ -20,13 +21,15 @@ const Clients: React.FC<ClientsProps> = () => {
 
     // Obtiene la lista de clientes y el estado de carga desde el store de Redux.
   const {clients, clientsLoading} = useSelector((state: RootState) => state.client.allClients)
+  const navigate = useNavigate()
 
-  const handleDetailsClick = () => {
+  const handleDetailsClick = (id: string) => {
     console.log('_id');
+    navigate(`/clients/client/${id}`)
   };
 
   const columnsBase: GridColDef<IClient>[] = [
-    { field: 'fullname', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.fullname, handleDetailsClick) }},
+    { field: 'fullname', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.fullname,()=> handleDetailsClick(value.row._id)) }},
     { field: 'balance', headerName: 'Balance', flex: 0.5, renderCell(value){return getFormatedValue(value.row.balance)}},
   ]
 

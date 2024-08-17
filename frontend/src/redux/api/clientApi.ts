@@ -26,7 +26,7 @@ export const clientApi = createApi({
             invalidatesTags: ['Client']
         }),
         // METODO BUSCAR POR ID
-        getClientById: builder.query<IApiResponse<IClient>, string>({
+        getClientById: builder.query<IClient, string>({
             query: (id) => `/clients/client/${id}`,
             providesTags: ['Client']
         }),
