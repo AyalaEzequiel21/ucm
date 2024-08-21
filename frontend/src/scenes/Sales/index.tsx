@@ -41,7 +41,7 @@ const Sales: React.FC<SalesProps> = () => {
     ]
     return(
         <SceneContainer>
-            <Header title="VENTAS" subtitle="Lista de ventas" />
+            <Header title="VENTAS" subtitle="Lista de ventas" type="basic"/>
             <CustomDatGrid<ISale>
                 rows={sales || []}
                 isFilterName={true}

@@ -24,7 +24,6 @@ const Clients: React.FC<ClientsProps> = () => {
   const navigate = useNavigate()
 
   const handleDetailsClick = (id: string) => {
-    console.log('_id');
     navigate(`/clients/client/${id}`)
   };
 
@@ -48,7 +47,7 @@ const Clients: React.FC<ClientsProps> = () => {
 
   return (
     <SceneContainer>
-      <Header title="CLIENTES" subtitle="Lista de clientes" />
+      <Header title="CLIENTES" subtitle="Lista de clientes" type="basic"/>
       <CustomDatGrid<IClient>
         rows={clients || []}
         isFilterName={true}

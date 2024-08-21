@@ -41,7 +41,7 @@ const Suppliers: React.FC<SuppliersProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="PROVEEDORES" subtitle="Lista de proveedores" />
+            <Header title="PROVEEDORES" subtitle="Lista de proveedores" type="basic"/>
             <CustomDatGrid<ISupplier>
                 rows={suppliers || []}
                 isFilterName= {true}

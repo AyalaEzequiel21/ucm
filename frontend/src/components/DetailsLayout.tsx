@@ -11,7 +11,7 @@ export const DetailsLayout: React.FC<DetailsLayoutProps> = ({title, children}) =
 
     return (
         <SceneContainer>
-            <Header title={title} subtitle="Detalles"/>
+            <Header title={"Detalles"} subtitle={title} type="details"/>
             <Box>{children}</Box>
         </SceneContainer>
     )

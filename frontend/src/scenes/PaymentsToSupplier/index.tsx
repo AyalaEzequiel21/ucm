@@ -41,7 +41,7 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="PAGOS A PROVEEDORES" subtitle="Lista de pagos" />
+            <Header title="PAGOS A PROVEEDORES" subtitle="Lista de pagos"type="basic"/>
             <CustomDatGrid<IPaymentToSupplier>
                 rows={paymentsToSupplier || []}
                 isFilterName={true}

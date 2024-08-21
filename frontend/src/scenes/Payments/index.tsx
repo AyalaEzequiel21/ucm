@@ -39,7 +39,7 @@ const Payments: React.FC<PaymentsProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="PAGOS DE CLIENTES" subtitle="Lista de pagos" />
+            <Header title="PAGOS DE CLIENTES" subtitle="Lista de pagos" type="basic"/>
             <CustomDatGrid<IClientPayment>
                 rows={clientsPayments || []}
                 isFilterName={true}

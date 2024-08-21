@@ -39,7 +39,7 @@ const Users: React.FC<UsersProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="USUARIOS" subtitle="Lista de usuarios" />
+            <Header title="USUARIOS" subtitle="Lista de usuarios" type="basic"/>
             <CustomDatGrid<UserType>
                 rows={users || []}
                 isFilterName={true}

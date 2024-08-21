@@ -3,3 +3,8 @@ export interface IApiResponse<T> {
     data: T[],
     ok: boolean
 }
+
+export interface ISingularApiResponse<T> {
+    data: T,
+    ok: boolean
+}

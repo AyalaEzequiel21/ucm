@@ -38,7 +38,7 @@ const PaymentsReports: React.FC<PaymentsReportsProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="REPORTES DE PAGOS" subtitle="Lista de reportes de pagos" />
+            <Header title="REPORTES DE PAGOS" subtitle="Lista de reportes de pagos" type="basic"/>
             <CustomDatGrid<IPaymentsReport>
                 rows={paymentsReports || []}
                 isFilterName={false}

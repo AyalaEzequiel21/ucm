@@ -22,7 +22,7 @@ const Products: React.FC<ProductsProps> = () => {
 
     return (
         <SceneContainer>
-            <Header title={'PRODUCTOS'} subtitle={"Lista de productos"} />
+            <Header title={'PRODUCTOS'} subtitle={"Lista de productos"} type="basic"/>
             {productsLoading ? 
                 <CircularProgress color="inherit" size={30}/> 
                 :

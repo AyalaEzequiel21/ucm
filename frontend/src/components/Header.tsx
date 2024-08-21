@@ -2,6 +2,8 @@ import { Box, Typography, useTheme } from "@mui/material"
 import { FlexBetween } from "./FlexBetween"
 import { ToolbarButton } from "./ToolbarButton"
 import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
 import { useState } from "react"
@@ -17,10 +19,11 @@ import { CustomAlert } from "./CustomAlert"
  */
 type HeaderProps = {
     title: string, // El título principal que se muestra en el encabezado.
-    subtitle: string // El subtítulo que se muestra debajo del título principal.
+    subtitle: string, // El subtítulo que se muestra debajo del título principal.
+    type: 'basic'|'details'
 }
 
-const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
+const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
 
     const {palette} = useTheme()
     const currentView = useSelector((state: RootState) => state.viewState.currentView)
@@ -47,13 +50,13 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
     
     return (
         <Box>
-            <Typography
+            {type === 'basic' &&<Typography
                 color={palette.primary.dark}
                 fontSize={'35px'}
                 fontWeight={'bold'}
             >
-                {title}
-            </Typography>
+                {title ? title : ''}
+            </Typography>}
             <FlexBetween>
             <Typography
                 variant="h4"
@@ -62,10 +65,36 @@ const Header: React.FC<HeaderProps> = ({title, subtitle}) => {
                 {subtitle}
             </Typography>
             <Box display={'flex'} gap={'1rem'}>
-                {currentView !== 'home' && <ToolbarButton key="agregar" disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport')} icon={<AddIcon fontSize="small"/>} label="agregar" handleClick={handleClickAdd}/>}
+                {currentView !== 'home' && type === 'basic' ?
+                    <ToolbarButton 
+                        key="agregar" 
+                        disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport')} 
+                        icon={<AddIcon fontSize="small"/>} 
+                        label="agregar" 
+                        handleClick={handleClickAdd}
+                    />
+                :   <FlexBetween gap={'1rem'}>
+                        <ToolbarButton
+                            key="modificar"
+                            icon={<EditIcon fontSize="small"/>}
+                            label="modificar"
+                            handleClick={handleClickAdd}
+                        />
+                        <ToolbarButton
+                            key={"eliminar"}
+                            icon={<DeleteIcon fontSize="small"/>}
+                            label="eliminar"
+                            handleClick={handleClickAdd}
+                        />
+                    </FlexBetween>
+                }
             </Box>
             </FlexBetween>
-            <CustomModal open={openModal} handleClose={handleCloseModal} element={formPitcher(currentView, handleCloseModal, handleSucessAlert, handleErrorAlert)}/>
+            <CustomModal 
+                open={openModal} 
+                handleClose={handleCloseModal} 
+                element={type === 'basic' ? formPitcher(currentView, handleCloseModal, handleSucessAlert, handleErrorAlert) : <div></div>}
+            />
             <CustomAlert
                 open={sucessAlertState}    
                 label={sucessMessage}

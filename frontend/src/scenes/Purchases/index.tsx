@@ -42,7 +42,7 @@ const Purchases: React.FC<PurchasesProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="COMPRAS A PROVEEDORES" subtitle="Lista de compras" />
+            <Header title="COMPRAS A PROVEEDORES" subtitle="Lista de compras" type="basic"/>
             <CustomDatGrid<IPurchase>
                 rows={purchases || []}
                 isFilterName={true}

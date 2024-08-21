@@ -7,7 +7,7 @@ const Home: React.FC<HomeProps> = () => {
 
     
     return (
-        <><Header title="Inicio" subtitle="estadisticas"/></>
+        <><Header title="Inicio" subtitle="estadisticas" type="basic"/></>
     )
 }
 
