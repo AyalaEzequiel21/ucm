@@ -50,13 +50,15 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
     
     return (
         <Box>
-            {type === 'basic' &&<Typography
-                color={palette.primary.dark}
-                fontSize={'35px'}
-                fontWeight={'bold'}
-            >
-                {title ? title : ''}
-            </Typography>}
+            {/* {type === 'basic' &&  */}
+                <Typography
+                    color={palette.primary.dark}
+                    fontSize={'35px'}
+                    fontWeight={'bold'}
+                >
+                    {title ? title : ''}
+                </Typography>
+            {/* } */}
             <FlexBetween>
             <Typography
                 variant="h4"
@@ -93,7 +95,12 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
             <CustomModal 
                 open={openModal} 
                 handleClose={handleCloseModal} 
-                element={type === 'basic' ? formPitcher(currentView, handleCloseModal, handleSucessAlert, handleErrorAlert) : <div></div>}
+                element={
+                    type === 'basic' ? 
+                        formPitcher(currentView, handleCloseModal, handleSucessAlert, handleErrorAlert) 
+                    : 
+                        <div></div>
+                    }
             />
             <CustomAlert
                 open={sucessAlertState}    

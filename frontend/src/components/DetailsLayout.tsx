@@ -4,15 +4,15 @@ import { SceneContainer } from "./SceneContainer"
 
 interface DetailsLayoutProps {
     title: string,
-    children: JSX.Element
+    children: React.ReactNode
 }
 
 export const DetailsLayout: React.FC<DetailsLayoutProps> = ({title, children}) => {
 
     return (
         <SceneContainer>
-            <Header title={"Detalles"} subtitle={title} type="details"/>
-            <Box>{children}</Box>
+            <Header title={title} subtitle={"Detalles"} type="details"/>
+            <Box marginTop={'1rem'}>{children}</Box>
         </SceneContainer>
     )
 }
