@@ -1,11 +1,11 @@
 import {  Card, useTheme } from "@mui/material"
 
-interface CustomCardProps {
+interface DetailsCardProps {
     children: React.ReactNode,
     size: 'M'|'L'|'XL'
 }
 
-const CustomCard: React.FC<CustomCardProps> = ({children, size}) => {
+const DetailsCard: React.FC<DetailsCardProps> = ({children, size}) => {
 
     const {palette, spacing} = useTheme()
     const getWidth = () => {
@@ -21,18 +21,17 @@ const CustomCard: React.FC<CustomCardProps> = ({children, size}) => {
     return (
         <Card
             sx={{
-                padding: spacing(1),
-                backgroundColor: palette.primary.dark,
+                padding: spacing(1.5),
+                backgroundColor: palette.grey[100],
                 borderRadius: '0.55rem',
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-                border: `1px solid ${palette.grey[100]}`,
-                color: palette.grey[100],
+                color: palette.primary.dark,
                 width: getWidth(),
                 minHeight: '7rem',
-                transition: 'background-color 0.3s ease',
+                border: `1px solid ${palette.divider}`,
+                transition: 'border-color 0.5s ease',
                 '&:hover': {
-                    backgroundColor: palette.primary.main,
-                    boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
+                    borderColor: palette.primary.dark
                 }
             }}
         >
@@ -41,4 +40,4 @@ const CustomCard: React.FC<CustomCardProps> = ({children, size}) => {
     )
 }
 
-export { CustomCard }
+export { DetailsCard }
