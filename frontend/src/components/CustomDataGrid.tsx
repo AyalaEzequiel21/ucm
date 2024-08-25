@@ -8,27 +8,29 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid"
  * Utiliza Material-UI `DataGrid` para renderizar los datos y proporciona flexibilidad en la configuración de columnas y filtros.
  * Es útil para mostrar listas de datos que requieren paginación, ordenamiento, y filtrado adaptativos según el dispositivo.
  */
-type CustomDataGridProps<T> = {
+export type CustomDataGridProps<T> = {
     rows: T[], // Lista de datos que se mostrarán en la tabla.
     isFilterName: boolean, // Indica si se debe aplicar un filtro basado en un campo específico.
     fieldValue?: string, // Nombre del campo para aplicar el filtro (opcional).
     columnsBase: GridColDef[], // Definición de columnas base que siempre se mostrarán.
     isLoading: boolean, // Indica si los datos están cargando, para mostrar un indicador de carga.
-    addedColumnsTable: GridColDef[], // Columnas adicionales que se agregarán en vista tablet.
-    addedColumnsDesktop: GridColDef[] // Columnas adicionales que se agregarán en vista escritorio.
+    addedColumnsTable?: GridColDef[], // Columnas adicionales que se agregarán en vista tablet.
+    addedColumnsDesktop?: GridColDef[] // Columnas adicionales que se agregarán en vista escritorio.
+    halfHeight?: boolean // Indica si la altura de la tabla debe ser la mitad del tamaño de la pantalla.
+    lightMode?: boolean // Indica si la tabla debe mostrar el modo claro.
 }
 
-const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoading, addedColumnsTable, addedColumnsDesktop}: CustomDataGridProps<T>) => {
+const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoading, addedColumnsTable, addedColumnsDesktop, halfHeight, lightMode}: CustomDataGridProps<T>) => {
 
     const {isMobile, isTablet, isDesktop } = useScreenSize()
     const {palette} = useTheme()
 
     const getColumns = () => {
         let columns: GridColDef[] = [...columnsBase]
-        if(isTablet && (!isMobile && !isDesktop)) {
+        if(isTablet && (!isMobile && !isDesktop) && addedColumnsTable) {
             columns = [...columns, ...addedColumnsTable]
         }
-        if (isDesktop && (!isMobile && !isTablet)) {
+        if (isDesktop && (!isMobile && !isTablet) && addedColumnsTable && addedColumnsDesktop) {
             columns = [...columns, ...addedColumnsTable]
             columns = [...columns, ...addedColumnsDesktop]
         }
@@ -38,7 +40,7 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoadi
     return (
         <Box
             mt={'10px'}
-            height={'80vh'}
+            height={halfHeight? '50vh': '80vh'}
         >
             <DataGrid 
                 rows={rows}
@@ -63,14 +65,15 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoadi
                 }}
                 sx={{
                     maxWidth: '100%',
+                    border: lightMode? `1px solid ${palette.primary.dark}` : 'none',
                     '& .MuiDataGrid-columnHeader': {
-                        backgroundColor: palette.primary.dark,
-                        color: palette.grey[100],
+                        backgroundColor: lightMode? palette.grey[100] : palette.primary.dark,
+                        color: lightMode? palette.primary.dark : palette.grey[100],
                         fontSize: '1.1rem',
                         fontWeight: 'bold',
                     },
                     '& .MuiSvgIcon-root': {
-                        color: palette.grey[100],
+                        color: lightMode? palette.primary.dark : palette.grey[100],
                     },
                     '& .MuiDataGrid-row': {
                         // height: '200px'
@@ -87,9 +90,9 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoadi
                         display: 'none'
                     },
                     '& .MuiDataGrid-footerContainer': {
-                        backgroundColor: palette.primary.dark,
+                        backgroundColor: lightMode? palette.grey[100] : palette.primary.dark,
                         '& .MuiTablePagination-root': {
-                            color: palette.grey[100],
+                            color: lightMode? palette.primary.dark : palette.grey[100],
                         }
                     },
 

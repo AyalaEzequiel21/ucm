@@ -2,10 +2,12 @@ import {  Card, useTheme } from "@mui/material"
 
 interface DetailsCardProps {
     children: React.ReactNode,
-    size: 'M'|'L'|'XL'
+    size: 'M'|'L'|'XL'|'XXL',
+    flexGrow: number,
+    isMobile?: boolean
 }
 
-const DetailsCard: React.FC<DetailsCardProps> = ({children, size}) => {
+const DetailsCard: React.FC<DetailsCardProps> = ({children, size, flexGrow, isMobile}) => {
 
     const {palette, spacing} = useTheme()
     const getWidth = () => {
@@ -14,6 +16,7 @@ const DetailsCard: React.FC<DetailsCardProps> = ({children, size}) => {
             case 'M': return '40%'
             case 'L': return '50%'
             case 'XL': return '70%'
+            case 'XXL': return '100%'
             default: return '40%'
         }
     }
@@ -27,8 +30,9 @@ const DetailsCard: React.FC<DetailsCardProps> = ({children, size}) => {
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
                 color: palette.primary.dark,
                 width: getWidth(),
-                minHeight: '7rem',
+                minHeight: isMobile? '11rem' : '15rem',
                 border: `1px solid ${palette.divider}`,
+                flexGrow: flexGrow,
                 transition: 'border-color 0.5s ease',
                 '&:hover': {
                     borderColor: palette.primary.dark

@@ -30,6 +30,11 @@ export const saleApi = createApi({
             query: (id)=> `/sales/sale/${id}`,
             providesTags: ['Sale']
         }),
+        // METODO LISTAR TODAS LAS VENTAS DE CLIENTE
+        getAllSalesByClientId: builder.query<IApiResponse<ISale>, string>({
+            query: (id) => `/sales/client/id/${id}`,
+            providesTags: ['Sale']
+        }),
         // METODO LISTAR TODOS
         getAllSales: builder.query<IApiResponse<ISale>, void>({
             query: () => '/sales',
@@ -38,4 +43,4 @@ export const saleApi = createApi({
     })
 })
 
-export const { useAddSaleMutation, useGetSaleByIdQuery, useGetAllSalesQuery } = saleApi
+export const { useAddSaleMutation, useGetSaleByIdQuery, useGetAllSalesQuery, useGetAllSalesByClientIdQuery } = saleApi

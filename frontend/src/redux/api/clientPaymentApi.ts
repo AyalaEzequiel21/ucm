@@ -30,6 +30,11 @@ export const clientPaymentApi = createApi({
             query: (id) => `/clientPayments/clientPayment/${id}`,
             providesTags: ['Client Payment']
         }),
+        //METODO PARA LISTAR TODOS LOS APGOS DE UN CLIENTE
+            getAllClientPaymentsByClientId: builder.query<IApiResponse<IClientPayment>, string>({
+                query: (id) => `/clientPayments/client/${id}`,
+                providesTags: ['Client Payment']
+            }),
         // METODO LISTAR TODOS
         getAllClientPayments: builder.query<IApiResponse<IClientPayment>, void>({
             query: () => '/clientPayments',
@@ -38,4 +43,4 @@ export const clientPaymentApi = createApi({
     })
 })
 
-export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery, useAddClientPaymentMutation } = clientPaymentApi
+export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery, useAddClientPaymentMutation, useGetAllClientPaymentsByClientIdQuery } = clientPaymentApi

@@ -116,6 +116,20 @@ const getSalesByClientName = async (inDelivery: boolean, clientName: string) => 
     }
 }
 
+// GET BY CLIENT ID
+const getSaleByClientId = async (clientId: IdType) => {
+    checkId(clientId)
+    try {
+        const sale = await SaleModel.find({client_id: clientId}) // FIND THE SALE BY HIS ID
+        if(!sale) { // CHECK IF EXISTS THE SALE OR RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Venta')
+        }
+        return sale
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
 // GET BY SALE DATE
 const getSalesByDate = async (inDelivery: boolean, date: string) => {
     if(!validateDate(date)){ // CHECK THAT DATE IS VALID FORMAT OR RUN AN EXCEPTION
@@ -156,4 +170,4 @@ const removeSaleById = async (saleId: IdType) => {
     }
 }
 
-export { createSale, modifySale, getAllSales, getSaleById, getSalesByClientName, getSalesByDate, removeSaleById }
+export { createSale, modifySale, getAllSales, getSaleById, getSalesByClientName, getSalesByDate, getSaleByClientId, removeSaleById }
