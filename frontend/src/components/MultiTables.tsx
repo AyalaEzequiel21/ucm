@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { CustomDataGridProps, CustomDatGrid } from "../CustomDataGrid";
+import { CustomDataGridProps, CustomDatGrid } from "./CustomDataGrid";
 import { Box, Tab, Tabs } from "@mui/material";
+import { GridPaginationModel } from "@mui/x-data-grid";
 
 export interface TableExtended<T> extends CustomDataGridProps<T> {
     label: string
@@ -12,9 +13,16 @@ interface MultiTablesProps<T> {
 
 const MultiTables= <T, >({tables, halfHeight}: MultiTablesProps<T>) => {
     const [selectedTab, setSelectedTab] = useState(0)
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 15 });
 
     const handleChangeTab = (event: React.ChangeEvent<object>, newValue: number) => {
         setSelectedTab(newValue)
+        setPaginationModel({ ...paginationModel, page: 0 })
+
+    }
+
+    const handlePaginationChange = (model: GridPaginationModel) => {
+        setPaginationModel(model);
     }
 
     return (
@@ -46,6 +54,8 @@ const MultiTables= <T, >({tables, halfHeight}: MultiTablesProps<T>) => {
                             addedColumnsDesktop={table.addedColumnsDesktop}
                             halfHeight={halfHeight}
                             lightMode={true}
+                            paginationModel={paginationModel}
+                            onPaginationChange={handlePaginationChange}
                         />
                     )}
                 </Box>

@@ -14,7 +14,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
-import { MultiTables, TableExtended } from "@/components/forms/MultiTables"
+import { MultiTables, TableExtended } from "@/components/MultiTables"
 import { GridColDef } from "@mui/x-data-grid"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { useGetAllClientPaymentsByClientIdQuery } from "@/redux/api/clientPaymentApi"

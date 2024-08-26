@@ -1,6 +1,6 @@
 import useScreenSize from "@/hooks/useScreenSize"
 import { Box, useTheme } from "@mui/material"
-import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid"
 
 /**
  * Componente CustomDatGrid:
@@ -8,6 +8,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid"
  * Utiliza Material-UI `DataGrid` para renderizar los datos y proporciona flexibilidad en la configuración de columnas y filtros.
  * Es útil para mostrar listas de datos que requieren paginación, ordenamiento, y filtrado adaptativos según el dispositivo.
  */
+
 export type CustomDataGridProps<T> = {
     rows: T[], // Lista de datos que se mostrarán en la tabla.
     isFilterName: boolean, // Indica si se debe aplicar un filtro basado en un campo específico.
@@ -18,9 +19,23 @@ export type CustomDataGridProps<T> = {
     addedColumnsDesktop?: GridColDef[] // Columnas adicionales que se agregarán en vista escritorio.
     halfHeight?: boolean // Indica si la altura de la tabla debe ser la mitad del tamaño de la pantalla.
     lightMode?: boolean // Indica si la tabla debe mostrar el modo claro.
+    paginationModel?: GridPaginationModel, // Estado de la paginación.
+    onPaginationChange?: (model: GridPaginationModel) => void, // Función para manejar el cambio de paginación.
 }
 
-const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoading, addedColumnsTable, addedColumnsDesktop, halfHeight, lightMode}: CustomDataGridProps<T>) => {
+const CustomDatGrid = <T,>({
+    rows, 
+    isFilterName, 
+    fieldValue, 
+    columnsBase, 
+    isLoading, 
+    addedColumnsTable, 
+    addedColumnsDesktop, 
+    halfHeight, 
+    lightMode,
+    paginationModel,
+    onPaginationChange,
+}: CustomDataGridProps<T>) => {
 
     const {isMobile, isTablet, isDesktop } = useScreenSize()
     const {palette} = useTheme()
@@ -47,21 +62,20 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoadi
                 columns={getColumns()}
                 getRowId={(row) => row._id}
                 loading={isLoading}
+                paginationModel={paginationModel}
+                onPaginationModelChange={onPaginationChange}
                 initialState={{
                     pagination: {
-                        paginationModel: {
-                            pageSize: 15,
-                        }
+                        paginationModel: (!paginationModel && !onPaginationChange) ? { page: 0, pageSize: 15 } : undefined,
                     },
                     sorting: {
-                        sortModel: [{field: isFilterName && fieldValue ? fieldValue : 'createdAt', sort: 'asc'}]
+                        sortModel: [{ field: isFilterName && fieldValue ? fieldValue : 'createdAt', sort: 'asc' }],
                     },
-                    filter:{
+                    filter: {
                         filterModel: {
-                            items: []
-                        }
-                    }
-
+                            items: [],
+                        },
+                    },
                 }}
                 sx={{
                     maxWidth: '100%',
@@ -80,7 +94,8 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoadi
                     },
                     '& .MuiDataGrid-cell': {
                         fontSize: '1rem',
-                        height: '0.9fr'
+                        height: '0.9fr',
+                        color: lightMode ? palette.primary.dark : palette.grey[100],
                     },
                     '& .MuiDataGrid-cell:focus-within': {
                         outline: 'none',
@@ -91,13 +106,17 @@ const CustomDatGrid = <T,>({rows, isFilterName, fieldValue, columnsBase, isLoadi
                     },
                     '& .MuiDataGrid-footerContainer': {
                         backgroundColor: lightMode? palette.grey[100] : palette.primary.dark,
+                        color: lightMode ? palette.primary.dark : palette.grey[100],
                         '& .MuiTablePagination-root': {
                             color: lightMode? palette.primary.dark : palette.grey[100],
+                        },
+                        '& .MuiSvgIcon-root': {
+                            color: lightMode ? palette.primary.dark : palette.grey[100],
                         }
                     },
 
                 }}
-                pageSizeOptions={[15]}
+                // pageSizeOptions={[15]}
                 rowSelection={false}
             />
         </Box>
