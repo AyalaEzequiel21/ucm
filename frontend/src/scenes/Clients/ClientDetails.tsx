@@ -11,7 +11,6 @@ import useScreenSize from "@/hooks/useScreenSize"
 import PhoneIcon from '@mui/icons-material/Phone'
 import SellIcon from '@mui/icons-material/Sell'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
-import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { MultiTables, TableExtended } from "@/components/MultiTables"
@@ -19,6 +18,8 @@ import { GridColDef } from "@mui/x-data-grid"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { useGetAllClientPaymentsByClientIdQuery } from "@/redux/api/clientPaymentApi"
 import { useGetAllSalesByClientIdQuery } from "@/redux/api/saleApi"
+import { ISale } from "@/utils/interfaces/ISale"
+import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 
 type ClientDetailsProps = object
 
@@ -54,7 +55,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
         { field: 'payment_method', headerName: 'Metodo', flex: 0.5 },
     ]
 
-    const tables: TableExtended<T>[] = [
+    const tables: TableExtended<ISale|IClientPayment>[] = [
         {
             label: 'Pagos',
             rows: payments?.data || [],

@@ -42,6 +42,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         dispatch(setViewState(pathKey as ViewStateType))
         navigate(`/${pathKey}`)
         setActive(label)
+        if (isMobile) {
+            setIsSidebarOpen(!isSidebarOpen)
+        }
     }
 
     const handleClickLogo = () => {

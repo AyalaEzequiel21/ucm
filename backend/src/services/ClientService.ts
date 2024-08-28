@@ -118,9 +118,9 @@ const getClientsByCategory = async (category: ClientCategoryType) => {
 }
 
 // FIND BY ID
-const getClientById = async (clientId: ObjectId|string, session: ClientSession|undefined) => {
+const getClientById = async (clientId: IdType, session: ClientSession|undefined) => {
     checkId(clientId)
-    const findClientWithOptionalSession = (client: ObjectId|string, sess: ClientSession|undefined) => { // FUNCTION TO CHECK IF THE SEARCH IS WITH TRANSACTION OR NOT
+    const findClientWithOptionalSession = (client: IdType, sess: ClientSession|undefined) => { // FUNCTION TO CHECK IF THE SEARCH IS WITH TRANSACTION OR NOT
         const query = ClientModel.findById(client)
         if(sess)  return query.session(sess)
         return query
@@ -133,6 +133,17 @@ const getClientById = async (clientId: ObjectId|string, session: ClientSession|u
         }
         return clientFound
     } catch(e) {        
+        ErrorsPitcher(e)
+    }
+}
+
+// FIND ALL DETAILS OF CLIENT
+const getDetailsOfClient = async (clientId: IdType, session: ClientSession|undefined) => {
+    checkId(clientId)
+    try {
+        const clientFound = await getClientById(clientId, session) //  FIND CLIENT WITH CLIENT SERVICE
+        // const PaymentsAndSales =
+    } catch(e) {
         ErrorsPitcher(e)
     }
 }

@@ -63,7 +63,7 @@ const CustomDatGrid = <T,>({
                 getRowId={(row) => row._id}
                 loading={isLoading}
                 paginationModel={paginationModel}
-                onPaginationModelChange={onPaginationChange}
+                onPaginationModelChange={onPaginationChange}    
                 initialState={{
                     pagination: {
                         paginationModel: (!paginationModel && !onPaginationChange) ? { page: 0, pageSize: 15 } : undefined,
@@ -89,13 +89,10 @@ const CustomDatGrid = <T,>({
                     '& .MuiSvgIcon-root': {
                         color: lightMode? palette.primary.dark : palette.grey[100],
                     },
-                    '& .MuiDataGrid-row': {
-                        // height: '200px'
-                    },
                     '& .MuiDataGrid-cell': {
                         fontSize: '1rem',
                         height: '0.9fr',
-                        color: lightMode ? palette.primary.dark : palette.grey[100],
+                        color: palette.primary.dark ,
                     },
                     '& .MuiDataGrid-cell:focus-within': {
                         outline: 'none',
@@ -116,7 +113,6 @@ const CustomDatGrid = <T,>({
                     },
 
                 }}
-                // pageSizeOptions={[15]}
                 rowSelection={false}
             />
         </Box>
