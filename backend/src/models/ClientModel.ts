@@ -44,6 +44,10 @@ export const clientSchema = new Schema<ClientMongoType>(
         is_active: {
             type: Boolean,
             default: true
+        }, 
+        created_at: {
+            type: Date,
+            required: false
         }
     },
     {

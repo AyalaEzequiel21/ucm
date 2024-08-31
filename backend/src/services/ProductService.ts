@@ -48,7 +48,7 @@ const modifyProduct = async (productUpdated: ProductMongoType) => {
 const getAllProducts = async (inDelivery: boolean) => {
 
     const productsFiltered = async (delivery: boolean) => { // FUNCTION TO FILTER PRICE PRODUCTS WHRN INDELIVERY IS ACTIVE
-        const query = ProductModel.find({is_active: true})
+        const query = ProductModel.find({is_active: true}).lean()
         if(delivery) return query.select("-first_price")
         return query
     }
@@ -64,7 +64,7 @@ const getAllProducts = async (inDelivery: boolean) => {
 // FIND ALL INACTIVES
 const getAllInactivesProducts = async () => {
     try {
-        const inactiveProducts = await ProductModel.find({is_active: false}) // FIND INACTIVE PRODUCTS
+        const inactiveProducts = await ProductModel.find({is_active: false}).lean() // FIND INACTIVE PRODUCTS
         return inactiveProducts
     } catch(e) {
         ErrorsPitcher(e)
@@ -74,7 +74,7 @@ const getAllInactivesProducts = async () => {
 // FIND BY NAME
 const getProductsByName = async (productName: string) => {
     try {
-        const productsFound = await ProductModel.find({product_name: { $regex: productName, $options: 'i' }, is_active: true}) // FIND ALL PRODUCTS THAT CONTAINS THE PRODUCTNAME
+        const productsFound = await ProductModel.find({product_name: { $regex: productName, $options: 'i' }, is_active: true}).lean() // FIND ALL PRODUCTS THAT CONTAINS THE PRODUCTNAME
         return productsFound
     } catch(e) {
         ErrorsPitcher(e)
@@ -85,7 +85,7 @@ const getProductsByName = async (productName: string) => {
 const getProductById = async (productId: ObjectId|string) => {
     checkId(productId)
     try{
-        const productFound = await ProductModel.findById(productId) // FIND PRODUCT BY ID
+        const productFound = await ProductModel.findById(productId).lean() // FIND PRODUCT BY ID
         if(!productFound) { // IF PRODUCT IS NOT FOUND, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Producto')
         }

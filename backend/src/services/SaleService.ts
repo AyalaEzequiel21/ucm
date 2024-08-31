@@ -77,7 +77,7 @@ const modifySale = async (saleUpdated: SaleMongoType) => {
 // GET ALL
 const getAllSales = async (inDelivery: boolean) => {
     try {
-        const sales: SaleMongoType[] = await SaleModel.find()//  FIND ALL SALES
+        const sales: SaleMongoType[] = await SaleModel.find().lean() //  FIND ALL SALES
         if(inDelivery){
             const salesFiltered = filterSaleForDelivery(sales)
             return salesFiltered
@@ -92,7 +92,7 @@ const getAllSales = async (inDelivery: boolean) => {
 const getSaleById = async (saleId: IdType) => {
     checkId(saleId)
     try {
-        const sale = await SaleModel.findById(saleId) //  FIND THE SALE BY HIS ID
+        const sale = await SaleModel.findById(saleId).lean() //  FIND THE SALE BY HIS ID
         if(!sale) { // CHECK IF EXISTS THE SALE OR RUN AN EXCEPTION
             throw new ResourceNotFoundError('Venta')
         }
@@ -105,7 +105,7 @@ const getSaleById = async (saleId: IdType) => {
 // GET BY CLIENT NAME
 const getSalesByClientName = async (inDelivery: boolean, clientName: string) => {
     try {
-        const sales: SaleMongoType[] = await SaleModel.find({ client_name: { $regex: clientName, $options: 'i' } }) // FIND ALL SALE WITH CLIENT NAME        
+        const sales: SaleMongoType[] = await SaleModel.find({ client_name: { $regex: clientName, $options: 'i' } }).lean() // FIND ALL SALE WITH CLIENT NAME        
         if(inDelivery){
             const salesFiltered = filterSaleForDelivery(sales) // IF INDELIVERY IS TRUE, THEN FILTERED THE SALES            
             return salesFiltered
@@ -120,7 +120,7 @@ const getSalesByClientName = async (inDelivery: boolean, clientName: string) => 
 const getSaleByClientId = async (clientId: IdType) => {
     checkId(clientId)
     try {
-        const sale = await SaleModel.find({client_id: clientId}) // FIND THE SALE BY HIS ID
+        const sale = await SaleModel.find({client_id: clientId}).lean() // FIND THE SALE BY HIS ID
         if(!sale) { // CHECK IF EXISTS THE SALE OR RUN AN EXCEPTION
             throw new ResourceNotFoundError('Venta')
         }
@@ -137,7 +137,7 @@ const getSalesByDate = async (inDelivery: boolean, date: string) => {
     }
     const newFormatDate = convertDateString(date) // CONVERT THE DATE STRING TO DATE WITH VALID FORMAT
     try {
-        const salesFound: SaleMongoType[] = await SaleModel.find({createdAt: newFormatDate}) // FIND ALL SALES WITH THIS DATE
+        const salesFound: SaleMongoType[] = await SaleModel.find({createdAt: newFormatDate}).lean() // FIND ALL SALES WITH THIS DATE
         if(inDelivery){
             const salesFiltered = filterSaleForDelivery(salesFound) // IF INDELIVERY IS TRUE, THEN FILTERED THE SALES, AND RETURN IT
             return salesFiltered

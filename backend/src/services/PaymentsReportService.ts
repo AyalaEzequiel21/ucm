@@ -32,7 +32,7 @@ import { IdType } from "../utilities/types/IdType";
  // FIND ALL
  const getAllPaymentsReports = async () => {
     try {
-        const reports = await PaymentsReportModel.find() //  FIND ALL PAYMENTS REPORT
+        const reports = await PaymentsReportModel.find().lean() //  FIND ALL PAYMENTS REPORT
         return reports
     } catch(e) {
         ErrorsPitcher(e)
@@ -43,7 +43,7 @@ import { IdType } from "../utilities/types/IdType";
  const getPaymentsReportById = async (reportId: IdType) => {
     checkId(reportId) // CHECK IF REPORT ID IS VALID
     try {
-        const reportSaved = await PaymentsReportModel.findById(reportId) //  FIND THE REPORT BY HIS ID
+        const reportSaved = await PaymentsReportModel.findById(reportId).lean() //  FIND THE REPORT BY HIS ID
         if(!reportSaved){
             throw new ResourceNotFoundError('Reporte de pagos')
         }
@@ -56,7 +56,7 @@ import { IdType } from "../utilities/types/IdType";
  // FIND ALL VALIDATED REPORTS
  const getAllValidatedPaymentsReports = async () => {
     try {
-        const reports = await PaymentsReportModel.find({report_status: "aprobado"}) //  FIND ALL VALIDATED PAYMENTS REPORT
+        const reports = await PaymentsReportModel.find({report_status: "aprobado"}).lean() //  FIND ALL VALIDATED PAYMENTS REPORT
         return reports
     } catch(e) {
         ErrorsPitcher(e)
@@ -66,7 +66,7 @@ import { IdType } from "../utilities/types/IdType";
   // FIND ALL PENDING REPORTS
   const getAllPendingPaymentsReports = async () => {
     try {
-        const reports = await PaymentsReportModel.find({report_status: "pendiente"}) //  FIND ALL PENDING PAYMENTS REPORT
+        const reports = await PaymentsReportModel.find({report_status: "pendiente"}).lean() //  FIND ALL PENDING PAYMENTS REPORT
         return reports
     } catch(e) {
         ErrorsPitcher(e)
@@ -80,7 +80,7 @@ import { IdType } from "../utilities/types/IdType";
     }
     const newFormatDate = convertDateString(date) // CONVERT THE DATE TO FORMAT FOR SEARCH
     try {
-        const reportsFound = await PaymentsReportModel.find({createdAt: newFormatDate})  //  FIND ALL REPORTS WITH SAME DATE
+        const reportsFound = await PaymentsReportModel.find({createdAt: newFormatDate}).lean()  //  FIND ALL REPORTS WITH SAME DATE
         return reportsFound
     } catch(e) {
         ErrorsPitcher(e)

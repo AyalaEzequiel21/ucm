@@ -99,4 +99,18 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
     }
 }
 
-export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment }
+const getClientPaymentsForDetails = async (clientId: IdType, session: ClientSession) => {
+    try {
+        const paymentsFound = await ClientPaymentModel.find({client_id: clientId}).session(session) // FIND CLIENT PAYMENT BY ID
+                .select('_id amount payment_method created_at')
+                .lean()
+        if(!paymentsFound) {
+            throw new ResourceNotFoundError("Pagos del cliente")
+        }
+        return paymentsFound
+    } catch(e) {
+        throw e
+    }
+}
+
+export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment, getClientPaymentsForDetails }

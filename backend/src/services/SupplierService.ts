@@ -36,7 +36,7 @@ const createSupplier = async (newSupplier: SupplierType) => {
 // FIND ALL 
 const getAllSuppliers = async () => {
     try{
-        const suppliers = await SupplierModel.find() // FIND ALL SUPPLIERS
+        const suppliers = await SupplierModel.find().lean() // FIND ALL SUPPLIERS
         return suppliers
     } catch(e){
         ErrorsPitcher(e)
@@ -46,7 +46,7 @@ const getAllSuppliers = async () => {
 // FIND BY NAME
 const getSuppliersByName = async (supplierName: string) => {
     try {
-        const suppliers = await SupplierModel.find({supplier_name: { $regex: supplierName, $options: 'i' }})  //  FIND ALL SUPPLIER THAT CONTAINS THIS NAME
+        const suppliers = await SupplierModel.find({supplier_name: { $regex: supplierName, $options: 'i' }}).lean() //  FIND ALL SUPPLIER THAT CONTAINS THIS NAME
         return suppliers
     } catch(e) {
         ErrorsPitcher(e)
@@ -57,7 +57,7 @@ const getSuppliersByName = async (supplierName: string) => {
 const getSupplierById = async (supplierId: IdType, session: ClientSession|null = null) => {
     checkId(supplierId)
     try{
-        const supplier = await SupplierModel.findById(supplierId).session(session) //  FIND SUPPLIER BY HIS ID
+        const supplier = await SupplierModel.findById(supplierId).session(session).lean() //  FIND SUPPLIER BY HIS ID
         if(!supplier) {
             throw new ResourceNotFoundError("Proveedor") //  IF SUPPLIER NOT EXISTS, THEN RUN AN EXCEPTION.
         }

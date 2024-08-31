@@ -1,3 +1,4 @@
+
 const convertDateString = (dateString: String) => {
     const [day, month, year] = dateString.split('/').map(Number) // CONVERT THE DATE TO NUMBERS
     const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0) // CREATE A DATE FOR THE START OF THE DAY
@@ -23,4 +24,18 @@ const validateDate = (date:string) => {
     return newDate <= actualDate // CHECK THAT NEW DATE DON'T BE LATER THAT ACTUAL DATE
 }
 
-export { convertDateString, validateDate }
+type WithCreatedAt = { created_at: Date | string };
+
+const getMostRecentDate = <T extends WithCreatedAt>(items: T[]) : Date | null => {
+    if (items.length === 0) {
+        return null
+    }
+    const mostRecentDate = items.reduce((latest, item) => {
+        const itemDate = new Date(item.created_at);
+        return itemDate > latest ? itemDate : latest;
+    }, new Date(items[0].created_at))
+
+    return mostRecentDate;
+}
+
+export { convertDateString, validateDate, getMostRecentDate }

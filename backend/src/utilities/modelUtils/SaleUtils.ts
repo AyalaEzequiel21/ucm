@@ -91,4 +91,16 @@ const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
     }
 }
 
-export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient }
+const getClientSalesForDetails = async (clientId: IdType, session: ClientSession) => {
+    try {
+        const sales = await SaleModel.find({ client_id: clientId }).session(session) //  FIND CLIENT'S SALES BY CLIENT ID
+            .select('_id client_name total_sale created_at') 
+            .lean() 
+
+        return sales
+    } catch (e) {
+        throw e
+    }
+};
+
+export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails }

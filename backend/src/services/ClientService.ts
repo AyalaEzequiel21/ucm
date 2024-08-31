@@ -7,6 +7,9 @@ import { validateIfExists } from "../utilities/validateIfExists";
 import { BadRequestError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { checkId } from "../utilities/validateObjectId";
 import { IdType } from "../utilities/types/IdType";
+import { getSalesAndPaymentOfClientById } from "../utilities/modelUtils/ClientUtils";
+import { IClientDetails } from "../utilities/interfaces/IClientDetails";
+import { getMostRecentDate } from "../utilities/datesUtils";
 
 /////////////////////////
 // CLIENT SERVICE
@@ -71,7 +74,7 @@ const getAllActivesClients = async (inDelivery: boolean) => {
         }
     }
     try{
-        const activeUsers = await ClientModel.find(getQuery(inDelivery)) // FIND ALL ACTIVE USERS        
+        const activeUsers = await ClientModel.find(getQuery(inDelivery)).lean() // FIND ALL ACTIVE USERS        
         return activeUsers
     } catch(e) {
         ErrorsPitcher(e)
@@ -82,7 +85,7 @@ const getAllActivesClients = async (inDelivery: boolean) => {
 
 const getAllInactivesClients = async () => {
     try{
-        const inactiveUsers = await ClientModel.find({is_active: false}) // FIND ALL INACTIVE USERS
+        const inactiveUsers = await ClientModel.find({is_active: false}).lean() // FIND ALL INACTIVE USERS
         return inactiveUsers
     } catch(e) {
         ErrorsPitcher(e)
@@ -93,7 +96,7 @@ const getAllInactivesClients = async () => {
 
 const getClientsByName = async (clientName: string) => {
     try {
-        const clientsFound = await ClientModel.find({ fullname: { $regex: clientName, $options: 'i' }, is_active: true}) // FIND ALL CLIENTS WITH FULLANME CONTAINS CLIENTNAME
+        const clientsFound = await ClientModel.find({ fullname: { $regex: clientName, $options: 'i' }, is_active: true}).lean() // FIND ALL CLIENTS WITH FULLANME CONTAINS CLIENTNAME
         if(clientsFound.length == 0) {
             throw new ResourceNotFoundError('Usuario')
         }
@@ -110,7 +113,7 @@ const getClientsByCategory = async (category: ClientCategoryType) => {
         throw new BadRequestError('Categoria invalida')
     }
     try {
-        const clientsFound = await ClientModel.find({category: category, is_active: true}) // FIND CLIENTS BY CATEGORY
+        const clientsFound = await ClientModel.find({category: category, is_active: true}).lean() // FIND CLIENTS BY CATEGORY
         return clientsFound
     } catch(e) {
         ErrorsPitcher(e)
@@ -138,16 +141,34 @@ const getClientById = async (clientId: IdType, session: ClientSession|undefined)
 }
 
 // FIND ALL DETAILS OF CLIENT
-const getDetailsOfClient = async (clientId: IdType, session: ClientSession|undefined) => {
+const getDetailsOfClient = async (clientId: IdType, session: ClientSession) => {
     checkId(clientId)
     try {
-        const clientFound = await getClientById(clientId, session) //  FIND CLIENT WITH CLIENT SERVICE
-        // const PaymentsAndSales =
+        const client = await ClientModel.findById(clientId)
+        .select('_id fullname phone category in_delivery created_at')
+        .session(session)
+        .lean()
+        if(!client) {
+            throw new ResourceNotFoundError('Cliente')
+        }
+        const {clientSales, clientPayments} = getSalesAndPaymentOfClientById(clientId, session)
+        const clientDetails: IClientDetails = {
+            ...client,
+            created_at: client.created_at.toISOString(),
+            sales: clientSales,
+            payments: clientPayments,
+            lastSale: getMostRecentDate(clientSales),
+            totalAmountOfSales: clientSales.reduce((acc, sale) => acc + sale.total_sale, 0),
+            totalAmountOfPayments: clientPayments.reduce((acc, payment) => acc + payment.amount, 0),
+            lastPayment: getMostRecentDate(clientPayments),
+        }
+        return clientDetails
     } catch(e) {
         ErrorsPitcher(e)
     }
 }
 
+///  TERMINAR ESTE METODO //////////////////
 
 // DELETE BY ID
 

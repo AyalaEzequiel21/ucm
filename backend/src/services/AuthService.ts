@@ -85,7 +85,7 @@ const modifyUser = async (userUpdated: UserMongoType) => {
 
 const getAllUsers = async () => {
     try {
-        const users = await UserModel.find().select('-password') // FIND ALL USERS
+        const users = await UserModel.find().select('-password').lean() // FIND ALL USERS
         return users
     } catch(e) {
         ErrorsPitcher(e)
@@ -97,7 +97,7 @@ const getAllUsers = async () => {
 const getUserById = async (userId: ObjectId|string) => {
     checkId(userId)
     try {
-        const userSaved = await UserModel.findById(userId) // FIND USER BY ID
+        const userSaved = await UserModel.findById(userId).lean() // FIND USER BY ID
         if(!userSaved) { // IF USER NOT EXISTS RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')
         }

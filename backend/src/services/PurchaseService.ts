@@ -78,7 +78,7 @@ const modifyPurchase = async (purchaseUpdated: PurchaseMongoType) => {
 const getPurchaseById = async (purchaseId: IdType) => {
     checkId(purchaseId)
     try {
-        const purchase = await PurchaseModel.findById(purchaseId) //  FIND PURCHASE BY HIS ID
+        const purchase = await PurchaseModel.findById(purchaseId).lean() //  FIND PURCHASE BY HIS ID
         if(!purchase) { // CHECK IF EXISTS PURCHASE OR RUN AN EXCEPTION
             throw new ResourceNotFoundError('Compra a proveedor')
         }
@@ -91,7 +91,7 @@ const getPurchaseById = async (purchaseId: IdType) => {
 // GET ALL
 const getAllPurchases = async () => {
     try {
-        const purchases = await PurchaseModel.find()
+        const purchases = await PurchaseModel.find().lean()
         return purchases
     } catch(e){
         ErrorsPitcher(e)
@@ -101,7 +101,7 @@ const getAllPurchases = async () => {
 // GET BY SUPPLIER NAME 
 const getPurchaseBySupplierName = async (supplierName: string) => {
     try {   
-        const purchasesFound = await PurchaseModel.find({supplier_name: { $regex: supplierName, $options: 'i' }}) //  FIND ALL PURCHASE THAT CONTAINS THE CLIENT NAME    
+        const purchasesFound = await PurchaseModel.find({supplier_name: { $regex: supplierName, $options: 'i' }}).lean() //  FIND ALL PURCHASE THAT CONTAINS THE CLIENT NAME    
         return purchasesFound
     } catch(e){
         ErrorsPitcher(e)
@@ -115,7 +115,7 @@ const getPurchasesByDate = async (purchaseDate: string) => {
     }
     const newFormatDate = convertDateString(purchaseDate) //  CONVERT THE PURCHASE DATE TO DATE WITH VALID FORMAT
     try {
-        const purchasesFound = await PurchaseModel.find({createdAt: newFormatDate}) // FIND ALL PURCHASES WITH HIS DATE
+        const purchasesFound = await PurchaseModel.find({createdAt: newFormatDate}).lean() // FIND ALL PURCHASES WITH HIS DATE
         return purchasesFound
     } catch(e) {
         ErrorsPitcher(e)

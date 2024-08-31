@@ -25,7 +25,7 @@ type SaleType = z.infer<typeof newSaleSchema>
 
 // SALE MONGO
 const saleMongoSchema = newSaleSchema.extend({
-    _id: validateObjectId()
+    _id: validateObjectId(),
 })
 
 type SaleMongoType = z.infer<typeof saleMongoSchema>

@@ -67,7 +67,7 @@ const removePaymentToSupplierById = async (paymentSupplierId: IdType) => {
 //  FIND ALL 
 const getAllPaymentsToSupplier = async () => {
     try {
-        const paymentsFound = await PaymentToSupplierModel.find() //  FIND ALL PAYMENTS TO SUPPLIER
+        const paymentsFound = await PaymentToSupplierModel.find().lean() //  FIND ALL PAYMENTS TO SUPPLIER
         return paymentsFound
     } catch(e){
         ErrorsPitcher(e)
@@ -78,7 +78,7 @@ const getAllPaymentsToSupplier = async () => {
 const getPaymentToSupplierById = async (paymentSupplierId: IdType) => {
     checkId(paymentSupplierId)
     try {
-        const paymentSupplier = await PaymentToSupplierModel.findById(paymentSupplierId) //  FIND THE PAYMENT BY HIS ID
+        const paymentSupplier = await PaymentToSupplierModel.findById(paymentSupplierId).lean() //  FIND THE PAYMENT BY HIS ID
         if(!paymentSupplier){ // IF PAYMENT NOT EXISTS RUN AN EXCEPTION
             throw new ResourceNotFoundError('Pago a proveedor')
         }
@@ -94,7 +94,7 @@ const getPaymentsToSupplierByPaymentMethod = async (paymentMethod: PaymentMethod
         throw new BadRequestError("Metodo de pago incorrecto")
     }
     try {
-        const paymentsFound = await PaymentToSupplierModel.find({payment_method: paymentMethod}) //  FIND ALL PAYMENTS TO SUPPLIER BY HIS PAYMENT METHOD
+        const paymentsFound = await PaymentToSupplierModel.find({payment_method: paymentMethod}).lean() //  FIND ALL PAYMENTS TO SUPPLIER BY HIS PAYMENT METHOD
         return paymentsFound
     } catch(e) {
         ErrorsPitcher(e)
@@ -109,7 +109,7 @@ const getPaymentsToSupplierBySupplierId = async (supplierId: IdType) => {
         if(!supplier){
             throw new ResourceNotFoundError('Proveedor')
         }
-        const paymentsFound = await PaymentToSupplierModel.find({supplier_id: supplierId}) //  FIND ALL PAYMENTS BY SUPPLIER ID
+        const paymentsFound = await PaymentToSupplierModel.find({supplier_id: supplierId}).lean() //  FIND ALL PAYMENTS BY SUPPLIER ID
         return paymentsFound
     } catch(e) {
         ErrorsPitcher(e)
@@ -123,7 +123,7 @@ const getPaymentsToSupplierByDate = async (paymentDate: string) => {
     }
     const newFormatDate = convertDateString(paymentDate) //  CONVERT THE DATE TO FORMAT VALID FOR SEARCH
     try {
-        const paymentsFound = await PaymentToSupplierModel.find({createdAt: newFormatDate}) //  FIND ALL PAYMENTS WITH THAT DATE
+        const paymentsFound = await PaymentToSupplierModel.find({createdAt: newFormatDate}).lean() //  FIND ALL PAYMENTS WITH THAT DATE
         return paymentsFound
     } catch(e) {
         ErrorsPitcher(e)

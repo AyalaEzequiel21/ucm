@@ -68,7 +68,7 @@ const removeClientPayment = async (clientPaymentId: IdType) => {
 const getClientPaymentsById = async (paymentId: IdType) => {
     checkId(paymentId)
     try {
-        const paymentsFound = await ClientPaymentModel.findById(paymentId) // FIND CLIENT PAYMENT BY ID
+        const paymentsFound = await ClientPaymentModel.findById(paymentId).lean() // FIND CLIENT PAYMENT BY ID
         if(!paymentsFound) {
             throw new ResourceNotFoundError("Pago de cliente")
         }
@@ -81,7 +81,7 @@ const getClientPaymentsById = async (paymentId: IdType) => {
 // FIND ALL
 const getAllClientsPayments = async () => {
     try {
-        const paymentsFound = await ClientPaymentModel.find() // FIND ALL CLIENTS PAYMENTS
+        const paymentsFound = await ClientPaymentModel.find().lean() // FIND ALL CLIENTS PAYMENTS
         return paymentsFound
     } catch(e) {
         ErrorsPitcher(e)
@@ -96,7 +96,7 @@ const getPaymentsByClientId = async (clientId: IdType) => {
         if(!client) {
             throw new ResourceNotFoundError('Cliente')  // IF NOT EXISTS THE CLIENT, RUN AN EXCEPTION
         }
-        const paymentsOfClient = await ClientPaymentModel.find({client_id: clientId}) // FIND ALL PAYMENTS FROM A CLIENT BY THE CLIENTID
+        const paymentsOfClient = await ClientPaymentModel.find({client_id: clientId}).lean() // FIND ALL PAYMENTS FROM A CLIENT BY THE CLIENTID
         return paymentsOfClient
     } catch(e) {
         ErrorsPitcher(e)
@@ -109,7 +109,7 @@ const getPaymentsPaymentMethod = async (paymentMethod: PaymentMethodType) => {
         throw new BadRequestError("Metodo de pago incorrecto")
     }
     try {
-        const paymentsByMethod = await ClientPaymentModel.find({payment_method: paymentMethod}) // FIND ALL PAYMENTS FROM A CLIENT BY THE METHOD
+        const paymentsByMethod = await ClientPaymentModel.find({payment_method: paymentMethod}).lean() // FIND ALL PAYMENTS FROM A CLIENT BY THE METHOD
         return paymentsByMethod
     } catch(e) {
         ErrorsPitcher(e)
@@ -123,7 +123,7 @@ const getClientsPaymentsByDate = async (date: string) => {
     }
     const newFormatDate = convertDateString(date) // CONVERT THE DATE TO VALID FORMAT FOR SEARCH
     try {
-        const paymentsFound = await ClientPaymentModel.find({createdAt: newFormatDate}).exec() // FIND THE PAYMENTS BY DATE
+        const paymentsFound = await ClientPaymentModel.find({createdAt: newFormatDate}).lean().exec() // FIND THE PAYMENTS BY DATE
         return paymentsFound
     } catch(e) {
         ErrorsPitcher(e)
