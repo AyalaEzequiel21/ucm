@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
-import { createSale, getAllSales, getSalesByClientName, getSaleById, modifySale, getSalesByDate, removeSaleById, getSaleByClientId } from "../services/SaleService";
+import { createSale, getAllSales, getSalesByClientName, getSaleById, modifySale, getSalesByDate, removeSaleById, getSaleByClientId, getSaleForDetailsById } from "../services/SaleService";
 import { RequestExtended } from "../utilities/interfaces/RequestExtended";
 
 /////////////////////////
@@ -74,6 +74,17 @@ const findSalesByClientId = async (req: Request, res: Response, next: NextFuncti
     }
 }
 
+// FIND SALES FOR DETAILS BY ID
+const findSalesForDetailsById = async (req: Request, res: Response, next: NextFunction) => {
+    const saleId = req.params.saleId // GET THE SALE ID FROM PARAMS
+    try {
+        const sale = await getSaleForDetailsById(saleId) // FIND THE SALE WITH THE SERVICE
+        res.status(200).json({ok: true, data: sale})
+    } catch(e){
+        next(e)
+    }
+}
+
 // FIND SALE BY DATE
 const findSalesByDate = async (req: RequestExtended, res: Response, next: NextFunction) => {
     const inDelivery = !!req.filterDelivery // GET INDELIVERY FROM PARAMS
@@ -97,4 +108,4 @@ const deleteSaleById = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
-export { registerSale, updateSale, findAllSales, findSaleById, findSalesByClientName, findSalesByClientId, findSalesByDate, deleteSaleById }
+export { registerSale, updateSale, findAllSales, findSaleById, findSalesForDetailsById, findSalesByClientName, findSalesByClientId, findSalesByDate, deleteSaleById }

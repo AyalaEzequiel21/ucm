@@ -4,7 +4,7 @@ import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
-import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
+import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
 import { getClientById } from "./ClientService";
@@ -102,6 +102,28 @@ const getSaleById = async (saleId: IdType) => {
     }
 }
 
+// GET SALE FOR DETAILS BY ID
+const getSaleForDetailsById = async (saleId: IdType) => {
+    checkId(saleId)
+    try {
+        const sale = await SaleModel.findById(saleId).lean() //  FIND THE SALE BY HIS ID
+        if(!sale) { // CHECK IF EXISTS THE SALE OR RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Venta')
+        }
+        const paymentOfSale = await getClientPaymentOfSale(saleId)
+        if(paymentOfSale) {
+            const saleWithPayment = {
+                ...sale,
+                payment: paymentOfSale
+            }
+            return saleWithPayment
+        }
+        return sale
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
 // GET BY CLIENT NAME
 const getSalesByClientName = async (inDelivery: boolean, clientName: string) => {
     try {
@@ -170,4 +192,4 @@ const removeSaleById = async (saleId: IdType) => {
     }
 }
 
-export { createSale, modifySale, getAllSales, getSaleById, getSalesByClientName, getSalesByDate, getSaleByClientId, removeSaleById }
+export { createSale, modifySale, getAllSales, getSaleById, getSaleForDetailsById, getSalesByClientName, getSalesByDate, getSaleByClientId, removeSaleById }

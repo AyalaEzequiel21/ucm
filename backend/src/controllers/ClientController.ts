@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
-import { createClient, getAllActivesClients, getAllInactivesClients, getClientById, getClientsByCategory, getClientsByName, modifyClient, removeClientById } from "../services/ClientService";
+import { createClient, getAllActivesClients, getAllInactivesClients, getClientById, getClientsByCategory, getClientsByName, getDetailsOfClient, modifyClient, removeClientById } from "../services/ClientService";
 import { ClientCategoryType } from "../utilities/types/ClientCategory";
 import { RequestExtended } from "../utilities/interfaces/RequestExtended";
 
@@ -84,6 +84,17 @@ const findClientById = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
+// FIND CLIENT DETAILS
+const findClientDetailsById = async (req: Request, res: Response, next: NextFunction) => {
+    const clientId = req.params.clientId // GET THE CLIENT ID FROM PARAMS REQUEST
+    try {
+        const client = await getDetailsOfClient(clientId) // FIND CLIENT BY ID WITH CLIENT SERVICE
+        res.status(200).json({ok: true, data: client})
+    } catch(e) {
+        next(e)
+    }
+}
+
 // DELETE CLIENT BY ID
 
 const deleteClientById = async (req: Request, res: Response, next: NextFunction) => {
@@ -96,4 +107,4 @@ const deleteClientById = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
-export { registerClient, updateClient, deleteClientById, findActivesClients, findInactivesClients, findClientById, findClientsByCategory, findClientsByName }
+export { registerClient, updateClient, deleteClientById, findActivesClients, findInactivesClients, findClientById, findClientsByCategory, findClientsByName, findClientDetailsById }

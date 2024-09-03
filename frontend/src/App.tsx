@@ -16,6 +16,7 @@ import { Purchases } from "./scenes/Purchases"
 import { Home } from "./scenes/Home"
 import { Login } from "./scenes/Login"
 import { ClientDetails } from "./scenes/Clients/ClientDetails"
+import { SaleDetails } from "./scenes/Sales/SaleDetails"
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
                   <Route path='/users' element={<Users />}/>
                   <Route path='/paymentsReport' element={<PaymentsReports />}/>
                   <Route path='/sales' element={<Sales />}/>
+                  <Route path='/sales/sale/:id' element={<SaleDetails />}/>
                   <Route path='/suppliers' element={<Suppliers />}/>
                   <Route path='/paymentsToSuppliers' element={<PaymentsToSuppliers />}/>
                   <Route path='/purchases' element={<Purchases />}/>

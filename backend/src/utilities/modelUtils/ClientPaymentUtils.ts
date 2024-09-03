@@ -4,6 +4,7 @@ import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../
 import { ClientPaymentModel } from "../../models";
 import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
 import { IdType } from "../types/IdType";
+import { IPaymentsOfClientDetails } from "../interfaces/IClientDetails";
 
 
 /////////////////////////
@@ -99,11 +100,11 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
     }
 }
 
-const getClientPaymentsForDetails = async (clientId: IdType, session: ClientSession) => {
+const getClientPaymentsForDetails = async (clientId: IdType) => {
     try {
-        const paymentsFound = await ClientPaymentModel.find({client_id: clientId}).session(session) // FIND CLIENT PAYMENT BY ID
-                .select('_id amount payment_method created_at')
-                .lean()
+        const paymentsFound = await ClientPaymentModel.find({client_id: clientId}) // FIND CLIENT PAYMENT BY ID
+                .select('_id amount payment_method createdAt')
+                .lean<IPaymentsOfClientDetails[]>()
         if(!paymentsFound) {
             throw new ResourceNotFoundError("Pagos del cliente")
         }

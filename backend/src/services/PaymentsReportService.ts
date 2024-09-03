@@ -138,7 +138,7 @@ import { IdType } from "../utilities/types/IdType";
  const removePaymentsReportById = async (reportId: IdType) => {
     checkId(reportId) // CHECK IF REPORT ID IS VALID
     try {
-        const reportSaved = await PaymentsReportModel.findById(reportId) //  FIND THE REPORT BY HIS ID
+        const reportSaved = await PaymentsReportModel.findById(reportId).lean() //  FIND THE REPORT BY HIS ID
         if(!reportSaved || reportSaved.report_status === 'aprobado') { // IF HIS STATUS IS APROBADO OR REPORT NOT EXISTS RUN AN EXCEPTION
             throw new ResourceNotFoundError('Reporte de pagos')
         }

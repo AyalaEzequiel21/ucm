@@ -1,7 +1,7 @@
 import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { filterGetAll } from '../middleware/GetAllMidd'
-import { deleteClientById, findActivesClients, findClientById, findClientsByCategory, findClientsByName, findInactivesClients, registerClient, updateClient } from '../controllers/ClientController'
+import { deleteClientById, findActivesClients, findClientById, findClientDetailsById, findClientsByCategory, findClientsByName, findInactivesClients, registerClient, updateClient } from '../controllers/ClientController'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { clientMongoSchema, newClientSchema } from '../schemas/ClientSchema'
 
@@ -26,6 +26,8 @@ router.put("/update", validateSchemaRequest(clientMongoSchema), updateClient)
 router.get("/clientName/:clientName", findClientsByName)
 // GERT CLIENT BY ID
 router.get('/client/:clientId', findClientById)
+// GET CLIENT DETAILS BY ID
+router.get("/clientDetails/:clientId", findClientDetailsById)
 // GET CLIENTS BY CATEGORY
 router.get("/category/:clientCategory", findClientsByCategory)
 // GET ALL INACTIVE CLIENTS

@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders"
-import { IApiResponse } from "@/utils/interfaces/IApiResponse"
-import { ISale } from "@/utils/interfaces/ISale"
+import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse"
+import { ISale, ISaleDetails } from "@/utils/interfaces/ISale"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 // URL BASE DE LA API
@@ -26,8 +26,13 @@ export const saleApi = createApi({
             invalidatesTags: ['Sale']
         }),
         // METODO BUSCAR POR ID
-        getSaleById: builder.query<IApiResponse<ISale>, string>({
+        getSaleById: builder.query<ISingularApiResponse<ISale>, string>({
             query: (id)=> `/sales/sale/${id}`,
+            providesTags: ['Sale']
+        }),
+        // METODO BUSCAR POR ID PARA DETALLES
+        getSaleDetailsById: builder.query<ISingularApiResponse<ISaleDetails>, string>({
+            query: (id) => `/sales/saleDetails/${id}`,
             providesTags: ['Sale']
         }),
         // METODO LISTAR TODAS LAS VENTAS DE CLIENTE
@@ -43,4 +48,4 @@ export const saleApi = createApi({
     })
 })
 
-export const { useAddSaleMutation, useGetSaleByIdQuery, useGetAllSalesQuery, useGetAllSalesByClientIdQuery } = saleApi
+export const { useAddSaleMutation, useGetSaleByIdQuery, useGetSaleDetailsByIdQuery, useGetAllSalesQuery, useGetAllSalesByClientIdQuery } = saleApi

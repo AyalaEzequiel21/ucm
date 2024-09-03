@@ -2,7 +2,7 @@ import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { newSaleSchema, saleMongoSchema } from '../schemas/SaleSchema'
-import { deleteSaleById, findAllSales, findSaleById, findSalesByClientId, findSalesByClientName, findSalesByDate, registerSale, updateSale } from '../controllers/SaleController'
+import { deleteSaleById, findAllSales, findSaleById, findSalesByClientId, findSalesByClientName, findSalesByDate, findSalesForDetailsById, registerSale, updateSale } from '../controllers/SaleController'
 import { filterGetAll } from '../middleware/GetAllMidd'
 
 // SALE ROUTES
@@ -15,6 +15,8 @@ router.use(validateUser())
 router.get("/", filterGetAll(), findAllSales)
 // GET SALE BY ID
 router.get("/sale/:saleId", findSaleById)
+// GET SALE FOR DETAILS BY ID
+router.get("/saleDetails/:saleId", findSalesForDetailsById)
 // GET ALL SALES BY ID CLIENT
 router.get("/client/id/:clientId", filterGetAll(), findSalesByClientId)
 // GET SALES BY NAME CLIENT

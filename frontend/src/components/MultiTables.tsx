@@ -18,7 +18,6 @@ const MultiTables= <T, >({tables, halfHeight}: MultiTablesProps<T>) => {
     const handleChangeTab = (event: React.ChangeEvent<object>, newValue: number) => {
         setSelectedTab(newValue)
         setPaginationModel({ ...paginationModel, page: 0 })
-
     }
 
     const handlePaginationChange = (model: GridPaginationModel) => {

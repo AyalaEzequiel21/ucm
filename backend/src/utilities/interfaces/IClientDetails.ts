@@ -2,6 +2,20 @@ import { ClientCategoryType } from "../types/ClientCategory";
 import { IdType } from "../types/IdType";
 import { PaymentMethodType } from "../types/PaymentMethod";
 
+
+export interface ISalesOfClientDetails {
+    _id: IdType
+    total_sale: number
+    createdAt: Date|string
+}
+
+export interface IPaymentsOfClientDetails {
+    _id: IdType
+    amount: number
+    payment_method: PaymentMethodType
+    createdAt: Date|string
+}
+
 export interface IClientDetails {
     _id: IdType
     fullname: string
@@ -9,20 +23,11 @@ export interface IClientDetails {
     category: ClientCategoryType
     in_delivery: boolean
     balance: number
-    created_at: Date|string
-    sales: {
-        _id: IdType
-        total_sale: number
-        created_at: Date|string
-    }[]
+    createdAt: Date|string
+    sales: ISalesOfClientDetails[]
     lastSale: Date|null
     totalAmountOfSales: number
-    payments: {
-        _id: IdType
-        amount: number
-        payment_method: PaymentMethodType
-        created_at: Date|string
-    }[]
+    payments: IPaymentsOfClientDetails[]
     lastPayment: Date|null
     totalAmountOfPayments: number
 }

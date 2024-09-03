@@ -10,6 +10,7 @@ import { IdType } from "../utilities/types/IdType";
 import { getSalesAndPaymentOfClientById } from "../utilities/modelUtils/ClientUtils";
 import { IClientDetails } from "../utilities/interfaces/IClientDetails";
 import { getMostRecentDate } from "../utilities/datesUtils";
+import { startSession } from "../config/startSession";
 
 /////////////////////////
 // CLIENT SERVICE
@@ -141,20 +142,19 @@ const getClientById = async (clientId: IdType, session: ClientSession|undefined)
 }
 
 // FIND ALL DETAILS OF CLIENT
-const getDetailsOfClient = async (clientId: IdType, session: ClientSession) => {
-    checkId(clientId)
+const getDetailsOfClient = async (clientId: IdType) => {
+    checkId(clientId) // CHECK IF ID IS VALID
     try {
-        const client = await ClientModel.findById(clientId)
-        .select('_id fullname phone category in_delivery created_at')
-        .session(session)
+        const client = await ClientModel.findById(clientId) // FIND CLIENT BY ID, ONLY SOMES PROEPIRTIES ARE RETURNED
+        .select('_id fullname phone balance category in_delivery createdAt')
         .lean()
-        if(!client) {
+        if(!client) { // IF CLIENT NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Cliente')
-        }
-        const {clientSales, clientPayments} = getSalesAndPaymentOfClientById(clientId, session)
-        const clientDetails: IClientDetails = {
+        }        
+        const {clientPayments, clientSales } = await getSalesAndPaymentOfClientById(clientId) // GET SALES AND PAYMENT OF CLIENT
+        const clientDetails: IClientDetails = { // CREATE A CLIENT DETAILS OBJECT WITH ALL PROPERTIES
             ...client,
-            created_at: client.created_at.toISOString(),
+            createdAt: client.createdAt,
             sales: clientSales,
             payments: clientPayments,
             lastSale: getMostRecentDate(clientSales),
@@ -162,13 +162,11 @@ const getDetailsOfClient = async (clientId: IdType, session: ClientSession) => {
             totalAmountOfPayments: clientPayments.reduce((acc, payment) => acc + payment.amount, 0),
             lastPayment: getMostRecentDate(clientPayments),
         }
-        return clientDetails
+        return clientDetails // RETURN CLIENT DETAILS
     } catch(e) {
         ErrorsPitcher(e)
     }
 }
-
-///  TERMINAR ESTE METODO //////////////////
 
 // DELETE BY ID
 
@@ -187,4 +185,4 @@ const removeClientById = async (clientId: IdType) => {
     }
 }
 
-export { createClient, modifyClient, getClientById, getAllActivesClients, getAllInactivesClients, getClientsByCategory, getClientsByName, removeClientById }
+export { createClient, modifyClient, getClientById, getAllActivesClients, getAllInactivesClients, getClientsByCategory, getClientsByName, getDetailsOfClient, removeClientById }

@@ -20,7 +20,7 @@ const clientMongoSchema = newClientSchema.extend({
     sales: z.array(validateObjectId()).optional(),
     payments: z.array(validateObjectId()).optional(),
     is_active: z.boolean().optional(),
-    created_at: z.date()
+    createdAt: z.date()
 })
 
 type ClientMongoType = z.infer<typeof clientMongoSchema>

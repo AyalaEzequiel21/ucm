@@ -2,9 +2,9 @@ import { DetailsCard } from "@/components/DetailsCard"
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
-import { useGetClientByIdQuery } from "@/redux/api/clientApi"
+import { useGetClientDetailsByIdQuery } from "@/redux/api/clientApi"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
-import { IClient } from "@/utils/interfaces/IClient"
+import { IClientDetails, IPaymentsOfClientDetails, ISalesOfClientDetails } from "@/utils/interfaces/IClient"
 import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import useScreenSize from "@/hooks/useScreenSize"
@@ -16,10 +16,6 @@ import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { MultiTables, TableExtended } from "@/components/MultiTables"
 import { GridColDef } from "@mui/x-data-grid"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
-import { useGetAllClientPaymentsByClientIdQuery } from "@/redux/api/clientPaymentApi"
-import { useGetAllSalesByClientIdQuery } from "@/redux/api/saleApi"
-import { ISale } from "@/utils/interfaces/ISale"
-import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 
 type ClientDetailsProps = object
 
@@ -28,11 +24,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     const {id} = useParams()
     const parsedId = id as string
     const {isMobile} = useScreenSize()
-    const { isLoading, data} = useGetClientByIdQuery(parsedId)
-    const client = data?.data as IClient
+    const { isLoading, data} = useGetClientDetailsByIdQuery(parsedId)
+    const client = data?.data as IClientDetails
     const navigate = useNavigate()
-    const {data: payments, isLoading: loadingPayments} = useGetAllClientPaymentsByClientIdQuery(parsedId)
-    const {data: sales, isLoading: loadingSales} = useGetAllSalesByClientIdQuery(parsedId)
 
     const handleClickSale = (id: string) => {
         navigate(`/sales/sale/${id}`)
@@ -43,45 +37,49 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     }
 
     const  columnsBaseSales: GridColDef[] = [
-        { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return renderButtonPrincipal(value.row._id, getFormatedDate(value.row.createdAt), ()=> handleClickSale(value.row._id))} },
+        { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){
+            if (!value.row) return null; // Evita errores si `value.row` es undefined o null
+            return renderButtonPrincipal(value.row._id, getFormatedDate(value.row.createdAt), () => handleClickSale(value.row._id));
+        } },
         { field: 'total_sale', headerName: 'Total', flex: 0.3, renderCell(value){return getFormatedValue(value.row.total_sale)}},
     ]
 
     const columnsBasePayments: GridColDef[] = [
-        { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return renderButtonPrincipal(value.row._id, getFormatedDate(value.row.createdAt), ()=> handleClickPayment(value.row._id))} },
+        { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){
+            if (!value.row) return null; // Evita errores si `value.row` es undefined o null
+            return renderButtonPrincipal(value.row._id, getFormatedDate(value.row.createdAt), () => handleClickPayment(value.row._id));
+        } },
         { field: 'amount', headerName: 'Total', flex: 0.3, renderCell(value){return getFormatedValue(value.row.amount)}},
     ]
     const columnsTabletPayments: GridColDef[] = [
         { field: 'payment_method', headerName: 'Metodo', flex: 0.5 },
     ]
 
-    const tables: TableExtended<ISale|IClientPayment>[] = [
+    const tables: TableExtended<IPaymentsOfClientDetails|ISalesOfClientDetails>[] = [
         {
             label: 'Pagos',
-            rows: payments?.data || [],
+            rows: client?.payments || [],
             isFilterName: false,
             columnsBase: columnsBasePayments,
             addedColumnsTable: columnsTabletPayments,
-            isLoading: loadingPayments
+            isLoading: isLoading
         },
         {
             label: 'Ventas',
-            rows: sales?.data || [],
+            rows: client?.sales || [],
             isFilterName: false,
             columnsBase: columnsBaseSales,
-            isLoading: loadingSales
+            isLoading: isLoading
         }
     ]
     
     useEffect(()=>{
-        console.log(sales)
+        console.log(data)
     },[data])
 
-    // const 
 
-    if (isLoading) {
-        return <div>Loading...</div>; // O un spinner, o lo que quieras mostrar mientras se cargan los datos.
-    }
+    if (isLoading || !client) return <div>Cargando...</div>
+
     
     return (
         <DetailsLayout title={client.fullname ? client.fullname : 'undefined'} >
@@ -96,13 +94,13 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                     <CustomTextItem isTitle={true}>Balance General</CustomTextItem>
                     <CustomTextItem isTitle={false} tag="Balance actual" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(client.balance)}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Total pagos" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(100000)}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Total compras" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(500000)}</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Total pagos" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(client.totalAmountOfPayments)}</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Total compras" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(client.totalAmountOfSales)}</CustomTextItem>
                 </DetailsCard >
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                     <CustomTextItem isTitle={true}>Historial</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Ultima compra" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(client.createdAt)}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Ultimo pago" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(client.createdAt)}</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Ultima compra" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(client.lastSale !== null ? client.lastSale : '')}</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Ultimo pago" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(client.lastPayment !== null ? client.lastPayment : '')}</CustomTextItem>
                 </DetailsCard>
             </FlexBetween>
             <FlexBetween>

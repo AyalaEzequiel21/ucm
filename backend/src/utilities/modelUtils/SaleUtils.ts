@@ -4,6 +4,8 @@ import { getClientById } from "../../services/ClientService";
 import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
+import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
+import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
 
 
 /////////////////////////
@@ -91,16 +93,25 @@ const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
     }
 }
 
-const getClientSalesForDetails = async (clientId: IdType, session: ClientSession) => {
+const getClientSalesForDetails = async (clientId: IdType) => {
     try {
-        const sales = await SaleModel.find({ client_id: clientId }).session(session) //  FIND CLIENT'S SALES BY CLIENT ID
-            .select('_id client_name total_sale created_at') 
-            .lean() 
+        const sales = await SaleModel.find({ client_id: clientId }) //  FIND CLIENT'S SALES BY CLIENT ID
+            .select('_id total_sale createdAt') 
+            .lean<ISalesOfClientDetails[]>() 
 
         return sales
     } catch (e) {
         throw e
     }
-};
+}
 
-export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails }
+const getClientPaymentOfSale = async (saleId: IdType) => {
+    try {
+        const payment = await getClientPaymentBySaleId(saleId)
+        return payment
+    } catch(e) {
+        throw(e)
+    }
+}
+
+export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale}

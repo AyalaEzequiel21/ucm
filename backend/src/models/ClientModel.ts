@@ -45,7 +45,7 @@ export const clientSchema = new Schema<ClientMongoType>(
             type: Boolean,
             default: true
         }, 
-        created_at: {
+        createdAt: {
             type: Date,
             required: false
         }

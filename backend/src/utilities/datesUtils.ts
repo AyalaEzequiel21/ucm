@@ -24,16 +24,16 @@ const validateDate = (date:string) => {
     return newDate <= actualDate // CHECK THAT NEW DATE DON'T BE LATER THAT ACTUAL DATE
 }
 
-type WithCreatedAt = { created_at: Date | string };
+type WithCreatedAt = { createdAt: Date | string };
 
 const getMostRecentDate = <T extends WithCreatedAt>(items: T[]) : Date | null => {
     if (items.length === 0) {
         return null
     }
     const mostRecentDate = items.reduce((latest, item) => {
-        const itemDate = new Date(item.created_at);
+        const itemDate = new Date(item.createdAt);
         return itemDate > latest ? itemDate : latest;
-    }, new Date(items[0].created_at))
+    }, new Date(items[0].createdAt))
 
     return mostRecentDate;
 }

@@ -1,5 +1,5 @@
 import useScreenSize from "@/hooks/useScreenSize"
-import { Box, useTheme } from "@mui/material"
+import { Box, Typography, useTheme } from "@mui/material"
 import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid"
 
 /**
@@ -57,64 +57,75 @@ const CustomDatGrid = <T,>({
             mt={'10px'}
             height={halfHeight? '50vh': '80vh'}
         >
-            <DataGrid 
-                rows={rows}
-                columns={getColumns()}
-                getRowId={(row) => row._id}
-                loading={isLoading}
-                paginationModel={paginationModel}
-                onPaginationModelChange={onPaginationChange}    
-                initialState={{
-                    pagination: {
-                        paginationModel: (!paginationModel && !onPaginationChange) ? { page: 0, pageSize: 15 } : undefined,
-                    },
-                    sorting: {
-                        sortModel: [{ field: isFilterName && fieldValue ? fieldValue : 'createdAt', sort: 'asc' }],
-                    },
-                    filter: {
-                        filterModel: {
-                            items: [],
+            {rows.length > 0 ? 
+                <DataGrid 
+                    rows={rows}
+                    columns={getColumns()}
+                    getRowId={(row) => row._id}
+                    loading={isLoading}
+                    paginationModel={paginationModel}
+                    pageSizeOptions={[15, 30, 50]}
+                    onPaginationModelChange={onPaginationChange}    
+                    initialState={{
+                        pagination: {
+                            paginationModel: (!paginationModel && !onPaginationChange) ? { page: 0, pageSize: 15 } : undefined,
                         },
-                    },
-                }}
-                sx={{
-                    maxWidth: '100%',
-                    border: lightMode? `1px solid ${palette.primary.dark}` : 'none',
-                    '& .MuiDataGrid-columnHeader': {
-                        backgroundColor: lightMode? palette.grey[100] : palette.primary.dark,
-                        color: lightMode? palette.primary.dark : palette.grey[100],
-                        fontSize: '1.1rem',
-                        fontWeight: 'bold',
-                    },
-                    '& .MuiSvgIcon-root': {
-                        color: lightMode? palette.primary.dark : palette.grey[100],
-                    },
-                    '& .MuiDataGrid-cell': {
-                        fontSize: '1rem',
-                        height: '0.9fr',
-                        color: palette.primary.dark ,
-                    },
-                    '& .MuiDataGrid-cell:focus-within': {
-                        outline: 'none',
-                      },
-                    '& .MuiDataGrid-filler': {
-                        height: '0%',
-                        display: 'none'
-                    },
-                    '& .MuiDataGrid-footerContainer': {
-                        backgroundColor: lightMode? palette.grey[100] : palette.primary.dark,
-                        color: lightMode ? palette.primary.dark : palette.grey[100],
-                        '& .MuiTablePagination-root': {
+                        sorting: {
+                            sortModel: [{ field: isFilterName && fieldValue ? fieldValue : 'createdAt', sort: 'asc' }],
+                        },
+                        filter: {
+                            filterModel: {
+                                items: [],
+                            },
+                        },
+                    }}
+                    sx={{
+                        maxWidth: '100%',
+                        border: lightMode? `1px solid ${palette.primary.dark}` : 'none',
+                        '& .MuiDataGrid-columnHeader': {
+                            backgroundColor: lightMode? palette.grey[100] : palette.primary.dark,
                             color: lightMode? palette.primary.dark : palette.grey[100],
+                            fontSize: '1.1rem',
+                            fontWeight: 'bold',
                         },
                         '& .MuiSvgIcon-root': {
+                            color: lightMode? palette.primary.dark : palette.grey[100],
+                        },
+                        '& .MuiDataGrid-cell': {
+                            fontSize: '1rem',
+                            height: '0.9fr',
+                            color: palette.primary.dark ,
+                        },
+                        '& .MuiDataGrid-cell:focus-within': {
+                            outline: 'none',
+                        },
+                        '& .MuiDataGrid-filler': {
+                            height: '0%',
+                            display: 'none'
+                        },
+                        '& .MuiDataGrid-footerContainer': {
+                            backgroundColor: lightMode? palette.grey[100] : palette.primary.dark,
                             color: lightMode ? palette.primary.dark : palette.grey[100],
-                        }
-                    },
+                            '& .MuiTablePagination-root': {
+                                color: lightMode? palette.primary.dark : palette.grey[100],
+                            },
+                            '& .MuiSvgIcon-root': {
+                                color: lightMode ? palette.primary.dark : palette.grey[100],
+                            }
+                        },
 
-                }}
-                rowSelection={false}
-            />
+                    }}
+                    rowSelection={false}
+                /> 
+            :
+                <Box display="flex" justifyContent="center" alignItems="center" height="100%" sx={{backgroundColor: palette.grey[100]}}>
+                    <Typography
+                        variant="h4"
+                        color={lightMode? palette.primary.dark : palette.grey[100]}
+                    >
+                        No se encontraron resultados
+                    </Typography>
+                </Box>}
         </Box>
     )
 }

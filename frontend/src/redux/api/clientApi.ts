@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders";
 import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse";
-import { IClient } from "@/utils/interfaces/IClient";
+import { IClient, IClientDetails } from "@/utils/interfaces/IClient";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // URL BASE DE LA API
@@ -26,8 +26,8 @@ export const clientApi = createApi({
             invalidatesTags: ['Client']
         }),
         // METODO BUSCAR POR ID
-        getClientById: builder.query<ISingularApiResponse<IClient>, string>({
-            query: (id) => `/clients/client/${id}`,
+        getClientDetailsById: builder.query<ISingularApiResponse<IClientDetails>, string>({
+            query: (id) => `/clients/clientDetails/${id}`,
             providesTags: ['Client']
         }),
         // METODO LISTAR TODOS
@@ -38,4 +38,4 @@ export const clientApi = createApi({
     })
 })
 
-export const { useGetClientByIdQuery, useGetAllClientsQuery, useAddClientMutation } = clientApi
+export const { useGetClientDetailsByIdQuery, useGetAllClientsQuery, useAddClientMutation } = clientApi
