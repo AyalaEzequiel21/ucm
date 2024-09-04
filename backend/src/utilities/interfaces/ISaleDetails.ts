@@ -13,10 +13,11 @@ export interface IPaymentOfSale {
 
 export interface ISaleDetails {
     _id: string,
-    client_id: string,
+    client_id?: string,
     client_name: string,
     details: IDetailsOfSale[],
     total_sale: number,
     createdAt: string
-    payment: IPaymentOfSale
+    payment: IPaymentOfSale,
+    totalQuantity: number
 }

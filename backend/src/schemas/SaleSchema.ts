@@ -18,7 +18,8 @@ const newSaleSchema = z.object({
     client_id: validateObjectId().optional(),
     client_name: z.string().min(4).max(15),
     details: z.array(detailSaleSchema),
-    total_sale: validateAmount().optional()
+    total_sale: validateAmount().optional(),
+    createdAt: z.date().optional()
 })
 
 type SaleType = z.infer<typeof newSaleSchema>

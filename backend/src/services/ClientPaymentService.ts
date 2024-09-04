@@ -8,6 +8,7 @@ import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/Payme
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { checkId } from "../utilities/validateObjectId";
 import { IdType } from "../utilities/types/IdType";
+import { IPaymentOfSale } from "../utilities/interfaces/ISaleDetails";
 
 /////////////////////////
 // CLIENT PAYMENT SERVICE
@@ -135,7 +136,7 @@ const getClientPaymentBySaleId = async (saleId: IdType) => {
     checkId(saleId)
     try {
         const paymentFound = await ClientPaymentModel.find({sale_id: saleId})
-        .select('_id amount payment_method').lean() // FIND ALL PAYMENTS BY SALE ID
+        .select('_id amount payment_method').lean<IPaymentOfSale>() // FIND ALL PAYMENTS BY SALE ID
         return paymentFound
     } catch(e) {
         ErrorsPitcher(e)

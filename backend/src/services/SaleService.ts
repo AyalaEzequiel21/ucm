@@ -4,6 +4,7 @@ import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
+import { IDetailsOfSale, IPaymentOfSale, ISaleDetails } from "../utilities/interfaces/ISaleDetails";
 import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
@@ -111,10 +112,15 @@ const getSaleForDetailsById = async (saleId: IdType) => {
             throw new ResourceNotFoundError('Venta')
         }
         const paymentOfSale = await getClientPaymentOfSale(saleId)
-        if(paymentOfSale) {
-            const saleWithPayment = {
+        if(paymentOfSale && sale.client_id && sale.createdAt && sale.total_sale) {
+            const saleWithPayment: ISaleDetails = {
                 ...sale,
-                payment: paymentOfSale
+                _id: sale._id.toString(),
+                payment: paymentOfSale,
+                details: sale.details as IDetailsOfSale[],
+                total_sale: sale.total_sale | 0,
+                totalQuantity: sale.details.reduce((total, payment) => total + payment.quantity, 0),
+                createdAt: sale.createdAt.toString()
             }
             return saleWithPayment
         }

@@ -33,6 +33,7 @@ export interface ISaleDetails {
     client_name: string,
     details: IDetailsOfSale[],
     total_sale: number,
-    createdAt: string
-    payment: IPaymentOfSale
+    createdAt: string,
+    payment: IPaymentOfSale,
+    totalQuantity: number
 }
