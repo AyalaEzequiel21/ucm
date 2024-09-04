@@ -111,9 +111,9 @@ const getSaleForDetailsById = async (saleId: IdType) => {
         if(!sale) { // CHECK IF EXISTS THE SALE OR RUN AN EXCEPTION
             throw new ResourceNotFoundError('Venta')
         }
-        const paymentOfSale = await getClientPaymentOfSale(saleId)
-        if(paymentOfSale && sale.client_id && sale.createdAt && sale.total_sale) {
-            const saleWithPayment: ISaleDetails = {
+        const paymentOfSale = await getClientPaymentOfSale(saleId) //  GET PAYMENT OF SALE
+        if(paymentOfSale && sale.client_id && sale.createdAt && sale.total_sale) { // CHECK IF PAYMENT OF SALE EXISTS
+            const saleWithPayment: ISaleDetails = {  // CREATE A SALE DETAILS OBJECT WITH ALL PROPERTIES
                 ...sale,
                 _id: sale._id.toString(),
                 payment: paymentOfSale,

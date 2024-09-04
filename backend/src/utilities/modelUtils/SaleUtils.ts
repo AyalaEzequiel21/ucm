@@ -107,7 +107,7 @@ const getClientSalesForDetails = async (clientId: IdType) => {
 
 const getClientPaymentOfSale = async (saleId: IdType) => {
     try {
-        const payment = await getClientPaymentBySaleId(saleId)
+        const payment = await getClientPaymentBySaleId(saleId) // FIND CLIENT'S PAYMENT BY SALE ID
         return payment
     } catch(e) {
         throw(e)

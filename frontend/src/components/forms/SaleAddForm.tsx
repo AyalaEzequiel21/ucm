@@ -8,7 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomAutocomplete } from "../CustomAutocomplete";
-import { Stack, Typography, useTheme } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography, useTheme } from "@mui/material";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { SaleDetailsForm } from "./SaleDetailsForm";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
@@ -104,6 +104,16 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                         totalAdd={detailsSale.length > 0 ? detailsSale.reduce((total, detail) => total + (detail.quantity * detail.price), 0): undefined}
                     />
                 </Stack>
+                <Box width={'1'}>
+                    <Accordion>
+                        <AccordionSummary>
+                            <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Agregar Pago</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            
+                        </AccordionDetails>
+                    </Accordion>
+                </Box>
             </CustomFormLayout>
         </FormProvider>
     )
