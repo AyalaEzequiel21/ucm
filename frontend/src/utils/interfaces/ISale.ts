@@ -1,3 +1,5 @@
+import { PaymentMethodType } from "../types/PaymentMethodType"
+
 export interface ISaleDetails {
     product_id: string,
     product_name: string,
@@ -22,9 +24,9 @@ export interface IDetailsOfSale {
 }
 
 export interface IPaymentOfSale {
-    _id: string,
+    // _id: string,
     amount: number,
-    payment_method: string
+    payment_method: PaymentMethodType
 }
 
 export interface ISaleDetails {

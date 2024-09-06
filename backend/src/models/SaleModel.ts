@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { DetailSaleType, SaleType } from "../schemas/SaleSchema";
+import { clientPaymentSchema } from "./ClientPaymentModel";
 
 const detailSaleSchema = new Schema<DetailSaleType>(
     {
@@ -56,6 +57,10 @@ export const saleSchema = new Schema<SaleType>(
         total_sale: {
             type: Number,
             min: 0.1
+        },
+        payment: {
+            type: clientPaymentSchema, 
+            required: false
         },
         createdAt: {
             type: Date,

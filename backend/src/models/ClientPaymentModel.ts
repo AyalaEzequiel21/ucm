@@ -14,6 +14,9 @@ export const clientPaymentSchema = new Schema<ClientPaymentType>(
             type: String,
         },
         amount: {
+            type: Number,
+            required: true,
+            min: 0.1
 
         },
         payment_method: {

@@ -15,6 +15,8 @@ import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { DetailsFormLayout } from "./DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { CategoryType } from "@/utils/types/CategoryType";
+import { CustomInput } from "../CustomInput";
+import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions.";
 
 const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
 
@@ -28,6 +30,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         defaultValues: {
             client_id: '',
             client_name: '',
+            payment: null
         }
     })
     const { handleSubmit, watch } = methods
@@ -48,9 +51,19 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
     }
 
     const onSubmit = async(dataForm: IOnlySale) => {
+        console.log(dataForm);
+        
         if(dataForm.client_id && detailsSale.length > 0){
-            const data: INewSaleValues = {...dataForm, details: detailsSale }
-            console.log(data)
+            const data: INewSaleValues = {...dataForm, details: detailsSale, payment: undefined }
+            if(dataForm.payment){
+                data.payment = {
+                    amount: dataForm.payment.amount,
+                    payment_method: dataForm.payment.payment_method,
+                    client_name: dataForm.client_name
+                }
+            }
+            console.log(data);
+            
             try {
                 await addSale(data).unwrap();
                 confirmAlertSucess('Venta registrada');
@@ -105,12 +118,31 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                     />
                 </Stack>
                 <Box width={'1'}>
-                    <Accordion>
+                    <Accordion sx={{backgroundColor: palette.grey[200]}}>
                         <AccordionSummary>
                             <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Agregar Pago</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            
+                            <CustomInput
+                                type="number"
+                                label="Total del pago"
+                                isSelect={false}
+                                value="payment.amount"
+                                msgError="Por favor ingrese un monto mayor a 0"
+                                error={!!errorMessage}
+                                helperText={errorMessage}
+                                // min={1}
+                            />
+                            <CustomInput
+                                type="text"
+                                label="Metodo de Pago"
+                                isSelect={true}
+                                selectOptions={paymentMethodOptions}
+                                value="payment.payment_method"
+                                msgError="Por favor ingrese el metodo de pago"
+                                error={!!errorMessage}
+                                helperText={errorMessage}
+                            />
                         </AccordionDetails>
                     </Accordion>
                 </Box>

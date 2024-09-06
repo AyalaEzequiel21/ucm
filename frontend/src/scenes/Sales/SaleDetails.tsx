@@ -30,7 +30,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
     const columns: GridColDef[] = [
         { field: 'product_name', headerName: 'Producto', flex: 0.5 },
         { field: 'price', headerName: 'Precio', flex: 0.3, renderCell(value){return getFormatedValue(value.row.price)}},
-        { field: 'quantity', headerName: 'Cantidad', flex: 0.5 },
+        { field: 'quantity', headerName: 'Cantidad', flex: 0.5, renderCell(value){return `${value.row.quantity} kg`} },
         { field: 'total', headerName: 'Total', flex: 0.3, renderCell: (value) => {
             const total = value.row.quantity * value.row.price;
             return getFormatedValue(total)

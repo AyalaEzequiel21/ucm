@@ -5,7 +5,8 @@ import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
-import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
+import { createClientPayment, getClientPaymentBySaleId } from "../../services/ClientPaymentService";
+import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 
 
 /////////////////////////
@@ -114,4 +115,13 @@ const getClientPaymentOfSale = async (saleId: IdType) => {
     }
 }
 
-export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale}
+const processClientPayment = async (clientPayment: ClientPaymentType) => {
+    try{
+        const newCLientPayment = await createClientPayment(clientPayment) // CREATE CLIENT PAYMENT
+        return newCLientPayment
+    } catch(e) {
+        throw e
+    }
+}
+
+export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment}

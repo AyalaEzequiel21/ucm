@@ -7,6 +7,7 @@ import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { ISale } from "@/utils/interfaces/ISale"
 import { GridColDef } from "@mui/x-data-grid"
+import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
@@ -41,6 +42,10 @@ const Sales: React.FC<SalesProps> = () => {
     const columnsDesktop: GridColDef<ISale>[] = [
         // { field: 'createdAt', headerName: 'Registro', flex: 0.5 },
     ]
+
+    useEffect(() => {
+        console.log(sales)
+    }, [sales])
     return(
         <SceneContainer>
             <Header title="VENTAS" subtitle="Lista de ventas" type="basic"/>

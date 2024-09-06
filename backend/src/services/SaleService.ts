@@ -5,7 +5,8 @@ import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { IDetailsOfSale, IPaymentOfSale, ISaleDetails } from "../utilities/interfaces/ISaleDetails";
-import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
+import { addPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
+import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, processClientPayment, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
 import { getClientById } from "./ClientService";
@@ -34,7 +35,11 @@ const createSale = async (sale: SaleType) => {
         }], {session})
 
         const { _id, total_sale } = saleCreated[0] // GET THE ID AND TOTAL_SALE FROM THE SALE CREATED
-        console.log(total_sale)
+        if(sale.payment){
+            const payment = await processClientPayment(sale.payment)
+            console.log(payment)
+        }
+        console.log(saleCreated)
         await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
         return saleCreated[0]

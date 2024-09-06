@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { validateAmount } from "../utilities/validateIsAmount";
 import { validateObjectId } from "../utilities/validateObjectId";
+import { newClientPaymentSchema } from "./ClientPaymentSchema";
 
 // DETAIL SALE
 const detailSaleSchema = z.object({
@@ -19,7 +20,8 @@ const newSaleSchema = z.object({
     client_name: z.string().min(4).max(15),
     details: z.array(detailSaleSchema),
     total_sale: validateAmount().optional(),
-    createdAt: z.date().optional()
+    createdAt: z.date().optional(),
+    payment: newClientPaymentSchema.optional()
 })
 
 type SaleType = z.infer<typeof newSaleSchema>
