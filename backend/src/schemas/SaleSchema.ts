@@ -21,7 +21,7 @@ const newSaleSchema = z.object({
     details: z.array(detailSaleSchema),
     total_sale: validateAmount().optional(),
     createdAt: z.date().optional(),
-    payment: newClientPaymentSchema.optional()
+    payment: newClientPaymentSchema.optional().nullable()
 })
 
 type SaleType = z.infer<typeof newSaleSchema>

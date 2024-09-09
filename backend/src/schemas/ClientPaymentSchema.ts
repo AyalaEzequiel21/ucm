@@ -10,7 +10,7 @@ const newClientPaymentSchema = z.object({
     amount: validateAmount(),
     payment_method: PaymentMethod,
     sale_id: validateObjectId().optional(),
-    report_id: validateObjectId().optional()
+    report_id: validateObjectId().optional().nullable()
 })
 
 type ClientPaymentType = z.infer<typeof newClientPaymentSchema>

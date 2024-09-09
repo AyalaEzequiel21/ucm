@@ -1,7 +1,7 @@
 import { useAddSaleMutation } from "@/redux/api/saleApi";
 import { RootState } from "@/redux/store";
 import { ISaleDetails } from "@/utils/interfaces/ISale";
-import { INewSaleValues, IOnlySale } from "@/utils/interfaces/registerModels/INewSale";
+import { INewSaleValues, IOnlySale } from "@/utils/interfaces/registerModels/INewSaleValues";
 import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -30,7 +30,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         defaultValues: {
             client_id: '',
             client_name: '',
-            payment: null
+            payment: undefined
         }
     })
     const { handleSubmit, watch } = methods
@@ -50,20 +50,26 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         setDetailsSale(prev => prev.filter((_, i) => i !== index));
     }
 
-    const onSubmit = async(dataForm: IOnlySale) => {
-        console.log(dataForm);
-        
+    const onSubmit = async(dataForm: IOnlySale) => {        
         if(dataForm.client_id && detailsSale.length > 0){
-            const data: INewSaleValues = {...dataForm, details: detailsSale, payment: undefined }
-            if(dataForm.payment){
-                data.payment = {
-                    amount: dataForm.payment.amount,
-                    payment_method: dataForm.payment.payment_method,
-                    client_name: dataForm.client_name
-                }
+            const data: INewSaleValues = {
+                ...dataForm, 
+                details: detailsSale, 
+                payment: dataForm.payment || undefined 
             }
-            console.log(data);
-            
+            if(dataForm.payment){
+                const { amount, payment_method } = dataForm.payment
+                if(!amount || !payment_method){
+                    setErrorMessage('Por favor complete todos los campos')
+                    return  
+                }
+                data.payment = {
+                    amount: Number(amount),
+                    payment_method,
+                    client_name: dataForm.client_name,
+                    client_id: dataForm.client_id
+                }
+            }            
             try {
                 await addSale(data).unwrap();
                 confirmAlertSucess('Venta registrada');
@@ -117,32 +123,33 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                         totalAdd={detailsSale.length > 0 ? detailsSale.reduce((total, detail) => total + (detail.quantity * detail.price), 0): undefined}
                     />
                 </Stack>
-                <Box width={'1'}>
+                <Box width={'100%'}>
                     <Accordion sx={{backgroundColor: palette.grey[200]}}>
                         <AccordionSummary>
                             <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Agregar Pago</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <CustomInput
-                                type="number"
-                                label="Total del pago"
-                                isSelect={false}
-                                value="payment.amount"
-                                msgError="Por favor ingrese un monto mayor a 0"
-                                error={!!errorMessage}
-                                helperText={errorMessage}
-                                // min={1}
-                            />
-                            <CustomInput
-                                type="text"
-                                label="Metodo de Pago"
-                                isSelect={true}
-                                selectOptions={paymentMethodOptions}
-                                value="payment.payment_method"
-                                msgError="Por favor ingrese el metodo de pago"
-                                error={!!errorMessage}
-                                helperText={errorMessage}
-                            />
+                            <Box gap={1}>
+                                <CustomInput
+                                    type="number"
+                                    label="Total del pago"
+                                    isSelect={false}
+                                    value="payment.amount"
+                                    msgError="Por favor ingrese un monto mayor a 0"
+                                    error={!!errorMessage}
+                                    helperText={errorMessage}
+                                />
+                                <CustomInput
+                                    type="text"
+                                    label="Metodo de Pago"
+                                    isSelect={true}
+                                    selectOptions={paymentMethodOptions}
+                                    value="payment.payment_method"
+                                    msgError="Por favor ingrese el metodo de pago"
+                                    error={!!errorMessage}
+                                    helperText={errorMessage}
+                                />
+                            </Box>
                         </AccordionDetails>
                     </Accordion>
                 </Box>

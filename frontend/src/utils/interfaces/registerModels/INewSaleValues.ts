@@ -1,10 +1,10 @@
 import { IClientPayment } from "../IClientPayment"
-import { IPaymentOfSale, ISaleDetails } from "../ISale"
+import { ISaleDetails } from "../ISale"
 
 export interface IOnlySale {
     client_id: string,
     client_name: string,
-    payment: IPaymentOfSale|null
+    payment?: IClientPayment
 }
 
 export interface INewSaleValues {
@@ -14,3 +14,8 @@ export interface INewSaleValues {
     total_sale?: number,
     payment?: IClientPayment
 }
+
+
+
+//  VERIFICAR BIEN EL TEMA DE LAS INTERFACES, PORQUE NO COINCIDEN Y TAMBIEN CONTROLAR EL FORMULARIO , 
+// PARA QUE FUNCIONE SIN COMPLETAR EL PAGO. Y TAMBEIN LO VISUAL

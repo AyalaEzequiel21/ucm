@@ -3,6 +3,7 @@ export interface IDetailsOfSale {
     product_name: string,
     price: number,
     quantity: number,
+    partial_total?: number
 }
 
 export interface IPaymentOfSale {

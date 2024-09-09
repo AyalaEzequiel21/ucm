@@ -4,8 +4,7 @@ import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
-import { IDetailsOfSale, IPaymentOfSale, ISaleDetails } from "../utilities/interfaces/ISaleDetails";
-import { addPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
+import { IDetailsOfSale, ISaleDetails } from "../utilities/interfaces/ISaleDetails";
 import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, processClientPayment, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
@@ -17,7 +16,7 @@ import { getClientById } from "./ClientService";
 
 // CREATE 
 const createSale = async (sale: SaleType) => {
-    const { client_id, client_name, details } = sale // GET THE DATA FOR CREATE THE SALE
+    const { client_id, client_name, details, payment } = sale // GET THE DATA FOR CREATE THE SALE
     const session = await startSession() // INIT A SESSION 
     if(!client_id || !details || !client_name){
         throw new BadRequestError('Faltan algunos datos necesarios')
@@ -31,7 +30,8 @@ const createSale = async (sale: SaleType) => {
         const saleCreated = await SaleModel.create([{ // REGISTER THE NEW SALE
             client_id: client_id,
             client_name: client_name,
-            details: details
+            details: details,
+            payment: payment
         }], {session})
 
         const { _id, total_sale } = saleCreated[0] // GET THE ID AND TOTAL_SALE FROM THE SALE CREATED
