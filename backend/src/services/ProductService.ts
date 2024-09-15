@@ -5,6 +5,7 @@ import {ProductModel} from "../models";
 import { ProductMongoType, ProductType } from "../schemas/ProductsSchema";
 import { validateIfExists } from "../utilities/validateIfExists";
 import { checkId } from "../utilities/validateObjectId";
+import { IdType } from "../utilities/types/IdType";
 
 /////////////////////////
 // PRODUCT SERVICE
@@ -82,7 +83,7 @@ const getProductsByName = async (productName: string) => {
 }
 
 // FIND BY ID
-const getProductById = async (productId: ObjectId|string) => {
+const getProductById = async (productId: IdType) => {
     checkId(productId)
     try{
         const productFound = await ProductModel.findById(productId).lean() // FIND PRODUCT BY ID
@@ -97,7 +98,7 @@ const getProductById = async (productId: ObjectId|string) => {
 
 // DELETE BY ID
 
-const removeProductById = async (productId: ObjectId|string) => {
+const removeProductById = async (productId: IdType) => {
     try{
         const productDeleted = await ProductModel.findById(productId) // FIND PRODUCT BY ID 
         if(!productDeleted || !productDeleted.is_active) { // IF PRODUCT NOT EXISTS OR HIS PROPERTIE IS_ACTIVE IS FALSE, RUN AN EXCEPTION

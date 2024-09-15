@@ -16,7 +16,7 @@ export interface ISale {
     details: ISaleDetails[],
     total_sale: number,
     createdAt: string,
-    payment?: IClientPayment
+    payment: IClientPayment|null
 
 }
 

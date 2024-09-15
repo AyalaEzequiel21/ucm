@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { UserModel } from "../models";
 import { UserLoginType, UserMongoType, UserType } from "../schemas/AuthSchema";
@@ -7,6 +6,7 @@ import { generateToken } from "../utilities/JwtUtils";
 import { validateIfExists } from "../utilities/validateIfExists";
 import { AuthenticationError, ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { checkId } from "../utilities/validateObjectId";
+import { IdType } from "../utilities/types/IdType";
 
 /////////////////////////
 // AUTH SERVICE
@@ -94,7 +94,7 @@ const getAllUsers = async () => {
 
 // FIND BY ID
 
-const getUserById = async (userId: ObjectId|string) => {
+const getUserById = async (userId: IdType) => {
     checkId(userId)
     try {
         const userSaved = await UserModel.findById(userId).lean() // FIND USER BY ID
@@ -109,7 +109,7 @@ const getUserById = async (userId: ObjectId|string) => {
 
 // DELETE BY ID
 
-const removeUserById = async (userId: ObjectId|string) => {
+const removeUserById = async (userId: IdType) => {
     checkId(userId)
     try {
         const userRemoved = await UserModel.findByIdAndDelete(userId) // DELETE USER BY ID

@@ -54,10 +54,10 @@ const getSuppliersByName = async (supplierName: string) => {
 }
 
 // FIND BY ID
-const getSupplierById = async (supplierId: IdType, session: ClientSession|null = null) => {
+const getSupplierById = async (supplierId: IdType) => {
     checkId(supplierId)
     try{
-        const supplier = await SupplierModel.findById(supplierId).session(session) //  FIND SUPPLIER BY HIS ID
+        const supplier = await SupplierModel.findById(supplierId) //  FIND SUPPLIER BY HIS ID
         if(!supplier) {
             throw new ResourceNotFoundError("Proveedor") //  IF SUPPLIER NOT EXISTS, THEN RUN AN EXCEPTION.
         }

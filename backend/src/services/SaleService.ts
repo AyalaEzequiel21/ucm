@@ -5,7 +5,7 @@ import { SaleModel } from "../models";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { IDetailsOfSale, ISaleDetails } from "../utilities/interfaces/ISaleDetails";
-import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, processClientPayment, removeSaleToClient } from "../utilities/modelUtils/SaleUtils";
+import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, processClientPayment, removeSaleToClient, validateClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
 import { getClientById } from "./ClientService";
@@ -15,7 +15,7 @@ import { getClientById } from "./ClientService";
 ///////////////////////
 
 // CREATE 
-const createSale = async (sale: SaleType) => {
+const createSale = async (sale: SaleType) => {    
     const { client_id, client_name, details, payment } = sale // GET THE DATA FOR CREATE THE SALE
     const session = await startSession() // INIT A SESSION 
     if(!client_id || !details || !client_name){
@@ -23,26 +23,22 @@ const createSale = async (sale: SaleType) => {
     }
     try {
         session.startTransaction() // START A TRANSACTION
-        const client = await getClientById(client_id, session) // FIND THE CLIENT WITH HIS ID
-        if(!client){ // IF CLIENT IS NOT FOUND, RUN AN EXCELTION
-            throw new ResourceNotFoundError('Cliente')
+        const clientExists = await validateClient(client_id) // CHECK THE CLIENT WITH HIS ID
+        if(clientExists){ // IF CLIENT EXISTS THEN CREATED THE SALE
+            const saleCreated = await SaleModel.create([{ // REGISTER THE NEW SALE
+                client_id: client_id,
+                client_name: client_name,
+                details: details,
+                payment: payment
+            }], {session})
+            const { _id, total_sale } = saleCreated[0] // GET THE ID AND TOTAL_SALE FROM THE SALE CREATED
+            if(sale.payment){
+                const payment = await processClientPayment(sale.payment, _id.toString(), session) // PROCESS THE PAYMENT
+            }
+            await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
+            await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+            return saleCreated[0]
         }
-        const saleCreated = await SaleModel.create([{ // REGISTER THE NEW SALE
-            client_id: client_id,
-            client_name: client_name,
-            details: details,
-            payment: payment
-        }], {session})
-
-        const { _id, total_sale } = saleCreated[0] // GET THE ID AND TOTAL_SALE FROM THE SALE CREATED
-        if(sale.payment){
-            const payment = await processClientPayment(sale.payment)
-            console.log(payment)
-        }
-        console.log(saleCreated)
-        await addSaleToClient(client_id, _id.toString(), session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
-        await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
-        return saleCreated[0]
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)

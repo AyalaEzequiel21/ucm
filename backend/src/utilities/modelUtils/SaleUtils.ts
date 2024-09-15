@@ -7,6 +7,7 @@ import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
 import { createClientPayment, getClientPaymentBySaleId } from "../../services/ClientPaymentService";
 import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
+import { processPaymentOfSale } from "./ClientPaymentUtils";
 
 
 /////////////////////////
@@ -15,7 +16,7 @@ import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 
 const addSaleToClient = async (clientId: IdType, saleId: IdType, session: ClientSession) => {
     try {
-        const client = await getClientById(clientId, session) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
+        const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
         if(!client) {
             throw new ResourceNotFoundError('Cliente')
         }
@@ -23,15 +24,12 @@ const addSaleToClient = async (clientId: IdType, saleId: IdType, session: Client
        if(!sale) {
             throw new ResourceNotFoundError('Venta')
        }
-       console.log(sale.total_sale, client.balance, client.sales)
     const saleForClient = {
         ...sale.toObject(),
         _id: sale._id.toString()
     }
     client.sales?.push(saleForClient._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
-    console.log(client.balance)
     client.balance += sale.total_sale || 0 // UPDATE THE CLIENT BALANCE
-    console.log(client.balance)
     await client.save({session})
     } catch(e){
         throw e
@@ -40,7 +38,7 @@ const addSaleToClient = async (clientId: IdType, saleId: IdType, session: Client
 
 const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: ClientSession) => {
     try {
-        const client = await getClientById(clientId, session) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
+        const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
         if(!client) {
             throw new ResourceNotFoundError('Cliente')
         }
@@ -64,7 +62,7 @@ const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: Cli
 
 const addDifferenceToBalanceClient = async (clientId: IdType, difference: number, session: ClientSession) => {
     try {
-        const client = await getClientById(clientId, session) // FIND THE CLIENT 
+        const client = await getClientById(clientId) // FIND THE CLIENT 
         if(!client){
             throw new ResourceNotFoundError('Cliente') // IF NOT EXISTS RUN AN EXCEPTION
         }
@@ -82,7 +80,7 @@ const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
         const deliverySales = [];
         for (const sale of sales) {
             if (sale.client_id) {
-                const client = await getClientById(sale.client_id, undefined);
+                const client = await getClientById(sale.client_id);
                 if (client && client.in_delivery) {
                     deliverySales.push(sale);
                 }
@@ -115,13 +113,18 @@ const getClientPaymentOfSale = async (saleId: IdType) => {
     }
 }
 
-const processClientPayment = async (clientPayment: ClientPaymentType) => {
+const processClientPayment = async (clientPayment: ClientPaymentType, saleID: IdType, session: ClientSession) => {
     try{
-        const newCLientPayment = await createClientPayment(clientPayment) // CREATE CLIENT PAYMENT
+        const newCLientPayment = await processPaymentOfSale(clientPayment, saleID, session) // CREATE CLIENT PAYMENT
         return newCLientPayment
     } catch(e) {
         throw e
     }
 }
 
-export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment}
+const validateClient = async (clientId: IdType) => {
+    const client = await getClientById(clientId)
+    return !!client
+}
+
+export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment, validateClient}

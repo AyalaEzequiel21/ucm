@@ -1,4 +1,3 @@
-import { ClientSession } from "mongoose";
 import { IdType } from "../types/IdType";
 import { getClientSalesForDetails } from "./SaleUtils";
 import { getClientPaymentsForDetails } from "./ClientPaymentUtils";

@@ -122,20 +122,14 @@ const getClientsByCategory = async (category: ClientCategoryType) => {
 }
 
 // FIND BY ID
-const getClientById = async (clientId: IdType, session: ClientSession|undefined) => {
+const getClientById = async (clientId: IdType) => {
     checkId(clientId)
-    const findClientWithOptionalSession = (client: IdType, sess: ClientSession|undefined) => { // FUNCTION TO CHECK IF THE SEARCH IS WITH TRANSACTION OR NOT
-        const query = ClientModel.findById(client)
-        if(sess)  return query.session(sess)
-        return query
-    }
-    try {
-        // const clientFound = await findClientWithOptionalSession(clientId, session).populate(["sales", "client_payments"]).exec() // FIND USER BY ID
-        const clientFound = await findClientWithOptionalSession(clientId, session)
-        if(!clientFound) { // IF USER NOT EXISTS, RUN AN EXCEPTION
+    try{
+        const client = await ClientModel.findById(clientId) // FIND CLIENT BY ID
+        if(!client) { // IF CLIENT NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Usuario')
         }
-        return clientFound
+        return client
     } catch(e) {        
         ErrorsPitcher(e)
     }

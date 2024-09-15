@@ -5,6 +5,7 @@ import { ClientPaymentModel } from "../../models";
 import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
 import { IdType } from "../types/IdType";
 import { IPaymentsOfClientDetails } from "../interfaces/IClientDetails";
+import { ClientPaymentMongoType, ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 
 
 /////////////////////////
@@ -15,7 +16,7 @@ import { IPaymentsOfClientDetails } from "../interfaces/IClientDetails";
 // GET A CLIENT WITH ID
 const getAClientWithId = async (clientId: IdType, session: ClientSession|undefined) => {
     try {
-        const clientFound = await getClientById(clientId, session) //  FIND CLIENT WITH CLIENT SERVICE
+        const clientFound = await getClientById(clientId) //  FIND CLIENT WITH CLIENT SERVICE
         return clientFound
     } catch(e) {
         throw e
@@ -25,7 +26,7 @@ const getAClientWithId = async (clientId: IdType, session: ClientSession|undefin
 // ADD PAYMENT TO CLIENT AND UPDATE THE CLIENT BALANCE
 const addPaymentToClient = async (clientId: IdType, paymentId: IdType, amount: number, session: ClientSession) => {
     try {
-        const client = await getClientById(clientId, session) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
+        const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
         if(!client) {
             throw new ResourceNotFoundError('Cliente')
         }
@@ -50,7 +51,7 @@ const addPaymentToClient = async (clientId: IdType, paymentId: IdType, amount: n
 // REMOVE PAYMENT TO CLIENT AND UPDATE THE BALANCE
 const subtractPaymentToClient = async (paymentId: IdType, clientId: IdType, amount: number, session: ClientSession) => {
     try {
-        const client = await getClientById(clientId, session) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
+        const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
         if(!client) {
             throw new ResourceNotFoundError('Cliente')
         }
@@ -74,7 +75,7 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
         throw new BadRequestError('Algunos datos faltan o son invalidos')
     }
     try {
-        const client = await getClientById(payment.client_id, session)  // VERIFY IF CLIENT EXISTS OR RUN AN EXCEPTION
+        const client = await getClientById(payment.client_id)  // VERIFY IF CLIENT EXISTS OR RUN AN EXCEPTION
         if(!client) { 
             throw new ResourceNotFoundError('Cliente')
         }
@@ -100,6 +101,37 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
     }
 }
 
+const addNewPaymentToClient = async (payment: ClientPaymentMongoType, clientId: IdType, session: ClientSession) => {
+    try{
+        const client = await getClientById(clientId) // VERIFY IF CLIENT EXISTS OR RUN AN EXCEPTION
+        if(!client) {
+            throw new ResourceNotFoundError('Cliente')
+        }
+    } catch(e) {
+        throw e
+    }
+}
+
+
+const processPaymentOfSale = async (payment: ClientPaymentType, saleId: IdType, session: ClientSession) => {
+    payment.sale_id = saleId.toString()
+    try {
+        const paymentCreated: unknown[] = await ClientPaymentModel.create([payment], {session}) // CREATE THE PAYMENT IN DATA BASE
+        if(!paymentCreated || paymentCreated.length !== 1){
+            throw new InternalServerError(`No se pudo crear el pago ${payment.client_name}`) 
+        }
+        const paymentParsed = paymentCreated[0] as ClientPaymentMongoType
+        const { amount, _id, client_id} = paymentParsed // GET THE NECESSARY ATRIBUTES  FOR ADD THE PAYMENT TO THE CLIENT
+        if(!amount || !_id || !client_id){
+            throw new BadRequestError('Faltan algunos datos necesarios')
+        }
+        await addPaymentToClient(client_id,  _id.toString(), amount, session)  //  ADD THE PAYMENT TO CLIENT
+        return paymentCreated[0] // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
+    } catch(e) {
+        throw e
+    }
+}
+
 const getClientPaymentsForDetails = async (clientId: IdType) => {
     try {
         const paymentsFound = await ClientPaymentModel.find({client_id: clientId}) // FIND CLIENT PAYMENT BY ID
@@ -114,4 +146,4 @@ const getClientPaymentsForDetails = async (clientId: IdType) => {
     }
 }
 
-export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment, getClientPaymentsForDetails }
+export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment, processPaymentOfSale, getClientPaymentsForDetails }

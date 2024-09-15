@@ -33,7 +33,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
             payment: undefined
         }
     })
-    const { handleSubmit, watch } = methods
+    const { handleSubmit, watch, formState: {errors} } = methods
     const onAddDetail = (detail: ISaleDetails) => {
         setDetailsSale(prev => {
             const exists = prev.some(item => item.product_id === detail.product_id)
@@ -50,19 +50,21 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         setDetailsSale(prev => prev.filter((_, i) => i !== index));
     }
 
-    const onSubmit = async(dataForm: IOnlySale) => {        
+    const onSubmit = async(dataForm: IOnlySale) => {  
+        console.log(dataForm);
+              
         if(dataForm.client_id && detailsSale.length > 0){
             const data: INewSaleValues = {
                 ...dataForm, 
                 details: detailsSale, 
-                payment: dataForm.payment || undefined 
+                payment: dataForm.payment || null
             }
             if(dataForm.payment){
                 const { amount, payment_method } = dataForm.payment
-                if(!amount || !payment_method){
-                    setErrorMessage('Por favor complete todos los campos')
-                    return  
-                }
+            //     if(!amount || !payment_method){
+            //         setErrorMessage('Por favor complete todos los campos')
+            //         return  
+            //     }
                 data.payment = {
                     amount: Number(amount),
                     payment_method,
@@ -71,6 +73,8 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                 }
             }            
             try {
+                console.log(data, dataForm)
+                
                 await addSale(data).unwrap();
                 confirmAlertSucess('Venta registrada');
                 onCloseModal();
@@ -136,8 +140,8 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                                     isSelect={false}
                                     value="payment.amount"
                                     msgError="Por favor ingrese un monto mayor a 0"
-                                    error={!!errorMessage}
-                                    helperText={errorMessage}
+                                    error={!!errors.payment?.amount}
+                                    helperText={errors.payment?.amount?.message}
                                 />
                                 <CustomInput
                                     type="text"
@@ -146,8 +150,8 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                                     selectOptions={paymentMethodOptions}
                                     value="payment.payment_method"
                                     msgError="Por favor ingrese el metodo de pago"
-                                    error={!!errorMessage}
-                                    helperText={errorMessage}
+                                    error={!!errors.payment?.payment_method}
+                                    helperText={errors.payment?.payment_method?.message}
                                 />
                             </Box>
                         </AccordionDetails>
