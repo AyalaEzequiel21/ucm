@@ -127,7 +127,7 @@ const getClientById = async (clientId: IdType) => {
     try{
         const client = await ClientModel.findById(clientId) // FIND CLIENT BY ID
         if(!client) { // IF CLIENT NOT EXISTS, RUN AN EXCEPTION
-            throw new ResourceNotFoundError('Usuario')
+            throw new ResourceNotFoundError('Cliente')
         }
         return client
     } catch(e) {        

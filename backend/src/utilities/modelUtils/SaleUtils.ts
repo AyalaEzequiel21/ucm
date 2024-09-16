@@ -5,7 +5,7 @@ import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
-import { createClientPayment, getClientPaymentBySaleId } from "../../services/ClientPaymentService";
+import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
 import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 import { processPaymentOfSale } from "./ClientPaymentUtils";
 
@@ -14,47 +14,27 @@ import { processPaymentOfSale } from "./ClientPaymentUtils";
 // SALE UTILS
 /////////////////////////
 
-const addSaleToClient = async (clientId: IdType, saleId: IdType, session: ClientSession) => {
+const addSaleToClient = async (clientId: IdType, sale: SaleMongoType, session: ClientSession) => {
     try {
         const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
-        if(!client) {
-            throw new ResourceNotFoundError('Cliente')
+        if(client) {
+            client.sales?.push(sale._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+            client.balance += sale.total_sale || 0 // UPDATE THE CLIENT BALANCE
+            await client.save({session})
         }
-       const sale = await SaleModel.findById(saleId).session(session)// FIND CLIENT PAYMENT WITH SESSION, CHECK IF EXISTS OR RUN AN EXCEPTION
-       if(!sale) {
-            throw new ResourceNotFoundError('Venta')
-       }
-    const saleForClient = {
-        ...sale.toObject(),
-        _id: sale._id.toString()
-    }
-    client.sales?.push(saleForClient._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
-    client.balance += sale.total_sale || 0 // UPDATE THE CLIENT BALANCE
-    await client.save({session})
     } catch(e){
         throw e
     }
 }
 
-const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: ClientSession) => {
+const removeSalefromClient = async (clientId: IdType, saleId: IdType, totalSale: number, session: ClientSession) => {
     try {
-        const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
-        if(!client) {
-            throw new ResourceNotFoundError('Cliente')
+        const client = await getClientById(clientId) // FIND CLIENT WITH CLIENT SERVICE, CHECK IF EXISTS ASND UPDATE IT
+        if(client && client.sales && client.balance) {
+            client.sales = client.sales.filter(sale => sale != saleId) // SUBTRACT SALE TO CLIENT LIST OF SALES
+            client.balance -= totalSale // UPDATE THE CLIENT BALANCE
+            await client.save({session})        
         }
-       const sale = await SaleModel.findById(saleId).session(session)// FIND CLIENT PAYMENT WITH SESSION, CHECK IF EXISTS OR RUN AN EXCEPTION
-       if(!sale) {
-            throw new ResourceNotFoundError('Venta')
-       }
-       if(client.sales && client.balance && sale.total_sale !== undefined) {
-            const saleForClient = {
-                ...sale.toObject(),
-                _id: sale._id.toString()
-            }
-            client.sales = client.sales.filter(sale => sale != saleForClient._id) // SUBTRACT SALE TO CLIENT LIST OF SALES
-            client.balance -= sale.total_sale // UPDATE THE CLIENT BALANCE
-            await client.save({session})
-       }
     } catch(e){
         throw e
     }
@@ -63,13 +43,10 @@ const removeSaleToClient = async (clientId: IdType, saleId: IdType, session: Cli
 const addDifferenceToBalanceClient = async (clientId: IdType, difference: number, session: ClientSession) => {
     try {
         const client = await getClientById(clientId) // FIND THE CLIENT 
-        if(!client){
-            throw new ResourceNotFoundError('Cliente') // IF NOT EXISTS RUN AN EXCEPTION
-        }
-        if(client.balance){ // UPDATE THE CLIENT BALANCE, ADD THE DIFFERENCE
+        if(client){
             client.balance += difference
+            await client.save({session}) // SAVE THE CLIENT UPDATED
         }
-        await client.save({session}) // SAVE THE CLIENT UPDATED
     } catch(e){
         throw e
     }
@@ -122,9 +99,4 @@ const processClientPayment = async (clientPayment: ClientPaymentType, saleID: Id
     }
 }
 
-const validateClient = async (clientId: IdType) => {
-    const client = await getClientById(clientId)
-    return !!client
-}
-
-export { addSaleToClient, removeSaleToClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment, validateClient}
+export { addSaleToClient, removeSalefromClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment}

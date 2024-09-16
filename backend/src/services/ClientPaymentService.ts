@@ -1,14 +1,15 @@
-    import { startSession } from "../config/startSession";
+import { startSession } from "../config/startSession";
 import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import {ClientPaymentModel} from "../models";
-import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
+import { ClientPaymentMongoType, ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { getAClientWithId, addPaymentToClient, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { checkId } from "../utilities/validateObjectId";
 import { IdType } from "../utilities/types/IdType";
 import { IPaymentOfSale } from "../utilities/interfaces/ISaleDetails";
+import { validateClient } from "../utilities/modelUtils/ClientUtils";
 
 /////////////////////////
 // CLIENT PAYMENT SERVICE
@@ -23,15 +24,14 @@ const createClientPayment = async (clientPayment: ClientPaymentType) => {
     }
     try {
         session.startTransaction() // INIT TRANSACTIONS
-        const client = await getAClientWithId(client_id, session) // FIND CLIENTS PAYMENT
-        if(!client) { // IF CLIENT NOT EXISTS RUN AN EXCEPTION
-            throw new ResourceNotFoundError('Cliente')
+        const clientExists = await validateClient(client_id) // FIND CLIENTS PAYMENT
+        if(clientExists) { // IF CLIENT NOT EXISTS RUN AN EXCEPTION
+            const paymentCreated: unknown[] = await ClientPaymentModel.create([clientPayment], {session: session}) // CREATE THE PAYMENT IN THE SESSION
+            const paymentParsed = paymentCreated[0] as ClientPaymentMongoType
+            await addPaymentToClient(client_id, paymentParsed, session) //  ADD PAYMENT TO CLIENT AND UPDATE THE BALANCE
+            await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+            return paymentCreated[0]
         }
-        const paymentCreated = await ClientPaymentModel.create([clientPayment], {session: session}) // CREATE THE PAYMENT IN THE SESSION
-        const paymentId = paymentCreated[0]._id // GET THE ID OK PAYMENT CREATED
-        await addPaymentToClient(client_id, paymentId.toString(), amount, session) //  ADD PAYMENT TO CLIENT AND UPDATE THE BALANCE
-        await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
-        return paymentCreated[0]
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
@@ -51,12 +51,11 @@ const removeClientPayment = async (clientPaymentId: IdType) => {
             throw new ResourceNotFoundError('Pago')
         }
         const {_id, client_id, amount } = payment // GET THE PROPERTIES NECESSARY
-        if(!client_id || !amount || !_id) { // CHECK THAT ALL THE NECESSARY PARAMETERS ARE EXIST, OR RUN AN EXCEPTION
-            throw new BadRequestError("Faltan datos necesarios")
+        if(client_id && amount && _id) { // CHECK THAT ALL THE NECESSARY PARAMETERS ARE EXIST, OR RUN AN EXCEPTION
+            await subtractPaymentToClient(_id.toString(), client_id, amount, session) // SUBTRACT PAYMENT TO CLIENT AND UPDATE THE BALACE
+            await payment.deleteOne({session}) // DELETE THE PAYMENT
+            await session.commitTransaction() // COMFIRM THE TRANSACTIONS
         }
-        await subtractPaymentToClient(_id.toString(), client_id, amount, session) // SUBTRACT PAYMENT TO CLIENT AND UPDATE THE BALACE
-        await ClientPaymentModel.findByIdAndDelete(clientPaymentId, { session: session }) // DELETE THE PAYMENT
-        await session.commitTransaction() // COMFIRM THE TRANSACTIONS
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
@@ -93,12 +92,11 @@ const getAllClientsPayments = async () => {
 const getPaymentsByClientId = async (clientId: IdType) => {
     checkId(clientId)
     try {
-        const client = await getAClientWithId(clientId, undefined) // CHECK IF EXISTS AN USER WITH SAME ID
-        if(!client) {
-            throw new ResourceNotFoundError('Cliente')  // IF NOT EXISTS THE CLIENT, RUN AN EXCEPTION
+        const client = await getAClientWithId(clientId) // CHECK IF EXISTS AN USER WITH SAME ID
+        if(client) {
+            const paymentsOfClient = await ClientPaymentModel.find({client_id: clientId}).lean() // FIND ALL PAYMENTS FROM A CLIENT BY THE CLIENTID
+            return paymentsOfClient
         }
-        const paymentsOfClient = await ClientPaymentModel.find({client_id: clientId}).lean() // FIND ALL PAYMENTS FROM A CLIENT BY THE CLIENTID
-        return paymentsOfClient
     } catch(e) {
         ErrorsPitcher(e)
     }

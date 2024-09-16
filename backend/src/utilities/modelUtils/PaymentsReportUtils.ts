@@ -24,7 +24,7 @@ const processPaymentsOfReport = async (payments: PaymentDtoType[], reportId: IdT
     const paymentsId: string[] = []
     try {
         for(const paymentDto of payments) {
-            const newPayment = await processOnePayment(paymentDto, reportId, undefined, session)
+            const newPayment = await processOnePayment(paymentDto, reportId , session)
             if(newPayment){
                paymentsId.push(newPayment)
            }

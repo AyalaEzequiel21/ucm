@@ -112,7 +112,7 @@ import { IdType } from "../utilities/types/IdType";
     const session = await startSession() // INIT THE SESSION
     try {
         session.startTransaction() // INIT TRANSACTIONS
-        const reportSaved = await PaymentsReportModel.findById(paymentsReportId).session(session) // FIND THE REPORT BY HIS ID
+        const reportSaved = await PaymentsReportModel.findById(paymentsReportId) // FIND THE REPORT BY HIS ID
         if(!reportSaved || reportSaved.report_status === 'aprobado') { // IF NOT EXISTS OR HIS STATUS IS APROBADO RUN AN EXCEPTIONS
             throw new ResourceNotFoundError('Reporte de pagos')
         }

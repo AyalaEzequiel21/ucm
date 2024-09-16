@@ -2,6 +2,7 @@ import { IdType } from "../types/IdType";
 import { getClientSalesForDetails } from "./SaleUtils";
 import { getClientPaymentsForDetails } from "./ClientPaymentUtils";
 import { IPaymentsOfClientDetails, ISalesOfClientDetails } from "../interfaces/IClientDetails";
+import { getClientById } from "../../services/ClientService";
 
 /////////////////////////
 // CLIENT UTILS
@@ -18,4 +19,9 @@ const getSalesAndPaymentOfClientById = async (clientId: IdType) => {
     }
 }
 
-export { getSalesAndPaymentOfClientById }
+const validateClient = async (clientId: IdType) => {
+    const client = await getClientById(clientId)
+    return !!client
+}
+
+export { getSalesAndPaymentOfClientById, validateClient }
