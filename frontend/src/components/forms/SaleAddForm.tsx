@@ -137,6 +137,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                                 <CustomInput
                                     type="number"
                                     label="Total del pago"
+                                    min={0}
                                     isSelect={false}
                                     value="payment.amount"
                                     msgError="Por favor ingrese un monto mayor a 0"

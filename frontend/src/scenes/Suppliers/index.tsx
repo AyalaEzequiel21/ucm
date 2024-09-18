@@ -2,6 +2,7 @@ import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
 import { RootState } from "@/redux/store"
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
@@ -33,7 +34,7 @@ const Suppliers: React.FC<SuppliersProps> = () => {
 
     const columnsTablet: GridColDef<ISupplier>[] = [
         { field: 'phone', headerName: 'Telefono', flex: 0.5 },
-        { field: 'primeProduct', headerName: 'Producto', flex: 0.5 },
+        { field: 'primeProduct', headerName: 'Producto', flex: 0.5, renderCell(value){return getCapitalizeString(value.row.primeProduct)} },
     ] 
     const columnsDesktop: GridColDef<ISupplier>[] = [
         { field: 'createdAt', headerName: 'Registro', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)} },

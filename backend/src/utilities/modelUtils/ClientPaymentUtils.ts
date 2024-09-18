@@ -29,7 +29,10 @@ const addPaymentToClient = async (clientId: IdType, payment: ClientPaymentMongoT
         const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
        if(client && client.payments && client.balance) {
             client.payments.push(payment._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+            console.log(client.balance);
             client.balance -= payment.amount // UPDATE THE CLIENT BALANCE
+            console.log(client.balance);
+            
             await client.save({session})
        }
     } catch(e){
@@ -93,11 +96,10 @@ const processPaymentOfSale = async (payment: ClientPaymentType, saleId: IdType, 
         }
         const paymentParsed = paymentCreated[0] as ClientPaymentMongoType
         const { amount, _id, client_id} = paymentParsed // GET THE NECESSARY ATRIBUTES  FOR ADD THE PAYMENT TO THE CLIENT
-        if(!amount || !_id || !client_id){
-            throw new BadRequestError('Faltan algunos datos necesarios')
+        if(amount && _id && client_id){
+            await addPaymentToClient(client_id,  paymentParsed, session)  //  ADD THE PAYMENT TO CLIENT
+            return paymentParsed // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
         }
-        await addPaymentToClient(client_id,  paymentParsed, session)  //  ADD THE PAYMENT TO CLIENT
-        return paymentParsed // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
     } catch(e) {
         throw e
     }

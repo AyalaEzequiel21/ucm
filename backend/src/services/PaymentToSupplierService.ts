@@ -2,9 +2,10 @@ import { startSession } from "../config/startSession";
 import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { PaymentToSupplierModel } from "../models";
-import { PaymentToSupplierType } from "../schemas/PaymentToSupplierSchema";
+import { PaymentToSupplierMongoType, PaymentToSupplierType } from "../schemas/PaymentToSupplierSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { addPaymentToSupplier, subtractPaymentToSupplier } from "../utilities/modelUtils/PaymentToSupplierUtils";
+import { validateSupplier } from "../utilities/modelUtils/PurchaseUtils";
 import { IdType } from "../utilities/types/IdType";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { checkId } from "../utilities/validateObjectId";
@@ -23,15 +24,14 @@ const createPaymentToSupplier = async (paymentToSupplier: PaymentToSupplierType)
     }
     try {
         session.startTransaction() // INIT TRANSACTIONS
-        const supplier = await getSupplierById(supplier_id, session) // FIND THE SUPPLIER WITH THIS ID
-        if(!supplier) { // IF SUPPLIER NOT EXISTS RUN AN EXCEPTION
-            throw new ResourceNotFoundError('Proveedor')
+        const supplierExists = await validateSupplier(supplier_id) // FIND THE SUPPLIER WITH THIS ID
+        if(supplierExists) { // IF SUPPLIER EXISTS THEN CREATE THE PAYMENT
+            const paymentSupplierCreated: unknown[] = await PaymentToSupplierModel.create([paymentToSupplier], {session}) // CREATE THE NEW PAYMENT TO SUPPLIER
+            const PaymentSupplierParsed = paymentSupplierCreated[0] as PaymentToSupplierMongoType
+            await addPaymentToSupplier(supplier_id, PaymentSupplierParsed, session) //  ADD THE PAYMENT TO SUPPLIER AND UPDATE HIS BALANCE
+            await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+            return PaymentSupplierParsed
         }
-        const paymentSupplierCreated = await PaymentToSupplierModel.create([paymentToSupplier], {session}) // CREATE THE NEW PAYMENT TO SUPPLIER
-        const paymentId = paymentSupplierCreated[0]._id.toString() // GET THE PAYMENT ID AND CONVERT TO STRING
-        await addPaymentToSupplier(supplier_id, paymentId, session) //  ADD THE PAYMENT TO SUPPLIER AND UPDATE HIS BALANCE
-        await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
-        return paymentSupplierCreated[0]
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
@@ -50,12 +50,12 @@ const removePaymentToSupplierById = async (paymentSupplierId: IdType) => {
         if(!paymentSupplier){
             throw new ResourceNotFoundError('Pago a proveedor') // IF THE PAYMENT IS NOT FOUND RUN AN EXCEPTION
         }
-        if(!paymentSupplier.supplier_id){
-            throw new BadRequestError("Faltan datos necesarios")
-        }
-        await subtractPaymentToSupplier(paymentSupplier.supplier_id, paymentSupplierId, session) // SUBTRACT THE PAYMENT AND UPDATE THE BALANCE
+        const {_id, supplier_id, total_payment } = paymentSupplier // GET THE PROPERTIES NECESSARY
+        if(_id && supplier_id && total_payment) { // CHECK THAT ALL THE NECESSARY PARAMETERS ARE EXIST, OR RUN AN EXCEPTION
+        await subtractPaymentToSupplier(supplier_id, paymentSupplierId, total_payment, session) // SUBTRACT THE PAYMENT AND UPDATE THE BALANCE
         await PaymentToSupplierModel.findByIdAndDelete(paymentSupplierId, {session})
         await session.commitTransaction() // COMFIRM THE TRANSACTIONS
+        }
     } catch(e){
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)

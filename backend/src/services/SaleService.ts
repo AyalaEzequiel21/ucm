@@ -23,7 +23,7 @@ const createSale = async (sale: SaleType) => {
     }
     try {
         session.startTransaction() // START A TRANSACTION
-        const clientExists = await validateClient   (client_id) // CHECK THE CLIENT WITH HIS ID
+        const clientExists = await validateClient(client_id) // CHECK THE CLIENT WITH HIS ID
         if(clientExists){ // IF CLIENT EXISTS THEN CREATED THE SALE
             const saleCreated: unknown[] = await SaleModel.create([{ // REGISTER THE NEW SALE
                 client_id: client_id,
