@@ -49,7 +49,7 @@ export const saleSchema = new Schema<SaleType>(
         client_name: {
             type: String, 
             required: true,
-            minlength: 5
+            minlength: 4
         }, 
         details: [
             detailSaleSchema

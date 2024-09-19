@@ -37,7 +37,7 @@ const SaleDetailsForm: React.FC<SaleDetailsProps> = ({onAddDetail, clientCategor
         if (data.product_name && data.quantity > 0 && data.price > 0) {
           const dataProcessed = {...data, quantity: Number(data.quantity), price: Number(data.price)}
           onAddDetail(dataProcessed);
-          reset();
+          reset()
         }
       }
 

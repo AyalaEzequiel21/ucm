@@ -50,6 +50,17 @@ const CustomInput = <T extends FieldValues>({
         }
         return null
     }
+
+    const registerProps = value
+        ? register(value, {
+            required: msgError,
+            minLength: minLength ? {value: minLength, message: `El ${label} debe tener al menos ${minLength} caracteres`} : undefined,
+            maxLength: maxLength ?  {value: maxLength, message: `El ${label} debe tener al menos ${maxLength} caracteres`}: undefined,
+            min: min ? {value: min, message: `El ${label} debe ser mayor a ${min - 1}`} : undefined,
+            max: max ? {value: max, message: `El ${label} debe ser menor a ${max}`} : undefined,
+        })
+        : {}
+
     return (
         <TextField
             fullWidth 
@@ -59,15 +70,7 @@ const CustomInput = <T extends FieldValues>({
             label={label}
             defaultValue={getDefaultValue()}
             color="primary"
-            {...register(value,
-                {
-                required: msgError,
-                minLength: minLength ? {value: minLength, message: `El ${label} debe tener al menos ${minLength} caracteres`} : undefined,
-                maxLength: maxLength ?  {value: maxLength, message: `El ${label} debe tener al menos ${maxLength} caracteres`}: undefined,
-                min: min ? {value: min, message: `El ${label} debe ser mayor a ${min - 1}`} : undefined,
-                max: max ? {value: max, message: `El ${label} debe ser menor a ${max}`} : undefined,
-                }
-            )}
+            {...registerProps}
             error={error}
             helperText={helperText}
             sx={{

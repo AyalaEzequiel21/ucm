@@ -10,3 +10,11 @@ export interface IClientPayment {
     report_id?: string
     createdAt?: string
 }
+
+export interface IClientPaymentForSale{
+    client_name?: string,
+    client_id?: string,
+    amount?: number,
+    payment_method: PaymentMethodType,
+    sale_id?: string
+}

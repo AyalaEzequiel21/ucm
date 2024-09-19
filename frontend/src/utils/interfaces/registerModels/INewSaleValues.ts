@@ -1,10 +1,10 @@
-import { IClientPayment } from "../IClientPayment"
+import { IClientPayment, IClientPaymentForSale } from "../IClientPayment"
 import { ISaleDetails } from "../ISale"
 
 export interface IOnlySale {
     client_id: string,
     client_name: string,
-    payment: IClientPayment|null
+    payment?: IClientPaymentForSale|null
 }
 
 export interface INewSaleValues {

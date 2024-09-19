@@ -1,6 +1,6 @@
 import { useAddSaleMutation } from "@/redux/api/saleApi";
 import { RootState } from "@/redux/store";
-import { ISaleDetails } from "@/utils/interfaces/ISale";
+import { ISale, ISaleDetails } from "@/utils/interfaces/ISale";
 import { INewSaleValues, IOnlySale } from "@/utils/interfaces/registerModels/INewSaleValues";
 import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useEffect, useState } from "react";
@@ -15,8 +15,7 @@ import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { DetailsFormLayout } from "./DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { CategoryType } from "@/utils/types/CategoryType";
-import { CustomInput } from "../CustomInput";
-import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions.";
+import { PaymentInSaleForm } from "./PaymentInSaleForm";
 
 const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
 
@@ -26,11 +25,12 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const [detailsSale, setDetailsSale] = useState<ISaleDetails[]>([])
     const [selectedClientCategory, setSelectedClientCategory] = useState<CategoryType | null>(null)
-    const methods = useForm<IOnlySale>({
+    const [isAddingPayment, setIsAddingPayment] = useState(false)
+    const methods = useForm<ISale>({
         defaultValues: {
-            client_id: '',
             client_name: '',
-            payment: undefined
+            details: [],
+            payment: null
         }
     })
     const { handleSubmit, watch, formState: {errors} } = methods
@@ -57,20 +57,12 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
             const data: INewSaleValues = {
                 ...dataForm, 
                 details: detailsSale, 
-                payment: dataForm.payment || null
-            }
-            if(dataForm.payment){
-                const { amount, payment_method } = dataForm.payment
-            //     if(!amount || !payment_method){
-            //         setErrorMessage('Por favor complete todos los campos')
-            //         return  
-            //     }
-                data.payment = {
-                    amount: Number(amount),
-                    payment_method,
+                payment: (isAddingPayment && dataForm.payment) ? {
                     client_name: dataForm.client_name,
-                    client_id: dataForm.client_id
-                }
+                    client_id: dataForm.client_id,
+                    amount: Number(dataForm.payment?.amount),
+                    payment_method: dataForm.payment?.payment_method
+                } : null
             }            
             try {
                 console.log(data, dataForm)
@@ -100,7 +92,9 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         if(client){
             setSelectedClientCategory(client.category)
         }
-    }, [selectedClientId, clients])
+        console.log(methods.getValues(), isAddingPayment);
+        
+    }, [selectedClientId, clients, isAddingPayment])
 
     return(
         <FormProvider {...methods}>
@@ -128,33 +122,22 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                     />
                 </Stack>
                 <Box width={'100%'}>
-                    <Accordion sx={{backgroundColor: palette.grey[200]}}>
+                    <Accordion 
+                        sx={{backgroundColor: palette.grey[200]}}
+                        onChange={(_, expanded) => {
+                            setIsAddingPayment(expanded);
+                            if (!expanded) {
+                                // Limpiar los valores del pago si el acordeón se cierra
+                                // methods.setValue('payment.amount', 0);
+                                // methods.setValue('payment.payment_method', 'efectivo');
+                            }
+                        }}
+                    >
                         <AccordionSummary>
                             <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Agregar Pago</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Box gap={1}>
-                                <CustomInput
-                                    type="number"
-                                    label="Total del pago"
-                                    min={0}
-                                    isSelect={false}
-                                    value="payment.amount"
-                                    msgError="Por favor ingrese un monto mayor a 0"
-                                    error={!!errors.payment?.amount}
-                                    helperText={errors.payment?.amount?.message}
-                                />
-                                <CustomInput
-                                    type="text"
-                                    label="Metodo de Pago"
-                                    isSelect={true}
-                                    selectOptions={paymentMethodOptions}
-                                    value="payment.payment_method"
-                                    msgError="Por favor ingrese el metodo de pago"
-                                    error={!!errors.payment?.payment_method}
-                                    helperText={errors.payment?.payment_method?.message}
-                                />
-                            </Box>
+                            {isAddingPayment && <PaymentInSaleForm />}
                         </AccordionDetails>
                     </Accordion>
                 </Box>
