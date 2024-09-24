@@ -18,7 +18,7 @@ type ClientPaymentType = z.infer<typeof newClientPaymentSchema>
 // CLIENT PAYMENT MONGO
 
 const clientPaymentMongoSchema = newClientPaymentSchema.extend({
-    _id: validateObjectId(),
+    _id: validateObjectId().optional(),
 })
 
 type ClientPaymentMongoType = z.infer<typeof clientPaymentMongoSchema>

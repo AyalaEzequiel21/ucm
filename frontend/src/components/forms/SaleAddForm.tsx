@@ -33,7 +33,11 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
             payment: null
         }
     })
-    const { handleSubmit, watch, formState: {errors} } = methods
+    const { 
+        handleSubmit, 
+        watch, 
+        // formState: {errors} 
+    } = methods
     const onAddDetail = (detail: ISaleDetails) => {
         setDetailsSale(prev => {
             const exists = prev.some(item => item.product_id === detail.product_id)
@@ -65,12 +69,12 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                 } : null
             }            
             try {
-                console.log(data, dataForm)
+                console.log(data)
                 
                 await addSale(data).unwrap();
                 confirmAlertSucess('Venta registrada');
                 onCloseModal();
-              } catch (error) {
+              } catch (error) {  
                 setErrorMessage(`Error al agregar la venta`)
                 console.log(error)
                 confirmErrorAlert()
@@ -92,7 +96,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         if(client){
             setSelectedClientCategory(client.category)
         }
-        console.log(methods.getValues(), isAddingPayment);
+        // console.log(methods.getValues(), isAddingPayment);
         
     }, [selectedClientId, clients, isAddingPayment])
 

@@ -28,7 +28,7 @@ router.get("/saleDate", filterGetAll(), findSalesByDate)
 router.use(validateUserRole(['admin', 'biller']))
 
 // SALE REGISTER 
-router.post("/register", validateSchemaRequest(newSaleSchema), registerSale)
+router.post("/register", validateSchemaRequest(saleMongoSchema), registerSale)
 // SALE UPDATE
 router.put("/update", validateSchemaRequest(saleMongoSchema), updateSale)
 // SALE DELETE

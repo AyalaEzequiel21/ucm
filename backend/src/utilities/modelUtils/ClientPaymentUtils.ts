@@ -26,16 +26,13 @@ const getAClientWithId = async (clientId: IdType) => {
 // ADD PAYMENT TO CLIENT AND UPDATE THE CLIENT BALANCE
 const addPaymentToClient = async (clientId: IdType, payment: ClientPaymentMongoType, session: ClientSession) => {
     try {
-        const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
-       if(client && client.payments && client.balance) {
+        const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION        
+       if(client && client.payments && client.balance && payment._id) {
             client.payments.push(payment._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
-            console.log(client.balance);
             client.balance -= payment.amount // UPDATE THE CLIENT BALANCE
-            console.log(client.balance);
-            
             await client.save({session})
        }
-    } catch(e){
+    } catch(e){        
         throw e
     }
 }
@@ -87,19 +84,30 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
 }
 
 
-const processPaymentOfSale = async (payment: ClientPaymentType, saleId: IdType, session: ClientSession) => {
-    payment.sale_id = saleId.toString()
+const processPaymentOfSale = async (payment: ClientPaymentMongoType, session: ClientSession) => {
     try {
-        const paymentCreated: unknown[] = await ClientPaymentModel.create([payment], {session}) // CREATE THE PAYMENT IN DATA BASE
-        if(!paymentCreated || paymentCreated.length !== 1){
-            throw new InternalServerError(`No se pudo crear el pago ${payment.client_name}`) 
-        }
+        let paymentCreated: unknown[] = [];
+        const {_id, ...newPayment} = payment
+        console.log('antes de la creacion del pago', payment, newPayment);
+         paymentCreated = await ClientPaymentModel.create([newPayment], {session}) // CREATE THE PAYMENT IN DATA BASE
+        console.log('despues de la creacion del pago');       
         const paymentParsed = paymentCreated[0] as ClientPaymentMongoType
-        const { amount, _id, client_id} = paymentParsed // GET THE NECESSARY ATRIBUTES  FOR ADD THE PAYMENT TO THE CLIENT
-        if(amount && _id && client_id){
+        const { amount, client_id} = paymentParsed // GET THE NECESSARY ATRIBUTES  FOR ADD THE PAYMENT TO THE CLIENT
+        if (!paymentParsed || !paymentParsed.amount || !paymentParsed._id || !paymentParsed.client_id) {
+            throw new InternalServerError(`El pago creado no contiene los atributos necesarios`);
+        }
+        if(amount && client_id){
             await addPaymentToClient(client_id,  paymentParsed, session)  //  ADD THE PAYMENT TO CLIENT
             return paymentParsed // RETURN THE FIRST ELEMENT OF ARRAY, IS THE PAYMENT CREATED
         }
+    } catch(e) {        
+        throw e
+    }
+}
+
+const updateSaleIdOfPayment = async (paymentId: IdType, saleId: IdType) => {
+    try {
+        await ClientPaymentModel.findByIdAndUpdate(paymentId, {sale_id: saleId})
     } catch(e) {
         throw e
     }
@@ -119,4 +127,6 @@ const getClientPaymentsForDetails = async (clientId: IdType) => {
     }
 }
 
-export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment, processPaymentOfSale, getClientPaymentsForDetails }
+export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment, updateSaleIdOfPayment, processPaymentOfSale, getClientPaymentsForDetails }
+
+

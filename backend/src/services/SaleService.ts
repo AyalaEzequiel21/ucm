@@ -17,6 +17,7 @@ import { checkId } from "../utilities/validateObjectId";
 // CREATE 
 const createSale = async (sale: SaleType) => {    
     const { client_id, client_name, details, payment } = sale // GET THE DATA FOR CREATE THE SALE
+    let paymentId = ''
     const session = await startSession() // INIT A SESSION 
     if(!client_id || !details || !client_name){
         throw new BadRequestError('Faltan algunos datos necesarios')
@@ -30,17 +31,22 @@ const createSale = async (sale: SaleType) => {
                 client_name: client_name,
                 details: details,
                 payment: payment
-            }], {session})
-
+            }], {session})            
             const saleParsed = saleCreated[0] as SaleMongoType
-            if(sale.payment){
-                const payment = await processClientPayment(sale.payment, saleParsed._id.toString(), session) // PROCESS THE PAYMENT
-                await addSaleToClient(client_id, saleParsed, session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
+            if(saleParsed.payment){
+                const payment = await processClientPayment(saleParsed.payment, session) // PROCESS THE PAYMENT                
+                if(payment && payment._id){
+                    paymentId = payment._id
+                }
             }
+            await addSaleToClient(client_id, saleParsed, session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
             await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
-            return saleCreated[0]
+            // await addSaleIdToPayment(saleParsed._id, paymentId)
+            return saleParsed
         }
     } catch(e) {
+        const errr = e as Error
+        console.log(errr.message);
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
     } finally {

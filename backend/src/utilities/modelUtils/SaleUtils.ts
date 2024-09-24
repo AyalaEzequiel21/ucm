@@ -1,13 +1,12 @@
 import { ClientSession } from "mongoose";
 import { IdType } from "../types/IdType";
 import { getClientById } from "../../services/ClientService";
-import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
 import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
-import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
-import { processPaymentOfSale } from "./ClientPaymentUtils";
+import { ClientPaymentMongoType } from "../../schemas/ClientPaymentSchema";
+import { processPaymentOfSale, updateSaleIdOfPayment } from "./ClientPaymentUtils";
 
 
 /////////////////////////
@@ -17,7 +16,7 @@ import { processPaymentOfSale } from "./ClientPaymentUtils";
 const addSaleToClient = async (clientId: IdType, sale: SaleMongoType, session: ClientSession) => {
     try {
         const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
-        if(client) {
+        if(client && sale._id) {
             client.sales?.push(sale._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
             client.balance += sale.total_sale || 0 // UPDATE THE CLIENT BALANCE
             await client.save({session})
@@ -90,13 +89,26 @@ const getClientPaymentOfSale = async (saleId: IdType) => {
     }
 }
 
-const processClientPayment = async (clientPayment: ClientPaymentType, saleID: IdType, session: ClientSession) => {
+const processClientPayment = async (clientPayment: ClientPaymentMongoType, session: ClientSession) => {
     try{
-        const newCLientPayment = await processPaymentOfSale(clientPayment, saleID, session) // CREATE CLIENT PAYMENT
+        const newCLientPayment = await processPaymentOfSale(clientPayment, session) // CREATE CLIENT PAYMENT
         return newCLientPayment
+    } catch(e) {        
+        throw e
+    }
+}
+
+const addSaleIdToPayment = async (saleId: IdType, paymentId: IdType) => {
+    try {
+        await updateSaleIdOfPayment(saleId, paymentId)
     } catch(e) {
         throw e
     }
 }
 
-export { addSaleToClient, removeSalefromClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment}
+const validateSale = async (saleId: IdType) => {
+    const sale = await SaleModel.findById(saleId)
+    return !!sale
+}
+
+export { addSaleToClient, removeSalefromClient, filterSaleForDelivery, addSaleIdToPayment, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment, validateSale}
