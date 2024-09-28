@@ -5,7 +5,7 @@ import { SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
 import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
-import { ClientPaymentMongoType } from "../../schemas/ClientPaymentSchema";
+import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 import { processPaymentOfSale, updateSaleIdOfPayment } from "./ClientPaymentUtils";
 
 
@@ -13,11 +13,12 @@ import { processPaymentOfSale, updateSaleIdOfPayment } from "./ClientPaymentUtil
 // SALE UTILS
 /////////////////////////
 
-const addSaleToClient = async (clientId: IdType, sale: SaleMongoType, session: ClientSession) => {
+const addSaleToClient = async (clientId: IdType, sale: SaleMongoType, session: ClientSession) => {    
     try {
         const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION
-        if(client && sale._id) {
-            client.sales?.push(sale._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
+        const { _id, total_sale } = sale
+        if(_id && total_sale && client){            
+            client.sales?.push(_id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
             client.balance += sale.total_sale || 0 // UPDATE THE CLIENT BALANCE
             await client.save({session})
         }
@@ -89,19 +90,11 @@ const getClientPaymentOfSale = async (saleId: IdType) => {
     }
 }
 
-const processClientPayment = async (clientPayment: ClientPaymentMongoType, session: ClientSession) => {
+const processClientPayment = async (clientPayment: ClientPaymentType, session: ClientSession) => {
     try{
         const newCLientPayment = await processPaymentOfSale(clientPayment, session) // CREATE CLIENT PAYMENT
-        return newCLientPayment
+        return newCLientPayment?._id
     } catch(e) {        
-        throw e
-    }
-}
-
-const addSaleIdToPayment = async (saleId: IdType, paymentId: IdType) => {
-    try {
-        await updateSaleIdOfPayment(saleId, paymentId)
-    } catch(e) {
         throw e
     }
 }
@@ -111,4 +104,4 @@ const validateSale = async (saleId: IdType) => {
     return !!sale
 }
 
-export { addSaleToClient, removeSalefromClient, filterSaleForDelivery, addSaleIdToPayment, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment, validateSale}
+export { addSaleToClient, removeSalefromClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment, validateSale}

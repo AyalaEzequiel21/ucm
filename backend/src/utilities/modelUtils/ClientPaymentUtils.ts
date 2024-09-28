@@ -84,13 +84,10 @@ const processOnePayment = async (payment: PaymentDtoType, reportId: IdType|undef
 }
 
 
-const processPaymentOfSale = async (payment: ClientPaymentMongoType, session: ClientSession) => {
+const processPaymentOfSale = async (payment: ClientPaymentType, session: ClientSession) => {
     try {
         let paymentCreated: unknown[] = [];
-        const {_id, ...newPayment} = payment
-        console.log('antes de la creacion del pago', payment, newPayment);
-         paymentCreated = await ClientPaymentModel.create([newPayment], {session}) // CREATE THE PAYMENT IN DATA BASE
-        console.log('despues de la creacion del pago');       
+         paymentCreated = await ClientPaymentModel.create([payment], {session}) // CREATE THE PAYMENT IN DATA BASE
         const paymentParsed = paymentCreated[0] as ClientPaymentMongoType
         const { amount, client_id} = paymentParsed // GET THE NECESSARY ATRIBUTES  FOR ADD THE PAYMENT TO THE CLIENT
         if (!paymentParsed || !paymentParsed.amount || !paymentParsed._id || !paymentParsed.client_id) {

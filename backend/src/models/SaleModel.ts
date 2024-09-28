@@ -39,12 +39,12 @@ detailSaleSchema.pre('validate', function(next) {
 });
 
 
-export const saleSchema = new Schema<SaleMongoType>(
+export const saleSchema = new Schema<SaleType>(
     {
-        _id: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: false
-        },
+        // _id: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     required: false
+        // },
         client_id: {
             type: mongoose.Schema.Types.ObjectId, 
             ref: "Client",
@@ -62,9 +62,10 @@ export const saleSchema = new Schema<SaleMongoType>(
             type: Number,
             min: 0.1
         },
-        payment: {
-            type: clientPaymentSchema, 
-            required: false
+        payment: { 
+            type: mongoose.Schema.Types.Mixed||undefined, 
+            ref: 'ClientPayment', 
+            required: false 
         },
         createdAt: {
             type: Date,

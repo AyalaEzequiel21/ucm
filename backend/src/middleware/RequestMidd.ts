@@ -5,9 +5,7 @@ import { BadRequestError } from "../errors/CustomErros";
 const validateSchemaRequest = <T>(schema: z.ZodSchema<T>) => {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
-            const result = schema.safeParse(req.body)
-            console.log(req.body);
-            
+            const result = schema.safeParse(req.body)                        
             if(result.success) {
                 req.body = result.data
                 next()

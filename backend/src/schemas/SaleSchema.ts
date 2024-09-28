@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { validateAmount } from "../utilities/validateIsAmount";
 import { validateObjectId } from "../utilities/validateObjectId";
-import { clientPaymentMongoSchema } from "./ClientPaymentSchema";
+import { PaymentMethod } from "../utilities/types/PaymentMethod";
 
 // DETAIL SALE
 const detailSaleSchema = z.object({
@@ -21,7 +21,10 @@ const newSaleSchema = z.object({
     details: z.array(detailSaleSchema),
     total_sale: validateAmount().optional(),
     createdAt: z.date().optional(),
-    payment: clientPaymentMongoSchema.optional().nullable()
+    payment: z.object({
+        payment_method: PaymentMethod,
+        amount: validateAmount(),
+    }).optional().nullable(),
 })
 
 type SaleType = z.infer<typeof newSaleSchema>
@@ -29,6 +32,7 @@ type SaleType = z.infer<typeof newSaleSchema>
 // SALE MONGO
 const saleMongoSchema = newSaleSchema.extend({
     _id: validateObjectId().optional(),
+    payment: validateObjectId().optional().nullable(),
 })
 
 type SaleMongoType = z.infer<typeof saleMongoSchema>

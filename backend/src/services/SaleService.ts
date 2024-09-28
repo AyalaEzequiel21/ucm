@@ -2,6 +2,7 @@ import { startSession } from "../config/startSession";
 import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SaleModel } from "../models";
+import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { IDetailsOfSale, ISaleDetails } from "../utilities/interfaces/ISaleDetails";
@@ -16,8 +17,7 @@ import { checkId } from "../utilities/validateObjectId";
 
 // CREATE 
 const createSale = async (sale: SaleType) => {    
-    const { client_id, client_name, details, payment } = sale // GET THE DATA FOR CREATE THE SALE
-    let paymentId = ''
+    const { client_id, client_name, details } = sale // GET THE DATA FOR CREATE THE SALE
     const session = await startSession() // INIT A SESSION 
     if(!client_id || !details || !client_name){
         throw new BadRequestError('Faltan algunos datos necesarios')
@@ -25,28 +25,29 @@ const createSale = async (sale: SaleType) => {
     try {
         session.startTransaction() // START A TRANSACTION
         const clientExists = await validateClient(client_id) // CHECK THE CLIENT WITH HIS ID
+        const completedSale: SaleMongoType = {...sale, payment: undefined}
         if(clientExists){ // IF CLIENT EXISTS THEN CREATED THE SALE
-            const saleCreated: unknown[] = await SaleModel.create([{ // REGISTER THE NEW SALE
-                client_id: client_id,
-                client_name: client_name,
-                details: details,
-                payment: payment
-            }], {session})            
-            const saleParsed = saleCreated[0] as SaleMongoType
-            if(saleParsed.payment){
-                const payment = await processClientPayment(saleParsed.payment, session) // PROCESS THE PAYMENT                
-                if(payment && payment._id){
-                    paymentId = payment._id
+            if(sale.payment){
+                const payment: ClientPaymentType = {
+                    client_id: client_id,
+                    amount: sale.payment.amount,
+                    payment_method: sale.payment.payment_method,
+                    client_name: client_name
                 }
+                const newPayment = await processClientPayment(payment, session) // PROCESS THE PAYMENT 
+                completedSale.payment = newPayment || undefined
             }
-            await addSaleToClient(client_id, saleParsed, session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
-            await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
-            // await addSaleIdToPayment(saleParsed._id, paymentId)
-            return saleParsed
+            const saleCreated: unknown[] = await SaleModel.create([completedSale], {session}) // REGISTER THE NEW SALE
+            if(saleCreated){                
+                const saleParsed = saleCreated[0] as SaleMongoType
+                await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
+                await addSaleToClient(client_id, saleParsed, session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
+                return saleParsed
+            }
         }
     } catch(e) {
-        const errr = e as Error
-        console.log(errr.message);
+    //     const errr = e as Error
+    //     console.log(errr.message);
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
     } finally {

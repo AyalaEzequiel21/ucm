@@ -24,11 +24,6 @@ export const clientPaymentSchema = new Schema<ClientPaymentType>(
             type: String,
             enum: paymentMethodsArray
         },
-        sale_id: {
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: "Sale",
-            required: false
-        },
         report_id: {
             type: mongoose.Schema.Types.ObjectId, 
             ref: "Report",
