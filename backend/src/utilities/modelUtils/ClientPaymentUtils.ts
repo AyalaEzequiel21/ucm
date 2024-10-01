@@ -1,4 +1,4 @@
-import { ClientSession } from "mongoose";
+import { ClientSession, get } from "mongoose";
 import { getClientById } from "../../services/ClientService";
 import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../../errors/CustomErros";
 import { ClientPaymentModel } from "../../models";
@@ -6,6 +6,7 @@ import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
 import { IdType } from "../types/IdType";
 import { IPaymentsOfClientDetails } from "../interfaces/IClientDetails";
 import { ClientPaymentMongoType, ClientPaymentType } from "../../schemas/ClientPaymentSchema";
+import { IPaymentOfSale } from "../interfaces/ISaleDetails";
 
 
 /////////////////////////
@@ -27,12 +28,12 @@ const getAClientWithId = async (clientId: IdType) => {
 const addPaymentToClient = async (clientId: IdType, payment: ClientPaymentMongoType, session: ClientSession) => {
     try {
         const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION        
-       if(client && client.payments && client.balance && payment._id) {
-            client.payments.push(payment._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
-            client.balance -= payment.amount // UPDATE THE CLIENT BALANCE
+        if(client && payment && payment._id) {
+            client.balance -= payment.amount // UPDATE THE CLIENT BALANCe
+            client.payments?.push(payment._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
             await client.save({session})
-       }
-    } catch(e){        
+        }
+    } catch(e){   
         throw e
     }
 }
@@ -115,6 +116,20 @@ const getClientPaymentsForDetails = async (clientId: IdType) => {
         const paymentsFound = await ClientPaymentModel.find({client_id: clientId}) // FIND CLIENT PAYMENT BY ID
                 .select('_id amount payment_method createdAt')
                 .lean<IPaymentsOfClientDetails[]>()
+        if(!paymentsFound) {
+            throw new ResourceNotFoundError("Pagos del cliente")
+        }
+        return paymentsFound
+    } catch(e) {
+        throw e
+    }
+}
+
+const getClientPyamentForSaleDetails = async (clientId: IdType) => {
+    try {
+        const paymentsFound = await ClientPaymentModel.find({client_id: clientId}) // FIND CLIENT PAYMENT BY ID
+                .select('_id amount payment_method')
+                .lean<IPaymentOfSale>()
         if(!paymentsFound) {
             throw new ResourceNotFoundError("Pagos del cliente")
         }

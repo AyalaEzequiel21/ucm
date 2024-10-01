@@ -27,13 +27,13 @@ export interface IPaymentOfSale {
     payment_method: PaymentMethodType
 }
 
-export interface ISaleDetails {
+export interface IDetailsSale {
     _id: string,
     client_id: string,
     client_name: string,
     details: ISaleDetails[],
     total_sale: number,
     createdAt: string,
-    payment: IPaymentOfSale,
+    payment?: IPaymentOfSale,
     totalQuantity: number
 }

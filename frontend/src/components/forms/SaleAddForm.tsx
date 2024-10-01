@@ -30,7 +30,10 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         defaultValues: {
             client_name: '',
             details: [],
-            payment: null
+            payment: {
+                amount: 0,
+                payment_method: 'efectivo'
+            }
         }
     })
     const { 
@@ -55,7 +58,6 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
     }
 
     const onSubmit = async(dataForm: IOnlySale) => {  
-        console.log(dataForm);
               
         if(dataForm.client_id && detailsSale.length > 0){
             const data: INewSaleValues = {
@@ -68,15 +70,12 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                     payment_method: dataForm.payment?.payment_method
                 } : null
             }            
-            try {
-                console.log(data)
-                
+            try {                
                 await addSale(data).unwrap();
                 confirmAlertSucess('Venta registrada');
                 onCloseModal();
               } catch (error) {  
                 setErrorMessage(`Error al agregar la venta`)
-                console.log(error)
                 confirmErrorAlert()
               } 
         } else {
@@ -95,9 +94,7 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
         const client = clients.find(c => c._id === selectedClientId)
         if(client){
             setSelectedClientCategory(client.category)
-        }
-        // console.log(methods.getValues(), isAddingPayment);
-        
+        }        
     }, [selectedClientId, clients, isAddingPayment])
 
     return(
@@ -130,11 +127,6 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
                         sx={{backgroundColor: palette.grey[200]}}
                         onChange={(_, expanded) => {
                             setIsAddingPayment(expanded);
-                            if (!expanded) {
-                                // Limpiar los valores del pago si el acordeón se cierra
-                                // methods.setValue('payment.amount', 0);
-                                // methods.setValue('payment.payment_method', 'efectivo');
-                            }
                         }}
                     >
                         <AccordionSummary>

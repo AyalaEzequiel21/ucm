@@ -20,7 +20,7 @@ export interface ICustonInputProps<T extends FieldValues> {
     max?: number, // Valor máximo permitido para entradas numéricas.
     minLength?: number, // Longitud mínima permitida para el campo de entrada.
     maxLength?: number, // Longitud máxima permitida para el campo de entrada.
-    defaultValue?: number // Valor por defecto del campo de entrada.
+    defaultValue?: number|string // Valor por defecto del campo de entrada.
 }
 
 const CustomInput = <T extends FieldValues>({

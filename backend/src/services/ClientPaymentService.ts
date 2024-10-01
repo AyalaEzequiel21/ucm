@@ -130,10 +130,10 @@ const getClientsPaymentsByDate = async (date: string) => {
 }
 
 //FIND BY SALE ID
-const getClientPaymentBySaleId = async (saleId: IdType) => {
-    checkId(saleId)
+const getClientPaymentByClientIdAndDate = async (clientId: IdType, date: string) => {
+    checkId(clientId)
     try {
-        const paymentFound = await ClientPaymentModel.find({sale_id: saleId}) // FIND ALL PAYMENTS BY SALE ID
+        const paymentFound = await ClientPaymentModel.find({client_id: clientId, createdAt: date}) // FIND ALL PAYMENTS BY SALE ID
         .select('_id amount payment_method').lean<IPaymentOfSale>() // ONLY SOME PROPERTIES ARE REQUIRED
         return paymentFound
     } catch(e) {
@@ -141,4 +141,4 @@ const getClientPaymentBySaleId = async (saleId: IdType) => {
     }
 }
 
-export { createClientPayment, removeClientPayment, getClientPaymentsById, getAllClientsPayments, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate, getClientPaymentBySaleId }
+export { createClientPayment, removeClientPayment, getClientPaymentsById, getAllClientsPayments, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate, getClientPaymentByClientIdAndDate }

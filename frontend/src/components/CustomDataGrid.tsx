@@ -64,7 +64,7 @@ const CustomDatGrid = <T,>({
                     getRowId={(row) => row._id}
                     loading={isLoading}
                     paginationModel={paginationModel}
-                    pageSizeOptions={[15, 30, 50]}
+                    pageSizeOptions={[15]}
                     onPaginationModelChange={onPaginationChange}    
                     initialState={{
                         pagination: {

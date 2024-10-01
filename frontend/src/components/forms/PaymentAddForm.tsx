@@ -39,7 +39,6 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
         } catch(e){
             const err = e as ApiErrorResponseType
             confirmErrorAlert()
-            console.log(err)
             setErrorMessage(err.data.message)
         }
     }
@@ -83,7 +82,6 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
                     msgError="Por favor ingrese el metodo de pago"
                     error={!!errors.payment_method}
                     helperText={errors.payment_method?.message}
-                    min={1}
                 />
             </CustomFormLayout>
         </FormProvider>

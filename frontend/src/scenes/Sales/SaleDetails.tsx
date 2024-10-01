@@ -4,7 +4,7 @@ import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import useScreenSize from "@/hooks/useScreenSize"
 import { useGetSaleDetailsByIdQuery } from "@/redux/api/saleApi"
-import { ISaleDetails } from "@/utils/interfaces/ISale"
+import { IDetailsSale } from "@/utils/interfaces/ISale"
 import { Typography } from "@mui/material"
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
@@ -12,6 +12,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PersonIcon from '@mui/icons-material/Person'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import CalculateIcon from '@mui/icons-material/Calculate'
+import PaymentIcon from '@mui/icons-material/Payment';
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { CustomDatGrid } from "@/components/CustomDataGrid"
@@ -25,7 +26,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
     const parsedId = id as string
     const {isMobile} = useScreenSize()
     const { isLoading, data} = useGetSaleDetailsByIdQuery(parsedId)
-    const sale = data?.data as ISaleDetails
+    const sale = data?.data as IDetailsSale
 
     const columns: GridColDef[] = [
         { field: 'product_name', headerName: 'Producto', flex: 0.5 },
@@ -68,7 +69,20 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
                 </DetailsCard>
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
                     <CustomTextItem isTitle>Pago</CustomTextItem>
-                    {/* {sale.payment}  */} //  CREAR TARJETA CON INFORMACION DE PAGOS O UN MENSAJE QUE DIGA QUE NO SE REALIZO NINGUN PAGO
+                    {sale.payment? 
+                        <>
+                            <CustomTextItem isTitle={false} tag="Metodo de pago" icon={<PaymentIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                                {sale.payment.payment_method}
+                            </CustomTextItem>
+                            <CustomTextItem isTitle={false} tag="Total de pago" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                                {getFormatedValue(sale.payment.amount)}
+                            </CustomTextItem>
+                        </>
+                        : 
+                        <CustomTextItem isTitle={false} tag="No realizado" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            No realizado
+                        </CustomTextItem>
+                    }
                 </DetailsCard>
             </FlexBetween>
             <FlexBetween>
