@@ -29,6 +29,11 @@ export const clientPaymentSchema = new Schema<ClientPaymentType>(
             ref: "Report",
             required: false
         },
+        sale_id: {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: "SAle",
+            required: false
+        },
     },
     {
         versionKey: false,

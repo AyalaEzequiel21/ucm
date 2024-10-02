@@ -125,20 +125,6 @@ const getClientPaymentsForDetails = async (clientId: IdType) => {
     }
 }
 
-const getClientPyamentForSaleDetails = async (clientId: IdType) => {
-    try {
-        const paymentsFound = await ClientPaymentModel.find({client_id: clientId}) // FIND CLIENT PAYMENT BY ID
-                .select('_id amount payment_method')
-                .lean<IPaymentOfSale>()
-        if(!paymentsFound) {
-            throw new ResourceNotFoundError("Pagos del cliente")
-        }
-        return paymentsFound
-    } catch(e) {
-        throw e
-    }
-}
-
 export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment, updateSaleIdOfPayment, processPaymentOfSale, getClientPaymentsForDetails }
 
 

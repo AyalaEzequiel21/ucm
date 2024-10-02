@@ -25,13 +25,13 @@ const Payments: React.FC<PaymentsProps> = () => {
         }
 
       const columnsBase: GridColDef<IClientPayment>[] = [
-        { field: 'client_name', headerName: 'Cliente', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.client_name, handleDetailsClick) }},
+        { field: 'client_name', headerName: 'Cliente', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id||'', value.row.client_name, handleDetailsClick) }},
         { field: 'amount', headerName: 'Total', flex: 0.5, renderCell(value){return getFormatedValue(value.row.amount)}},
       ]
     
       const columnsTablet: GridColDef<IClientPayment>[] = [
           { field: 'payment_method', headerName: 'Metodo', flex: 0.5 },
-          { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)}},
+          { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt||'')}},
       ] 
       const columnsDesktop: GridColDef<IClientPayment>[] = [
         //   { field: 'createdAt', headerName: 'Registro', flex: 0.5 },

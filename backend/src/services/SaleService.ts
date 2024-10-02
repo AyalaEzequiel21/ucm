@@ -7,7 +7,7 @@ import { SaleMongoType, SaleType } from "../schemas/SaleSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { IDetailsOfSale, ISaleDetails } from "../utilities/interfaces/ISaleDetails";
 import { validateClient } from "../utilities/modelUtils/ClientUtils";
-import { addDifferenceToBalanceClient, addSaleToClient, filterSaleForDelivery, getClientPaymentOfSale, processClientPayment, removeSalefromClient } from "../utilities/modelUtils/SaleUtils";
+import { addDifferenceToBalanceClient, addSaleToClient, addSaleToPayment, filterSaleForDelivery, getClientPaymentOfSale, processClientPayment, removeSalefromClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
 
@@ -42,6 +42,8 @@ const createSale = async (sale: SaleType) => {
                 const saleParsed = saleCreated[0] as SaleMongoType
                 await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
                 await addSaleToClient(client_id, saleParsed, session) // IF TOTAL SALE IS NOT UNDEFINED, THEN ADD THE SALE TO CLIENT AND UPDATE THE BALANCE
+                if(saleParsed.payment && saleParsed._id)
+                addSaleToPayment(saleParsed.payment, saleParsed._id)
                 return saleParsed
             }
         }
@@ -121,11 +123,13 @@ const getSaleForDetailsById = async (saleId: IdType) => {
             throw new ResourceNotFoundError('Venta')
         }
         const paymentOfSale = await getClientPaymentOfSale(sale.client_id, sale.createdAt.toString()) //  GET PAYMENT OF SALE
+        console.log(paymentOfSale);
+        
         if(paymentOfSale && sale.client_id && sale.createdAt && sale.total_sale) { // CHECK IF PAYMENT OF SALE EXISTS
             const saleWithPayment: ISaleDetails = {  // CREATE A SALE DETAILS OBJECT WITH ALL PROPERTIES
                 ...sale,
                 _id: sale._id.toString(),
-                payment: paymentOfSale,
+                payment: paymentOfSale[0],
                 details: sale.details as IDetailsOfSale[],
                 total_sale: sale.total_sale | 0,
                 totalQuantity: sale.details.reduce((total, payment) => total + payment.quantity, 0),

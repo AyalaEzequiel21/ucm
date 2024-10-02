@@ -134,7 +134,7 @@ const getClientPaymentByClientIdAndDate = async (clientId: IdType, date: string)
     checkId(clientId)
     try {
         const paymentFound = await ClientPaymentModel.find({client_id: clientId, createdAt: date}) // FIND ALL PAYMENTS BY SALE ID
-        .select('_id amount payment_method').lean<IPaymentOfSale>() // ONLY SOME PROPERTIES ARE REQUIRED
+        .select('_id amount payment_method').lean<IPaymentOfSale[]>() // ONLY SOME PROPERTIES ARE REQUIRED
         return paymentFound
     } catch(e) {
         ErrorsPitcher(e)

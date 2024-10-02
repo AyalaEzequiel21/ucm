@@ -1,7 +1,7 @@
 import { ClientSession } from "mongoose";
 import { IdType } from "../types/IdType";
 import { getClientById } from "../../services/ClientService";
-import { SaleModel } from "../../models";
+import { ClientPaymentModel, SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
 import { getClientPaymentByClientIdAndDate } from "../../services/ClientPaymentService";
@@ -104,4 +104,12 @@ const validateSale = async (saleId: IdType) => {
     return !!sale
 }
 
-export { addSaleToClient, removeSalefromClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment, validateSale}
+const addSaleToPayment = async (paymentId: IdType, saleId: IdType) => {
+    try {
+        await ClientPaymentModel.findByIdAndUpdate(paymentId, {sale_id: saleId})
+    } catch(e) {
+        throw e
+    }
+}
+
+export { addSaleToClient, removeSalefromClient, filterSaleForDelivery, addDifferenceToBalanceClient, getClientSalesForDetails, getClientPaymentOfSale, processClientPayment, validateSale, addSaleToPayment}

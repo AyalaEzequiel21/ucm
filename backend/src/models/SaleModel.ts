@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { DetailSaleType, SaleMongoType, SaleType } from "../schemas/SaleSchema";
+import { DetailSaleType, SaleType } from "../schemas/SaleSchema";
 import { clientPaymentSchema } from "./ClientPaymentModel";
 
 const detailSaleSchema = new Schema<DetailSaleType>(
@@ -41,10 +41,6 @@ detailSaleSchema.pre('validate', function(next) {
 
 export const saleSchema = new Schema<SaleType>(
     {
-        // _id: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     required: false
-        // },
         client_id: {
             type: mongoose.Schema.Types.ObjectId, 
             ref: "Client",

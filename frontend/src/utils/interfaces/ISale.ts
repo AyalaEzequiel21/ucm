@@ -37,3 +37,7 @@ export interface IDetailsSale {
     payment?: IPaymentOfSale,
     totalQuantity: number
 }
+
+
+// AGREGUE UN SALE_ID A LOS PAYMENT, MODIFICAR METODO DE API PARA QUE BUSQUE X ESTE
+// ASI EVITAMOS QUE ENCUENTRE MAS DE UN RESULTADO. 

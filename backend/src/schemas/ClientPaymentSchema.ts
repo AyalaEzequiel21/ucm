@@ -9,6 +9,7 @@ const newClientPaymentSchema = z.object({
     client_name: z.string().min(4).max(15),
     amount: validateAmount(),
     payment_method: PaymentMethod,
+    sale_id: validateObjectId().optional().nullable(),
     report_id: validateObjectId().optional().nullable()
 })
 
