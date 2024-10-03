@@ -4,7 +4,7 @@ import { getClientById } from "../../services/ClientService";
 import { ClientPaymentModel, SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
-import { getClientPaymentByClientIdAndDate } from "../../services/ClientPaymentService";
+import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
 import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 import { processPaymentOfSale } from "./ClientPaymentUtils";
 
@@ -81,9 +81,9 @@ const getClientSalesForDetails = async (clientId: IdType) => {
     }
 }
 
-const getClientPaymentOfSale = async (clientId: IdType, date: string) => {
+const getClientPaymentOfSale = async (saleId: IdType) => {
     try {
-        const payment = await getClientPaymentByClientIdAndDate(clientId, date) // FIND CLIENT'S PAYMENT BY SALE ID
+        const payment = await getClientPaymentBySaleId(saleId) // FIND CLIENT'S PAYMENT BY SALE ID
         return payment
     } catch(e) {
         throw(e)

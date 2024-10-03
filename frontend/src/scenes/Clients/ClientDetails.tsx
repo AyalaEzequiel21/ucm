@@ -5,7 +5,6 @@ import { FlexBetween } from "@/components/FlexBetween"
 import { useGetClientDetailsByIdQuery } from "@/redux/api/clientApi"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { IClientDetails, IPaymentsOfClientDetails, ISalesOfClientDetails } from "@/utils/interfaces/IClient"
-import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import useScreenSize from "@/hooks/useScreenSize"
 import PhoneIcon from '@mui/icons-material/Phone'
@@ -72,11 +71,6 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
             isLoading: isLoading
         }
     ]
-    
-    useEffect(()=>{
-        console.log(data)
-    },[data])
-
 
     if (isLoading || !client) return <div>Cargando...</div>
 

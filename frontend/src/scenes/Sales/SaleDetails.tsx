@@ -5,8 +5,6 @@ import { FlexBetween } from "@/components/FlexBetween"
 import useScreenSize from "@/hooks/useScreenSize"
 import { useGetSaleDetailsByIdQuery } from "@/redux/api/saleApi"
 import { IDetailsSale } from "@/utils/interfaces/ISale"
-import { Typography } from "@mui/material"
-import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PersonIcon from '@mui/icons-material/Person'
@@ -38,16 +36,11 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
         }},
     ]
 
-    useEffect(() => {
-        console.log(sale);
-        
-    }, [sale])
-
     if(isLoading || !sale) return <div>Cargando...</div>
 
     return (
         <DetailsLayout title={"Venta"}>
-            <Typography>{sale.client_name}</Typography>
+            {/* <Typography>{sale.client_name}</Typography> */}
             <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                     <CustomTextItem isTitle>Información</CustomTextItem>
