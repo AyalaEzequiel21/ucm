@@ -15,6 +15,7 @@ import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { MultiTables, TableExtended } from "@/components/MultiTables"
 import { GridColDef } from "@mui/x-data-grid"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
 
 type ClientDetailsProps = object
 
@@ -72,7 +73,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
         }
     ]
 
-    if (isLoading || !client) return <div>Cargando...</div>
+    if (isLoading || !client) return <SpinnerLoading />
 
     
     return (

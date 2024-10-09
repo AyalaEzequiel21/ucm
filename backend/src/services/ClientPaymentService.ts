@@ -3,13 +3,14 @@ import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import {ClientPaymentModel} from "../models";
 import { ClientPaymentMongoType, ClientPaymentType } from "../schemas/ClientPaymentSchema";
-import { getAClientWithId, addPaymentToClient, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
+import { addPaymentToClient, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { checkId } from "../utilities/validateObjectId";
 import { IdType } from "../utilities/types/IdType";
 import { IPaymentOfSale } from "../utilities/interfaces/ISaleDetails";
-import { validateClient } from "../utilities/modelUtils/ClientUtils";
+import { getTheClientBalance, validateClient } from "../utilities/modelUtils/ClientUtils";
+import { getClientById } from "./ClientService";
 
 /////////////////////////
 // CLIENT PAYMENT SERVICE
@@ -78,6 +79,22 @@ const getClientPaymentsById = async (paymentId: IdType) => {
     }
 }
 
+// FIND FOR DETAIL BY ID
+const getClientPaymentsByIdForDetail = async (paymentId: IdType) => {
+    checkId(paymentId)
+    try {
+        const paymentFound = await ClientPaymentModel.findById(paymentId).lean() // FIND CLIENT PAYMENT FOR DETAIL BY ID
+        if(!paymentFound || !paymentFound.client_id) {
+            throw new ResourceNotFoundError("Pago de cliente")
+        }
+        const clientBalance = await getTheClientBalance(paymentFound.client_id)
+        return {...paymentFound, client_balance: clientBalance}
+        return 
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
 // FIND ALL
 const getAllClientsPayments = async () => {
     try {
@@ -92,7 +109,7 @@ const getAllClientsPayments = async () => {
 const getPaymentsByClientId = async (clientId: IdType) => {
     checkId(clientId)
     try {
-        const client = await getAClientWithId(clientId) // CHECK IF EXISTS AN USER WITH SAME ID
+        const client = await getClientById(clientId) // CHECK IF EXISTS AN USER WITH SAME ID
         if(client) {
             const paymentsOfClient = await ClientPaymentModel.find({client_id: clientId}).lean() // FIND ALL PAYMENTS FROM A CLIENT BY THE CLIENTID
             return paymentsOfClient
@@ -141,4 +158,4 @@ const getClientPaymentBySaleId = async (saleId: IdType) => {
     }
 }
 
-export { createClientPayment, removeClientPayment, getClientPaymentsById, getAllClientsPayments, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate, getClientPaymentBySaleId }
+export { createClientPayment, removeClientPayment, getClientPaymentsById, getClientPaymentsByIdForDetail, getAllClientsPayments, getPaymentsByClientId, getPaymentsPaymentMethod, getClientsPaymentsByDate, getClientPaymentBySaleId }

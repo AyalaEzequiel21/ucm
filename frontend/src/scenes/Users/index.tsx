@@ -1,6 +1,7 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
 import { RootState } from "@/redux/store"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
@@ -37,6 +38,8 @@ const Users: React.FC<UsersProps> = () => {
       ] 
       const columnsDesktop: GridColDef<UserType>[] = [] 
 
+    if(usersLoading || !users) return <SpinnerLoading />
+    
     return(
         <SceneContainer>
             <Header title="USUARIOS" subtitle="Lista de usuarios" type="basic"/>

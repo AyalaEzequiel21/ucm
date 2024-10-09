@@ -6,7 +6,6 @@ import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
 import { IdType } from "../types/IdType";
 import { IPaymentsOfClientDetails } from "../interfaces/IClientDetails";
 import { ClientPaymentMongoType, ClientPaymentType } from "../../schemas/ClientPaymentSchema";
-import { IPaymentOfSale } from "../interfaces/ISaleDetails";
 
 
 /////////////////////////
@@ -14,15 +13,7 @@ import { IPaymentOfSale } from "../interfaces/ISaleDetails";
 /////////////////////////
 
 
-// GET A CLIENT WITH ID
-const getAClientWithId = async (clientId: IdType) => {
-    try {
-        const clientFound = await getClientById(clientId) //  FIND CLIENT WITH CLIENT SERVICE
-        return clientFound
-    } catch(e) {
-        throw e
-    }
-}
+
 
 // ADD PAYMENT TO CLIENT AND UPDATE THE CLIENT BALANCE
 const addPaymentToClient = async (clientId: IdType, payment: ClientPaymentMongoType, session: ClientSession) => {
@@ -125,6 +116,6 @@ const getClientPaymentsForDetails = async (clientId: IdType) => {
     }
 }
 
-export { getAClientWithId, addPaymentToClient, subtractPaymentToClient, processOnePayment, updateSaleIdOfPayment, processPaymentOfSale, getClientPaymentsForDetails }
+export { addPaymentToClient, subtractPaymentToClient, processOnePayment, updateSaleIdOfPayment, processPaymentOfSale, getClientPaymentsForDetails }
 
 

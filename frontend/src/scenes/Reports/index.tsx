@@ -1,6 +1,7 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
 import { RootState } from "@/redux/store"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
@@ -35,6 +36,8 @@ const PaymentsReports: React.FC<PaymentsReportsProps> = () => {
 
     const columnsDesktop: GridColDef<IPaymentsReport>[] = [
     ]
+
+    if(paymentsReportsLoading || !paymentsReports) return <SpinnerLoading />
 
     return(
         <SceneContainer>

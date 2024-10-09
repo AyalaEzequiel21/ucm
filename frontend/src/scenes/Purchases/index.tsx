@@ -1,6 +1,7 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
 import { RootState } from "@/redux/store"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
@@ -38,7 +39,7 @@ const Purchases: React.FC<PurchasesProps> = () => {
       //   { field: 'createdAt', headerName: 'Registro', flex: 0.5 },
     ] 
 
-
+    if(purchaseLoading || !purchases) return <SpinnerLoading />
 
     return(
         <SceneContainer>

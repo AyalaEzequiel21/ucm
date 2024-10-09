@@ -1,5 +1,5 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders";
-import { IApiResponse } from "@/utils/interfaces/IApiResponse";
+import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse";
 import { IClientPayment } from "@/utils/interfaces/IClientPayment";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -25,9 +25,14 @@ export const clientPaymentApi = createApi({
             }),
             invalidatesTags: ['Client Payment']
         }),
+        // METODO BUSCAR POR ID PARA DETALLE
+        getClientPaymentDetailsById: builder.query<ISingularApiResponse<IClientPayment>, string>({
+            query: (id) => `/clientPayments/paymentDetail/${id}`,  
+            providesTags: ['Client Payment']  
+        }),
         // METODO BUSCAR POR ID
-        getClientpaymentById: builder.query<IApiResponse<IClientPayment>, string>({
-            query: (id) => `/clientPayments/clientPayment/${id}`,
+        getClientpaymentById: builder.query<ISingularApiResponse<IClientPayment>, string>({
+            query: (id) => `/clientPayments/payment/${id}`,
             providesTags: ['Client Payment']
         }),
         //METODO PARA LISTAR TODOS LOS APGOS DE UN CLIENTE
@@ -43,4 +48,4 @@ export const clientPaymentApi = createApi({
     })
 })
 
-export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery, useAddClientPaymentMutation, useGetAllClientPaymentsByClientIdQuery } = clientPaymentApi
+export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery, useGetClientPaymentDetailsByIdQuery, useAddClientPaymentMutation, useGetAllClientPaymentsByClientIdQuery } = clientPaymentApi

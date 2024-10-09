@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header"
 import { ProductCard } from "@/components/ProductCard"
 import { SceneContainer } from "@/components/SceneContainer"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
 import useScreenSize from "@/hooks/useScreenSize"
 import { RootState } from "@/redux/store"
 import { Box, CircularProgress } from "@mui/material"
@@ -19,6 +20,8 @@ const Products: React.FC<ProductsProps> = () => {
     // Obtiene la lista de productos y el estado de carga desde el store de Redux.
     const {products, productsLoading} = useSelector((state: RootState) => state.product.allProducts)
     const { isMobile } = useScreenSize()
+
+    if(productsLoading || !products) return <SpinnerLoading />
 
     return (
         <SceneContainer>

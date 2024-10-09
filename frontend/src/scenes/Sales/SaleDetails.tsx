@@ -15,6 +15,7 @@ import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { GridColDef } from "@mui/x-data-grid"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
 
 type SaleDetailsProps = object
 
@@ -36,11 +37,10 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
         }},
     ]
 
-    if(isLoading || !sale) return <div>Cargando...</div>
+    if(isLoading || !sale) return <SpinnerLoading />
 
     return (
         <DetailsLayout title={"Venta"}>
-            {/* <Typography>{sale.client_name}</Typography> */}
             <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                     <CustomTextItem isTitle>Información</CustomTextItem>

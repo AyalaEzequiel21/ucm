@@ -24,4 +24,9 @@ const validateClient = async (clientId: IdType) => {
     return !!client
 }
 
-export { getSalesAndPaymentOfClientById, validateClient }
+const getTheClientBalance = async (clientId: IdType) => {
+    const client = await getClientById(clientId)
+    return client?.balance
+}
+
+export { getSalesAndPaymentOfClientById, validateClient, getTheClientBalance }

@@ -1,13 +1,13 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
 import { SceneContainer } from "@/components/SceneContainer"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
 import { RootState } from "@/redux/store"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { ISale } from "@/utils/interfaces/ISale"
 import { GridColDef } from "@mui/x-data-grid"
-import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
@@ -43,9 +43,8 @@ const Sales: React.FC<SalesProps> = () => {
         // { field: 'createdAt', headerName: 'Registro', flex: 0.5 },
     ]
 
-    useEffect(() => {
-        console.log(sales)
-    }, [sales])
+    if(saleLoading || !sales) return <SpinnerLoading />
+
     return(
         <SceneContainer>
             <Header title="VENTAS" subtitle="Lista de ventas" type="basic"/>

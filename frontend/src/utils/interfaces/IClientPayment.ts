@@ -8,7 +8,8 @@ export interface IClientPayment {
     payment_method: PaymentMethodType,
     sale_id?: string
     report_id?: string
-    createdAt?: string
+    createdAt?: string,
+    client_balance?: number
 }
 
 export interface IClientPaymentForSale{
