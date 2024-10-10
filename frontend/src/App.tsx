@@ -18,6 +18,7 @@ import { Login } from "./scenes/Login"
 import { ClientDetails } from "./scenes/Clients/ClientDetails"
 import { SaleDetails } from "./scenes/Sales/SaleDetails"
 import { PaymentDetails } from "./scenes/Payments/PaymentDetails"
+import { PurchaseDetails } from "./scenes/Purchases/PurchaseDetails"
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
                   <Route path='/suppliers' element={<Suppliers />}/>
                   <Route path='/paymentsToSuppliers' element={<PaymentsToSuppliers />}/>
                   <Route path='/purchases' element={<Purchases />}/>
+                  <Route path='/purchases/purchase/:id' element={<PurchaseDetails/>}/>
                 </Route>
               </Routes>
           </ThemeProvider>

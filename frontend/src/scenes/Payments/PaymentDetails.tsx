@@ -74,9 +74,9 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
                     </CustomTextItem>
                 </DetailsCard>
             </FlexBetween>
-            <DetailsCard size={"XXL"} flexGrow={1} isMobile={isMobile}>
-                <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} height={'100%'}>
-                    <Typography textAlign={'center'}>Quieres ver mas pagos del cliente?</Typography>
+            <DetailsCard size={"XXL"} flexGrow={0} isMobile={isMobile} centerContent>
+                <Box display={'flex'} flexDirection={'column'} alignItems={'center'} gap={2}>
+                    <Typography variant="h4" textAlign={'center'}>Quieres ver mas pagos del cliente?</Typography>
                     <ToolbarButton handleClick={()=> handleClickToClient(payment?.client_id || '')} label="Ver detalle" icon={null}/>
                 </Box>
             </DetailsCard>

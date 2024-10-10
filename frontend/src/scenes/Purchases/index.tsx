@@ -9,6 +9,7 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { IPurchase } from "@/utils/interfaces/IPurchase"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 
 type PurchasesProps = object
@@ -22,13 +23,14 @@ const Purchases: React.FC<PurchasesProps> = () => {
 
     // Obtiene la lista de compras y el estado de carga desde el store de Redux.
     const {purchases, purchaseLoading} = useSelector((state: RootState) => state.purchase.allPurchases)
+    const navigate = useNavigate()
 
-    const handleDetailsClick = () => {
-        console.log('click');
+    const handleDetailsClick = (id: string) => {
+        navigate(`/purchases/purchase/${id}`)
     }
 
     const columnBase: GridColDef<IPurchase>[] = [
-        { field: 'supplier_name', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, handleDetailsClick) }},
+        { field: 'supplier_name', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, ()=> handleDetailsClick(value.row._id)) }},
         { field: 'total_purchase', headerName: 'Total', flex: 0.5, renderCell(value){ return getFormatedValue(value.row.total_purchase) } }
     ]
 

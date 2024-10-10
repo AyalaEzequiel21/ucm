@@ -33,7 +33,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     }
 
     const handleClickPayment = (id: string) => {
-        navigate(`/payments/payment/${id}`)
+        navigate(`/clientPayments/payment/${id}`)
     }
 
     const  columnsBaseSales: GridColDef[] = [
