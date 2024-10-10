@@ -9,7 +9,7 @@ export interface IPurchase {
     _id: string,
     supplier_id: string,
     supplier_name: string,
-    purchaseDetails: IPurchaseDetails[],
+    purchaseDetail: IPurchaseDetails[],
     total_purchase: number,
     createdAt: string
 }

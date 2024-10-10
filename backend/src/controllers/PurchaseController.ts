@@ -39,6 +39,18 @@ const findPurchaseById = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
+// FIND PURCHASE DETAILS BY ID
+const findPurchaseForDetailsById = async (req: Request, res: Response, next: NextFunction) => {
+    const purchaseId = req.params.purchaseId // GET THE PURCHASE ID FROM THE PARAMS 
+    try {
+        const purchase = await getPurchaseById(purchaseId) // FIBD THE PURCHASE BY HIS ID
+        res.status(200).json({ok: true, data: purchase})
+    } catch(e) {
+        next(e)
+    }
+}
+
+
 // FIND ALL PURCHASES
 const findAllPurchases = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -82,4 +94,4 @@ const deletePurchaseById = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
-export { registerPurchase, updatePurchase, findPurchaseById, findAllPurchases, findPurchasesBySupplierName, findPurchasesByDate, deletePurchaseById }
+export { registerPurchase, updatePurchase, findPurchaseById, findPurchaseForDetailsById, findAllPurchases, findPurchasesBySupplierName, findPurchasesByDate, deletePurchaseById }

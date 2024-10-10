@@ -2,7 +2,7 @@ import express from "express"
 import { validateUser, validateUserRole } from "../middleware/AuthMidd"
 import { validateSchemaRequest } from "../middleware/RequestMidd"
 import { newPurchaseSchema, purchaseMongoSchema } from "../schemas/PurchaseSchema"
-import { deletePurchaseById, findAllPurchases, findPurchaseById, findPurchasesByDate, findPurchasesBySupplierName, registerPurchase, updatePurchase } from "../controllers/PurchaseController"
+import { deletePurchaseById, findAllPurchases, findPurchaseById, findPurchaseForDetailsById, findPurchasesByDate, findPurchasesBySupplierName, registerPurchase, updatePurchase } from "../controllers/PurchaseController"
 
 // PURCHASE ROUTES
 const router = express.Router()
@@ -17,6 +17,8 @@ router.use(validateUserRole(['admin', 'biller']))
 router.get("/", findAllPurchases)
 // GET PURCHASE BY ID
 router.get("/purchase/:purchaseId", findPurchaseById)
+// GET PURCHASE FOR DETAILS BY ID
+router.get("/purchaseDetails/:purchaseId", findPurchaseForDetailsById)
 // GET PURCHASE BY NAME SUPPLIER
 router.get("/supplier/:supplierName", findPurchasesBySupplierName)
 // GET PURCHASE BY DATE

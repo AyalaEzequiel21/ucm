@@ -1,12 +1,84 @@
+import { CustomTextItem } from "@/components/CustomTextItem"
+import { DetailsCard } from "@/components/DetailsCard"
 import { DetailsLayout } from "@/components/DetailsLayout"
+import { FlexBetween } from "@/components/FlexBetween"
+import { SpinnerLoading } from "@/components/SpinnerLoading"
+import useScreenSize from "@/hooks/useScreenSize"
+import { useGetPurchaseByIdQuery } from "@/redux/api/purchaseApi"
+import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
+import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
+import { IPurchase } from "@/utils/interfaces/IPurchase"
+import { GridColDef } from "@mui/x-data-grid"
+import { useParams } from "react-router-dom"
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import PersonIcon from '@mui/icons-material/Person'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import { CustomDatGrid } from "@/components/CustomDataGrid"
+import { useEffect } from "react"
+
 
 type PurchaseDetailsProps = object
 
 const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
 
+    const {id} = useParams()
+    const parseId = id as string
+    const {isMobile} = useScreenSize()
+    const { isLoading, data} = useGetPurchaseByIdQuery(parseId)
+    const purchase = data?.data as IPurchase
+
+    const columns: GridColDef[] = [
+        { field: 'product_name', headerName: 'Producto', flex: 0.5 },
+        { field: 'unity_price', headerName: 'Precio', flex: 0.3, renderCell(value){return getFormatedValue(value.row.unity_price)}},
+        { field: 'quantity', headerName: 'Cantidad', flex: 0.5, renderCell(value){return `${value.row.quantity} kg`}},
+        { field: 'total', headerName: 'Total', flex: 0.3, renderCell: (value) => {
+            const total = value.row.quantity * value.row.unity_price;
+            return getFormatedValue(total)
+        }},
+    ]
+
+    useEffect(() => {
+        console.log(purchase)
+    }, [purchase])
+    if(isLoading || !purchase) return <SpinnerLoading />
+
     return (
-        <DetailsLayout title={"Compras"}>
-            TODO
+        <DetailsLayout title={"Compra"}>
+            <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
+                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                    <CustomTextItem isTitle>Información</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                        {getFormatedDate(purchase?.createdAt)}
+                    </CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Proveedor" icon={<PersonIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                        {purchase?.supplier_name}
+                    </CustomTextItem>
+                </DetailsCard>
+                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                    <CustomTextItem isTitle>Totales</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Total de compra" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                        {getFormatedValue(purchase.total_purchase)}
+                    </CustomTextItem>
+                    {/* <CustomTextItem isTitle={false} tag="Total de kilos" icon={<CalculateIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                        {purchase?.}Kg
+                    </CustomTextItem> */}
+                </DetailsCard>
+                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
+                    <CustomTextItem isTitle>Pago</CustomTextItem>
+                </DetailsCard>
+            </FlexBetween>
+            <FlexBetween>
+                <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
+                    <CustomDatGrid
+                        rows={purchase?.purchaseDetail || []}
+                        isFilterName={false}
+                        columnsBase={columns}
+                        isLoading={isLoading}
+                        lightMode={true}
+
+                    />
+                </DetailsCard>
+            </FlexBetween>
         </DetailsLayout>
     )
 }

@@ -86,6 +86,20 @@ const getPurchaseById = async (purchaseId: IdType) => {
     }
 }
 
+// GET FOR DETAILS BY ID
+const getPurchaseForDetailsById = async (purchaseId: IdType) => {
+    checkId(purchaseId)
+    try {
+        const purchase = await PurchaseModel.findById(purchaseId).lean() //  FIND PURCHASE BY HIS ID
+        if(!purchase) { // CHECK IF EXISTS PURCHASE OR RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Compra a proveedor')
+        }
+        return purchase
+    } catch(e){
+        ErrorsPitcher(e)
+    }
+}
+
 // GET ALL
 const getAllPurchases = async () => {
     try {
