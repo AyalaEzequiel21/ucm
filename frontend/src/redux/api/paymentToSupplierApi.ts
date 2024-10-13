@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders"
-import { IApiResponse } from "@/utils/interfaces/IApiResponse"
-import { IPaymentToSupplier } from "@/utils/interfaces/IPaymentToSupplier"
+import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse"
+import { IPaymentToSupplier, IPaymentToSupplierDetails } from "@/utils/interfaces/IPaymentToSupplier"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 // URL BASE DE LA API
@@ -21,6 +21,11 @@ export const paymentToSupplierApi = createApi({
             query: (id) => `/paymentToSupplier/${id}`,
             providesTags: ['Payment To Supplier']
         }),
+        // METODO BUSCAR POR ID PARA DETALLE
+        getPaymentToSupplierDetailsById: builder.query<ISingularApiResponse<IPaymentToSupplierDetails>, string>({
+            query: (id) => `/paymentsToSupplier/paymentToSupplierDetail/${id}`,
+            providesTags: ['Payment To Supplier']
+        }),
         // METODO LISTAR TODOS
         getAllPaymentsToSuppliers: builder.query<IApiResponse<IPaymentToSupplier>, void>({
             query: () => '/paymentsToSupplier',
@@ -38,4 +43,4 @@ export const paymentToSupplierApi = createApi({
     })
 })
 
-export const { useGetPaymentToSupplierByIdQuery, useGetAllPaymentsToSuppliersQuery, useAddPaymentToSupplierMutation } = paymentToSupplierApi
+export const { useGetPaymentToSupplierByIdQuery, useGetPaymentToSupplierDetailsByIdQuery, useGetAllPaymentsToSuppliersQuery, useAddPaymentToSupplierMutation } = paymentToSupplierApi

@@ -60,4 +60,5 @@ const validateSupplier = async (supplierId: IdType) => {
     return !!supplier
 }
 
+
 export { addPurchaseToSupplier, addDiferenceToBalanceSupplier, removePurchaseToSupplier, validateSupplier }

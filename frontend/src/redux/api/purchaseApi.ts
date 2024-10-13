@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders"
 import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse"
-import { IPurchase } from "@/utils/interfaces/IPurchase"
+import { IPurchase, IPurchaseDetails } from "@/utils/interfaces/IPurchase"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 // URL BASE DE LA API
@@ -31,7 +31,7 @@ export const purchaseApi = createApi({
             providesTags: ['Purchase']
         }),
         // METODO BUSCAR POR ID PARA DETALLES
-        getPurchaseDetailsById: builder.query<ISingularApiResponse<IPurchase>, string>({
+        getPurchaseDetailsById: builder.query<ISingularApiResponse<IPurchaseDetails>, string>({
             query: (id) => `/purchases/purchaseDetails/${id}`,
             providesTags: ['Purchase']
         }),
@@ -43,4 +43,4 @@ export const purchaseApi = createApi({
     })
 })
 
-export const { useAddPurchaseMutation, useGetAllPurchasesQuery, useGetPurchaseByIdQuery } = purchaseApi
+export const { useAddPurchaseMutation, useGetAllPurchasesQuery, useGetPurchaseDetailsByIdQuery, useGetPurchaseByIdQuery } = purchaseApi

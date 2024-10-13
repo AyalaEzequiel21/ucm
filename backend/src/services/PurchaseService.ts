@@ -7,6 +7,7 @@ import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { addDiferenceToBalanceSupplier, addPurchaseToSupplier, removePurchaseToSupplier, validateSupplier } from "../utilities/modelUtils/PurchaseUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
+import { getSupplierById } from "./SupplierService";
 
 /////////////////////////
 // PURCHASE SERVICE
@@ -94,7 +95,14 @@ const getPurchaseForDetailsById = async (purchaseId: IdType) => {
         if(!purchase) { // CHECK IF EXISTS PURCHASE OR RUN AN EXCEPTION
             throw new ResourceNotFoundError('Compra a proveedor')
         }
-        return purchase
+        const supplier = await getSupplierById(purchase.supplier_id || '') // GET SUPPLIER DATA FOR DETAILS
+        const response = {
+            ...purchase,
+            supplierBalance: supplier?.balance,
+            paymentsQuantity: supplier?.payments?.length,
+            
+        }
+        return response
     } catch(e){
         ErrorsPitcher(e)
     }
@@ -157,4 +165,4 @@ const removePurchaseById = async (purchaseId: IdType) => {
     }
 }
 
-export { createPurchase, modifyPurchase, getPurchaseById, getAllPurchases, getPurchaseBySupplierName, getPurchasesByDate, removePurchaseById }
+export { createPurchase, modifyPurchase, getPurchaseById, getPurchaseForDetailsById, getAllPurchases, getPurchaseBySupplierName, getPurchasesByDate, removePurchaseById }

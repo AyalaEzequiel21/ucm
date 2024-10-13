@@ -9,6 +9,7 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { IPaymentToSupplier } from "@/utils/interfaces/IPaymentToSupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 
 type PaymentsToSuppliersProps = object
@@ -22,13 +23,13 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
 
     // Obtiene la lista de pagos a proveedor y el estado de carga desde el store de Redux.
     const {paymentsToSupplier, paymentsToSupplierLoading} = useSelector((state: RootState) => state.paymentToSupplier.allPaymentsToSupplier)
-
-    const handleDetailsClick = () => {
-        console.log('_id');
+    const navigate = useNavigate()
+    const handleDetailsClick = (id: string) => {
+        navigate(`/paymentsToSuppliers/payment/${id}`)
     }
 
     const columnsBase: GridColDef<IPaymentToSupplier>[] = [
-        { field: 'supplier_name', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, handleDetailsClick) }},
+        { field: 'supplier_name', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, ()=> handleDetailsClick(value.row._id)) }},
         { field: 'total_payment', headerName: 'Total', flex: 0.5, renderCell(value){return getFormatedValue(value.row.total_payment)}},
     ]
 

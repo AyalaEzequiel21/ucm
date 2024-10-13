@@ -13,3 +13,8 @@ export interface IPurchase {
     total_purchase: number,
     createdAt: string
 }
+
+export interface IPurchaseDetails extends IPurchase {
+    supplierBalance: number,
+    paymentsQuantity: number
+}

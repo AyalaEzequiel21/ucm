@@ -89,7 +89,6 @@ const getClientPaymentsByIdForDetail = async (paymentId: IdType) => {
         }
         const clientBalance = await getTheClientBalance(paymentFound.client_id)
         return {...paymentFound, client_balance: clientBalance}
-        return 
     } catch(e) {
         ErrorsPitcher(e)
     }

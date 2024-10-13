@@ -42,5 +42,11 @@ const subtractPaymentToSupplier = async (supplierId: IdType, paymentSupplierId: 
     }
 }
 
-export { addPaymentToSupplier, subtractPaymentToSupplier }
+
+const getTheSupplierBalance = async (supplierId: IdType) => {
+    const supplier = await getSupplierById(supplierId)
+    return supplier?.balance
+}
+
+export { addPaymentToSupplier, subtractPaymentToSupplier, getTheSupplierBalance }
 

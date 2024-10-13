@@ -4,7 +4,7 @@ import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { PaymentToSupplierModel } from "../models";
 import { PaymentToSupplierMongoType, PaymentToSupplierType } from "../schemas/PaymentToSupplierSchema";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
-import { addPaymentToSupplier, subtractPaymentToSupplier } from "../utilities/modelUtils/PaymentToSupplierUtils";
+import { addPaymentToSupplier, getTheSupplierBalance, subtractPaymentToSupplier } from "../utilities/modelUtils/PaymentToSupplierUtils";
 import { validateSupplier } from "../utilities/modelUtils/PurchaseUtils";
 import { IdType } from "../utilities/types/IdType";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
@@ -88,6 +88,21 @@ const getPaymentToSupplierById = async (paymentSupplierId: IdType) => {
     }
 }
 
+// FIND FOR DETAILS BY ID
+const getPaymentToSupplierForDetailsById = async (paymentSupplierId: IdType) => {
+    checkId(paymentSupplierId)
+    try {
+        const paymentSupplier = await PaymentToSupplierModel.findById(paymentSupplierId).lean() //  FIND THE PAYMENT BY HIS ID
+        if(!paymentSupplier || !paymentSupplier.supplier_id){ // IF PAYMENT NOT EXISTS RUN AN EXCEPTION
+            throw new ResourceNotFoundError('Pago a proveedor')
+        }
+        const supplierBalance = await getTheSupplierBalance(paymentSupplier.supplier_id)
+        return {...paymentSupplier, supplier_balance: supplierBalance}
+    } catch(e) {
+        ErrorsPitcher(e)
+    }
+}
+
 // FIND BY PAYMENT METHOD
 const getPaymentsToSupplierByPaymentMethod = async (paymentMethod: PaymentMethodType) => {
     if(!paymentMethodsArray.includes(paymentMethod)){ //  IF PAYMENT METHOD IS NOT VALID RUN AN EXCEPTION
@@ -130,4 +145,4 @@ const getPaymentsToSupplierByDate = async (paymentDate: string) => {
     }
 }
 
-export { createPaymentToSupplier, removePaymentToSupplierById, getAllPaymentsToSupplier, getPaymentToSupplierById, getPaymentsToSupplierByPaymentMethod, getPaymentsToSupplierBySupplierId, getPaymentsToSupplierByDate }
+export { createPaymentToSupplier, removePaymentToSupplierById, getAllPaymentsToSupplier, getPaymentToSupplierById, getPaymentToSupplierForDetailsById, getPaymentsToSupplierByPaymentMethod, getPaymentsToSupplierBySupplierId, getPaymentsToSupplierByDate }

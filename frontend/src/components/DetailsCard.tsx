@@ -31,6 +31,7 @@ const DetailsCard: React.FC<DetailsCardProps> = ({children, size, flexGrow, isMo
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
                 color: palette.primary.dark,
                 width: getWidth(),
+                // height: '100%',
                 minHeight: isMobile? '11rem' : '15rem',
                 border: `1px solid ${palette.divider}`,
                 flexGrow: flexGrow,

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { PaymentToSupplierType } from "../schemas/PaymentToSupplierSchema";
-import { createPaymentToSupplier, getAllPaymentsToSupplier, getPaymentToSupplierById, getPaymentsToSupplierByDate, getPaymentsToSupplierByPaymentMethod, getPaymentsToSupplierBySupplierId, removePaymentToSupplierById } from "../services/PaymentToSupplierService";
+import { createPaymentToSupplier, getAllPaymentsToSupplier, getPaymentToSupplierById, getPaymentToSupplierForDetailsById, getPaymentsToSupplierByDate, getPaymentsToSupplierByPaymentMethod, getPaymentsToSupplierBySupplierId, removePaymentToSupplierById } from "../services/PaymentToSupplierService";
 import { PaymentMethodType } from "../utilities/types/PaymentMethod";
 
 ////////////////////////////////////
@@ -50,6 +50,17 @@ const findPaymentToSupplierById = async (req: Request, res: Response, next: Next
     }
 }
 
+// FIND PAYMENT TO SUPPLIER FOR DETAIL BY ID
+const findPaymentToSupplierDetailsById = async (req: Request, res: Response, next: NextFunction) => {
+    const paymentId = req.params.paymentId // GET THE PAYMENT SUPPLIER ID FROM THE PARAMS
+    try {
+        const paymentSupplier = await getPaymentToSupplierForDetailsById(paymentId) //  FIND THE PAYMENT TO SUPPLIER BY HIS ID
+        res.status(200).json({ok: true, data: paymentSupplier})
+    } catch(e){
+        next(e)
+    }
+ }
+
  // FIND PAYMENTS BY PAYMENT METHOD
  const findPaymentsSupplierByPaymentMethod = async (req: Request, res: Response, next: NextFunction) => {
     const method = req.params.paymentMethod as PaymentMethodType //  GET THE PAYMENT MEHOD FROM THE PARAMS
@@ -83,4 +94,4 @@ const findPaymentToSupplierById = async (req: Request, res: Response, next: Next
     }
  }
 
-export { registerPaymentToSupplier, deletePaymentSupplierById, findAllPaymentsToSupplier, findPaymentToSupplierById, findPaymentsSupplierByPaymentMethod, findPaymentsSupplierBySupplierId, findPaymentsSupplierByDate }
+export { registerPaymentToSupplier, deletePaymentSupplierById, findPaymentToSupplierDetailsById, findAllPaymentsToSupplier, findPaymentToSupplierById, findPaymentsSupplierByPaymentMethod, findPaymentsSupplierBySupplierId, findPaymentsSupplierByDate }

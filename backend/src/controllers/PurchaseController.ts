@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { PurchaseMongoType, PurchaseType } from "../schemas/PurchaseSchema";
-import { createPurchase, getAllPurchases, getPurchaseById, getPurchaseBySupplierName, getPurchasesByDate, modifyPurchase, removePurchaseById } from "../services/PurchaseService";
+import { createPurchase, getAllPurchases, getPurchaseById, getPurchaseBySupplierName, getPurchaseForDetailsById, getPurchasesByDate, modifyPurchase, removePurchaseById } from "../services/PurchaseService";
 
 /////////////////////////
 // PURCHASE CONTROLLER
@@ -43,7 +43,7 @@ const findPurchaseById = async (req: Request, res: Response, next: NextFunction)
 const findPurchaseForDetailsById = async (req: Request, res: Response, next: NextFunction) => {
     const purchaseId = req.params.purchaseId // GET THE PURCHASE ID FROM THE PARAMS 
     try {
-        const purchase = await getPurchaseById(purchaseId) // FIBD THE PURCHASE BY HIS ID
+        const purchase = await getPurchaseForDetailsById(purchaseId) // FIBD THE PURCHASE BY HIS ID
         res.status(200).json({ok: true, data: purchase})
     } catch(e) {
         next(e)

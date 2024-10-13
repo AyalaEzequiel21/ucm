@@ -2,7 +2,7 @@ import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { newPaymentToSupplierSchema } from '../schemas/PaymentToSupplierSchema'
-import { deletePaymentSupplierById, findAllPaymentsToSupplier, findPaymentToSupplierById, findPaymentsSupplierByDate, findPaymentsSupplierByPaymentMethod, findPaymentsSupplierBySupplierId, registerPaymentToSupplier } from '../controllers/PaymentToSupplierController'
+import { deletePaymentSupplierById, findAllPaymentsToSupplier, findPaymentToSupplierById, findPaymentToSupplierDetailsById, findPaymentsSupplierByDate, findPaymentsSupplierByPaymentMethod, findPaymentsSupplierBySupplierId, registerPaymentToSupplier } from '../controllers/PaymentToSupplierController'
 
 
 // PAYMENT TO SUPPLIER ROUTES
@@ -22,6 +22,8 @@ router.post("/register", validateSchemaRequest(newPaymentToSupplierSchema), regi
 router.get("/method/:paymentMethod", findPaymentsSupplierByPaymentMethod)
 // GET PAYMENTS TO SUPPLIER BY PAYMENT ID
 router.get("/paymentToSupplier/:paymentId", findPaymentToSupplierById)
+// GET PAYMENT TO SUPPLIER FOR DETAIL BY PAYMENT ID
+router.get("/paymentToSupplierDetail/:paymentId", findPaymentToSupplierDetailsById)
 // GET PAYMENTS TO SUPPLIER BY PAYMENT DATE
 router.get("/payment-date", findPaymentsSupplierByDate)
 // GET ALL PAYMENTS TO SUPPLIER BY SUPPLIER ID    

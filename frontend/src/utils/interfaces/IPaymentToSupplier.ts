@@ -8,3 +8,7 @@ export interface IPaymentToSupplier {
     total_payment: number
     createdAt: string
 }
+
+export interface IPaymentToSupplierDetails extends IPaymentToSupplier {
+    supplier_balance: number
+}
