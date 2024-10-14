@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { SupplierMongoType, SupplierType } from "../schemas/SupplierSchema"
-import { createSupplier, getAllSuppliers, getSupplierById, getSuppliersByName, modifySupplier, removeSupplierById } from "../services/SupplierService"
+import { createSupplier, getAllSuppliers, getDetailsOfSupplier, getSupplierById, getSuppliersByName, modifySupplier, removeSupplierById } from "../services/SupplierService"
 
 
 /////////////////////////
@@ -50,6 +50,17 @@ const findSupplierById = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
+//FIND SUPPLIER DETAILS
+const findSupplierDetailsById = async (req: Request, res: Response, next: NextFunction) => {
+    const supplierId = req.params.supplierId //  GET THE SUPPLIER ID FROM PARAMS
+    try{
+        const supplier = await getDetailsOfSupplier(supplierId) //  FIND SUPPLIER BY HIS ID WITH THE SERVICE
+        res.status(200).json({ok: true, data: supplier})
+    } catch(e) {
+        next(e)
+    }
+}
+
 // UPDATED SUPPLIER
 const updateSupplier = async (req: Request, res: Response, next: NextFunction) => {
     const supplierUpdated: SupplierMongoType = req.body //  GET THE SUPPLIER UPDATED FROM BODY
@@ -72,4 +83,4 @@ const deleteSupplierById = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
-export { registerSupplier, findAllSuppliers, findSuppliersByName, findSupplierById, updateSupplier, deleteSupplierById }
+export { registerSupplier, findAllSuppliers, findSuppliersByName, findSupplierById, findSupplierDetailsById, updateSupplier, deleteSupplierById }

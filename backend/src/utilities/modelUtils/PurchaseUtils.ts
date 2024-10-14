@@ -60,5 +60,12 @@ const validateSupplier = async (supplierId: IdType) => {
     return !!supplier
 }
 
+const getPurchasesOfSupplierForDetails = async (supplierId: IdType) => {
+    const purchases = await PurchaseModel.find({supplier_id: supplierId})
+        .select('_id total_purchase createdAt')
+        .lean()
+    return purchases
+}
 
-export { addPurchaseToSupplier, addDiferenceToBalanceSupplier, removePurchaseToSupplier, validateSupplier }
+
+export { addPurchaseToSupplier, addDiferenceToBalanceSupplier, getPurchasesOfSupplierForDetails, removePurchaseToSupplier, validateSupplier }

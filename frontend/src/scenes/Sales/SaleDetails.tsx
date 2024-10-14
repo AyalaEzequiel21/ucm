@@ -73,7 +73,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
                         </>
                         : 
                         <CustomTextItem isTitle={false} tag="No realizado" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                            No realizado
+                            0
                         </CustomTextItem>
                     }
                 </DetailsCard>

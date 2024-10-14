@@ -71,7 +71,7 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
                     <CustomTextItem isTitle={false} tag="Cantidad de pagos" icon={<ListAltIcon fontSize={isMobile ? "small" : "medium"}/>}>{purchase.paymentsQuantity}</CustomTextItem>
                 </DetailsCard>
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
-                    <CustomTextItem isTitle>Detalle del proveedor</CustomTextItem>
+                    <CustomTextItem isTitle>Detalles del proveedor</CustomTextItem>
                     <Box display={'flex'} justifyContent={'center'} alignItems={'center'} width={'100%'} height={'100%'} mt={'3rem'}>
                         <ToolbarButton handleClick={()=> handleToSupplier(purchase?.supplier_id || '')} label="Ir a detalles" icon={null}/>
                     </Box>

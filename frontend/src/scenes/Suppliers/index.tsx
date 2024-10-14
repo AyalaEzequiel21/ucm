@@ -10,6 +10,7 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { ISupplier } from "@/utils/interfaces/ISupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 
 type SuppliersProps = object
@@ -23,13 +24,13 @@ const Suppliers: React.FC<SuppliersProps> = () => {
 
     // Obtiene la lista de proveedores y el estado de carga desde el store de Redux.
     const {suppliers, suppliersLoading} = useSelector((state: RootState) => state.supplier.allSuppliers)
-
-    const handleDetailsClick = () => {
-        console.log('_id');
+    const navigate = useNavigate()
+    const handleDetailsClick = (id: string) => {
+        navigate(`/suppliers/supplier/${id}`)
     };
 
     const columnsBase: GridColDef<ISupplier>[] = [
-        { field: 'supplier_name', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, handleDetailsClick) }},
+        { field: 'supplier_name', headerName: 'Proveedor', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.supplier_name, ()=> handleDetailsClick(value.row._id)) }},
         { field: 'balance', headerName: 'Balance', flex: 0.5, renderCell(value){return getFormatedValue(value.row.balance)}},
     ]
 

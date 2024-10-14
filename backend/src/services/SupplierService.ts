@@ -67,6 +67,20 @@ const getSupplierById = async (supplierId: IdType) => {
     }
 }
 
+// FIND ALL DETAILS OF SUPPLIER
+const getDetailsOfSupplier = async (supplierId: IdType) => {
+    checkId(supplierId)
+    try{
+        const supplier = await SupplierModel.findById(supplierId).populate("purchases").populate("payments").lean() //  FIND SUPPLIER BY HIS ID
+        if(!supplier) {
+            throw new ResourceNotFoundError("El proveedor") //  IF SUPPLIER NOT EXISTS, THEN RUN AN EXCEPTION.
+        }
+        return supplier
+    } catch(e) {
+        ErrorsPitcher(e)
+    } 
+}
+
 // UPDATE
 const modifySupplier = async (supplierUpdated: SupplierMongoType) => {
     const { payments, _id, purchases, ...supplierFiltered } = supplierUpdated // SUBTRACT THE PROPERTIES THAT NOT BE UPDATE
@@ -98,4 +112,4 @@ const removeSupplierById = async (supplierId: IdType) => {
     }
 }
 
-export { createSupplier, getAllSuppliers, getSuppliersByName, getSupplierById, modifySupplier, removeSupplierById }
+export { createSupplier, getAllSuppliers, getSuppliersByName, getSupplierById, getDetailsOfSupplier, modifySupplier, removeSupplierById }

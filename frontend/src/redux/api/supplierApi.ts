@@ -1,5 +1,5 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders";
-import { IApiResponse } from "@/utils/interfaces/IApiResponse";
+import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse";
 import { ISupplier } from "@/utils/interfaces/ISupplier";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -26,8 +26,13 @@ export const supplierApi = createApi({
             invalidatesTags: ['Supplier']
         }),
         // METODO BUSCAR POR ID
-        getSupplierById: builder.query<IApiResponse<ISupplier>, string>({
+        getSupplierById: builder.query<ISingularApiResponse<ISupplier>, string>({
             query: (id) => `/suppliers/supplier/${id}`,
+            providesTags: ['Supplier']
+        }),
+        // METODO BUSCAR POR ID PARA DETALLES
+        getSupplierDetailsById: builder.query<ISingularApiResponse<ISupplier>, string>({
+            query: (id) => `/suppliers/supplierDetails/${id}`,
             providesTags: ['Supplier']
         }),
         // METODO LISTAR TODOS
@@ -38,4 +43,4 @@ export const supplierApi = createApi({
     })
 })
 
-export const { useGetSupplierByIdQuery, useGetAllSuppliersQuery, useAddSupplierMutation } = supplierApi
+export const { useGetSupplierByIdQuery, useGetSupplierDetailsByIdQuery, useGetAllSuppliersQuery, useAddSupplierMutation } = supplierApi
