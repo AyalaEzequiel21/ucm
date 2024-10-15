@@ -13,9 +13,10 @@ type SupplierType = z.infer<typeof newSupplierSchema>
 // SUPPLIER MONGO
 const supplierMongoSchema = newSupplierSchema.extend({
     _id: validateObjectId(),
-    balance: z.number().optional(),
+    balance: z.number(),
     purchases: z.array(validateObjectId()).optional(),
-    payments: z.array(validateObjectId()).optional()
+    payments: z.array(validateObjectId()).optional(), 
+    createdAt: z.date()
 })
 
 type SupplierMongoType = z.infer<typeof supplierMongoSchema>

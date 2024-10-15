@@ -34,7 +34,11 @@ export const supplierSchema = new Schema<SupplierMongoType>(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Purchase",
             default: []
-        }]
+        }], 
+        createdAt: {
+            type: Date,
+            required: false
+        }
     },
     {
         versionKey: false,

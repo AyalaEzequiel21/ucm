@@ -4,6 +4,7 @@ import { getSupplierById } from "../../services/SupplierService";
 import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { PaymentToSupplierModel } from "../../models";
 import { PaymentToSupplierMongoType } from "../../schemas/PaymentToSupplierSchema";
+import { IPaymentsOfSupplierDetails } from "../interfaces/ISupplierDetails";
 
 
 /////////////////////////////
@@ -48,5 +49,13 @@ const getTheSupplierBalance = async (supplierId: IdType) => {
     return supplier?.balance
 }
 
-export { addPaymentToSupplier, subtractPaymentToSupplier, getTheSupplierBalance }
+const getPaymentsToSupplierForDetails = async (supplierId: IdType) => {
+    const payment = PaymentToSupplierModel.find({supplier_id: supplierId})
+    .select('_id total_payment payment_method createdAt')
+    .lean<IPaymentsOfSupplierDetails[]>()
+
+    return payment
+}
+
+export { addPaymentToSupplier, subtractPaymentToSupplier, getPaymentsToSupplierForDetails, getTheSupplierBalance }
 

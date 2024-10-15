@@ -6,6 +6,9 @@ import { SupplierMongoType, SupplierType } from "../schemas/SupplierSchema";
 import { IdType } from "../utilities/types/IdType";
 import { validateIfExists } from "../utilities/validateIfExists";
 import { checkId } from "../utilities/validateObjectId";
+import { getPurchasesAndPaymentsOfSupplier } from "../utilities/modelUtils/SupplierUtils";
+import { ISupplierDetails } from "../utilities/interfaces/ISupplierDetails";
+import { getMostRecentDate } from "../utilities/datesUtils";
 
 /////////////////////////
 // SUPPLIER SERVICE
@@ -71,11 +74,24 @@ const getSupplierById = async (supplierId: IdType) => {
 const getDetailsOfSupplier = async (supplierId: IdType) => {
     checkId(supplierId)
     try{
-        const supplier = await SupplierModel.findById(supplierId).populate("purchases").populate("payments").lean() //  FIND SUPPLIER BY HIS ID
+        const supplier = await SupplierModel.findById(supplierId)
+        .select('-purchases -payments')
+        .lean() //  FIND SUPPLIER BY HIS ID
         if(!supplier) {
             throw new ResourceNotFoundError("El proveedor") //  IF SUPPLIER NOT EXISTS, THEN RUN AN EXCEPTION.
         }
-        return supplier
+        const {supplierPayments, supplierPurchases} = await getPurchasesAndPaymentsOfSupplier(supplierId)
+        const supplierDetails: ISupplierDetails = {
+            ...supplier, 
+            purchases: supplierPurchases,
+            lastPurchase: getMostRecentDate(supplierPurchases),
+            totalAmountOfPurchases: supplierPurchases.reduce((acc, curr) => acc + curr.total_purchase, 0),
+            payments: supplierPayments, 
+            lastPayment: getMostRecentDate(supplierPayments),
+            totalAmountOfPayments: supplierPayments.reduce((acc, curr) => acc + curr.total_payment, 0),
+            createdAt: supplier.createdAt
+        }
+        return supplierDetails
     } catch(e) {
         ErrorsPitcher(e)
     } 

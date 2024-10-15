@@ -4,6 +4,7 @@ import { getSupplierById } from "../../services/SupplierService";
 import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { PurchaseModel } from "../../models";
 import { PurchaseMongoType } from "../../schemas/PurchaseSchema";
+import { IPurchasesOfSupplierDetails } from "../interfaces/ISupplierDetails";
 
 
 /////////////////////////
@@ -63,7 +64,7 @@ const validateSupplier = async (supplierId: IdType) => {
 const getPurchasesOfSupplierForDetails = async (supplierId: IdType) => {
     const purchases = await PurchaseModel.find({supplier_id: supplierId})
         .select('_id total_purchase createdAt')
-        .lean()
+        .lean<IPurchasesOfSupplierDetails[]>()
     return purchases
 }
 

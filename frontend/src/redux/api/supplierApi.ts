@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders";
 import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse";
-import { ISupplier } from "@/utils/interfaces/ISupplier";
+import { ISupplier, ISupplierDetails } from "@/utils/interfaces/ISupplier";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // URL BASE DE LA API
@@ -31,7 +31,7 @@ export const supplierApi = createApi({
             providesTags: ['Supplier']
         }),
         // METODO BUSCAR POR ID PARA DETALLES
-        getSupplierDetailsById: builder.query<ISingularApiResponse<ISupplier>, string>({
+        getSupplierDetailsById: builder.query<ISingularApiResponse<ISupplierDetails>, string>({
             query: (id) => `/suppliers/supplierDetails/${id}`,
             providesTags: ['Supplier']
         }),

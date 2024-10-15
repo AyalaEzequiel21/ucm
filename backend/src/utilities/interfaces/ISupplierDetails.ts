@@ -1,29 +1,20 @@
-export interface ISupplier {
-    _id: string,
-    supplier_name: string, 
-    phone: string,
-    primeProduct: string,
-    balance: number,
-    purchases: string[],
-    payments: string[],
-    createdAt: string
-}
+import { IdType } from "../types/IdType"
 
 export interface IPurchasesOfSupplierDetails {
-    _id: string,
+    _id: IdType,
     total_purchase: number,
     createdAt: Date|string
 }
 
 export interface IPaymentsOfSupplierDetails {
-    _id: string,
+    _id: IdType,
     total_payment: number,
     payment_method: string,
     createdAt: Date|string
 }
 
 export interface ISupplierDetails {
-    _id: string
+    _id: IdType
     supplier_name: string
     phone: string
     primeProduct: string
@@ -34,5 +25,5 @@ export interface ISupplierDetails {
     totalAmountOfPurchases: number,
     payments: IPaymentsOfSupplierDetails[],
     lastPayment: Date|null,
-    totalAmountOfPayments: number,
+    totalAmountOfPayments: number
 }
