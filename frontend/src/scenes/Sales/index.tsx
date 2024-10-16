@@ -1,5 +1,6 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
+import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
 import { RootState } from "@/redux/store"
@@ -48,15 +49,19 @@ const Sales: React.FC<SalesProps> = () => {
     return(
         <SceneContainer>
             <Header title="VENTAS" subtitle="Lista de ventas" type="basic"/>
-            <CustomDatGrid<ISale>
-                rows={sales || []}
-                isFilterName={true}
-                fieldValue="client_name"
-                isLoading={saleLoading || !sales}
-                columnsBase={columnBase}
-                addedColumnsTable={columnsTablet}
-                addedColumnsDesktop={columnsDesktop}
-            />
+            {sales.length === 0 ?
+                <NotFoundComponent />
+                :
+                <CustomDatGrid<ISale>
+                    rows={sales || []}
+                    isFilterName={true}
+                    fieldValue="client_name"
+                    isLoading={saleLoading || !sales}
+                    columnsBase={columnBase}
+                    addedColumnsTable={columnsTablet}
+                    addedColumnsDesktop={columnsDesktop}
+                />
+            }
         </SceneContainer>
     )
 }

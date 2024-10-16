@@ -1,10 +1,11 @@
 import { Header } from "@/components/Header"
+import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { ProductCard } from "@/components/ProductCard"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
 import useScreenSize from "@/hooks/useScreenSize"
 import { RootState } from "@/redux/store"
-import { Box, CircularProgress } from "@mui/material"
+import { Box } from "@mui/material"
 import { useSelector } from "react-redux"
 
 
@@ -26,8 +27,8 @@ const Products: React.FC<ProductsProps> = () => {
     return (
         <SceneContainer>
             <Header title={'PRODUCTOS'} subtitle={"Lista de productos"} type="basic"/>
-            {productsLoading ? 
-                <CircularProgress color="inherit" size={30}/> 
+            {products.length === 0 ? 
+                <NotFoundComponent/> 
                 :
                 <Box 
                     display={'grid'}

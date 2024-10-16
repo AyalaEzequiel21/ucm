@@ -1,5 +1,6 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
+import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
 import { RootState } from "@/redux/store"
@@ -46,15 +47,19 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
     return(
         <SceneContainer>
             <Header title="PAGOS A PROVEEDORES" subtitle="Lista de pagos"type="basic"/>
-            <CustomDatGrid<IPaymentToSupplier>
-                rows={paymentsToSupplier || []}
-                isFilterName={true}
-                fieldValue="supplier_name"
-                columnsBase={columnsBase}
-                isLoading={paymentsToSupplierLoading || !paymentsToSupplier}
-                addedColumnsTable={columnsTablet}
-                addedColumnsDesktop={columnsDesktop}
-            />
+            {paymentsToSupplier.length === 0 ?
+                <NotFoundComponent />
+                :
+                <CustomDatGrid<IPaymentToSupplier>
+                    rows={paymentsToSupplier || []}
+                    isFilterName={true}
+                    fieldValue="supplier_name"
+                    columnsBase={columnsBase}
+                    isLoading={paymentsToSupplierLoading || !paymentsToSupplier}
+                    addedColumnsTable={columnsTablet}
+                    addedColumnsDesktop={columnsDesktop}
+                />
+            }
         </SceneContainer>
     )
 }

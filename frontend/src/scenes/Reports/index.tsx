@@ -1,5 +1,6 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
+import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
 import { RootState } from "@/redux/store"
@@ -42,14 +43,18 @@ const PaymentsReports: React.FC<PaymentsReportsProps> = () => {
     return(
         <SceneContainer>
             <Header title="REPORTES DE PAGOS" subtitle="Lista de reportes de pagos" type="basic"/>
-            <CustomDatGrid<IPaymentsReport>
-                rows={paymentsReports || []}
-                isFilterName={false}
-                columnsBase={columnsBase}
-                isLoading={paymentsReportsLoading || !paymentsReports}
-                addedColumnsTable={columnsTablet}
-                addedColumnsDesktop={columnsDesktop}
-            />
+            {paymentsReports.length === 0 ? 
+                <NotFoundComponent /> 
+                : 
+                <CustomDatGrid<IPaymentsReport>
+                    rows={paymentsReports || []}
+                    isFilterName={false}
+                    columnsBase={columnsBase}
+                    isLoading={paymentsReportsLoading || !paymentsReports}
+                    addedColumnsTable={columnsTablet}
+                    addedColumnsDesktop={columnsDesktop}
+                />
+            }
         </SceneContainer>
     )
 }
