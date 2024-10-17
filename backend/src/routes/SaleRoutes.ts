@@ -17,16 +17,16 @@ router.get("/", filterGetAll(), findAllSales)
 router.get("/sale/:saleId", findSaleById)
 // GET SALE FOR DETAILS BY ID
 router.get("/saleDetails/:saleId", findSalesForDetailsById)
+
+// MIDDLEWARE FOR CHECK IF USER ROLE IS VALID
+router.use(validateUserRole(['admin', 'biller']))
+
 // GET ALL SALES BY ID CLIENT
 router.get("/client/id/:clientId", filterGetAll(), findSalesByClientId)
 // GET SALES BY NAME CLIENT
 router.get("/client/:clientName", filterGetAll(), findSalesByClientName)
 // GET SALES BY DATE
 router.get("/saleDate", filterGetAll(), findSalesByDate)
-
-// MIDDLEWARE FOR CHECK IF USER ROLE IS VALID
-router.use(validateUserRole(['admin', 'biller']))
-
 // SALE REGISTER 
 router.post("/register", validateSchemaRequest(newSaleSchema), registerSale)
 // SALE UPDATE

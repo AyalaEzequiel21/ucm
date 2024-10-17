@@ -1,5 +1,6 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
+import { NotAuthorizedComponent } from "@/components/NotAuthorizedComponent"
 import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
@@ -25,7 +26,9 @@ const Suppliers: React.FC<SuppliersProps> = () => {
 
     // Obtiene la lista de proveedores y el estado de carga desde el store de Redux.
     const {suppliers, suppliersLoading} = useSelector((state: RootState) => state.supplier.allSuppliers)
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const navigate = useNavigate()
+    
     const handleDetailsClick = (id: string) => {
         navigate(`/suppliers/supplier/${id}`)
     };
@@ -48,18 +51,21 @@ const Suppliers: React.FC<SuppliersProps> = () => {
     return(
         <SceneContainer>
             <Header title="PROVEEDORES" subtitle="Lista de proveedores" type="basic"/>
-            {suppliers.length === 0 ?
-                <NotFoundComponent />
-                : 
-                <CustomDatGrid<ISupplier>
-                    rows={suppliers || []}
-                    isFilterName= {true}
-                    fieldValue="supplier_name"
-                    isLoading={suppliersLoading}
-                    columnsBase={columnsBase}
-                    addedColumnsTable={columnsTablet}
-                    addedColumnsDesktop={columnsDesktop}
-                />
+            {userLogin?.role === 'delivery' ? 
+                <NotAuthorizedComponent />
+                :
+                suppliers.length === 0 ?
+                    <NotFoundComponent />
+                    : 
+                    <CustomDatGrid<ISupplier>
+                        rows={suppliers || []}
+                        isFilterName= {true}
+                        fieldValue="supplier_name"
+                        isLoading={suppliersLoading}
+                        columnsBase={columnsBase}
+                        addedColumnsTable={columnsTablet}
+                        addedColumnsDesktop={columnsDesktop}
+                    />
             }
         </SceneContainer>
     )

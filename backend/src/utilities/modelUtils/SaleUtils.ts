@@ -1,7 +1,7 @@
 import { ClientSession } from "mongoose";
 import { IdType } from "../types/IdType";
 import { getClientById } from "../../services/ClientService";
-import { ClientPaymentModel, SaleModel } from "../../models";
+import { ClientModel, ClientPaymentModel, SaleModel } from "../../models";
 import { SaleMongoType } from "../../schemas/SaleSchema";
 import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
 import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
@@ -57,7 +57,7 @@ const filterSaleForDelivery = async (sales: SaleMongoType[]) => {
         const deliverySales = [];
         for (const sale of sales) {
             if (sale.client_id) {
-                const client = await getClientById(sale.client_id);
+                const client = await ClientModel.findById(sale.client_id).lean();
                 if (client && client.in_delivery) {
                     deliverySales.push(sale);
                 }

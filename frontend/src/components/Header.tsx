@@ -50,47 +50,45 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
     
     return (
         <Box>
-            {/* {type === 'basic' &&  */}
-                <Typography
-                    color={palette.primary.dark}
-                    fontSize={'35px'}
-                    fontWeight={'bold'}
-                >
-                    {title ? title : ''}
-                </Typography>
-            {/* } */}
-            <FlexBetween>
             <Typography
-                variant="h4"
                 color={palette.primary.dark}
+                fontSize={'35px'}
+                fontWeight={'bold'}
             >
-                {subtitle}
+                {title ? title : ''}
             </Typography>
-            <Box display={'flex'} gap={'1rem'}>
-                {currentView !== 'home' && type === 'basic' ?
-                    <ToolbarButton 
-                        key="agregar" 
-                        disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport')} 
-                        icon={<AddIcon fontSize="small"/>} 
-                        label="agregar" 
-                        handleClick={handleClickAdd}
-                    />
-                :   <FlexBetween gap={'1rem'}>
-                        <ToolbarButton
-                            key="modificar"
-                            icon={<EditIcon fontSize="small"/>}
-                            label="modificar"
+            <FlexBetween>
+                <Typography
+                    variant="h4"
+                    color={palette.primary.dark}
+                >
+                    {subtitle}
+                </Typography>
+                <Box display={'flex'} gap={'1rem'}>
+                    {currentView !== 'home' && type === 'basic' ?
+                        <ToolbarButton 
+                            key="agregar" 
+                            disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport')} 
+                            icon={<AddIcon fontSize="small"/>} 
+                            label="agregar" 
                             handleClick={handleClickAdd}
                         />
-                        <ToolbarButton
-                            key={"eliminar"}
-                            icon={<DeleteIcon fontSize="small"/>}
-                            label="eliminar"
-                            handleClick={handleClickAdd}
-                        />
-                    </FlexBetween>
-                }
-            </Box>
+                    :   <FlexBetween gap={'1rem'}>
+                            <ToolbarButton
+                                key="modificar"
+                                icon={<EditIcon fontSize="small"/>}
+                                label="modificar"
+                                handleClick={handleClickAdd}
+                            />
+                            <ToolbarButton
+                                key={"eliminar"}
+                                icon={<DeleteIcon fontSize="small"/>}
+                                label="eliminar"
+                                handleClick={handleClickAdd}
+                            />
+                        </FlexBetween>
+                    }
+                </Box>
             </FlexBetween>
             <CustomModal 
                 open={openModal} 

@@ -1,5 +1,6 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
+import { NotAuthorizedComponent } from "@/components/NotAuthorizedComponent"
 import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
@@ -24,6 +25,7 @@ const Purchases: React.FC<PurchasesProps> = () => {
 
     // Obtiene la lista de compras y el estado de carga desde el store de Redux.
     const {purchases, purchaseLoading} = useSelector((state: RootState) => state.purchase.allPurchases)
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const navigate = useNavigate()
 
     const handleDetailsClick = (id: string) => {
@@ -47,18 +49,21 @@ const Purchases: React.FC<PurchasesProps> = () => {
     return(
         <SceneContainer>
             <Header title="COMPRAS A PROVEEDORES" subtitle="Lista de compras" type="basic"/>
-                {purchases.length === 0 ?
-                    <NotFoundComponent />
+                {userLogin?.role === 'delivery' ? 
+                    <NotAuthorizedComponent />
                     :
-                    <CustomDatGrid<IPurchase>
-                        rows={purchases || []}
-                        isFilterName={true}
-                        fieldValue="supplier_name"
-                        isLoading={purchaseLoading || !purchases}
-                        columnsBase={columnBase}
-                        addedColumnsTable={columnsTablet}
-                        addedColumnsDesktop={columnsDesktop}
-                    />
+                    purchases.length === 0 ?
+                        <NotFoundComponent />
+                        :
+                        <CustomDatGrid<IPurchase>
+                            rows={purchases || []}
+                            isFilterName={true}
+                            fieldValue="supplier_name"
+                            isLoading={purchaseLoading || !purchases}
+                            columnsBase={columnBase}
+                            addedColumnsTable={columnsTablet}
+                            addedColumnsDesktop={columnsDesktop}
+                        />
                 }
         </SceneContainer>
     )

@@ -1,5 +1,6 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
+import { NotAuthorizedComponent } from "@/components/NotAuthorizedComponent"
 import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
@@ -24,6 +25,7 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
 
     // Obtiene la lista de pagos a proveedor y el estado de carga desde el store de Redux.
     const {paymentsToSupplier, paymentsToSupplierLoading} = useSelector((state: RootState) => state.paymentToSupplier.allPaymentsToSupplier)
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const navigate = useNavigate()
     const handleDetailsClick = (id: string) => {
         navigate(`/paymentsToSuppliers/payment/${id}`)
@@ -47,18 +49,21 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
     return(
         <SceneContainer>
             <Header title="PAGOS A PROVEEDORES" subtitle="Lista de pagos"type="basic"/>
-            {paymentsToSupplier.length === 0 ?
-                <NotFoundComponent />
+            {userLogin?.role === 'delivery' ?
+                <NotAuthorizedComponent />
                 :
-                <CustomDatGrid<IPaymentToSupplier>
-                    rows={paymentsToSupplier || []}
-                    isFilterName={true}
-                    fieldValue="supplier_name"
-                    columnsBase={columnsBase}
-                    isLoading={paymentsToSupplierLoading || !paymentsToSupplier}
-                    addedColumnsTable={columnsTablet}
-                    addedColumnsDesktop={columnsDesktop}
-                />
+                paymentsToSupplier.length === 0 ?
+                    <NotFoundComponent />
+                    :
+                    <CustomDatGrid<IPaymentToSupplier>
+                        rows={paymentsToSupplier || []}
+                        isFilterName={true}
+                        fieldValue="supplier_name"
+                        columnsBase={columnsBase}
+                        isLoading={paymentsToSupplierLoading || !paymentsToSupplier}
+                        addedColumnsTable={columnsTablet}
+                        addedColumnsDesktop={columnsDesktop}
+                    />
             }
         </SceneContainer>
     )

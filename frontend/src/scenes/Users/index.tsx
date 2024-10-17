@@ -1,5 +1,6 @@
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Header } from "@/components/Header"
+import { NotAuthorizedComponent } from "@/components/NotAuthorizedComponent"
 import { NotFoundComponent } from "@/components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/SpinnerLoading"
@@ -22,7 +23,7 @@ const Users: React.FC<UsersProps> = () => {
 
     // Obtiene la lista de usuarios y el estado de carga desde el store de Redux.
     const {users, usersLoading} = useSelector((state: RootState) => state.user.allUsers)
-
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const handleDetailsClick = () => {
         console.log('_id');
     };
@@ -44,7 +45,10 @@ const Users: React.FC<UsersProps> = () => {
     return(
         <SceneContainer>
             <Header title="USUARIOS" subtitle="Lista de usuarios" type="basic"/>
-            {users.length === 0 ?
+            {userLogin?.role !== 'admin' ? 
+                <NotAuthorizedComponent />
+                :
+                users.length === 0 ?
                 <NotFoundComponent />
                 :
                 <CustomDatGrid<UserType>
