@@ -3,7 +3,7 @@ import { BadRequestError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import {ClientPaymentModel} from "../models";
 import { ClientPaymentMongoType, ClientPaymentType } from "../schemas/ClientPaymentSchema";
-import { addPaymentToClient, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
+import { addPaymentToClient, filterPaymentForDelivery, subtractPaymentToClient } from "../utilities/modelUtils/ClientPaymentUtils";
 import { PaymentMethodType, paymentMethodsArray } from "../utilities/types/PaymentMethod";
 import { convertDateString, validateDate } from "../utilities/datesUtils";
 import { checkId } from "../utilities/validateObjectId";
@@ -95,9 +95,13 @@ const getClientPaymentsByIdForDetail = async (paymentId: IdType) => {
 }
 
 // FIND ALL
-const getAllClientsPayments = async () => {
+const getAllClientsPayments = async (inDelivery: boolean) => {
     try {
-        const paymentsFound = await ClientPaymentModel.find().lean() // FIND ALL CLIENTS PAYMENTS
+        const paymentsFound: ClientPaymentMongoType[] = await ClientPaymentModel.find().lean() // FIND ALL CLIENTS PAYMENTS
+        if(inDelivery) {
+            const deliveryPayments = await filterPaymentForDelivery(paymentsFound)
+            return deliveryPayments
+        }
         return paymentsFound
     } catch(e) {
         ErrorsPitcher(e)

@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
                     {currentView !== 'home' && type === 'basic' ?
                         <ToolbarButton 
                             key="agregar" 
-                            disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport')} 
+                            disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport') || (userLogin?.role !== 'admin' && currentView === 'users')} 
                             icon={<AddIcon fontSize="small"/>} 
                             label="agregar" 
                             handleClick={handleClickAdd}
@@ -76,12 +76,14 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
                     :   <FlexBetween gap={'1rem'}>
                             <ToolbarButton
                                 key="modificar"
+                                disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport')} 
                                 icon={<EditIcon fontSize="small"/>}
                                 label="modificar"
                                 handleClick={handleClickAdd}
                             />
                             <ToolbarButton
                                 key={"eliminar"}
+                                disabled={(userLogin?.role === 'delivery')} 
                                 icon={<DeleteIcon fontSize="small"/>}
                                 label="eliminar"
                                 handleClick={handleClickAdd}

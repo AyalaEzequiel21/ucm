@@ -91,7 +91,7 @@ const getAllSales = async (inDelivery: boolean) => {
     try {
         const sales: SaleMongoType[] = await SaleModel.find().lean() //  FIND ALL SALES
         if(inDelivery){
-            const salesFiltered = filterSaleForDelivery(sales)
+            const salesFiltered = await filterSaleForDelivery(sales)
             return salesFiltered
         }
         return sales

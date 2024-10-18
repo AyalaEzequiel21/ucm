@@ -13,6 +13,10 @@ router.use(validateUser())
 
 //  GET ALL CLIENT PAYMENTS 
 router.get("/", filterGetAll(), findAllClientsPayments)
+// GET CLIENT PAYMENTS BY PAYMENT ID
+router.get("/payment/:paymentId", findClientPaymentById) 
+// GET CLIENT PAYMENT FOR DETAIL BY PAYMENT ID
+router.get("/paymentDetail/:paymentId", findClientPaymentDetailById)
 
 // MIDDLEWARE FOR CHECK IF USER ROLE IS VALID
 router.use(validateUserRole(['admin', 'biller']))
@@ -21,10 +25,6 @@ router.use(validateUserRole(['admin', 'biller']))
 router.post("/register", validateSchemaRequest(newClientPaymentSchema), registerClientPayment)
 // GET CLIENT PAYMENTS BY PAYMENT METHOD
 router.get("/method/:paymentMethod", findClientPaymentsByPaymentMethod)
-// GET CLIENT PAYMENTS BY PAYMENT ID
-router.get("/payment/:paymentId", findClientPaymentById) 
-// GET CLIENT PAYMENT FOR DETAIL BY PAYMENT ID
-router.get("/paymentDetail/:paymentId", findClientPaymentDetailById)
 // GET CLIENT PAYMENTS BY PAYMENT DATE
 router.get("/payment-date", findClientPaymentsByDate)
 // GET ALL CLIENT PAYMENTS BY CLIENT ID    

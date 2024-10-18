@@ -1,7 +1,7 @@
 import { ClientSession, get } from "mongoose";
 import { getClientById } from "../../services/ClientService";
 import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../../errors/CustomErros";
-import { ClientPaymentModel } from "../../models";
+import { ClientModel, ClientPaymentModel } from "../../models";
 import { PaymentDtoType } from "../../schemas/PaymentDtoSchema";
 import { IdType } from "../types/IdType";
 import { IPaymentsOfClientDetails } from "../interfaces/IClientDetails";
@@ -11,8 +11,6 @@ import { ClientPaymentMongoType, ClientPaymentType } from "../../schemas/ClientP
 /////////////////////////
 // CLIENT PAYMENT UTILS
 /////////////////////////
-
-
 
 
 // ADD PAYMENT TO CLIENT AND UPDATE THE CLIENT BALANCE
@@ -116,6 +114,23 @@ const getClientPaymentsForDetails = async (clientId: IdType) => {
     }
 }
 
-export { addPaymentToClient, subtractPaymentToClient, processOnePayment, updateSaleIdOfPayment, processPaymentOfSale, getClientPaymentsForDetails }
+const filterPaymentForDelivery = async (paymentsFound: ClientPaymentMongoType[]) => {
+    try{ 
+        const deliveryPayments = []
+        for(const payment of paymentsFound){
+            if(payment.client_id) {
+                const client = await ClientModel.findById(payment.client_id).lean()
+                if(client?.in_delivery){
+                    deliveryPayments.push(payment)
+                }
+            }
+        }
+        return deliveryPayments
+    } catch(e) {
+        throw e
+    }
+}
+
+export { addPaymentToClient, subtractPaymentToClient, processOnePayment, updateSaleIdOfPayment, processPaymentOfSale, getClientPaymentsForDetails, filterPaymentForDelivery }
 
 

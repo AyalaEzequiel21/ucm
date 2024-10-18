@@ -14,6 +14,10 @@ router.use(validateUser())
 // router.post("/testRegister", registerClient)
 // GET ALL CLIENTS
 router.get("/", filterGetAll(), findActivesClients)
+// GERT CLIENT BY ID
+router.get('/client/:clientId', findClientById)
+// GET CLIENT DETAILS BY ID
+router.get("/clientDetails/:clientId", findClientDetailsById)
 
 // MIDDLEWARE FOR VALIDATE IF USER ROLE IS VALID
 router.use(validateUserRole(["admin", "biller"]))
@@ -24,10 +28,6 @@ router.post("/register", validateSchemaRequest(newClientSchema), registerClient)
 router.put("/update", validateSchemaRequest(clientMongoSchema), updateClient)
 // GET CLIENTS BY NAME
 router.get("/clientName/:clientName", findClientsByName)
-// GERT CLIENT BY ID
-router.get('/client/:clientId', findClientById)
-// GET CLIENT DETAILS BY ID
-router.get("/clientDetails/:clientId", findClientDetailsById)
 // GET CLIENTS BY CATEGORY
 router.get("/category/:clientCategory", findClientsByCategory)
 // GET ALL INACTIVE CLIENTS

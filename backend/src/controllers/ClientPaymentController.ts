@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { ClientPaymentType } from "../schemas/ClientPaymentSchema";
 import { createClientPayment, getAllClientsPayments, getClientPaymentsById, getClientPaymentsByIdForDetail, getClientsPaymentsByDate, getPaymentsByClientId, getPaymentsPaymentMethod, removeClientPayment } from "../services/ClientPaymentService";
 import { PaymentMethodType } from "../utilities/types/PaymentMethod";
+import { RequestExtended } from "../utilities/interfaces/RequestExtended";
 
 /////////////////////////
 // CLIENT PAYMENT CONTROLLER
@@ -52,9 +53,10 @@ const findClientPaymentDetailById = async (req: Request, res: Response, next: Ne
 }
 
 // FIND ALL CLIENTS PAYMENTS
-const findAllClientsPayments = async (req: Request, res: Response, next: NextFunction) => {
+const findAllClientsPayments = async (req: RequestExtended, res: Response, next: NextFunction) => {
+    const inDelivery = !!req.filterDelivery
     try {
-        const paymentsFound = await getAllClientsPayments() // FIND ALL PAYMENTS WITH THE SERVICE
+        const paymentsFound = await getAllClientsPayments(inDelivery) // FIND ALL PAYMENTS WITH THE SERVICE
         res.status(200).json({ok: true, data: paymentsFound})
     } catch(e) {
         next(e)
