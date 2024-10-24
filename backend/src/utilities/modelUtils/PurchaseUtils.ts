@@ -15,9 +15,10 @@ import { IPurchasesOfSupplierDetails } from "../interfaces/ISupplierDetails";
 const addPurchaseToSupplier = async (supplierId: IdType, purchase: PurchaseMongoType, session: ClientSession) => {
     try {
         const supplier = await getSupplierById(supplierId)  // FIND THE SUPPLIER
-        if((supplier && supplier.balance) && (purchase._id && purchase.total_purchase)){ // IF THE SUPPLIER EXISTS ADD THE PURCHASE TO THE LIST OF PURCHASESs
-            supplier.purchases?.push(purchase._id) // ADD PURCHASE TO SUPPLIER LIST OF PURCHASES
-            supplier.balance += purchase.total_purchase // UPDATE THE SUPPLIER BALANCE
+        const { total_purchase, _id } = purchase
+        if(supplier &&  total_purchase && _id){ // IF THE SUPPLIER EXISTS ADD THE PURCHASE TO THE LIST OF PURCHASESs
+            supplier.purchases?.push(_id) // ADD PURCHASE TO SUPPLIER LIST OF PURCHASES
+            supplier.balance += total_purchase || 0// UPDATE THE SUPPLIER BALANCE
             await supplier.save({session}) // SAVE THE SUPPLIER
         }
     } catch(e) {

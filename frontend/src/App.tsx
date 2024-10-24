@@ -1,7 +1,7 @@
 import { CssBaseline } from "@mui/material"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { useMemo } from "react"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import { themeSettings } from "./config/theme"
 import { Layout } from "./scenes/layout"
 import { Products } from "./scenes/Products"
@@ -21,6 +21,7 @@ import { PaymentDetails } from "./scenes/Payments/PaymentDetails"
 import { PurchaseDetails } from "./scenes/Purchases/PurchaseDetails"
 import { PaymentToSupplierDetails } from "./scenes/PaymentsToSupplier/PaymentToSupplierDetails"
 import { SupplierDetails } from "./scenes/Suppliers/SupplierDetails"
+import { PaymentsReportDetails } from "./scenes/Reports/PaymentsReportDetails"
 
 function App() {
 
@@ -32,9 +33,10 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline />
               <Routes> 
+                <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path='/login' element={<Login/>}/>
                 <Route element={<Layout />}>
-                  <Route path='/' element={<Home/>}/>
+                  <Route path='/home' element={<Home/>}/>
                   <Route path='/clients' element={<Clients />}/>
                   <Route path='/clients/client/:id' element={<ClientDetails />}/>
                   <Route path='/products' element={<Products />}/>
@@ -42,6 +44,7 @@ function App() {
                   <Route path='/clientPayments/payment/:id' element={<PaymentDetails />}/>
                   <Route path='/users' element={<Users />}/>
                   <Route path='/paymentsReport' element={<PaymentsReports />}/>
+                  <Route path='/paymentsReport/report/:id' element={<PaymentsReportDetails />}/>
                   <Route path='/sales' element={<Sales />}/>
                   <Route path='/sales/sale/:id' element={<SaleDetails />}/>
                   <Route path='/suppliers' element={<Suppliers />}/>

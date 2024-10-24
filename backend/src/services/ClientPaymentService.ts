@@ -19,10 +19,10 @@ import { getClientById } from "./ClientService";
 // CREATE
 const createClientPayment = async (clientPayment: ClientPaymentType) => {
     const { client_id, amount, client_name, payment_method } = clientPayment //  GET THE PARAMETERS PAYMENT FROM THE REQUEST 
-    const session = await startSession() // INIT A SESSION FOR TRANSACTION
     if(!client_id || !amount || !payment_method || !client_name) { // CHECK THAT ALL THE NECESSARY PARAMETERS ARE EXIST, OR RUN AN EXCEPTION
         throw new BadRequestError("Faltan datos necesarios")
     }
+    const session = await startSession() // INIT A SESSION FOR TRANSACTION
     try {
         session.startTransaction() // INIT TRANSACTIONS
         const clientExists = await validateClient(client_id) // FIND CLIENTS PAYMENT
@@ -31,7 +31,7 @@ const createClientPayment = async (clientPayment: ClientPaymentType) => {
             const paymentParsed = paymentCreated[0] as ClientPaymentMongoType
             await addPaymentToClient(client_id, paymentParsed, session) //  ADD PAYMENT TO CLIENT AND UPDATE THE BALANCE
             await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
-            return paymentCreated[0]
+            return paymentParsed
         }
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION

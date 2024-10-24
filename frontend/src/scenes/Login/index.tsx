@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.jpeg";
 import { CustomInput } from "@/components/CustomInput";
 import { useLoginMutation } from "@/redux/api/userApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { jwtDecode } from "jwt-decode";
 import { IUser } from "@/utils/interfaces/IUser";
@@ -42,7 +42,9 @@ const Login: React.FC<LoginProps> = () => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loginLocalUser } = useLocalStorage();
+  const { loginLocalUser, getJwtLocalStorage } = useLocalStorage();
+  const jwt = getJwtLocalStorage()
+
 
   const onSubmit = async (dataForm: ILoginFormValues) => {
     setErrorMessage(undefined);
@@ -51,12 +53,20 @@ const Login: React.FC<LoginProps> = () => {
       const decodedToken = jwtDecode<IUser>(response.token);
       dispatch(login(decodedToken ));
       loginLocalUser(response.token);
-      navigate("/");
+      navigate("/home");
     } catch (e) {
       const err = e as ApiErrorResponseType;
       setErrorMessage(err.data.message);
     }
   };
+
+  useEffect(()=> {
+    if(jwt){
+        navigate('/home')
+        const jwtDecoded: IUser = jwtDecode(jwt)
+        dispatch(login(jwtDecoded))            
+    }
+}, [jwt, dispatch, navigate])
 
   return (
     <Container

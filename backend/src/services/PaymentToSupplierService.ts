@@ -18,10 +18,10 @@ import { getSupplierById } from "./SupplierService";
 // CREATE 
 const createPaymentToSupplier = async (paymentToSupplier: PaymentToSupplierType) => {
     const { supplier_id } = paymentToSupplier // GET THE DATA FOR CREATE THE PAYMENT TO SUPPLIER
-    const session = await startSession() // INIT A SESSION FOR A TRANSACTION
     if(!supplier_id){ // IF THE SUPPLIER ID NOT EXISTS RUN AN EXCEPTION
         throw new BadRequestError("Faltan datos necesarios")
     }
+    const session = await startSession() // INIT A SESSION FOR A TRANSACTION
     try {
         session.startTransaction() // INIT TRANSACTIONS
         const supplierExists = await validateSupplier(supplier_id) // FIND THE SUPPLIER WITH THIS ID

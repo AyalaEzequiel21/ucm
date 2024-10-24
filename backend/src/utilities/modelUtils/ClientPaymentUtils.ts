@@ -18,7 +18,7 @@ const addPaymentToClient = async (clientId: IdType, payment: ClientPaymentMongoT
     try {
         const client = await getClientById(clientId) // FIND CLIENT WITH SESSION AND CLIENT SERVICE, CHECK IF EXISTS OR RUN AN EXCEPTION        
         if(client && payment && payment._id) {
-            client.balance -= payment.amount // UPDATE THE CLIENT BALANCe
+            client.balance -= payment.amount || 0 // UPDATE THE CLIENT BALANCe
             client.payments?.push(payment._id) // ADD PAYMENT TO CLIENT LIST OF PAYMENTS
             await client.save({session})
         }

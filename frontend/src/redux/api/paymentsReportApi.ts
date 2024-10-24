@@ -1,5 +1,5 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders"
-import { IApiResponse } from "@/utils/interfaces/IApiResponse"
+import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse"
 import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
@@ -26,7 +26,7 @@ export const paymentsReportApi = createApi({
             invalidatesTags: ['Payments Report']
         }),
         // METODO BUSCAR POR ID
-        getPaymentsReportById: builder.query<IApiResponse<IPaymentsReport>, string>({
+        getPaymentsReportById: builder.query<ISingularApiResponse<IPaymentsReport>, string>({
             query: (id) => `/paymentsReport/report/${id}`,
             providesTags: ['Payments Report']
         }),

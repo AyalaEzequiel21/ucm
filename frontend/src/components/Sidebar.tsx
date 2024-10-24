@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
     const handleClickLogo = () => {
         dispatch(setViewState('home'))
-        navigate('/')
+        navigate('/home')
         setActive('')
     }
 

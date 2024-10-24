@@ -1,7 +1,6 @@
 import { ClientSession } from "mongoose";
 import { IdType } from "../types/IdType";
 import { getSupplierById } from "../../services/SupplierService";
-import { ResourceNotFoundError } from "../../errors/CustomErros";
 import { PaymentToSupplierModel } from "../../models";
 import { PaymentToSupplierMongoType } from "../../schemas/PaymentToSupplierSchema";
 import { IPaymentsOfSupplierDetails } from "../interfaces/ISupplierDetails";
@@ -15,12 +14,9 @@ import { IPaymentsOfSupplierDetails } from "../interfaces/ISupplierDetails";
 const addPaymentToSupplier = async (supplierId: IdType, paymentToSupplier: PaymentToSupplierMongoType, session: ClientSession) => {
     try {
         const supplier = await getSupplierById(supplierId) // FIND THE SUPPLIER WITH THIS ID
-        if(!supplier) { // IF THE SUPPLIER IS NOT FOUND, THEN RUN AN EXCEPTION
-            throw new ResourceNotFoundError('Proveedor')
-        }
         if(supplier && supplier.payments && supplier.balance){
             supplier.payments.push(paymentToSupplier._id) // ADD THE PAYMENT TO SUPPLIER LIST OF PAYMENTS
-            supplier.balance -= paymentToSupplier.total_payment // UPDATE THE SUPPLIER BALANCE
+            supplier.balance -= paymentToSupplier.total_payment || 0 // UPDATE THE SUPPLIER BALANCE
             await supplier.save({session})
         }
     } catch(e){

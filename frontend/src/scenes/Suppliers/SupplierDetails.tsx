@@ -89,7 +89,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                     <CustomTextItem isTitle={true}>Información Personal</CustomTextItem>
                     <CustomTextItem isTitle={false} tag="Telefono" icon={<PhoneIcon fontSize={isMobile ? "small" : "medium"}/>}>{supplierDetails.phone}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Categoria" icon={<SellIcon fontSize={isMobile ? "small" : "medium"}/>}>{supplierDetails.primeProduct}</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Producto" icon={<SellIcon fontSize={isMobile ? "small" : "medium"}/>}>{supplierDetails.primeProduct}</CustomTextItem>
                     <CustomTextItem isTitle={false} tag="Registrado" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(supplierDetails.createdAt.toString())}</CustomTextItem>
                 </DetailsCard>
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>

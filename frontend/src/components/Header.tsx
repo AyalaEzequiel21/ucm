@@ -64,8 +64,8 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
                 >
                     {subtitle}
                 </Typography>
-                <Box display={'flex'} gap={'1rem'}>
-                    {currentView !== 'home' && type === 'basic' ?
+                {currentView !== 'home' && <Box display={'flex'} gap={'1rem'}>
+                    {type === 'basic' ?
                         <ToolbarButton 
                             key="agregar" 
                             disabled={(userLogin?.role === 'delivery' && currentView !== 'paymentsReport') || (userLogin?.role !== 'admin' && currentView === 'users')} 
@@ -90,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
                             />
                         </FlexBetween>
                     }
-                </Box>
+                </Box>}
             </FlexBetween>
             <CustomModal 
                 open={openModal} 
