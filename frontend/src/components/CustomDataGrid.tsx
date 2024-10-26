@@ -21,6 +21,7 @@ export type CustomDataGridProps<T> = {
     lightMode?: boolean // Indica si la tabla debe mostrar el modo claro.
     paginationModel?: GridPaginationModel, // Estado de la paginación.
     onPaginationChange?: (model: GridPaginationModel) => void, // Función para manejar el cambio de paginación.
+    idName?: keyof T
 }
 
 const CustomDatGrid = <T,>({
@@ -35,6 +36,7 @@ const CustomDatGrid = <T,>({
     lightMode,
     paginationModel,
     onPaginationChange,
+    idName
 }: CustomDataGridProps<T>) => {
 
     const {isMobile, isTablet, isDesktop } = useScreenSize()
@@ -61,7 +63,7 @@ const CustomDatGrid = <T,>({
                 <DataGrid 
                     rows={rows}
                     columns={getColumns()}
-                    getRowId={(row) => row._id}
+                    getRowId={(row) => idName ? row[idName] : row['_id']}
                     loading={isLoading}
                     paginationModel={paginationModel}
                     pageSizeOptions={[15]}
