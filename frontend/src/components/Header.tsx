@@ -10,6 +10,7 @@ import { useState } from "react"
 import { CustomModal } from "./CustomModal"
 import { formPitcher } from "@/utils/functionsHelper/formPitcher"
 import { CustomAlert } from "./CustomAlert"
+import { AddButton } from "./ui-components/buttons/AddButton"
 
 /**
  * Componente Header:
@@ -90,6 +91,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
                             />
                         </FlexBetween>
                     }
+                    <AddButton/>
                 </Box>}
             </FlexBetween>
             <CustomModal 
@@ -100,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({title, subtitle, type}) => {
                         formPitcher(currentView, handleCloseModal, handleSucessAlert, handleErrorAlert) 
                     : 
                         <div></div>
-                    }
+                    }   
             />
             <CustomAlert
                 open={sucessAlertState}    

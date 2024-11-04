@@ -1,8 +1,8 @@
 import { CustomTextItem } from "@/components/CustomTextItem"
-import { DetailsCard } from "@/components/DetailsCard"
+import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
-import { SpinnerLoading } from "@/components/SpinnerLoading"
+import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import useScreenSize from "@/hooks/useScreenSize"
 import { useGetPaymentsReportByIdQuery } from "@/redux/api/paymentsReportApi"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
@@ -35,6 +35,10 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
 
     const columnsTablet: GridColDef[] = [
         { field: 'payment_method', headerName: 'Metodo', flex: 0.5 },
+    ]
+
+    const columnsDesktop: GridColDef[] = [
+        
     ]
 
     useEffect(() => {
@@ -70,6 +74,7 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
                         isFilterName={false}
                         columnsBase={columnsBase}
                         addedColumnsTable={columnsTablet}
+                        addedColumnsDesktop={columnsDesktop}
                         isLoading={isLoading}
                         lightMode={true}
                         idName="client_id"

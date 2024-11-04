@@ -1,4 +1,4 @@
-import { DetailsCard } from "@/components/DetailsCard"
+import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
@@ -15,7 +15,7 @@ import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { MultiTables, TableExtended } from "@/components/MultiTables"
 import { GridColDef } from "@mui/x-data-grid"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
-import { SpinnerLoading } from "@/components/SpinnerLoading"
+import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 
 type ClientDetailsProps = object
 

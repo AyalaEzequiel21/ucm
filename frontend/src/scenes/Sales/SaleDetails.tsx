@@ -1,5 +1,5 @@
 import { CustomTextItem } from "@/components/CustomTextItem"
-import { DetailsCard } from "@/components/DetailsCard"
+import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import useScreenSize from "@/hooks/useScreenSize"
@@ -15,7 +15,7 @@ import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { GridColDef } from "@mui/x-data-grid"
-import { SpinnerLoading } from "@/components/SpinnerLoading"
+import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 
 type SaleDetailsProps = object
 

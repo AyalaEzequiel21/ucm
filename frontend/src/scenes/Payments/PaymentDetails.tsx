@@ -1,5 +1,5 @@
 import { CustomTextItem } from "@/components/CustomTextItem"
-import { DetailsCard } from "@/components/DetailsCard"
+import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import useScreenSize from "@/hooks/useScreenSize"
@@ -15,7 +15,7 @@ import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import PaymentIcon from '@mui/icons-material/Payment';
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import ListAltIcon from '@mui/icons-material/ListAlt'
-import { SpinnerLoading } from "@/components/SpinnerLoading"
+import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { Box, Typography } from "@mui/material"
 import { ToolbarButton } from "@/components/ToolbarButton"
 

@@ -1,7 +1,7 @@
 import { IProduct } from "@/utils/interfaces/IProduct"
 import { Card, CardContent, IconButton, Typography, useTheme } from "@mui/material"
 import EditIcon from '@mui/icons-material/Edit';
-import { FlexBetween } from "./FlexBetween";
+import { FlexBetween } from "../FlexBetween";
 
 /**
  * Componente ProductCard:

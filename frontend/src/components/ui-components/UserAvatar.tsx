@@ -1,6 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material"
-import { FlexBetween } from "./FlexBetween"
+
 import useScreenSize from "@/hooks/useScreenSize"
+import { FlexBetween } from "../FlexBetween"
 
 /**
  * 

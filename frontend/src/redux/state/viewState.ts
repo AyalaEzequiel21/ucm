@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 // VISTAS
-export type ViewStateType = 'home' | 'clients' | 'clientsPayments' | 'products' | 'sales' | 'users' | 'suppliers' | 'purchases' | 'paymentsReport'
+export type ViewStateType = 'home' | 'clients' | 'clientsPayments' | 'products' | 'sales' | 'users' | 'suppliers' | 'purchases' | 'paymentsReport' | 'paymentsToSuppliers'
 
 // ESTRUCTURA DEL ESTADO PARA ALMACENAR LA VISTA ACTUAL
 interface IViewState {

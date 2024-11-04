@@ -33,7 +33,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({icon, label, handleClick, 
                 }
             }}
         >
-            {icon} {isMobile ? '' : label}
+            {icon} {!isMobile && label}
         </Button>
     )
 }

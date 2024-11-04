@@ -14,9 +14,9 @@ import SellIcon from '@mui/icons-material/Sell'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import { useNavigate, useParams } from "react-router-dom"
-import { SpinnerLoading } from "@/components/SpinnerLoading"
+import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { CustomTextItem } from "@/components/CustomTextItem"
-import { DetailsCard } from "@/components/DetailsCard"
+import { DetailsCard } from "@/components/ui-components/DetailsCard"
 
 type SupplierDetailsProps = object
 
