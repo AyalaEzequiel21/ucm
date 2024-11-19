@@ -1,5 +1,5 @@
 export type FormAddProps = {
     onCloseModal: ()=> void,
-    confirmAlertSucess: (message: string)=> void
+    confirmAlertSucess: ()=> void
     confirmErrorAlert: ()=> void
 }

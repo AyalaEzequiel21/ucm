@@ -11,6 +11,8 @@ import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { PaymentAddForm } from "@/components/forms/PaymentAddForm"
 
 type PaymentsProps = object
 
@@ -24,6 +26,8 @@ const Payments: React.FC<PaymentsProps> = () => {
   // Obtiene la lista de pagos y el estado de carga desde el store de Redux.
     const {clientsPayments, clientsPaymentsLoading} = useSelector((state: RootState) => state.clientPayment.allClientsPayments)
       const navigate = useNavigate()
+      const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isDelivery = userLogin?.role === 'delivery'
       const handleDetailsClick = (id: string) => {
         navigate(`/clientPayments/payment/${id}`)
         }
@@ -45,7 +49,13 @@ const Payments: React.FC<PaymentsProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="PAGOS DE CLIENTES" subtitle="Lista de pagos" type="basic"/>
+            <Header title="PAGOS DE CLIENTES" subtitle="Lista de pagos">
+              <AddButton 
+                form={<PaymentAddForm/>}
+                model="Pago"
+                disabled={isDelivery}
+              />
+            </Header>
             {clientsPayments.length === 0 ?
               <NotFoundComponent />
               :

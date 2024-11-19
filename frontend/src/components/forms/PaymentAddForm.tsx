@@ -1,6 +1,5 @@
 import { useAddClientPaymentMutation } from "@/redux/api/clientPaymentApi";
 import { INewClientPaymentValues } from "@/utils/interfaces/registerModels/INewClientPaymentValues";
-import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
@@ -12,12 +11,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions.";
+import { useModalAlert } from "@/context/ModalContext";
 
-const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const PaymentAddForm: React.FC<object> = () => {
     
     const [addClientPayment, {isLoading}] = useAddClientPaymentMutation()
     const {clients} = useSelector((state: RootState) => state.client.allClients)
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
     const methods = useForm<INewClientPaymentValues>()
     const {
         handleSubmit,
@@ -33,12 +34,12 @@ const PaymentAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
         try{
             const response = await addClientPayment(dataProsseced).unwrap()
             console.log(response);
-            confirmAlertSucess('El producto se registro con exito')
-            onCloseModal()
+            toggleSuccessAlert()
+            toggleModal()
             reset()
         } catch(e){
             const err = e as ApiErrorResponseType
-            confirmErrorAlert()
+            toggleErrorAlert()
             setErrorMessage(err.data.message)
         }
     }

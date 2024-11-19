@@ -11,6 +11,8 @@ import { IClient } from "@/utils/interfaces/IClient";
 import { GridColDef } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { AddButton } from "@/components/ui-components/buttons/AddButton";
+import { ClientAddForm } from "@/components/forms/ClientAddForm";
 
 type ClientsProps = object;
 
@@ -24,7 +26,8 @@ const Clients: React.FC<ClientsProps> = () => {
     // Obtiene la lista de clientes y el estado de carga desde el store de Redux.
   const {clients, clientsLoading} = useSelector((state: RootState) => state.client.allClients)
   const navigate = useNavigate()
-
+  const userLogin = useSelector((state: RootState) => state.user.userLogin)
+  const isDelivery = userLogin?.role === 'delivery'
   const handleDetailsClick = (id: string) => {
     navigate(`/clients/client/${id}`)
   };
@@ -50,7 +53,13 @@ const Clients: React.FC<ClientsProps> = () => {
 
   return (
     <SceneContainer>
-      <Header title="CLIENTES" subtitle="Lista de clientes" type="basic"/>
+      <Header title="CLIENTES" subtitle="Lista de clientes">
+        <AddButton 
+          form={<ClientAddForm/>}
+          model="Cliente"
+          disabled={isDelivery}
+        />
+      </Header>
       {clients.length === 0 ?
         <NotFoundComponent /> 
         :

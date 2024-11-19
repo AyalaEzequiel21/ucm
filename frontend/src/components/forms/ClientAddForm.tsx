@@ -8,15 +8,16 @@ import { useAddClientMutation } from "@/redux/api/clientApi"
 import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
-import { FormAddProps } from "@/utils/types/FormAddProps"
 import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
+import { useModalAlert } from "@/context/ModalContext"
 
 
-const ClientAddForm: React.FC<FormAddProps> = ({onCloseModal, confirmAlertSucess, confirmErrorAlert}) => {
+const ClientAddForm: React.FC<object> = () => {
 
     const [addClient, {isLoading}] = useAddClientMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined) 
     const methods = useForm<INewClientValues>()
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
     const { handleSubmit, reset, formState: {errors} } = methods
 
 
@@ -31,13 +32,13 @@ const ClientAddForm: React.FC<FormAddProps> = ({onCloseModal, confirmAlertSucess
         try{
             // const response = 
             await addClient(processedDataForm).unwrap()
-            confirmAlertSucess(`El cliente se registro con exito`)
+            toggleSuccessAlert()
             reset()
-            onCloseModal()
+            toggleModal()
             
         } catch(e){
             const err = e as ApiErrorResponseType
-            confirmErrorAlert()
+            toggleErrorAlert()
             console.log(err.data.message);
             setErrorMessage(err.data.message)
         }

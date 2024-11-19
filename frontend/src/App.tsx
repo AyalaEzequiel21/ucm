@@ -22,6 +22,7 @@ import { PurchaseDetails } from "./scenes/Purchases/PurchaseDetails"
 import { PaymentToSupplierDetails } from "./scenes/PaymentsToSupplier/PaymentToSupplierDetails"
 import { SupplierDetails } from "./scenes/Suppliers/SupplierDetails"
 import { PaymentsReportDetails } from "./scenes/Reports/PaymentsReportDetails"
+import { ModalProvider } from "./context/ModalContext"
 
 function App() {
 
@@ -35,7 +36,11 @@ function App() {
               <Routes> 
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path='/login' element={<Login/>}/>
-                <Route element={<Layout />}>
+                <Route element={
+                  <ModalProvider>
+                    <Layout />
+                  </ModalProvider>}
+                >
                   <Route path='/home' element={<Home/>}/>
                   <Route path='/clients' element={<Clients />}/>
                   <Route path='/clients/client/:id' element={<ClientDetails />}/>

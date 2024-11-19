@@ -1,48 +1,46 @@
-import { useState } from "react"
+import React from "react"
 import { CustomButton } from "./CustomButton"
 import AddIcon from '@mui/icons-material/Add'
 import { CustomModal } from "@/components/CustomModal"
 import { CustomAlert } from "@/components/CustomAlert"
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
+import { useModalAlert } from "@/context/ModalContext"
 
-type AddButtonProps = object
+interface AddButtonProps {
+    form: React.ReactNode,
+    model: string, 
+    disabled?: boolean
+}
 
-const AddButton: React.FC<AddButtonProps> = () => {
+const AddButton: React.FC<AddButtonProps> = ({form, model, disabled}) => {
     
-    const [openModal, setOpenModal] = useState(false)
-    const [successAlertOpen, setSuccessAlertOpen] = useState(false)
-    const [errorAlertOpen, setErrorAlertOpen] = useState(false)
-
-    const toogleModal = () => setOpenModal(!openModal)
-
-    const toogleSuccess = () => setSuccessAlertOpen(!successAlertOpen)
-
-    const toogleError = () => setErrorAlertOpen(!errorAlertOpen)
+    const { openModal, toggleModal, successAlertOpen, errorAlertOpen, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
 
     return(
         <>
             <CustomButton
                 icon={<AddIcon fontSize="small"/>}
                 label= 'Agregar'
-                onClick={toogleModal}
-                disabled={false}
-                mode='dark'
+                onClick={toggleModal}
+                disabled={disabled}
+                mode='light'
             />
 
             <CustomModal
                 open={openModal}
-                handleClose={toogleModal}
-                element={<>Lista</>}
+                handleClose={toggleModal}
+                element={form}
             />
             <CustomAlert
                 open={successAlertOpen}
-                label="Elemento agregado correctamente"
-                onCLose={toogleSuccess}
+                label={`${getCapitalizeString(model)} agregado correctamente`}
+                onCLose={toggleSuccessAlert}
                 type="success"
             />
             <CustomAlert
                 open={errorAlertOpen}
                 label="Error al agregar elemento"
-                onCLose={toogleError}
+                onCLose={toggleErrorAlert}
                 type="error"
             />
         </>
