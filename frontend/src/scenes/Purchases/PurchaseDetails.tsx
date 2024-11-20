@@ -18,6 +18,8 @@ import { useEffect } from "react"
 import { Box } from "@mui/material"
 import { ToolbarButton } from "@/components/ToolbarButton"
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import { SceneContainer } from "@/components/SceneContainer"
+import { Header } from "@/components/Header"
 
 
 type PurchaseDetailsProps = object
@@ -50,46 +52,51 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
     if(isLoading || !purchase) return <SpinnerLoading />
 
     return (
-        <DetailsLayout title={"Compra"}>
-            <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle>Información</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {getFormatedDate(purchase?.createdAt)}
-                    </CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Proveedor" icon={<PersonIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {purchase?.supplier_name}
-                    </CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Balance actual" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(purchase.supplierBalance)}</CustomTextItem>
-                    
-                </DetailsCard>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle>Totales</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Total de compra" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {getFormatedValue(purchase.total_purchase)}
-                    </CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Cantidad de pagos" icon={<ListAltIcon fontSize={isMobile ? "small" : "medium"}/>}>{purchase.paymentsQuantity}</CustomTextItem>
-                </DetailsCard>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
-                    <CustomTextItem isTitle>Detalles del proveedor</CustomTextItem>
-                    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} width={'100%'} height={'100%'} mt={'3rem'}>
-                        <ToolbarButton handleClick={()=> handleToSupplier(purchase?.supplier_id || '')} label="Ir a detalles" icon={null}/>
-                    </Box>
-                </DetailsCard>
-            </FlexBetween>
-            <FlexBetween>
-                <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
-                    <CustomDatGrid
-                        rows={purchase?.purchaseDetail || []}
-                        isFilterName={false}
-                        columnsBase={columns}
-                        isLoading={isLoading}
-                        lightMode={true}
+        <SceneContainer>
+            <Header title="Compra a proveedor" subtitle="Detalles">
 
-                    />
-                </DetailsCard>
-            </FlexBetween>
-        </DetailsLayout>
+            </Header>
+            <DetailsLayout>
+                <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle>Información</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {getFormatedDate(purchase?.createdAt)}
+                        </CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Proveedor" icon={<PersonIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {purchase?.supplier_name}
+                        </CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Balance actual" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(purchase.supplierBalance)}</CustomTextItem>
+                        
+                    </DetailsCard>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle>Totales</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Total de compra" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {getFormatedValue(purchase.total_purchase)}
+                        </CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Cantidad de pagos" icon={<ListAltIcon fontSize={isMobile ? "small" : "medium"}/>}>{purchase.paymentsQuantity}</CustomTextItem>
+                    </DetailsCard>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
+                        <CustomTextItem isTitle>Detalles del proveedor</CustomTextItem>
+                        <Box display={'flex'} justifyContent={'center'} alignItems={'center'} width={'100%'} height={'100%'} mt={'3rem'}>
+                            <ToolbarButton handleClick={()=> handleToSupplier(purchase?.supplier_id || '')} label="Ir a detalles" icon={null}/>
+                        </Box>
+                    </DetailsCard>
+                </FlexBetween>
+                <FlexBetween>
+                    <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
+                        <CustomDatGrid
+                            rows={purchase?.purchaseDetail || []}
+                            isFilterName={false}
+                            columnsBase={columns}
+                            isLoading={isLoading}
+                            lightMode={true}
+
+                        />
+                    </DetailsCard>
+                </FlexBetween>
+            </DetailsLayout>
+        </SceneContainer>
     )
 }
 

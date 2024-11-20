@@ -16,6 +16,8 @@ import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { GridColDef } from "@mui/x-data-grid"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
+import { SceneContainer } from "@/components/SceneContainer"
+import { Header } from "@/components/Header"
 
 type SaleDetailsProps = object
 
@@ -40,57 +42,62 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
     if(isLoading || !sale) return <SpinnerLoading />
 
     return (
-        <DetailsLayout title={"Venta"}>
-            <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle>Información</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {getFormatedDate(sale?.createdAt)}
-                    </CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Cliente" icon={<PersonIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {sale?.client_name}
-                    </CustomTextItem>
-                </DetailsCard>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle>Totales</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Total de venta" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {getFormatedValue(sale?.total_sale)}
-                    </CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Total de kilos" icon={<CalculateIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {sale?.totalQuantity}Kg
-                    </CustomTextItem>
-                </DetailsCard>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
-                    <CustomTextItem isTitle>Pago</CustomTextItem>
-                    {sale.payment? 
-                        <>
-                            <CustomTextItem isTitle={false} tag="Metodo de pago" icon={<PaymentIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                                {sale.payment.payment_method}
-                            </CustomTextItem>
-                            <CustomTextItem isTitle={false} tag="Total de pago" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                                {getFormatedValue(sale.payment.amount)}
-                            </CustomTextItem>
-                        </>
-                        : 
-                        <CustomTextItem isTitle={false} tag="No realizado" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                            0
+        <SceneContainer>
+            <Header title="Detalle de venta" subtitle={sale?.client_name}>
+                
+            </Header>
+            <DetailsLayout>
+                <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle>Información</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {getFormatedDate(sale?.createdAt)}
                         </CustomTextItem>
-                    }
-                </DetailsCard>
-            </FlexBetween>
-            <FlexBetween>
-                <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
-                    <CustomDatGrid
-                        rows={sale?.details || []}
-                        isFilterName={false}
-                        columnsBase={columns}
-                        isLoading={isLoading}
-                        lightMode={true}
+                        <CustomTextItem isTitle={false} tag="Cliente" icon={<PersonIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {sale?.client_name}
+                        </CustomTextItem>
+                    </DetailsCard>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle>Totales</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Total de venta" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {getFormatedValue(sale?.total_sale)}
+                        </CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Total de kilos" icon={<CalculateIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {sale?.totalQuantity}Kg
+                        </CustomTextItem>
+                    </DetailsCard>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
+                        <CustomTextItem isTitle>Pago</CustomTextItem>
+                        {sale.payment? 
+                            <>
+                                <CustomTextItem isTitle={false} tag="Metodo de pago" icon={<PaymentIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                                    {sale.payment.payment_method}
+                                </CustomTextItem>
+                                <CustomTextItem isTitle={false} tag="Total de pago" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                                    {getFormatedValue(sale.payment.amount)}
+                                </CustomTextItem>
+                            </>
+                            : 
+                            <CustomTextItem isTitle={false} tag="No realizado" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                                0
+                            </CustomTextItem>
+                        }
+                    </DetailsCard>
+                </FlexBetween>
+                <FlexBetween>
+                    <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
+                        <CustomDatGrid
+                            rows={sale?.details || []}
+                            isFilterName={false}
+                            columnsBase={columns}
+                            isLoading={isLoading}
+                            lightMode={true}
 
-                    />
-                </DetailsCard>
-            </FlexBetween>
-        </DetailsLayout>
+                        />
+                    </DetailsCard>
+                </FlexBetween>
+            </DetailsLayout>
+        </SceneContainer>
     )
 }
 

@@ -1,7 +1,6 @@
 import { useAddPurchaseMutation } from "@/redux/api/purchaseApi";
 import { RootState } from "@/redux/store";
 import { INewPurchaseValues, IOnlyPurchase } from "@/utils/interfaces/registerModels/INewPurchase";
-import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -15,13 +14,15 @@ import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { DetailsFormLayout } from "./DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
+import { useModalAlert } from "@/context/ModalContext";
 
 
-const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const PurchaseAddForm: React.FC<object> = () => {
     
     const {palette} = useTheme()
     const [addPurchase, {isLoading}] = useAddPurchaseMutation()
     const {suppliers} = useSelector((state: RootState) => state.supplier.allSuppliers)
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const [detailsPurchase, setDetailsPurchase] = useState<IPurchaseDetails[]>([])
     const methods = useForm<IOnlyPurchase>({
@@ -56,12 +57,12 @@ const PurchaseAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
             console.log(data)
             try {
                 await addPurchase(data).unwrap();
-                confirmAlertSucess('Compra registrada');
-                onCloseModal();
+                toggleSuccessAlert();
+                toggleModal()
               } catch (error) {
                 setErrorMessage(`Error al agregar la compra`)
                 console.log(error)
-                confirmErrorAlert()
+                toggleErrorAlert
               } 
         } else {
             setErrorMessage('Seleccione un proveedor y agregue al menos un detalle.');

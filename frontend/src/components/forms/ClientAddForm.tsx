@@ -17,7 +17,7 @@ const ClientAddForm: React.FC<object> = () => {
     const [addClient, {isLoading}] = useAddClientMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined) 
     const methods = useForm<INewClientValues>()
-    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const { handleSubmit, reset, formState: {errors} } = methods
 
 

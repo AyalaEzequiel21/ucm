@@ -2,7 +2,6 @@ import { useAddSaleMutation } from "@/redux/api/saleApi";
 import { RootState } from "@/redux/store";
 import { ISale, ISaleDetails } from "@/utils/interfaces/ISale";
 import { INewSaleValues, IOnlySale } from "@/utils/interfaces/registerModels/INewSaleValues";
-import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -16,12 +15,14 @@ import { DetailsFormLayout } from "./DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { CategoryType } from "@/utils/types/CategoryType";
 import { PaymentInSaleForm } from "./PaymentInSaleForm";
+import { useModalAlert } from "@/context/ModalContext";
 
-const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const SaleAddForm: React.FC<object> = () => {
 
     const {palette} = useTheme()
     const [addSale, {isLoading}] = useAddSaleMutation()
     const {clients} = useSelector((state: RootState) => state.client.allClients)
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const [detailsSale, setDetailsSale] = useState<ISaleDetails[]>([])
     const [selectedClientCategory, setSelectedClientCategory] = useState<CategoryType | null>(null)
@@ -72,11 +73,11 @@ const SaleAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
             }            
             try {                
                 await addSale(data).unwrap();
-                confirmAlertSucess('Venta registrada');
-                onCloseModal();
+                toggleSuccessAlert()
+                toggleModal()
               } catch (error) {  
                 setErrorMessage(`Error al agregar la venta`)
-                confirmErrorAlert()
+                toggleErrorAlert()
               } 
         } else {
             setErrorMessage('Seleccione un cliente y agregue al menos un detalle.');

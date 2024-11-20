@@ -1,5 +1,4 @@
 import { useAddSupplierMutation } from "@/redux/api/supplierApi";
-import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { FormProvider, useForm } from "react-hook-form";
@@ -7,10 +6,12 @@ import { INewSupplier } from "@/utils/interfaces/registerModels/INewSupplier";
 import { CustomInput } from "../CustomInput";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
+import { useModalAlert } from "@/context/ModalContext";
 
-const SupplierAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const SupplierAddForm: React.FC<object> = () => {
 
     const [addSupplier, {isLoading}] = useAddSupplierMutation()
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
     const methods = useForm<INewSupplier>()
     const {
@@ -27,14 +28,13 @@ const SupplierAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErr
         }
 
         try{
-            const response = await addSupplier(processedDataForm).unwrap()
-            console.log(response)
-            confirmAlertSucess(`El cliente se registro con exito`)
+            await addSupplier(processedDataForm).unwrap()
+            toggleSuccessAlert()
             reset()
-            onCloseModal()
+            toggleModal()
         } catch(e){
             const err = e as ApiErrorResponseType
-            confirmErrorAlert()
+            toggleErrorAlert()
             console.log(err.data.message);
             setErrorMessage(err.data.message)
         }

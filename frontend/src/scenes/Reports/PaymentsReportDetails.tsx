@@ -16,6 +16,8 @@ import {  Button } from "@mui/material"
 import { GridColDef } from "@mui/x-data-grid"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { CustomDatGrid } from "@/components/CustomDataGrid"
+import { SceneContainer } from "@/components/SceneContainer"
+import { Header } from "@/components/Header"
 
 
 type PaymentsReportDetailsProps = object
@@ -48,40 +50,45 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
     if(isLoading || !report) return <SpinnerLoading />
 
     return (
-        <DetailsLayout title="Reporte de pagos">
-            <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle>Información</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {getFormatedDate(report?.createdAt)}
-                    </CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Estado" icon={<AssessmentIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                        {report?.report_status}
-                    </CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Cant. pagos" icon={<CalculateIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                    {report?.payments_dto.length}
-                    </CustomTextItem>
+        <SceneContainer>
+            <Header title="Reporte de pagos" subtitle="Detalles">
 
-                </DetailsCard>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile} centerContent>
-                        <Button disabled={report?.report_status !=='pendiente'} variant="contained">Validar reporte</Button>                    
-                </DetailsCard>
-            </FlexBetween>
-            <FlexBetween>
-                <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
-                    <CustomDatGrid
-                        rows={report?.payments_dto || []}
-                        isFilterName={false}
-                        columnsBase={columnsBase}
-                        addedColumnsTable={columnsTablet}
-                        addedColumnsDesktop={columnsDesktop}
-                        isLoading={isLoading}
-                        lightMode={true}
-                        idName="client_id"
-                    />
-                </DetailsCard>
-            </FlexBetween>
-        </DetailsLayout>
+            </Header>
+            <DetailsLayout>
+                <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle>Información</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {getFormatedDate(report?.createdAt)}
+                        </CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Estado" icon={<AssessmentIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                            {report?.report_status}
+                        </CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Cant. pagos" icon={<CalculateIcon fontSize={isMobile ? "small" : "medium"}/>}>
+                        {report?.payments_dto.length}
+                        </CustomTextItem>
+
+                    </DetailsCard>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile} centerContent>
+                            <Button disabled={report?.report_status !=='pendiente'} variant="contained">Validar reporte</Button>                    
+                    </DetailsCard>
+                </FlexBetween>
+                <FlexBetween>
+                    <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
+                        <CustomDatGrid
+                            rows={report?.payments_dto || []}
+                            isFilterName={false}
+                            columnsBase={columnsBase}
+                            addedColumnsTable={columnsTablet}
+                            addedColumnsDesktop={columnsDesktop}
+                            isLoading={isLoading}
+                            lightMode={true}
+                            idName="client_id"
+                        />
+                    </DetailsCard>
+                </FlexBetween>
+            </DetailsLayout>
+        </SceneContainer>
     )
 }
 

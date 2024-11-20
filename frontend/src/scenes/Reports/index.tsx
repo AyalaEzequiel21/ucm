@@ -11,6 +11,8 @@ import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { PaymentsReportAddFotm } from "@/components/forms/PaymentsReportAddForm"
 
 type PaymentsReportsProps = object
 
@@ -43,7 +45,12 @@ const PaymentsReports: React.FC<PaymentsReportsProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="REPORTES DE PAGOS" subtitle="Lista de reportes de pagos" type="basic"/>
+            <Header title="REPORTES DE PAGOS" subtitle="Lista de reportes de pagos">
+                <AddButton
+                    form={<PaymentsReportAddFotm/>}
+                    model="Reporte de pago"
+                />
+            </Header>
             {paymentsReports.length === 0 ? 
                 <NotFoundComponent /> 
                 : 

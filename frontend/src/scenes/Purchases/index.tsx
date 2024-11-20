@@ -12,6 +12,8 @@ import { IPurchase } from "@/utils/interfaces/IPurchase"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { PurchaseAddForm } from "@/components/forms/PurchaseAddForm"
 
 
 type PurchasesProps = object
@@ -26,6 +28,7 @@ const Purchases: React.FC<PurchasesProps> = () => {
     // Obtiene la lista de compras y el estado de carga desde el store de Redux.
     const {purchases, purchaseLoading} = useSelector((state: RootState) => state.purchase.allPurchases)
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isDelivery = userLogin?.role === 'delivery'
     const navigate = useNavigate()
 
     const handleDetailsClick = (id: string) => {
@@ -48,7 +51,13 @@ const Purchases: React.FC<PurchasesProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="COMPRAS A PROVEEDORES" subtitle="Lista de compras" type="basic"/>
+            <Header title="COMPRAS A PROVEEDORES" subtitle="Lista de compras">
+                {!isDelivery && <AddButton
+                    form={<PurchaseAddForm />}
+                    model="Compra a proveedor"
+                    disabled={isDelivery}
+                />}
+            </Header>
                 {userLogin?.role === 'delivery' ? 
                     <NotAuthorizedComponent />
                     :

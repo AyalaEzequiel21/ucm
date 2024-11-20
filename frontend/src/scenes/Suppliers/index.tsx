@@ -13,6 +13,8 @@ import { ISupplier } from "@/utils/interfaces/ISupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { SupplierAddForm } from "@/components/forms/SupplierAddForm"
 
 
 type SuppliersProps = object
@@ -27,6 +29,7 @@ const Suppliers: React.FC<SuppliersProps> = () => {
     // Obtiene la lista de proveedores y el estado de carga desde el store de Redux.
     const {suppliers, suppliersLoading} = useSelector((state: RootState) => state.supplier.allSuppliers)
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isDelivery = userLogin?.role === 'delivery'
     const navigate = useNavigate()
     
     const handleDetailsClick = (id: string) => {
@@ -50,7 +53,13 @@ const Suppliers: React.FC<SuppliersProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="PROVEEDORES" subtitle="Lista de proveedores" type="basic"/>
+            <Header title="PROVEEDORES" subtitle="Lista de proveedores">
+                {!isDelivery && <AddButton
+                    form={<SupplierAddForm />}
+                    model="Proveedor"
+                    disabled={isDelivery}
+                />}
+            </Header>
             {userLogin?.role === 'delivery' ? 
                 <NotAuthorizedComponent />
                 :

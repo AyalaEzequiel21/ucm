@@ -11,6 +11,8 @@ import { ISale } from "@/utils/interfaces/ISale"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { SaleAddForm } from "@/components/forms/SaleAddForm"
 
 
 type SalesProps = object
@@ -24,6 +26,8 @@ const Sales: React.FC<SalesProps> = () => {
 
     // Obtiene la lista de ventas y el estado de carga desde el store de Redux.
     const {sales, saleLoading} = useSelector((state: RootState) => state.sale.allSales)
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isDelivery = userLogin?.role === 'delivery'
     const navigate = useNavigate()
 
     const handleDetailsClick = (id: string) => {
@@ -48,7 +52,13 @@ const Sales: React.FC<SalesProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="VENTAS" subtitle="Lista de ventas" type="basic"/>
+            <Header title="VENTAS" subtitle="Lista de ventas">
+                <AddButton
+                    form={<SaleAddForm/>}
+                    model="Venta"
+                    disabled={isDelivery}
+                />
+            </Header>
             {sales.length === 0 ?
                 <NotFoundComponent />
                 :

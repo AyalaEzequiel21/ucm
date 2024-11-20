@@ -3,7 +3,6 @@ import { RootState } from "@/redux/store";
 import { ISupplier } from "@/utils/interfaces/ISupplier";
 import { INewPaymentToSupplierValues } from "@/utils/interfaces/registerModels/INewPaymentToSupplierValues";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
-import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -12,11 +11,13 @@ import { CustomAutocomplete } from "../CustomAutocomplete";
 import { CustomInput } from "../CustomInput";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions.";
+import { useModalAlert } from "@/context/ModalContext";
 
-const PaymentToSupplierAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const PaymentToSupplierAddForm: React.FC<object> = () => {
 
     const [addPaymentToSupplier, {isLoading}] = useAddPaymentToSupplierMutation()
     const {suppliers} = useSelector((state: RootState) => state.supplier.allSuppliers)
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
     const methods = useForm<INewPaymentToSupplierValues>()
     const {
@@ -34,12 +35,12 @@ const PaymentToSupplierAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, c
         try{
             const response = await addPaymentToSupplier(dataProsseced).unwrap()
             console.log(response);
-            confirmAlertSucess('El pago se registro con exito')
-            onCloseModal()
+            toggleSuccessAlert()
+            toggleModal()
             reset()
         } catch(e){
             const err = e as ApiErrorResponseType
-            confirmErrorAlert()
+            toggleErrorAlert()
             console.log(err)
             setErrorMessage(err.data.message)
         }

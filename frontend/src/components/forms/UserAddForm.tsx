@@ -1,6 +1,5 @@
 import { useAddUserMutation } from "@/redux/api/userApi";
 import { INewUserValues } from "@/utils/interfaces/registerModels/INewUserValues";
-import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
@@ -8,11 +7,13 @@ import { CustomInput } from "../CustomInput";
 import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
+import { useModalAlert } from "@/context/ModalContext";
 
-const UserAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const UserAddForm: React.FC<object> = () => {
 
     const [addUser, {isLoading}] = useAddUserMutation()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const methods = useForm<INewUserValues>()
     const {
         handleSubmit,
@@ -26,15 +27,14 @@ const UserAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAl
             username: getCapitalizeString(dataForm.username)
         }
         try{
-            // const response = 
             await addUser(processedDataForm).unwrap()            
-            confirmAlertSucess(`El cliente se registro con exito`)
+            toggleSuccessAlert()
             reset()
-            onCloseModal()
+            toggleModal()
             
         } catch(e){
             const err = e as ApiErrorResponseType
-            confirmErrorAlert()
+            toggleErrorAlert()
             console.log(err.data.message);
             setErrorMessage(err.data.message)
         }

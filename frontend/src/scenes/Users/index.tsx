@@ -10,6 +10,8 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { UserType } from "@/utils/types/UserType"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { UserAddForm } from "@/components/forms/UserAddForm"
 
 
 type UsersProps = object
@@ -24,6 +26,7 @@ const Users: React.FC<UsersProps> = () => {
     // Obtiene la lista de usuarios y el estado de carga desde el store de Redux.
     const {users, usersLoading} = useSelector((state: RootState) => state.user.allUsers)
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isAdmin = userLogin?.role === 'admin'
     const handleDetailsClick = () => {
         console.log('_id');
     };
@@ -44,7 +47,13 @@ const Users: React.FC<UsersProps> = () => {
     
     return(
         <SceneContainer>
-            <Header title="USUARIOS" subtitle="Lista de usuarios" type="basic"/>
+            <Header title="USUARIOS" subtitle="Lista de usuarios">
+                {isAdmin && <AddButton
+                    form={<UserAddForm/>}
+                    model="Usuario"
+                    disabled={!isAdmin}
+                />}
+            </Header>
             {userLogin?.role !== 'admin' ? 
                 <NotAuthorizedComponent />
                 :

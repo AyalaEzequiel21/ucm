@@ -7,6 +7,8 @@ import useScreenSize from "@/hooks/useScreenSize"
 import { RootState } from "@/redux/store"
 import { Box } from "@mui/material"
 import { useSelector } from "react-redux"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { ProductAddForm } from "@/components/forms/ProductAddForm"
 
 
 type ProductsProps = object
@@ -20,13 +22,21 @@ const Products: React.FC<ProductsProps> = () => {
 
     // Obtiene la lista de productos y el estado de carga desde el store de Redux.
     const {products, productsLoading} = useSelector((state: RootState) => state.product.allProducts)
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isDelivery = userLogin?.role === 'delivery'
     const { isMobile } = useScreenSize()
 
     if(productsLoading || !products) return <SpinnerLoading />
 
     return (
         <SceneContainer>
-            <Header title={'PRODUCTOS'} subtitle={"Lista de productos"} type="basic"/>
+            <Header title={'PRODUCTOS'} subtitle={"Lista de productos"}>
+                {!isDelivery && <AddButton
+                    form={<ProductAddForm/>}
+                    model="Producto"
+                    disabled={isDelivery}
+                />}
+            </Header>
             {products.length === 0 ? 
                 <NotFoundComponent/> 
                 :

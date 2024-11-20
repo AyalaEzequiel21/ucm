@@ -6,12 +6,13 @@ import { FormProvider, useForm } from "react-hook-form"
 import { INewProductValues } from "@/utils/interfaces/registerModels/INewProductValue"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
-import { FormAddProps } from "@/utils/types/FormAddProps"
+import { useModalAlert } from "@/context/ModalContext"
 
 
-const ProductAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const ProductAddForm: React.FC<object> = () => {
     
     const [addProduct, {isLoading}] = useAddProductMutation()
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
     const methods = useForm<INewProductValues>()
     const {
@@ -30,12 +31,12 @@ const ProductAddForm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErro
         }
         try{
             await addProduct(processedDataForm).unwrap()
-            confirmAlertSucess('El producto se registro con exito')
-            onCloseModal()
+            toggleSuccessAlert()
+            toggleModal()
             reset()
         }catch (e){
             const err = e as ApiErrorResponseType
-            confirmErrorAlert()
+            toggleErrorAlert()
             console.log(err)
             setErrorMessage(err.data.message)
         }

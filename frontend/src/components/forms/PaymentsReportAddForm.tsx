@@ -1,7 +1,6 @@
 import { useAddPaymentsReportMutation } from "@/redux/api/paymentsReportApi";
 import { IClientPayment } from "@/utils/interfaces/IClientPayment";
 import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport";
-import { FormAddProps } from "@/utils/types/FormAddProps";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
@@ -9,10 +8,12 @@ import { ReportDetailsForm } from "./ReportDetailsForm";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { DetailsFormLayout } from "./DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
+import { useModalAlert } from "@/context/ModalContext";
 
-const PaymentsReportAddFotm: React.FC<FormAddProps> = ({confirmAlertSucess, confirmErrorAlert, onCloseModal}) => {
+const PaymentsReportAddFotm: React.FC<object> = () => {
     
     const [addPaymentsReport, {isLoading}] = useAddPaymentsReportMutation()
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
     const [detailsReport, setDetailsReport] = useState<Partial<IClientPayment>[]>([])
     const methods = useForm<Partial<IPaymentsReport>>({
@@ -37,12 +38,12 @@ const PaymentsReportAddFotm: React.FC<FormAddProps> = ({confirmAlertSucess, conf
             const data: Partial<IPaymentsReport> = {...dataForm, payments_dto: detailsReport }  
             try {
                 await addPaymentsReport(data).unwrap();
-                confirmAlertSucess('Reporte de pago registrado');
-                onCloseModal();
+                toggleSuccessAlert()
+                toggleModal()
               } catch (error) {
                 setErrorMessage(`Error al agregar el reporte de pago`)
                 console.log(error)
-                confirmErrorAlert()
+                toggleErrorAlert()
               }
         } else {
             setErrorMessage('Agregue al menos un detalle.');

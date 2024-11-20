@@ -17,6 +17,8 @@ import { useNavigate, useParams } from "react-router-dom"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
+import { SceneContainer } from "@/components/SceneContainer"
+import { Header } from "@/components/Header"
 
 type SupplierDetailsProps = object
 
@@ -84,35 +86,39 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
 
 
     return (
-        <DetailsLayout title = {supplierDetails.supplier_name}>
-            <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle={true}>Información Personal</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Telefono" icon={<PhoneIcon fontSize={isMobile ? "small" : "medium"}/>}>{supplierDetails.phone}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Producto" icon={<SellIcon fontSize={isMobile ? "small" : "medium"}/>}>{supplierDetails.primeProduct}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Registrado" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(supplierDetails.createdAt.toString())}</CustomTextItem>
-                </DetailsCard>
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle={true}>Balance General</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Balance actual" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(supplierDetails.balance)}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Total pagos" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(supplierDetails.totalAmountOfPayments)}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Total compras" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(supplierDetails.totalAmountOfPurchases)}</CustomTextItem>
-                </DetailsCard >
-                <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
-                    <CustomTextItem isTitle={true}>Historial</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Ultima compra" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(supplierDetails.lastPurchase !== null ? supplierDetails.lastPurchase.toString() : '')}</CustomTextItem>
-                    <CustomTextItem isTitle={false} tag="Ultimo pago" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(supplierDetails.lastPayment !== null ? supplierDetails.lastPayment.toString() : '')}</CustomTextItem>
-                </DetailsCard>
-            </FlexBetween>
-            <FlexBetween>
-                <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
-                    <MultiTables 
-                        tables={tables}
-                        halfHeight
-                    />
-                </DetailsCard>
-            </FlexBetween>
-        </DetailsLayout>
+        <SceneContainer>
+            <Header title={supplierDetails.supplier_name} subtitle="Detalles">
+            </Header>    
+            <DetailsLayout>
+                <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle={true}>Información Personal</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Telefono" icon={<PhoneIcon fontSize={isMobile ? "small" : "medium"}/>}>{supplierDetails.phone}</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Producto" icon={<SellIcon fontSize={isMobile ? "small" : "medium"}/>}>{supplierDetails.primeProduct}</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Registrado" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(supplierDetails.createdAt.toString())}</CustomTextItem>
+                    </DetailsCard>
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle={true}>Balance General</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Balance actual" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(supplierDetails.balance)}</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Total pagos" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(supplierDetails.totalAmountOfPayments)}</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Total compras" icon={<AttachMoneyIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedValue(supplierDetails.totalAmountOfPurchases)}</CustomTextItem>
+                    </DetailsCard >
+                    <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
+                        <CustomTextItem isTitle={true}>Historial</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Ultima compra" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(supplierDetails.lastPurchase !== null ? supplierDetails.lastPurchase.toString() : '')}</CustomTextItem>
+                        <CustomTextItem isTitle={false} tag="Ultimo pago" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(supplierDetails.lastPayment !== null ? supplierDetails.lastPayment.toString() : '')}</CustomTextItem>
+                    </DetailsCard>
+                </FlexBetween>
+                <FlexBetween>
+                    <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
+                        <MultiTables 
+                            tables={tables}
+                            halfHeight
+                        />
+                    </DetailsCard>
+                </FlexBetween>
+            </DetailsLayout>
+        </SceneContainer>
     )
 }
 

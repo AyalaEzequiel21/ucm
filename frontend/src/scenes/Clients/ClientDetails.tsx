@@ -16,6 +16,8 @@ import { MultiTables, TableExtended } from "@/components/MultiTables"
 import { GridColDef } from "@mui/x-data-grid"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
+import { SceneContainer } from "@/components/SceneContainer"
+import { Header } from "@/components/Header"
 
 type ClientDetailsProps = object
 
@@ -77,7 +79,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
 
     
     return (
-        <DetailsLayout title={client.fullname ? client.fullname : 'undefined'} >
+        <SceneContainer>
+            <Header title={client.fullname} subtitle="Detalles">
+
+            </Header>
+            <DetailsLayout>
             <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                     <CustomTextItem isTitle={true}>Información Personal</CustomTextItem>
@@ -106,6 +112,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
                 </DetailsCard>
             </FlexBetween>
         </DetailsLayout>
+        </SceneContainer>
     )
 }
 

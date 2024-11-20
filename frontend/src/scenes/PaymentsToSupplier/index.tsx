@@ -12,6 +12,8 @@ import { IPaymentToSupplier } from "@/utils/interfaces/IPaymentToSupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { AddButton } from "@/components/ui-components/buttons/AddButton"
+import { PaymentToSupplierAddForm } from "@/components/forms/PaymentToSupplierAddForm"
 
 
 type PaymentsToSuppliersProps = object
@@ -26,6 +28,7 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
     // Obtiene la lista de pagos a proveedor y el estado de carga desde el store de Redux.
     const {paymentsToSupplier, paymentsToSupplierLoading} = useSelector((state: RootState) => state.paymentToSupplier.allPaymentsToSupplier)
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isDelivery = userLogin?.role === 'delivery'
     const navigate = useNavigate()
     const handleDetailsClick = (id: string) => {
         navigate(`/paymentsToSuppliers/payment/${id}`)
@@ -48,7 +51,13 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="PAGOS A PROVEEDORES" subtitle="Lista de pagos"type="basic"/>
+            <Header title="PAGOS A PROVEEDORES" subtitle="Lista de pagos" >
+                {!isDelivery && <AddButton
+                    form={<PaymentToSupplierAddForm />}
+                    model="Pago a proveedor"
+                    disabled={isDelivery}
+                />}
+            </Header>
             {userLogin?.role === 'delivery' ?
                 <NotAuthorizedComponent />
                 :

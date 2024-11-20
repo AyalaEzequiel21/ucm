@@ -23,11 +23,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({icon, label, onClick, disabl
                 borderRadius: '0.33rem',
                 color: isDark ? palette.grey[200] :palette.primary.dark,
                 backgroundColor: isDark ? palette.primary.dark : 'none',
+                transition: "all 0.3s ease-in-out",
                 '&:hover': {
                     backgroundColor: isDark ? 'none' : palette.primary.dark,
                     border: isDark ? ` 2px solid ${palette.primary.dark}`: 'none',
                     color: isDark? palette.primary.dark : palette.secondary.main,
-
                 }
             }}
         >
