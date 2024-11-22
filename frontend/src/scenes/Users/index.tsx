@@ -10,8 +10,8 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { UserType } from "@/utils/types/UserType"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
-import { AddButton } from "@/components/ui-components/buttons/AddButton"
 import { UserAddForm } from "@/components/forms/UserAddForm"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 
 type UsersProps = object
@@ -48,9 +48,10 @@ const Users: React.FC<UsersProps> = () => {
     return(
         <SceneContainer>
             <Header title="USUARIOS" subtitle="Lista de usuarios">
-                {isAdmin && <AddButton
+                {isAdmin && <HeaderButton
                     form={<UserAddForm/>}
                     model="Usuario"
+                    type="add"
                     disabled={!isAdmin}
                 />}
             </Header>

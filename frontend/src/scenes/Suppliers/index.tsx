@@ -13,8 +13,8 @@ import { ISupplier } from "@/utils/interfaces/ISupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { AddButton } from "@/components/ui-components/buttons/AddButton"
 import { SupplierAddForm } from "@/components/forms/SupplierAddForm"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 
 type SuppliersProps = object
@@ -54,9 +54,10 @@ const Suppliers: React.FC<SuppliersProps> = () => {
     return(
         <SceneContainer>
             <Header title="PROVEEDORES" subtitle="Lista de proveedores">
-                {!isDelivery && <AddButton
+                {!isDelivery && <HeaderButton
                     form={<SupplierAddForm />}
                     model="Proveedor"
+                    type="add"
                     disabled={isDelivery}
                 />}
             </Header>

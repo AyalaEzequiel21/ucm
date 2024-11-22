@@ -12,8 +12,8 @@ import { IPaymentToSupplier } from "@/utils/interfaces/IPaymentToSupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { AddButton } from "@/components/ui-components/buttons/AddButton"
 import { PaymentToSupplierAddForm } from "@/components/forms/PaymentToSupplierAddForm"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 
 type PaymentsToSuppliersProps = object
@@ -52,9 +52,10 @@ const PaymentsToSuppliers: React.FC<PaymentsToSuppliersProps> = () => {
     return(
         <SceneContainer>
             <Header title="PAGOS A PROVEEDORES" subtitle="Lista de pagos" >
-                {!isDelivery && <AddButton
+                {!isDelivery && <HeaderButton
                     form={<PaymentToSupplierAddForm />}
                     model="Pago a proveedor"
+                    type="add"
                     disabled={isDelivery}
                 />}
             </Header>

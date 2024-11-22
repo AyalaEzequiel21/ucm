@@ -12,8 +12,8 @@ import { IPurchase } from "@/utils/interfaces/IPurchase"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { AddButton } from "@/components/ui-components/buttons/AddButton"
 import { PurchaseAddForm } from "@/components/forms/PurchaseAddForm"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 
 type PurchasesProps = object
@@ -52,9 +52,10 @@ const Purchases: React.FC<PurchasesProps> = () => {
     return(
         <SceneContainer>
             <Header title="COMPRAS A PROVEEDORES" subtitle="Lista de compras">
-                {!isDelivery && <AddButton
+                {!isDelivery && <HeaderButton
                     form={<PurchaseAddForm />}
                     model="Compra a proveedor"
+                    type="add"
                     disabled={isDelivery}
                 />}
             </Header>

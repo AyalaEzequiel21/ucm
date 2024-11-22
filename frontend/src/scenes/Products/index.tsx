@@ -7,8 +7,8 @@ import useScreenSize from "@/hooks/useScreenSize"
 import { RootState } from "@/redux/store"
 import { Box } from "@mui/material"
 import { useSelector } from "react-redux"
-import { AddButton } from "@/components/ui-components/buttons/AddButton"
 import { ProductAddForm } from "@/components/forms/ProductAddForm"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 
 type ProductsProps = object
@@ -31,9 +31,10 @@ const Products: React.FC<ProductsProps> = () => {
     return (
         <SceneContainer>
             <Header title={'PRODUCTOS'} subtitle={"Lista de productos"}>
-                {!isDelivery && <AddButton
+                {!isDelivery && <HeaderButton
                     form={<ProductAddForm/>}
                     model="Producto"
+                    type="add"
                     disabled={isDelivery}
                 />}
             </Header>

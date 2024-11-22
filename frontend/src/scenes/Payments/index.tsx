@@ -11,8 +11,8 @@ import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { AddButton } from "@/components/ui-components/buttons/AddButton"
 import { PaymentAddForm } from "@/components/forms/PaymentAddForm"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 type PaymentsProps = object
 
@@ -50,9 +50,10 @@ const Payments: React.FC<PaymentsProps> = () => {
     return(
         <SceneContainer>
             <Header title="PAGOS DE CLIENTES" subtitle="Lista de pagos">
-              <AddButton 
+              <HeaderButton 
                 form={<PaymentAddForm/>}
                 model="Pago"
+                type="add"
                 disabled={isDelivery}
               />
             </Header>

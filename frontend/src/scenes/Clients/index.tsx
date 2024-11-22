@@ -11,8 +11,8 @@ import { IClient } from "@/utils/interfaces/IClient";
 import { GridColDef } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AddButton } from "@/components/ui-components/buttons/AddButton";
 import { ClientAddForm } from "@/components/forms/ClientAddForm";
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton";
 
 type ClientsProps = object;
 
@@ -54,9 +54,10 @@ const Clients: React.FC<ClientsProps> = () => {
   return (
     <SceneContainer>
       <Header title="CLIENTES" subtitle="Lista de clientes">
-        <AddButton 
+        <HeaderButton 
           form={<ClientAddForm/>}
           model="Cliente"
+          type="add"
           disabled={isDelivery}
         />
       </Header>

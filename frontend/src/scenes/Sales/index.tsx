@@ -11,8 +11,8 @@ import { ISale } from "@/utils/interfaces/ISale"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { AddButton } from "@/components/ui-components/buttons/AddButton"
 import { SaleAddForm } from "@/components/forms/SaleAddForm"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 
 type SalesProps = object
@@ -53,9 +53,10 @@ const Sales: React.FC<SalesProps> = () => {
     return(
         <SceneContainer>
             <Header title="VENTAS" subtitle="Lista de ventas">
-                <AddButton
+                <HeaderButton
                     form={<SaleAddForm/>}
                     model="Venta"
+                    type="add"
                     disabled={isDelivery}
                 />
             </Header>
