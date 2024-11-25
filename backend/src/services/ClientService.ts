@@ -1,4 +1,3 @@
- import { ObjectId, ClientSession } from "mongoose";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import {ClientModel} from "../models";
 import { ClientMongoType, ClientType } from "../schemas/ClientSchema";
@@ -10,7 +9,6 @@ import { IdType } from "../utilities/types/IdType";
 import { getSalesAndPaymentOfClientById } from "../utilities/modelUtils/ClientUtils";
 import { IClientDetails } from "../utilities/interfaces/IClientDetails";
 import { getMostRecentDate } from "../utilities/datesUtils";
-import { startSession } from "../config/startSession";
 
 /////////////////////////
 // CLIENT SERVICE
@@ -142,7 +140,7 @@ const getDetailsOfClient = async (clientId: IdType) => {
         const client = await ClientModel.findById(clientId) // FIND CLIENT BY ID, ONLY SOMES PROEPIRTIES ARE RETURNED
         .select('_id fullname phone balance category in_delivery createdAt')
         .lean()
-        if(!client) { // IF CLIENT NOT EXISTS, RUN AN EXCEPTION
+        if(!client || !client.createdAt) { // IF CLIENT NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Cliente')
         }        
         const {clientPayments, clientSales } = await getSalesAndPaymentOfClientById(clientId) // GET SALES AND PAYMENT OF CLIENT

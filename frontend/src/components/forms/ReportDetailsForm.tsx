@@ -7,7 +7,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { CustomAutocomplete } from "../CustomAutocomplete"
 import { CustomInput } from "../CustomInput"
-import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions."
+import { paymentMethodOptions } from "@/utils/dataUtils/AllOptions"
 
 interface ReportDetailsProps {
     onAddDetail: (detail: Partial<IClientPayment>) => void  

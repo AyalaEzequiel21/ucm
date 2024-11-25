@@ -18,6 +18,9 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
+import { ClientModifyForm } from "@/components/forms/ClientModifyform"
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 
 type ClientDetailsProps = object
 
@@ -81,7 +84,12 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     return (
         <SceneContainer>
             <Header title={client.fullname} subtitle="Detalles">
-
+                <HeaderButton 
+                    form={<ClientModifyForm clientData={client}/>}
+                    model="Cliente"
+                    type="edit"
+                    // disabled={isDelivery}
+                />
             </Header>
             <DetailsLayout>
             <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
@@ -90,6 +98,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
                     <CustomTextItem isTitle={false} tag="Telefono" icon={<PhoneIcon fontSize={isMobile ? "small" : "medium"}/>}>{client.phone}</CustomTextItem>
                     <CustomTextItem isTitle={false} tag="Categoria" icon={<SellIcon fontSize={isMobile ? "small" : "medium"}/>}>{client.category === 'cat_1'? 'Cargador' : 'Carnicero'}</CustomTextItem>
                     <CustomTextItem isTitle={false} tag="Registrado" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>{getFormatedDate(client.createdAt)}</CustomTextItem>
+                    <CustomTextItem isTitle={false} tag="Reparto" icon={<LocalShippingIcon fontSize={isMobile ? "small" : "medium"}/>}>{client.in_delivery ? 'Si' : 'No'}</CustomTextItem>
                 </DetailsCard>
                 <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                     <CustomTextItem isTitle={true}>Balance General</CustomTextItem>

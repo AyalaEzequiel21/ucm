@@ -10,7 +10,7 @@ import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomAutocomplete } from "../CustomAutocomplete";
 import { CustomInput } from "../CustomInput";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
-import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions.";
+import { paymentMethodOptions } from "@/utils/dataUtils/AllOptions";
 import { useModalAlert } from "@/context/ModalContext";
 
 const PaymentToSupplierAddForm: React.FC<object> = () => {

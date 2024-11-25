@@ -2,7 +2,7 @@ import { Box } from "@mui/material"
 import { CustomInput } from "../CustomInput"
 import { useFormContext } from "react-hook-form";
 import { IClientPaymentForSale } from "@/utils/interfaces/IClientPayment";
-import { paymentMethodOptions } from "@/utils/dataUtils/PaymentMethodsOptions.";
+import { paymentMethodOptions } from "@/utils/dataUtils/AllOptions";
 
 interface PaymentInSaleFormProps {
 }

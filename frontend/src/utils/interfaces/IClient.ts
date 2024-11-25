@@ -14,6 +14,14 @@ export interface IClient {
     createdAt: string
 }
 
+export interface IClientMongo {
+    _id: string,
+    fullname: string,
+    phone: string,
+    balance: number,
+    category: CategoryType,
+    in_delivery: boolean,
+}
 
 
 export interface ISalesOfClientDetails {

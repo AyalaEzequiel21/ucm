@@ -13,9 +13,10 @@ interface ICustomRadioGroupProps<T extends FieldValues>  {
     propertie: Path<T>, // Nombre de la propiedad del formulario que este grupo controla.
     error?: boolean | undefined, // Indica si hay un error en la selección.
     options: IRadioOptions[], // Lista de opciones que se mostrarán como botones de radio.
+    defaultValue?: boolean
 }
 
-const CustomRadioGroup = <T extends FieldValues>({ label, propertie, error, options }: ICustomRadioGroupProps<T>) => {
+const CustomRadioGroup = <T extends FieldValues>({ label, propertie, error, options, defaultValue}: ICustomRadioGroupProps<T>) => {
 
     const { register } = useFormContext()
 
@@ -26,7 +27,7 @@ const CustomRadioGroup = <T extends FieldValues>({ label, propertie, error, opti
                 row
                 aria-label={label}
                 name={propertie}
-                defaultValue={options[0].value}
+                defaultValue={defaultValue || options[0].value}
             >
                 {options.map(option => (
                     <FormControlLabel

@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders";
 import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse";
-import { IClient, IClientDetails } from "@/utils/interfaces/IClient";
+import { IClient, IClientDetails, IClientMongo } from "@/utils/interfaces/IClient";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // URL BASE DE LA API
@@ -34,8 +34,17 @@ export const clientApi = createApi({
         getAllClients: builder.query<IApiResponse<IClient>, void>({
             query: () => '/clients',
             providesTags: ['Client']
-          }),
+        }),
+          // METODO MODIFICAR
+        modifyClient: builder.mutation<IApiResponse<IClient>, IClientMongo>({
+            query: (client) => ({
+                url: '/clients/update',
+                method: 'PUT',
+                body: client
+            }),
+            invalidatesTags: ['Client']
+        }),
     })
 })
 
-export const { useGetClientDetailsByIdQuery, useGetAllClientsQuery, useAddClientMutation } = clientApi
+export const { useGetClientDetailsByIdQuery, useGetAllClientsQuery, useAddClientMutation, useModifyClientMutation } = clientApi

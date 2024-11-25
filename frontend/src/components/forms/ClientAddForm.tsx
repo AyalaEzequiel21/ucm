@@ -1,15 +1,14 @@
 import { FormProvider, useForm } from "react-hook-form"
 import { CustomFormLayout } from "../CustomFormLayout"
 import { CustomInput } from "../CustomInput"
-import { ISelectOptions } from "@/utils/interfaces/ISelectOptions"
 import { CustomRadioGroup } from "../CustomRadioGroup"
-import { IRadioOptions } from "@/utils/interfaces/IRadioOption"
 import { useAddClientMutation } from "@/redux/api/clientApi"
 import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
 import { useModalAlert } from "@/context/ModalContext"
+import { categoriesOptions, inDeliveryOptions } from "@/utils/dataUtils/AllOptions"
 
 
 const ClientAddForm: React.FC<object> = () => {
@@ -43,29 +42,6 @@ const ClientAddForm: React.FC<object> = () => {
             setErrorMessage(err.data.message)
         }
     }
-
-    const categoriesOptions: ISelectOptions[] = [
-        {
-            label: 'Cargador',
-            value: 'cat_1'
-        },
-        {
-            label: 'Carnicero',
-            value: 'cat_2'
-        }
-    ]
-
-    const inDeliveryOptions: IRadioOptions[] = [
-        {
-            label: 'No',
-            value: false
-        },
-        {
-            label: 'Si',
-            value: true
-        }
-        
-    ]
 
     return (
         <FormProvider {...methods}>
