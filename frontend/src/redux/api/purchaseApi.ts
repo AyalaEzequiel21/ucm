@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders"
 import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse"
-import { IPurchase, IPurchaseDetails } from "@/utils/interfaces/IPurchase"
+import { IPurchase, IPurchaseForDetails } from "@/utils/interfaces/IPurchase"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 // URL BASE DE LA API
@@ -31,7 +31,7 @@ export const purchaseApi = createApi({
             providesTags: ['Purchase']
         }),
         // METODO BUSCAR POR ID PARA DETALLES
-        getPurchaseDetailsById: builder.query<ISingularApiResponse<IPurchaseDetails>, string>({
+        getPurchaseDetailsById: builder.query<ISingularApiResponse<IPurchaseForDetails>, string>({
             query: (id) => `/purchases/purchaseDetails/${id}`,
             providesTags: ['Purchase']
         }),
@@ -40,7 +40,16 @@ export const purchaseApi = createApi({
             query: () => '/purchases',
             providesTags: ['Purchase']
         }),
+        // METODO MODIFICAR
+        modifyPurchase: builder.mutation<IApiResponse<IPurchase>, IPurchase>({
+            query: (purchase) => ({
+                url: '/purchases/update',
+                method: 'PUT',
+                body: purchase
+            }),
+            invalidatesTags: ['Purchase']
+        })
     })
 })
 
-export const { useAddPurchaseMutation, useGetAllPurchasesQuery, useGetPurchaseDetailsByIdQuery, useGetPurchaseByIdQuery } = purchaseApi
+export const { useAddPurchaseMutation, useGetAllPurchasesQuery, useGetPurchaseDetailsByIdQuery, useGetPurchaseByIdQuery, useModifyPurchaseMutation } = purchaseApi

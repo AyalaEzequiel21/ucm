@@ -1,13 +1,12 @@
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
-import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import useScreenSize from "@/hooks/useScreenSize"
 import { useGetPurchaseDetailsByIdQuery } from "@/redux/api/purchaseApi"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
-import { IPurchaseDetails } from "@/utils/interfaces/IPurchase"
+import { IPurchaseForDetails } from "@/utils/interfaces/IPurchase"
 import { GridColDef } from "@mui/x-data-grid"
 import { useNavigate, useParams } from "react-router-dom"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
@@ -20,6 +19,8 @@ import { ToolbarButton } from "@/components/ToolbarButton"
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
+import { PurchaseModifyForm } from "@/components/forms/PurchaseModifyForm"
 
 
 type PurchaseDetailsProps = object
@@ -30,7 +31,7 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
     const parseId = id as string
     const {isMobile} = useScreenSize()
     const { isLoading, data} = useGetPurchaseDetailsByIdQuery(parseId)
-    const purchase = data?.data as IPurchaseDetails
+    const purchase = data?.data as IPurchaseForDetails
     const navigate = useNavigate()
 
     const columns: GridColDef[] = [
@@ -54,9 +55,13 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
     return (
         <SceneContainer>
             <Header title="Compra a proveedor" subtitle="Detalles">
-
+                <HeaderButton
+                    form={<PurchaseModifyForm purchaseData={purchase}/>}
+                    model="Compra a proveedor"
+                    type="edit"
+                />
             </Header>
-            <DetailsLayout>
+            <Box marginTop={'1rem'} width={'100%'}>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                     <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                         <CustomTextItem isTitle>Información</CustomTextItem>
@@ -95,7 +100,7 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
                         />
                     </DetailsCard>
                 </FlexBetween>
-            </DetailsLayout>
+            </Box>
         </SceneContainer>
     )
 }

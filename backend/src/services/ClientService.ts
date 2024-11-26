@@ -43,6 +43,9 @@ const createClient = async (newClient: ClientType) => {
 const modifyClient = async (clientUpdated: ClientMongoType) => {
     const { _id, sales, payments, ...clientFiltered } = clientUpdated
     try { 
+        if (await validateIfExists(ClientModel, "fullname", clientFiltered.fullname)) { // CHECK IF EXISTS OTHER CLIENT WITH THE SAME FULLNAME, IS EXISTS RUN AN EXCEPTION
+            throw new ResourceAlreadyExistsError('El nombre')
+        }
         const client = await ClientModel.findByIdAndUpdate( // FIND BY ID AND UPDATE THE CLIENT. THEN RETURN THE NEW VERSION
             _id, 
             clientFiltered, 

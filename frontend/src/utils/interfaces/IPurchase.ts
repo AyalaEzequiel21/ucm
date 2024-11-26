@@ -14,7 +14,7 @@ export interface IPurchase {
     createdAt: string
 }
 
-export interface IPurchaseDetails extends IPurchase {
+export interface IPurchaseForDetails extends IPurchase {
     supplierBalance: number,
     paymentsQuantity: number
 }

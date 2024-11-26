@@ -49,7 +49,7 @@ const PurchaseAddForm: React.FC<object> = () => {
 
     const onRemoveDetail = (index: number) => {
         setDetailsPurchase(prev => prev.filter((_, i) => i !== index));
-      }
+    }
 
     const onSubmit = async(dataForm: IOnlyPurchase) => {
         if(dataForm.supplier_id && detailsPurchase.length > 0){
