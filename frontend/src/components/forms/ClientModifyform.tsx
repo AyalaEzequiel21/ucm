@@ -23,13 +23,13 @@ const ClientModifyForm: React.FC<ClientModifyFormProps> = ({clientData}) => {
 
     const onSubmit = async (dataForm: INewClientValues) => {
 
-        const createdAt = new Date(clientData.createdAt);
+        // const createdAt = new Date(clientData.createdAt);
 
         // Validamos si la conversión a Date es válida
-        if (isNaN(createdAt.getTime())) {
-            setErrorMessage("El formato de fecha en 'createdAt' no es válido");
-            return;
-        }
+        // if (isNaN(createdAt.getTime())) {
+        //     setErrorMessage("El formato de fecha en 'createdAt' no es válido");
+        //     return;
+        // }
 
         const updatedClient: IClientMongo = {
             fullname: dataForm.fullname,

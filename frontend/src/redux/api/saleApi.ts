@@ -1,6 +1,6 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders"
 import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse"
-import { IDetailsSale, ISale } from "@/utils/interfaces/ISale"
+import { IDetailsSale, ISale, SaleMongoType } from "@/utils/interfaces/ISale"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 // URL BASE DE LA API
@@ -45,7 +45,16 @@ export const saleApi = createApi({
             query: () => '/sales',
             providesTags: ['Sale']
         }),
+        // METODO MODIFICAR
+        modifySale: builder.mutation<IApiResponse<ISale>, SaleMongoType>({
+            query: (sale) => ({
+                url: '/sales/update',
+                method: 'PUT',
+                body: sale
+            }),
+            invalidatesTags: ['Sale']
+        }),
     })
 })
 
-export const { useAddSaleMutation, useGetSaleByIdQuery, useGetSaleDetailsByIdQuery, useGetAllSalesQuery, useGetAllSalesByClientIdQuery } = saleApi
+export const { useAddSaleMutation, useGetSaleByIdQuery, useGetSaleDetailsByIdQuery, useGetAllSalesQuery, useGetAllSalesByClientIdQuery, useModifySaleMutation } = saleApi

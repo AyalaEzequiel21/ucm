@@ -1,3 +1,5 @@
+import { ClientCategoryType } from "../types/ClientCategory"
+
 export interface IDetailsOfSale {
     product_id: string,
     product_name: string,
@@ -20,5 +22,6 @@ export interface ISaleDetails {
     total_sale: number,
     createdAt: string
     payment: IPaymentOfSale,
-    totalQuantity: number
+    totalQuantity: number,
+    client_category?: ClientCategoryType
 }

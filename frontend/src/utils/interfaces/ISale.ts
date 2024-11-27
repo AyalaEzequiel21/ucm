@@ -1,3 +1,4 @@
+import { CategoryType } from "../types/CategoryType"
 import { PaymentMethodType } from "../types/PaymentMethodType"
 import { IClientPayment } from "./IClientPayment"
 
@@ -35,7 +36,12 @@ export interface IDetailsSale {
     total_sale: number,
     createdAt: string,
     payment?: IPaymentOfSale,
-    totalQuantity: number
+    totalQuantity: number,
+    client_category: CategoryType
+}
+
+export type SaleMongoType = Omit<IDetailsSale, 'createdAt'> & {
+    createdAt?: string; 
 }
 
 

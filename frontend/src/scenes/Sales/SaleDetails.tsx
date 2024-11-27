@@ -1,6 +1,5 @@
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
-import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import useScreenSize from "@/hooks/useScreenSize"
 import { useGetSaleDetailsByIdQuery } from "@/redux/api/saleApi"
@@ -18,6 +17,9 @@ import { GridColDef } from "@mui/x-data-grid"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
+import { SaleModifyForm } from "@/components/forms/SaleModifyForm"
+import { Box } from "@mui/material"
 
 type SaleDetailsProps = object
 
@@ -44,9 +46,13 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
     return (
         <SceneContainer>
             <Header title="Detalle de venta" subtitle={sale?.client_name}>
-                
+                <HeaderButton
+                    form={<SaleModifyForm saleData={sale}/>}
+                    model="Compra a proveedor"
+                    type="edit"
+                />
             </Header>
-            <DetailsLayout>
+            <Box marginTop={'1rem'} width={'100%'}>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                     <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                         <CustomTextItem isTitle>Información</CustomTextItem>
@@ -96,7 +102,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
                         />
                     </DetailsCard>
                 </FlexBetween>
-            </DetailsLayout>
+            </Box>
         </SceneContainer>
     )
 }
