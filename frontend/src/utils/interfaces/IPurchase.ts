@@ -3,6 +3,7 @@ export interface IPurchaseDetails {
     product_name: string,
     quantity: number,
     unity_price: number,
+    partial_total?: number
 }
 
 export interface IPurchase {

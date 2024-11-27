@@ -13,7 +13,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PersonIcon from '@mui/icons-material/Person'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import { CustomDatGrid } from "@/components/CustomDataGrid"
-import { useEffect } from "react"
 import { Box } from "@mui/material"
 import { ToolbarButton } from "@/components/ToolbarButton"
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -47,9 +46,6 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
         navigate(`/suppliers/supplier/${supplier_id}`)
     }
 
-    useEffect(() => {
-        console.log(purchase)
-    }, [purchase])
     if(isLoading || !purchase) return <SpinnerLoading />
 
     return (

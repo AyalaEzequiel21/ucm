@@ -54,19 +54,18 @@ const PurchaseAddForm: React.FC<object> = () => {
     const onSubmit = async(dataForm: IOnlyPurchase) => {
         if(dataForm.supplier_id && detailsPurchase.length > 0){
             const data: INewPurchaseValues = {...dataForm, purchaseDetail: detailsPurchase }
-            console.log(data)
             try {
                 await addPurchase(data).unwrap();
                 toggleSuccessAlert();
                 toggleModal()
-              } catch (error) {
+            } catch (error) {
                 setErrorMessage(`Error al agregar la compra`)
                 console.log(error)
                 toggleErrorAlert
-              } 
+            } 
         } else {
             setErrorMessage('Seleccione un proveedor y agregue al menos un detalle.');
-          }
+        }
     }
 
     const supplierOptions: IAutocompleteOption[] = suppliers.map((supplier: ISupplier) => ({
@@ -74,7 +73,6 @@ const PurchaseAddForm: React.FC<object> = () => {
         id: supplier._id
     })) || []
 
-   
 
     return (
         <FormProvider {...methods}>
@@ -91,7 +89,7 @@ const PurchaseAddForm: React.FC<object> = () => {
                         idName="supplier_id"
                         options={supplierOptions}
                     />
-                   <Stack direction="column" spacing={2.5}>
+                    <Stack direction="column" spacing={2.5}>
                         <PurchaseDetailsForm onAddDetail={onAddDetail}/>
                         <Typography variant="h5" sx={{color: palette.primary.dark,mb: '0.2rem'}}>Detalle</Typography>
                         <DetailsFormLayout
@@ -100,7 +98,7 @@ const PurchaseAddForm: React.FC<object> = () => {
                             onRemoveDetail={onRemoveDetail}
                             totalAdd={detailsPurchase.length > 0 ? detailsPurchase.reduce((total, detail) => total + detail.quantity * detail.unity_price, 0) : undefined}
                         />
-                   </Stack>
+                    </Stack>
                 </CustomFormLayout>
         </FormProvider>
     )

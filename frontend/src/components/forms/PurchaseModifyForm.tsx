@@ -26,7 +26,7 @@ const PurchaseModifyForm: React.FC<PurchaseModifyFormProps> = ({ purchaseData })
         }
     })
     const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
-    const { handleSubmit, reset, formState: {errors} } = methods
+    const { handleSubmit, reset } = methods
 
     const onAddDetail = (detail: IPurchaseDetails) => {
         setDetailsPurchase(prev => {
@@ -44,9 +44,35 @@ const PurchaseModifyForm: React.FC<PurchaseModifyFormProps> = ({ purchaseData })
         setDetailsPurchase(prev => prev.filter((_, i) => i !== index));
     }
 
-    const onSubmit = async(dataForm: IPurchaseDetails) => {
-        
+    const hasChanges = () => {
+        if(detailsPurchase.length !== purchaseData.purchaseDetail.length) return true
+        return detailsPurchase.some((detail, index) => {
+            const original = purchaseData.purchaseDetail[index]
+            return(
+                detail.product_name !== original.product_name ||
+                detail.quantity !== original.quantity ||
+                detail.unity_price !== original.unity_price
+            )
+        })
     }
+
+    const onSubmit = async() => {
+        if (!hasChanges()) {
+            setErrorMessage('No se realizaron cambios en la compra.');
+            return;
+        }
+        try {
+            setErrorMessage(undefined);
+            await modifyPurchase({ ...purchaseData, purchaseDetail: detailsPurchase }).unwrap()
+            toggleSuccessAlert()
+            reset()
+            toggleModal()
+        } catch (error) {
+            console.error(error);
+            toggleErrorAlert()
+        }
+    }
+
     return (
         <FormProvider {...methods}>
             <CustomFormLayout
@@ -65,7 +91,7 @@ const PurchaseModifyForm: React.FC<PurchaseModifyFormProps> = ({ purchaseData })
                         onRemoveDetail={onRemoveDetail}
                         totalAdd={detailsPurchase.length > 0 ? detailsPurchase.reduce((total, detail) => total + detail.quantity * detail.unity_price, 0) : undefined}
                     />
-                   </Stack>
+                </Stack>
             </CustomFormLayout>
         </FormProvider>
     )

@@ -54,7 +54,6 @@ const ClientModifyForm: React.FC<ClientModifyFormProps> = ({clientData}) => {
         } else {
             setErrorMessage("No se realizaron cambios")
         }
-        console.log(clientData)
     }
 
     return(

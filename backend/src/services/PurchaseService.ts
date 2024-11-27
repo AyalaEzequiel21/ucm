@@ -60,8 +60,8 @@ const modifyPurchase = async (purchaseUpdated: PurchaseMongoType) => {
         purchaseSaved.purchaseDetail = purchaseDetail // UPDATE THE PURCHASE DETAILS
         await purchaseSaved.save({session}) // SAVE THE UPDATED PURCHASE
         if(oldTotal && purchaseSaved.total_purchase){
-            const difference = purchaseSaved.total_purchase - oldTotal // CALCULATE THE DIFFERENCE BEETWEN OLD TOTAL SALE AND THE NEW TOTAL
-            difference !== 0 && await addDiferenceToBalanceSupplier(supplier_id, difference, session) //  ADD THE DIFFERENCE TO SUPPLIER BALANCE
+            const difference = purchaseSaved.total_purchase - oldTotal // CALCULATE THE DIFFERENCE BEETWEN OLD TOTAL SALE AND THE NEW TOTAL            
+            if(difference !== 0) await addDiferenceToBalanceSupplier(supplier_id, difference, session) //  ADD THE DIFFERENCE TO SUPPLIER BALANCE
         }
         await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
         return purchaseSaved

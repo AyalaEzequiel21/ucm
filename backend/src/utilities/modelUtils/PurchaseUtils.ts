@@ -31,10 +31,8 @@ const addDiferenceToBalanceSupplier = async (supllierId: IdType, diffrence: numb
         const supplier = await getSupplierById(supllierId) // FIND THE SUPPLIER WITH THE SERVICE BY ID
         if(!supplier) {
             throw new ResourceNotFoundError('Proveedor') //  IF THE SUPPLIER IS NOT FOUND, THEN RUN AN EXCEPTION
-        }
-        if(supplier.balance){ // UPDATE TO SUPPLIER BALANCE
-            supplier.balance += diffrence
-        }
+        }   
+        supplier.balance += diffrence     
         await supplier.save({session}) //  SAVE THE SUPPLIER
     } catch(e){
         throw e
