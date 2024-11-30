@@ -1,4 +1,3 @@
-import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import { MultiTables, TableExtended } from "@/components/MultiTables"
 import useScreenSize from "@/hooks/useScreenSize"
@@ -19,6 +18,9 @@ import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
+import { Box } from "@mui/material"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
+import { SupplierModifyForm } from "@/components/forms/SupplierModifyForm"
 
 type SupplierDetailsProps = object
 
@@ -88,8 +90,13 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
     return (
         <SceneContainer>
             <Header title={supplierDetails.supplier_name} subtitle="Detalles">
+                <HeaderButton 
+                    form={<SupplierModifyForm supplierData={supplierDetails}/>}
+                    model="Proveedor"
+                    type="edit"
+                />
             </Header>    
-            <DetailsLayout>
+            <Box marginTop={'1rem'} width={'100%'}>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                     <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                         <CustomTextItem isTitle={true}>Información Personal</CustomTextItem>
@@ -117,7 +124,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
                         />
                     </DetailsCard>
                 </FlexBetween>
-            </DetailsLayout>
+            </Box>
         </SceneContainer>
     )
 }

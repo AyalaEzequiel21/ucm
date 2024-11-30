@@ -16,7 +16,7 @@ const supplierMongoSchema = newSupplierSchema.extend({
     balance: z.number(),
     purchases: z.array(validateObjectId()).optional(),
     payments: z.array(validateObjectId()).optional(), 
-    createdAt: z.date()
+    createdAt: z.date().optional()
 })
 
 type SupplierMongoType = z.infer<typeof supplierMongoSchema>

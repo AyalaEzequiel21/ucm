@@ -1,4 +1,3 @@
-import { ClientSession } from "mongoose";
 import { ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import { SupplierModel } from "../models";
@@ -77,7 +76,7 @@ const getDetailsOfSupplier = async (supplierId: IdType) => {
         const supplier = await SupplierModel.findById(supplierId)
         .select('-purchases -payments')
         .lean() //  FIND SUPPLIER BY HIS ID
-        if(!supplier) {
+        if(!supplier || !supplier.createdAt) {
             throw new ResourceNotFoundError("El proveedor") //  IF SUPPLIER NOT EXISTS, THEN RUN AN EXCEPTION.
         }
         const {supplierPayments, supplierPurchases} = await getPurchasesAndPaymentsOfSupplier(supplierId)
@@ -101,6 +100,14 @@ const getDetailsOfSupplier = async (supplierId: IdType) => {
 const modifySupplier = async (supplierUpdated: SupplierMongoType) => {
     const { payments, _id, purchases, ...supplierFiltered } = supplierUpdated // SUBTRACT THE PROPERTIES THAT NOT BE UPDATE
     try {
+        const existingSupplier = await SupplierModel.findOne({
+            supplier_name: supplierFiltered.supplier_name,
+            _id: { $ne: _id },
+        })
+
+        if (existingSupplier) { 
+            throw new ResourceAlreadyExistsError('El nombre ya está siendo utilizado por otro proveedor');
+        }
         const supplier = await SupplierModel.findByIdAndUpdate( // FINTHE SUPPLIER AND UPDATE IT
             _id, 
             supplierFiltered,

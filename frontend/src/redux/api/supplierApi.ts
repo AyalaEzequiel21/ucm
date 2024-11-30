@@ -39,8 +39,17 @@ export const supplierApi = createApi({
         getAllSuppliers: builder.query<IApiResponse<ISupplier>, void>({
             query: () => '/suppliers',
             providesTags: ['Supplier']
-          }),
+        }),
+        // METODO MODIFICAR
+        modifySupplier: builder.mutation<IApiResponse<ISupplier>, ISupplier>( {
+            query: (supplier) => ({
+                url: '/suppliers/update',
+                method: 'PUT',
+                body: supplier
+            }),
+            invalidatesTags: ['Supplier']
+        })
     })
 })
 
-export const { useGetSupplierByIdQuery, useGetSupplierDetailsByIdQuery, useGetAllSuppliersQuery, useAddSupplierMutation } = supplierApi
+export const { useGetSupplierByIdQuery, useGetSupplierDetailsByIdQuery, useGetAllSuppliersQuery, useAddSupplierMutation, useModifySupplierMutation } = supplierApi

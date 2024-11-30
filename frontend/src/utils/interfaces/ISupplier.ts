@@ -4,9 +4,9 @@ export interface ISupplier {
     phone: string,
     primeProduct: string,
     balance: number,
-    purchases: string[],
-    payments: string[],
-    createdAt: string
+    purchases?: string[],
+    payments?: string[],
+    createdAt?: string
 }
 
 export interface IPurchasesOfSupplierDetails {

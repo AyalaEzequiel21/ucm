@@ -73,7 +73,9 @@ const SaleModifyForm: React.FC<SaleModifyFormProps> = ({ saleData }) => {
         }
         try {
             setErrorMessage(undefined);
-            const {createdAt, ...newSale} = saleData
+            const {createdAt, payment, ...newSale} = saleData
+            void createdAt
+            void payment
             await modifySale({...newSale, details: detailsSale}).unwrap()
             toggleSuccessAlert()
             reset()

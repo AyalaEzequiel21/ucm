@@ -43,8 +43,12 @@ const createClient = async (newClient: ClientType) => {
 const modifyClient = async (clientUpdated: ClientMongoType) => {
     const { _id, sales, payments, ...clientFiltered } = clientUpdated
     try { 
-        if (await validateIfExists(ClientModel, "fullname", clientFiltered.fullname)) { // CHECK IF EXISTS OTHER CLIENT WITH THE SAME FULLNAME, IS EXISTS RUN AN EXCEPTION
-            throw new ResourceAlreadyExistsError('El nombre')
+        const existingClient = await ClientModel.findOne({
+            fullname: clientFiltered.fullname,
+            _id: { $ne: _id },
+        })
+        if (existingClient) { 
+            throw new ResourceAlreadyExistsError('El nombre ya está siendo utilizado por otro cliente');
         }
         const client = await ClientModel.findByIdAndUpdate( // FIND BY ID AND UPDATE THE CLIENT. THEN RETURN THE NEW VERSION
             _id, 
