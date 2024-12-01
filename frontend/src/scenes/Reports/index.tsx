@@ -30,7 +30,7 @@ const PaymentsReports: React.FC<PaymentsReportsProps> = () => {
     }
 
     const columnsBase: GridColDef<IPaymentsReport>[] = [
-        { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return renderButtonPrincipal(value.row._id, getFormatedDate(value.row.createdAt),()=> handleDetailsClick(value.row._id))}},
+        { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){return renderButtonPrincipal(value.row._id, getFormatedDate(value.row.createdAt || ""),()=> handleDetailsClick(value.row._id))}},
         { field: 'report_status', headerName: 'Estado', flex: 0.5, renderCell(value){return getCapitalizeString(value.row.report_status)} },
 
     ]

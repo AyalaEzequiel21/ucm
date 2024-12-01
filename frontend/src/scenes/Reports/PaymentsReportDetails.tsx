@@ -1,6 +1,5 @@
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
-import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import useScreenSize from "@/hooks/useScreenSize"
@@ -12,12 +11,16 @@ import { useParams } from "react-router-dom"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CalculateIcon from '@mui/icons-material/Calculate'
-import {  Button } from "@mui/material"
+import {  Box, Button } from "@mui/material"
 import { GridColDef } from "@mui/x-data-grid"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
+import { PaymentsReportModifyForm } from "@/components/forms/PaymentsReportModifyForm"
 
 
 type PaymentsReportDetailsProps = object
@@ -29,6 +32,8 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
     const { isMobile } = useScreenSize()
     const { isLoading, data } = useGetPaymentsReportByIdQuery(parsedId)
     const report = data?.data as IPaymentsReport
+    const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const isDelivery = userLogin?.role === 'delivery'
 
     const columnsBase: GridColDef[] = [
         { field: "client_name", headerName: 'Cliente', flex: 0.5 },
@@ -52,14 +57,19 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
     return (
         <SceneContainer>
             <Header title="Reporte de pagos" subtitle="Detalles">
-
+                <HeaderButton
+                    form={<PaymentsReportModifyForm paymentsReportData={report}/>}
+                    model="Cliente"
+                    type="edit"
+                    disabled={isDelivery || report?.report_status !== 'pendiente'}
+                />
             </Header>
-            <DetailsLayout>
+            <Box marginTop={'1rem'} width={'100%'}>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                     <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                         <CustomTextItem isTitle>Información</CustomTextItem>
                         <CustomTextItem isTitle={false} tag="Fecha" icon={<CalendarMonthIcon fontSize={isMobile ? "small" : "medium"}/>}>
-                            {getFormatedDate(report?.createdAt)}
+                            {getFormatedDate(report?.createdAt || "")}
                         </CustomTextItem>
                         <CustomTextItem isTitle={false} tag="Estado" icon={<AssessmentIcon fontSize={isMobile ? "small" : "medium"}/>}>
                             {report?.report_status}
@@ -87,7 +97,7 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
                         />
                     </DetailsCard>
                 </FlexBetween>
-            </DetailsLayout>
+            </Box>
         </SceneContainer>
     )
 }

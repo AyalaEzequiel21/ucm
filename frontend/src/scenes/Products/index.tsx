@@ -24,7 +24,7 @@ const Products: React.FC<ProductsProps> = () => {
     const {products, productsLoading} = useSelector((state: RootState) => state.product.allProducts)
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const isDelivery = userLogin?.role === 'delivery'
-    const { isMobile } = useScreenSize()
+    const { isMobile, isDesktop } = useScreenSize()
 
     if(productsLoading || !products) return <SpinnerLoading />
 
@@ -43,7 +43,7 @@ const Products: React.FC<ProductsProps> = () => {
                 :
                 <Box 
                     display={'grid'}
-                    gridTemplateColumns={`repeat(4, minmax(0,1fr))`}
+                    gridTemplateColumns={isDesktop? `repeat(4, minmax(0,1fr))`: `repeat(3, minmax(0,1fr))`}
                     justifyContent={'space-between'}
                     rowGap={'20px'}
                     columnGap={'1.33%'}

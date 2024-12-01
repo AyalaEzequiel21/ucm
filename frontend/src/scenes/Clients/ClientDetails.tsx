@@ -35,7 +35,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     const { isLoading, data} = useGetClientDetailsByIdQuery(parsedId)
     const client = data?.data as IClientDetails
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
-  const isDelivery = userLogin?.role === 'delivery'
+    const isDelivery = userLogin?.role === 'delivery'
     const navigate = useNavigate()
 
     const handleClickSale = (id: string) => {

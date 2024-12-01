@@ -1,7 +1,11 @@
 import { IProduct } from "@/utils/interfaces/IProduct"
-import { Card, CardContent, IconButton, Typography, useTheme } from "@mui/material"
+import { Box, Card, CardContent, Divider, IconButton, Menu, Typography, useTheme } from "@mui/material"
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { FlexBetween } from "../FlexBetween";
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
+import { useState } from "react";
 
 /**
  * Componente ProductCard:
@@ -16,47 +20,136 @@ type ProductCardProps = {
 const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
 
     const {palette} = useTheme()
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const open = Boolean(anchorEl)
+    const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleMenuClose = () => {
+        setAnchorEl(null)
+    }
 
     return (
         <Card
             sx={{
                 backgroundImage: 'none',
                 backgroundColor: palette.primary.dark,
-                borderRadius: '0.55rem',
-                p: '0.2rem 0',
+                borderRadius: '1rem',
+                p: '0.5rem 0',
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-                border: `1px solid ${palette.secondary.main}`,
-                transition: 'box-shadow 0.3s ease-in-out',
+                border: `1px solid ${palette.divider}`,
+                transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                 '&:hover': {
-                    boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.2)',
                 }
             }}
         >
             <CardContent sx={{color: palette.grey[100]}}>
-                <FlexBetween>
+                <FlexBetween >
                     <Typography sx={{
                         fontWeight: 'bold', 
-                        fontSize: isMobile ? '24px' : '22px', 
-                        color: palette.secondary.main}}
+                        fontSize: isMobile ? '24px' : '20px',
+                        color: palette.secondary.main,
+                    }}
                     >
-                        {product.product_name}
+                        {getCapitalizeString(product.product_name)}
                     </Typography>
-                    <IconButton 
+                    <IconButton
                         sx={{
                             color: palette.grey[100],
                             '&:hover': {
-                                color: palette.secondary.main
-                            }
+                                color: palette.secondary.main,
+                            },
+                        }}
+                        onClick={handleMenuClick}
+                    >
+                        <MoreVertIcon fontSize={isMobile ? 'large' : 'medium'} />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleMenuClose}
+                        PaperProps={{
+                            style: {
+                                borderRadius: '0.5rem',
+                                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                            },
                         }}
                     >
-                        <EditIcon fontSize={isMobile ? 'large' : 'medium'} />
-                    </IconButton>
+                        <FlexBetween flexDirection={'column'}>
+                            <IconButton
+                                sx={{
+                                    color: palette.grey[100],
+                                    '&:hover': {
+                                        color: palette.secondary.main,
+                                    },
+                                }}
+                            >
+                                <EditIcon fontSize={isMobile ? 'large' : 'medium'} />
+                            </IconButton>
+                            <IconButton
+                                sx={{
+                                    color: palette.grey[100],
+                                    '&:hover': {
+                                        color: palette.error.light,
+                                    },
+                                }}
+                            >
+                                <DeleteIcon fontSize={isMobile ? 'large' : 'medium'} />
+                            </IconButton>
+                        </FlexBetween>
+
+                    </Menu>
                 </FlexBetween>
-                <Typography  sx={{ mb: '1.5rem', fontSize: isMobile ? '15px' : '17px' }}>
+                <Divider sx={{ mb: '0.5rem', backgroundColor: palette.grey[100] }} />
+                <Typography
+                    variant="body1"
+                    sx={{
+                        mb: '0.5rem',
+                        color: palette.grey[100],
+                    }}
+                >
                     {`Stock: ${product.stock}`}
                 </Typography>
-                <Typography sx={{ mb: '0.5rem', fontSize: '17px', '&:hover': {color: palette.secondary.main} }}>{`Cargador: $${product.first_price ? product.first_price.toFixed(2) : ' -'}`}</Typography>
-                <Typography sx={{ fontSize: '17px', '&:hover': {color: palette.secondary.main} }}>{`Carnicero: $${product.second_price ? product.second_price.toFixed(2) : ' -'}`}</Typography>
+                <FlexBetween flexDirection={'column'} gap={1} alignContent={"start"}>
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            color: palette.grey[100],
+                            backgroundColor: palette.secondary.main,
+                            borderRadius: '0.5rem',
+                            padding: '0.5rem 0.6rem',
+                            fontSize: isMobile ? '14px' : '16px',
+                            width: '100%'
+                        }}
+                    >
+                        {`Cargador: $${product.first_price?.toFixed(2) || '-'}`}
+                    </Typography>
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            color: palette.grey[100],
+                            backgroundColor: palette.secondary.main,
+                            borderRadius: '0.5rem',
+                            padding: '0.5rem 0.6rem',
+                            fontSize: isMobile ? '14px' : '16px',
+                            // textAlign: 'center',
+                            width: '100%'
+                        }}
+                    >
+                        {`Cargador: $${product.second_price?.toFixed(2) || '-'}`}
+                    </Typography>
+                </FlexBetween>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '1rem',
+                        }}
+                    > 
+                    </Box>
             </CardContent>
         </Card>
     )

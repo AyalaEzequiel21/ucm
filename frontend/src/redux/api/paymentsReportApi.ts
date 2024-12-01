@@ -35,7 +35,16 @@ export const paymentsReportApi = createApi({
             query: () => '/paymentsReport',
             providesTags: ['Payments Report']
         }),
+        // METODO MODIFICAR
+        modifyPaymentsReport: builder.mutation<IApiResponse<IPaymentsReport>, IPaymentsReport>({
+            query: (report) => ({
+                url: '/paymentsReport/update',
+                method: 'PUT',
+                body: report
+            }),
+            invalidatesTags: ['Payments Report']
+        })
     })
 })
 
-export const { useGetPaymentsReportByIdQuery, useGetAllPaymentsReportsQuery, useAddPaymentsReportMutation } = paymentsReportApi
+export const { useGetPaymentsReportByIdQuery, useGetAllPaymentsReportsQuery, useAddPaymentsReportMutation, useModifyPaymentsReportMutation } = paymentsReportApi

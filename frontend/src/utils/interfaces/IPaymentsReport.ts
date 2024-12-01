@@ -5,5 +5,5 @@ export interface IPaymentsReport {
     payments?: string[],
     payments_dto: Partial<IClientPayment>[],
     report_status: 'pendiente' | 'aprobado',
-    createdAt: string
+    createdAt?: string
 }
