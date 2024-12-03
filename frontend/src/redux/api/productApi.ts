@@ -34,8 +34,17 @@ export const productApi = createApi({
         getAllProducts: builder.query<IApiResponse<IProduct>, void>({
             query: () => '/products',
             providesTags: ['Product']
-          }),
+        }),
+        // METODO MODIFICAR
+        modifyProduct: builder.mutation<IApiResponse<IProduct>, IProduct>({
+            query: (product) => ({
+                url: '/products/update',
+                method: 'PUT',
+                body: product
+            }),
+            invalidatesTags: ['Product']
+        })
     })
 })
 
-export const { useGetProductByIdQuery, useGetAllProductsQuery, useAddProductMutation } = productApi
+export const { useGetProductByIdQuery, useGetAllProductsQuery, useAddProductMutation, useModifyProductMutation } = productApi

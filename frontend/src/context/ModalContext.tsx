@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 
-
 interface ModalContextProps {
     openModal: boolean;
     successAlertOpen: boolean;
