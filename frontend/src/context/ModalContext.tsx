@@ -1,10 +1,12 @@
+import { CustomModal } from "@/components/CustomModal";
 import { createContext, useContext, useState } from "react";
 
 interface ModalContextProps {
     openModal: boolean;
+    modalContent: React.ReactNode | null;
     successAlertOpen: boolean;
     errorAlertOpen: boolean;
-    toggleModal: () => void;
+    toggleModal: (content?: React.ReactNode) => void;
     toggleSuccessAlert: () => void;
     toggleErrorAlert: () => void;
 }
@@ -12,18 +14,23 @@ interface ModalContextProps {
 const ModalContext = createContext<ModalContextProps | undefined>(undefined)
 
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [openModal, setOpenModal] = useState(false);
-    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
-    const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false)
+    const [modalContent, setModalContent] = useState<React.ReactNode | null>(null)
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false)
+    const [errorAlertOpen, setErrorAlertOpen] = useState(false)
   
-    const toggleModal = () => setOpenModal(!openModal);
-    const toggleSuccessAlert = () => setSuccessAlertOpen(!successAlertOpen);
-    const toggleErrorAlert = () => setErrorAlertOpen(!errorAlertOpen);
+    const toggleModal = (content?: React.ReactNode) => {
+      setOpenModal(!openModal)
+      setModalContent(content||null)
+    }
+    const toggleSuccessAlert = () => setSuccessAlertOpen(!successAlertOpen)
+    const toggleErrorAlert = () => setErrorAlertOpen(!errorAlertOpen)
 
     return (
         <ModalContext.Provider
           value={{
             openModal,
+            modalContent,
             successAlertOpen,
             errorAlertOpen,
             toggleModal,
@@ -32,6 +39,13 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           }}
         >
           {children}
+          {openModal && modalContent && (
+                <CustomModal
+                    open={openModal}
+                    handleClose={() => toggleModal()}
+                    element={modalContent}
+                />
+            )}
         </ModalContext.Provider>
       );
 }

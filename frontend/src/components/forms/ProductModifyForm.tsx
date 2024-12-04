@@ -6,6 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../CustomFormLayout";
 import { CustomInput } from "../CustomInput";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
+import { useModalAlert } from "@/context/ModalContext";
 
 
 interface ProductModifyFormProps {
@@ -15,17 +16,30 @@ interface ProductModifyFormProps {
 const ProductModifyForm: React.FC<ProductModifyFormProps> = ({ productData }) => {
     const [modifyProduct, { isLoading }] = useModifyProductMutation()
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const methods = useForm<INewProductValues>()
     const { handleSubmit, reset, formState: {errors} } = methods
 
     const onSumit = async(dataForm: INewProductValues)=> {
-        const updatedProduct = {...productData, ...dataForm}
+        const updatedProduct: IProduct = {
+            _id: productData._id,
+            product_name: dataForm.product_name,
+            first_price: Number(dataForm.first_price),
+            second_price: Number(dataForm.second_price),
+            stock: productData.stock,
+            is_active: productData.is_active,
+            createdAt: productData.createdAt
+        }
         if(updatedProduct.product_name !== productData.product_name || updatedProduct.first_price !== productData.first_price || updatedProduct.second_price !== productData.second_price) {
             try{
                 await modifyProduct(updatedProduct).unwrap()
+                toggleSuccessAlert()
                 reset()
+                toggleModal(null)
             } catch(e) {
                 const err = e as ApiErrorResponseType
+                toggleErrorAlert()
+                console.log(err.data.message)
                 setErrorMessage(err.data.message)
             }
         }else {

@@ -3,10 +3,9 @@ import { CustomButton } from "./CustomButton"
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CustomModal } from "@/components/CustomModal"
 import { CustomAlert } from "@/components/CustomAlert"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
-import { useModalAlert } from "@/context/ModalContext"
+import { useModalAlert } from "@/context/ModalContext";
 
 interface HeaderButtonProps {
     form: React.ReactNode,
@@ -39,22 +38,19 @@ const getLabel = (type: HeaderButtonProps['type']) => {
 
 const HeaderButton: React.FC<HeaderButtonProps> = ({form, model, disabled, type}) => {
     
-    const { openModal, toggleModal, successAlertOpen, errorAlertOpen, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
+    const { toggleModal, successAlertOpen, errorAlertOpen, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
 
+    const onSubmit = () => {
+        toggleModal(form)
+    }
     return(
         <>
             <CustomButton
                 icon={getIcon(type)}
                 label= {getLabel(type)}
-                onClick={toggleModal}
+                onClick={onSubmit}
                 disabled={disabled}
                 mode='light'
-            />
-
-            <CustomModal
-                open={openModal}
-                handleClose={toggleModal}
-                element={form}
             />
             <CustomAlert
                 open={successAlertOpen}

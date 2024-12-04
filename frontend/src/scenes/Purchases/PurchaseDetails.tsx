@@ -20,6 +20,7 @@ import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { PurchaseModifyForm } from "@/components/forms/PurchaseModifyForm"
+import { PurchaseAddForm } from "@/components/forms/PurchaseAddForm"
 
 
 type PurchaseDetailsProps = object
@@ -55,6 +56,11 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
                     form={<PurchaseModifyForm purchaseData={purchase}/>}
                     model="Compra a proveedor"
                     type="edit"
+                />
+                <HeaderButton
+                    form={<PurchaseAddForm/>}
+                    model="Compra a proveedor"
+                    type="delete"
                 />
             </Header>
             <Box marginTop={'1rem'} width={'100%'}>

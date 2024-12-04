@@ -3,7 +3,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
-import { CustomModal } from "../CustomModal";
+import { useModalAlert } from "@/context/ModalContext";
 
 
 interface DropDownMenuProps {
@@ -12,11 +12,9 @@ interface DropDownMenuProps {
     model: string,
 }
 
-const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete, model}) => {
+const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete}) => {
     const { palette } = useTheme()
-    // const { openModal, toggleModal, successAlertOpen, errorAlertOpen, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
-    const [localOpenModal, setLocalOpenModal] = useState(false);
-    const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+    const { toggleModal} = useModalAlert()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
     const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -28,14 +26,12 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete, model}
     }
 
     const handleEditClick = () => {
-        setModalContent(formEdit);
-        setLocalOpenModal(true);
+        toggleModal(formEdit)
         handleMenuClose();
     }
 
     const handleDeleteClick = () => {
-        setModalContent(formDelete);
-        setLocalOpenModal(true);
+        toggleModal(formDelete)
         handleMenuClose();
     }
 
@@ -88,7 +84,6 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete, model}
                     <Typography>Eliminar</Typography>
                 </MenuItem>
             </Menu>
-            <CustomModal open={localOpenModal} handleClose={() => setLocalOpenModal(false)} element={modalContent} />
         </>
     )
 }
