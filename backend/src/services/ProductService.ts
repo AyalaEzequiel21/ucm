@@ -31,6 +31,13 @@ const createProduct = async (newProduct: ProductType) => {
 const modifyProduct = async (productUpdated: ProductMongoType) => {
     const { _id, ...productFiltered } = productUpdated // EXCLUDE _ID
     try {
+        const existingProduct = await ProductModel.findOne({
+            product_name: productFiltered.product_name,
+            _id: { $ne: _id },
+        })
+        if (existingProduct) { 
+            throw new ResourceAlreadyExistsError('El nombre ya está siendo utilizado por otro producto');
+        }
         const product = await ProductModel.findByIdAndUpdate( // FIND PRODUCT BY ID AND UPDATE IT
             _id,
             productFiltered,

@@ -22,17 +22,23 @@ const CustomButton: React.FC<CustomButtonProps> = ({icon, label, onClick, disabl
                 border: !isDark ? ` 2px solid ${palette.primary.dark}`: 'none',
                 borderRadius: '0.33rem',
                 color: isDark ? palette.grey[200] :palette.primary.dark,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 backgroundColor: isDark ? palette.primary.dark : 'none',
+                p: '0.5rem',
                 transition: "all 0.3s ease-in-out",
                 '&:hover': {
-                    backgroundColor: isDark ? 'none' : palette.primary.dark,
-                    border: isDark ? ` 2px solid ${palette.primary.dark}`: 'none',
-                    color: isDark? palette.primary.dark : palette.secondary.main,
+                    backgroundColor: isDark ? palette.primary.light : palette.primary.dark,
+                    border: isDark ? `2px solid ${palette.primary.dark}` : 'none',
+                    color: isDark ? palette.primary.dark : palette.secondary.main,
+                    boxShadow: `0px 4px 10px ${palette.primary.dark}`,
+                    transform: 'scale(1.02)',
                 }
             }}
         >
-            {icon && <span className="icon">{icon}</span>} 
-            {!isMobile &&<span className="label">{label}</span>}
+            {icon && <span style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}} className="icon">{icon}</span>} 
+            {!isMobile &&<span style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}} className="label">{label}</span>}
         </Button>
     )
 }

@@ -5,14 +5,13 @@ import { NotFoundComponent } from "@/components/ui-components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { RootState } from "@/redux/store"
-import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { UserType } from "@/utils/types/UserType"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { UserAddForm } from "@/components/forms/UserAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
-
+import { DropDownMenu } from "@/components/ui-components/DropdownMenu"
 
 type UsersProps = object
 
@@ -32,16 +31,20 @@ const Users: React.FC<UsersProps> = () => {
     };
 
     const columnsBase: GridColDef<UserType>[] = [
-        { field: 'username', headerName: 'Usuario', flex: 0.75, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.username, handleDetailsClick) }},
-        { field: 'role', headerName: 'Role', flex: 0.5},
-      ]
+        { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.username, handleDetailsClick) }},
+        { field: 'role', headerName: 'Role', flex: 0.7},
+        { field: '', headerName: '...', flex: 0.3, renderCell(){ return (
+            <DropDownMenu formDelete={<></>} formEdit={<></>} model="Usuario" mode="light"/>
+            )
+        }},
+    ]
     
-      const columnsTablet: GridColDef<UserType>[] = [
-          { field: '_id', headerName: 'Id', flex: 0.5 },
-          { field: 'createdAt', headerName: 'Registro', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)} },
+    const columnsTablet: GridColDef<UserType>[] = [
+        //   { field: '_id', headerName: 'Id', flex: 0.5 },
+        //   { field: 'createdAt', headerName: 'Registro', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)} },
 
-      ] 
-      const columnsDesktop: GridColDef<UserType>[] = [] 
+    ] 
+    const columnsDesktop: GridColDef<UserType>[] = [] 
 
     if(usersLoading || !users) return <SpinnerLoading />
     

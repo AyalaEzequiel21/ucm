@@ -14,13 +14,12 @@ import PersonIcon from '@mui/icons-material/Person'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import { CustomDatGrid } from "@/components/CustomDataGrid"
 import { Box } from "@mui/material"
-import { ToolbarButton } from "@/components/ToolbarButton"
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { PurchaseModifyForm } from "@/components/forms/PurchaseModifyForm"
-import { PurchaseAddForm } from "@/components/forms/PurchaseAddForm"
+import { CustomButton } from "@/components/ui-components/buttons/CustomButton"
 
 
 type PurchaseDetailsProps = object
@@ -57,11 +56,6 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
                     model="Compra a proveedor"
                     type="edit"
                 />
-                <HeaderButton
-                    form={<PurchaseAddForm/>}
-                    model="Compra a proveedor"
-                    type="delete"
-                />
             </Header>
             <Box marginTop={'1rem'} width={'100%'}>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
@@ -86,7 +80,7 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
                     <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}> 
                         <CustomTextItem isTitle>Detalles del proveedor</CustomTextItem>
                         <Box display={'flex'} justifyContent={'center'} alignItems={'center'} width={'100%'} height={'100%'} mt={'3rem'}>
-                            <ToolbarButton handleClick={()=> handleToSupplier(purchase?.supplier_id || '')} label="Ir a detalles" icon={null}/>
+                            <CustomButton mode="light" label="Ir a proveedor" onClick={()=> handleToSupplier(purchase?.supplier_id || '')} icon={<PersonIcon/>}/>
                         </Box>
                     </DetailsCard>
                 </FlexBetween>

@@ -10,9 +10,10 @@ interface DropDownMenuProps {
     formEdit: React.ReactNode
     formDelete: React.ReactNode, 
     model: string,
+    mode: 'dark' | 'light',
 }
 
-const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete}) => {
+const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete, mode}) => {
     const { palette } = useTheme()
     const { toggleModal} = useModalAlert()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -39,7 +40,8 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete}) => {
         <>
             <IconButton
                 sx={{
-                    color: palette.grey[100],
+                    border: `0.5px solid ${palette.primary.dark}`,
+                    color: mode === 'dark' ? palette.primary.dark : palette.grey[100],
                     '&:hover': {
                         color: palette.secondary.main,
                     },
