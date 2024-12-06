@@ -12,7 +12,7 @@ import { IPaymentToSupplier } from "@/utils/interfaces/IPaymentToSupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { PaymentToSupplierAddForm } from "@/components/forms/PaymentToSupplierAddForm"
+import { PaymentToSupplierAddForm } from "@/components/forms/add/PaymentToSupplierAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 

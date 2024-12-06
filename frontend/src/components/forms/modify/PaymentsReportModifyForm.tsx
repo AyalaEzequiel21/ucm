@@ -4,9 +4,9 @@ import { IClientPayment } from "@/utils/interfaces/IClientPayment";
 import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { ReportDetailsForm } from "./ReportDetailsForm";
-import { DetailsFormLayout } from "./DetailsFormLayout";
+import { CustomFormLayout } from "../../CustomFormLayout";
+import { ReportDetailsForm } from "./../ReportDetailsForm";
+import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 

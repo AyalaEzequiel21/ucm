@@ -9,9 +9,10 @@ import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrinc
 import { UserType } from "@/utils/types/UserType"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
-import { UserAddForm } from "@/components/forms/UserAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { DropDownMenu } from "@/components/ui-components/DropdownMenu"
+import { UserAddForm } from "@/components/forms/add/UserAddForm"
+import { UserModifyForm } from "@/components/forms/modify/UserModifyForm"
 
 type UsersProps = object
 
@@ -33,8 +34,8 @@ const Users: React.FC<UsersProps> = () => {
     const columnsBase: GridColDef<UserType>[] = [
         { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.username, handleDetailsClick) }},
         { field: 'role', headerName: 'Role', flex: 0.7},
-        { field: '', headerName: '...', flex: 0.3, renderCell(){ return (
-            <DropDownMenu formDelete={<></>} formEdit={<></>} model="Usuario" mode="light"/>
+        { field: '', headerName: '...', flex: 0.3, renderCell(value){ return (
+            <DropDownMenu formDelete={<></>} formEdit={<UserModifyForm userId={value.row._id}/>} model="Usuario" mode="dark"/>
             )
         }},
     ]

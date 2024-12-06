@@ -20,7 +20,7 @@ import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { Box } from "@mui/material"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
-import { SupplierModifyForm } from "@/components/forms/SupplierModifyForm"
+import { SupplierModifyForm } from "@/components/forms/modify/SupplierModifyForm"
 
 type SupplierDetailsProps = object
 

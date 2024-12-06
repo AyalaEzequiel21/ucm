@@ -11,7 +11,7 @@ import { IClient } from "@/utils/interfaces/IClient";
 import { GridColDef } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ClientAddForm } from "@/components/forms/ClientAddForm";
+import { ClientAddForm } from "@/components/forms/add/ClientAddForm";
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton";
 
 type ClientsProps = object;

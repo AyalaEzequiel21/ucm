@@ -12,7 +12,7 @@ import { IPurchase } from "@/utils/interfaces/IPurchase"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { PurchaseAddForm } from "@/components/forms/PurchaseAddForm"
+import { PurchaseAddForm } from "@/components/forms/add/PurchaseAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 

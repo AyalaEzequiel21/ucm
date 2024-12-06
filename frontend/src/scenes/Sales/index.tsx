@@ -11,7 +11,7 @@ import { ISale } from "@/utils/interfaces/ISale"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { SaleAddForm } from "@/components/forms/SaleAddForm"
+import { SaleAddForm } from "@/components/forms/add/SaleAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 

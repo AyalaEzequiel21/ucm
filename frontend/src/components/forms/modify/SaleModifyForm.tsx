@@ -4,10 +4,10 @@ import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString
 import { IDetailsSale, ISaleDetails } from "@/utils/interfaces/ISale";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CustomFormLayout } from "../CustomFormLayout";
+import { CustomFormLayout } from "../../CustomFormLayout";
 import { Stack, Typography, useTheme } from "@mui/material";
-import { SaleDetailsForm } from "./SaleDetailsForm";
-import { DetailsFormLayout } from "./DetailsFormLayout";
+import { SaleDetailsForm } from "./../SaleDetailsForm";
+import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";

@@ -3,10 +3,10 @@ import { Box, Card, CardContent, Divider, Typography, useTheme } from "@mui/mate
 import { FlexBetween } from "../FlexBetween";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { DropDownMenu } from "./DropdownMenu";
-import { ProductAddForm } from "../forms/ProductAddForm";
+import { ProductAddForm } from "../forms/add/ProductAddForm";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { ProductModifyForm } from "../forms/ProductModifyForm";
+import { ProductModifyForm } from "../forms/modify/ProductModifyForm";
 
 /**
  * Componente ProductCard:
@@ -54,6 +54,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                         model="Producto"
                         formEdit={<ProductModifyForm productData={product} />}
                         formDelete={<ProductAddForm/>}
+                        mode='light'
                     />}
                 </FlexBetween>
                 <Divider sx={{ mb: '0.5rem', backgroundColor: palette.grey[100] }} />

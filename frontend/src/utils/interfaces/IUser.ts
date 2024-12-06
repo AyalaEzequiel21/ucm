@@ -4,3 +4,7 @@ export interface IUser {
     role: 'admin'|'biller'|'delivery'|'',
     createdAt?: string
 }
+
+export interface IUserMongo extends IUser {
+    password: string
+}

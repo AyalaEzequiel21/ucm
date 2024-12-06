@@ -13,7 +13,7 @@ import { ISupplier } from "@/utils/interfaces/ISupplier"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { SupplierAddForm } from "@/components/forms/SupplierAddForm"
+import { SupplierAddForm } from "@/components/forms/add/SupplierAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 
@@ -46,7 +46,7 @@ const Suppliers: React.FC<SuppliersProps> = () => {
         { field: 'primeProduct', headerName: 'Producto', flex: 0.5, renderCell(value){return getCapitalizeString(value.row.primeProduct)} },
     ] 
     const columnsDesktop: GridColDef<ISupplier>[] = [
-        { field: 'createdAt', headerName: 'Registro', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)} },
+        { field: 'createdAt', headerName: 'Registro', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt || '')} },
     ] 
 
     if(suppliersLoading || !suppliers) return <SpinnerLoading />

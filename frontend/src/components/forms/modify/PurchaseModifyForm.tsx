@@ -4,10 +4,10 @@ import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString
 import { IPurchaseDetails, IPurchaseForDetails } from "@/utils/interfaces/IPurchase";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CustomFormLayout } from "../CustomFormLayout";
+import { CustomFormLayout } from "../../CustomFormLayout";
 import { Stack, Typography, useTheme } from "@mui/material";
-import { PurchaseDetailsForm } from "./PurchaseDetailsForm";
-import { DetailsFormLayout } from "./DetailsFormLayout";
+import { PurchaseDetailsForm } from "./../PurchaseDetailsForm";
+import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 
 interface PurchaseModifyFormProps {

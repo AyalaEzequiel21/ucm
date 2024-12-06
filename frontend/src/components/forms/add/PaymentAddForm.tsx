@@ -2,16 +2,16 @@ import { useAddClientPaymentMutation } from "@/redux/api/clientPaymentApi";
 import { INewClientPaymentValues } from "@/utils/interfaces/registerModels/INewClientPaymentValues";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { CustomInput } from "../CustomInput";
 import { IClient } from "@/utils/interfaces/IClient";
-import { CustomAutocomplete } from "../CustomAutocomplete";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { paymentMethodOptions } from "@/utils/dataUtils/AllOptions";
 import { useModalAlert } from "@/context/ModalContext";
+import { CustomFormLayout } from "@/components/CustomFormLayout";
+import { CustomAutocomplete } from "@/components/CustomAutocomplete";
+import { CustomInput } from "@/components/CustomInput";
 
 const PaymentAddForm: React.FC<object> = () => {
     

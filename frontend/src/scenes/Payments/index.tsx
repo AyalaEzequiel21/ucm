@@ -11,7 +11,7 @@ import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { PaymentAddForm } from "@/components/forms/PaymentAddForm"
+import { PaymentAddForm } from "@/components/forms/add/PaymentAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 type PaymentsProps = object

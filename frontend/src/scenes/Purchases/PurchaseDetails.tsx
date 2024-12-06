@@ -18,7 +18,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
-import { PurchaseModifyForm } from "@/components/forms/PurchaseModifyForm"
+import { PurchaseModifyForm } from "@/components/forms/modify/PurchaseModifyForm"
 import { CustomButton } from "@/components/ui-components/buttons/CustomButton"
 
 

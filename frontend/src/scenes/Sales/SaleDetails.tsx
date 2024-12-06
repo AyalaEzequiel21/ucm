@@ -18,7 +18,7 @@ import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
-import { SaleModifyForm } from "@/components/forms/SaleModifyForm"
+import { SaleModifyForm } from "@/components/forms/modify/SaleModifyForm"
 import { Box } from "@mui/material"
 
 type SaleDetailsProps = object

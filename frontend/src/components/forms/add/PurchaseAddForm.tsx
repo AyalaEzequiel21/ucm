@@ -5,14 +5,14 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { ISupplier } from "@/utils/interfaces/ISupplier";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { CustomAutocomplete } from "../CustomAutocomplete";
+import { CustomFormLayout } from "../../CustomFormLayout";
+import { CustomAutocomplete } from "../../CustomAutocomplete";
 import { IPurchaseDetails } from "@/utils/interfaces/IPurchase";
 import { Stack, Typography, useTheme } from "@mui/material";
-import { PurchaseDetailsForm } from "./PurchaseDetailsForm";
+import { PurchaseDetailsForm } from "./../PurchaseDetailsForm";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
-import { DetailsFormLayout } from "./DetailsFormLayout";
+import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { useModalAlert } from "@/context/ModalContext";
 

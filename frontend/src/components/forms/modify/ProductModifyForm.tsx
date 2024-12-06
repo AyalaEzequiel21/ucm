@@ -3,8 +3,8 @@ import { IProduct } from "@/utils/interfaces/IProduct";
 import { INewProductValues } from "@/utils/interfaces/registerModels/INewProductValue";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { CustomInput } from "../CustomInput";
+import { CustomFormLayout } from "../../CustomFormLayout";
+import { CustomInput } from "../../CustomInput";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { useModalAlert } from "@/context/ModalContext";
 

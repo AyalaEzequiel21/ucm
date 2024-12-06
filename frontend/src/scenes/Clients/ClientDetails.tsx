@@ -18,7 +18,7 @@ import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
-import { ClientModifyForm } from "@/components/forms/ClientModifyform"
+import { ClientModifyForm } from "@/components/forms/modify/ClientModifyform"
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import { Box } from "@mui/material"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"

@@ -20,7 +20,7 @@ import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import { PaymentsReportModifyForm } from "@/components/forms/PaymentsReportModifyForm"
+import { PaymentsReportModifyForm } from "@/components/forms/modify/PaymentsReportModifyForm"
 
 
 type PaymentsReportDetailsProps = object

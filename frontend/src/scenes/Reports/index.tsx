@@ -11,7 +11,7 @@ import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { PaymentsReportAddFotm } from "@/components/forms/PaymentsReportAddForm"
+import { PaymentsReportAddFotm } from "@/components/forms/add/PaymentsReportAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 type PaymentsReportsProps = object

@@ -5,16 +5,16 @@ import { INewSaleValues, IOnlySale } from "@/utils/interfaces/registerModels/INe
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { CustomAutocomplete } from "../CustomAutocomplete";
+import { CustomFormLayout } from "../../CustomFormLayout";
+import { CustomAutocomplete } from "../../CustomAutocomplete";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography, useTheme } from "@mui/material";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
-import { SaleDetailsForm } from "./SaleDetailsForm";
+import { SaleDetailsForm } from "./../SaleDetailsForm";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
-import { DetailsFormLayout } from "./DetailsFormLayout";
+import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { CategoryType } from "@/utils/types/CategoryType";
-import { PaymentInSaleForm } from "./PaymentInSaleForm";
+import { PaymentInSaleForm } from "./../PaymentInSaleForm";
 import { useModalAlert } from "@/context/ModalContext";
 
 const SaleAddForm: React.FC<object> = () => {

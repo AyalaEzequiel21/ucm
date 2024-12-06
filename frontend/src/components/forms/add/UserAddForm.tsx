@@ -2,12 +2,12 @@ import { useAddUserMutation } from "@/redux/api/userApi";
 import { INewUserValues } from "@/utils/interfaces/registerModels/INewUserValues";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { CustomInput } from "../CustomInput";
-import { ISelectOptions } from "@/utils/interfaces/ISelectOptions";
+import { CustomFormLayout } from "../../CustomFormLayout";
+import { CustomInput } from "../../CustomInput";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { useModalAlert } from "@/context/ModalContext";
+import { roleOptions } from "@/utils/interfaces/IRole";
 
 const UserAddForm: React.FC<object> = () => {
 
@@ -39,17 +39,6 @@ const UserAddForm: React.FC<object> = () => {
             setErrorMessage(err.data.message)
         }
     }
-
-    const roleOptions: ISelectOptions[] = [
-        {
-            label: 'Biller',
-            value: 'biller'
-        },
-        {
-            label: 'Delivery',
-            value: 'delivery'
-        }
-    ]
 
     return (
         <FormProvider {...methods}>

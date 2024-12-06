@@ -46,8 +46,17 @@ export const userApi = createApi({
         getAllUsers: builder.query<IApiResponse<UserType>, void>({
             query: () => '/auth/users',
             providesTags: ['User']
+        }),
+        // METODO MODIFICAR
+        modifyUser: builder.mutation<IApiResponse<IUser>, IUser>({
+          query: (user) => ({
+            url: '/auth/user/update',
+            method: 'PUT',
+            body: user
           }),
+          invalidatesTags: ['User']
+        }),
     })
 })
 
-export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginMutation , useAddUserMutation} = userApi
+export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginMutation , useAddUserMutation, useModifyUserMutation } = userApi

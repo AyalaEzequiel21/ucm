@@ -45,7 +45,6 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
     return (
         <SceneContainer>
             <Header title="Pago de cliente" subtitle="Detalles">
-
             </Header>
             <DetailsLayout>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>

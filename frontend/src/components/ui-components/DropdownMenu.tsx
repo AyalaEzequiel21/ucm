@@ -1,5 +1,5 @@
 import { IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
@@ -40,15 +40,16 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({formEdit, formDelete, mode})
         <>
             <IconButton
                 sx={{
-                    border: `0.5px solid ${palette.primary.dark}`,
+                    backgroundColor: mode === 'dark' ? palette.grey[300] : undefined,
                     color: mode === 'dark' ? palette.primary.dark : palette.grey[100],
                     '&:hover': {
+                        backgroundColor: mode === 'dark' ?  palette.grey[500] : undefined,
                         color: palette.secondary.main,
                     },
                 }}
                 onClick={handleMenuClick}
             >
-                <MoreVertIcon fontSize={'medium'} />
+                <MoreHorizIcon fontSize={'medium'} />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

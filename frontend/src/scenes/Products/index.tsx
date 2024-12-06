@@ -7,7 +7,7 @@ import useScreenSize from "@/hooks/useScreenSize"
 import { RootState } from "@/redux/store"
 import { Box } from "@mui/material"
 import { useSelector } from "react-redux"
-import { ProductAddForm } from "@/components/forms/ProductAddForm"
+import { ProductAddForm } from "@/components/forms/add/ProductAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
 

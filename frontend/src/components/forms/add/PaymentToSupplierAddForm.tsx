@@ -6,12 +6,12 @@ import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { CustomAutocomplete } from "../CustomAutocomplete";
-import { CustomInput } from "../CustomInput";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { paymentMethodOptions } from "@/utils/dataUtils/AllOptions";
 import { useModalAlert } from "@/context/ModalContext";
+import { CustomFormLayout } from "@/components/CustomFormLayout";
+import { CustomAutocomplete } from "@/components/CustomAutocomplete";
+import { CustomInput } from "@/components/CustomInput";
 
 const PaymentToSupplierAddForm: React.FC<object> = () => {
 

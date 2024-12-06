@@ -3,12 +3,12 @@ import { IClientPayment } from "@/utils/interfaces/IClientPayment";
 import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CustomFormLayout } from "../CustomFormLayout";
-import { ReportDetailsForm } from "./ReportDetailsForm";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
-import { DetailsFormLayout } from "./DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { useModalAlert } from "@/context/ModalContext";
+import { CustomFormLayout } from "@/components/CustomFormLayout";
+import { ReportDetailsForm } from "../ReportDetailsForm";
+import { DetailsFormLayout } from "../DetailsFormLayout";
 
 const PaymentsReportAddFotm: React.FC<object> = () => {
     
