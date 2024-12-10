@@ -1,9 +1,8 @@
 import { setHeaders } from "@/utils/functionsHelper/setHeaders";
-import { IApiResponse } from "@/utils/interfaces/IApiResponse";
+import { IApiResponse, ISingularApiResponse } from "@/utils/interfaces/IApiResponse";
 import { ILoginFormValues } from "@/utils/interfaces/ILoginFormValues";
 import { ILoginResponse } from "@/utils/interfaces/ILoginReponse";
-import { IUser } from "@/utils/interfaces/IUser";
-import { UserType } from "@/utils/types/UserType";
+import { IUser, IUserMongo } from "@/utils/interfaces/IUser";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // URL BASE DE LA API
@@ -38,17 +37,17 @@ export const userApi = createApi({
           invalidatesTags: ['User']
         }),
         // METODO BUSCAR POR ID
-        getUserById: builder.query<IApiResponse<UserType>, string>({
-            query: (id) => `/users/user/${id}`,
+        getUserById: builder.query<ISingularApiResponse<IUserMongo>, string>({
+            query: (id) => `/auth/users/user/${id}`,
             providesTags: ['User']
         }),
         // METODO LISTAR TODOS
-        getAllUsers: builder.query<IApiResponse<UserType>, void>({
+        getAllUsers: builder.query<IApiResponse<IUser>, void>({
             query: () => '/auth/users',
             providesTags: ['User']
         }),
         // METODO MODIFICAR
-        modifyUser: builder.mutation<IApiResponse<IUser>, IUser>({
+        modifyUser: builder.mutation<IApiResponse<IUserMongo>, IUser>({
           query: (user) => ({
             url: '/auth/user/update',
             method: 'PUT',

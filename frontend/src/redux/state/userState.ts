@@ -1,10 +1,9 @@
 import { IUser } from "@/utils/interfaces/IUser"
-import { UserType } from "@/utils/types/UserType"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 // ESTRUCTURA DEL ESTADO PARA ALMACENAR LOS USUARIOS
 export interface IAllUsers {
-    users: UserType[],
+    users: IUser[],
     usersLoading: boolean
 }
 // ESTRUCTURA COMPLETA DEL ESTADO PARA EL SLICE

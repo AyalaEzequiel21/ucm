@@ -6,13 +6,13 @@ import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { RootState } from "@/redux/store"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
-import { UserType } from "@/utils/types/UserType"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { DropDownMenu } from "@/components/ui-components/DropdownMenu"
 import { UserAddForm } from "@/components/forms/add/UserAddForm"
 import { UserModifyForm } from "@/components/forms/modify/UserModifyForm"
+import { IUser } from "@/utils/interfaces/IUser"
 
 type UsersProps = object
 
@@ -31,21 +31,21 @@ const Users: React.FC<UsersProps> = () => {
         console.log('_id');
     };
 
-    const columnsBase: GridColDef<UserType>[] = [
+    const columnsBase: GridColDef<IUser>[] = [
         { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.username, handleDetailsClick) }},
         { field: 'role', headerName: 'Role', flex: 0.7},
         { field: '', headerName: '...', flex: 0.3, renderCell(value){ return (
-            <DropDownMenu formDelete={<></>} formEdit={<UserModifyForm userId={value.row._id}/>} model="Usuario" mode="dark"/>
+            <DropDownMenu formDelete={<></>} formEdit={<UserModifyForm user={value.row}/>} model="Usuario" mode="dark"/>
             )
         }},
     ]
     
-    const columnsTablet: GridColDef<UserType>[] = [
+    const columnsTablet: GridColDef<IUser>[] = [
         //   { field: '_id', headerName: 'Id', flex: 0.5 },
         //   { field: 'createdAt', headerName: 'Registro', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)} },
 
     ] 
-    const columnsDesktop: GridColDef<UserType>[] = [] 
+    const columnsDesktop: GridColDef<IUser>[] = [] 
 
     if(usersLoading || !users) return <SpinnerLoading />
     
@@ -65,7 +65,7 @@ const Users: React.FC<UsersProps> = () => {
                 users.length === 0 ?
                 <NotFoundComponent />
                 :
-                <CustomDatGrid<UserType>
+                <CustomDatGrid<IUser>
                     rows={users || []}
                     isFilterName={true}
                     fieldValue="fullname"

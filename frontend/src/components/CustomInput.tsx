@@ -45,7 +45,7 @@ const CustomInput = <T extends FieldValues>({
         if(defaultValue){
             return defaultValue
         }
-        if(selectOptions){
+        if(selectOptions && selectOptions.length === 0){
             return selectOptions[0].value
         }
         return null

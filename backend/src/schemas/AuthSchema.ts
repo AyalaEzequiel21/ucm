@@ -16,7 +16,7 @@ type UserType = z.infer<typeof newUserSchema>
 // USER MONGO
 const userMongoSchema = newUserSchema.extend({
     _id: validateObjectId(),
-
+    password: newUserSchema.shape.password.optional(),
 })
 
 type UserMongoType = z.infer<typeof userMongoSchema>

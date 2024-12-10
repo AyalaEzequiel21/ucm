@@ -29,7 +29,7 @@ router.put("/user/update", validateSchemaRequest(userMongoSchema), updateUser)
 router.get("/users", findAllUsers)
 
 // GET USER BY ID
-router.get("/user/:userId", findUserById)
+router.get("/users/user/:userId", findUserById)
 
 // USER DELETE
 router.delete("/user/delete/:userId", deleteUserById)

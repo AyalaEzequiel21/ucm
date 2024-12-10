@@ -61,17 +61,35 @@ const loginUser = async (userLogin: UserLoginType) => {
 // UPDATE 
 
 const modifyUser = async (userUpdated: UserMongoType) => {
-    const {_id, password, role} = userUpdated // EXCLUDES FIELDS
+    const {_id, username, password, role} = userUpdated // EXCLUDES FIELDS
+
     try {
-        const hashPassword = await getHashPassword(password) // HASH THE PASSWORD
-        const user = await UserModel.findByIdAndUpdate( // FIND USER BY ID, AND UPDATE
+        const updateFields: Partial<UserMongoType> = {};
+        if (password) {
+            updateFields.password = await getHashPassword(password);
+        }
+        if (role) {
+            updateFields.role = role;
+        }
+        if (username) {
+            updateFields.username = username;
+        }
+        const existingClient = await UserModel.findOne({
+            username: username,
+            _id: { $ne: _id },
+        })
+        if (existingClient) { 
+            throw new ResourceAlreadyExistsError('El nombre ya está siendo utilizado por otro cliente');
+        }
+        if (Object.keys(updateFields).length === 0) {
+            throw new Error('No se proporcionaron campos para actualizar');
+        }
+        const user = await UserModel.findByIdAndUpdate(
             _id,
-            {
-                hashPassword,
-                role
-            },
+            updateFields,
             { new: true, runValidators: true }
-            ) // CHECK THAT USER EXISTS, BUT RUN AN EXCEPTION
+        ) // CHECK THAT USER EXISTS, BUT RUN AN EXCEPTION
+
         if(!user) {
             throw new ResourceNotFoundError('Usuario')
         } 

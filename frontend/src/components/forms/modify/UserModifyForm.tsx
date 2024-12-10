@@ -1,34 +1,60 @@
 import { CustomFormLayout } from "@/components/CustomFormLayout";
 import { CustomInput } from "@/components/CustomInput";
 import { useModalAlert } from "@/context/ModalContext";
-import { useGetUserByIdQuery, useModifyUserMutation } from "@/redux/api/userApi";
+import { useModifyUserMutation } from "@/redux/api/userApi";
 import { roleOptions } from "@/utils/interfaces/IRole";
-import { IUser } from "@/utils/interfaces/IUser";
-import { INewUserValues } from "@/utils/interfaces/registerModels/INewUserValues";
-import { useEffect, useState } from "react";
+import { IUser, IUserMongo } from "@/utils/interfaces/IUser";
+import { IUpdateUserValues  } from "@/utils/interfaces/registerModels/INewUserValues";
+import { Box, Button, Collapse } from "@mui/material";
+import {  useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-
 interface UserModifyProps {
-    userId: string
+    user: IUser
 }
 
-const UserModifyForm: React.FC<UserModifyProps> = ({ userId }) => {
+const UserModifyForm: React.FC<UserModifyProps> = ({ user }) => {
     const [modifyUser, { isLoading }] = useModifyUserMutation()
-    const user = useGetUserByIdQuery(userId)
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-    const methods = useForm<INewUserValues>()
+    const methods = useForm<IUpdateUserValues >()
     const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const { handleSubmit, reset, formState: {errors} } = methods
-
-    const onSubmit = async (dataForm: INewUserValues) => {
-        
-    }
+    const [showPasswordField, setShowPasswordField] = useState(false)
 
     useEffect(() => {
         console.log(user);
-        
-    }, [user])
+    }, [user]);
+
+    const onSubmit = async (dataForm: IUpdateUserValues ) => {
+        if(dataForm.username !== user.username || dataForm.role !== user.role || dataForm.password) {
+            const updatedUser: IUserMongo = {
+                _id: user._id,
+                username: dataForm.username,
+                role: dataForm.role,
+            }
+            if (showPasswordField && dataForm.password) {
+                updatedUser.password = dataForm.password; // Solo incluir la contraseña si se completó
+            }
+            if (
+                updatedUser.username !== user.username ||
+                updatedUser.role !== user.role ||
+                updatedUser.password
+            ) {
+                try {
+                    await modifyUser(updatedUser).unwrap();
+                    toggleSuccessAlert();
+                    reset();
+                    toggleModal();
+                } catch (error) {
+                    toggleErrorAlert();
+                    setErrorMessage('Error al modificar el usuario');
+                }
+            } 
+        } else {
+            setErrorMessage('No se realizaron cambios');
+        }
+    }
+
     return (
         <FormProvider {...methods}>
             <CustomFormLayout
@@ -48,18 +74,7 @@ const UserModifyForm: React.FC<UserModifyProps> = ({ userId }) => {
                     helperText={errors.username?.message}
                     minLength={5}
                     maxLength={15}
-                    defaultValue={userData?.username}
-                />
-                <CustomInput 
-                    type="password"
-                    label="Contraseña"
-                    isSelect={false}
-                    value="password"
-                    msgError="Por favor ingrese una contraseña"
-                    error={!!errors.password}
-                    helperText={errors.password?.message}
-                    minLength={8}
-                    maxLength={15}
+                    defaultValue={user.username}
                 />
                 <CustomInput 
                     type="text"
@@ -70,8 +85,28 @@ const UserModifyForm: React.FC<UserModifyProps> = ({ userId }) => {
                     error={!!errors.role}
                     helperText={errors.role?.message}
                     selectOptions={roleOptions}
-                    defaultValue={userData?.role}
+                    defaultValue={user.role}
                 />
+                <Box>
+                    <Button onClick={() => setShowPasswordField(!showPasswordField)}>
+                        {showPasswordField ? 'Cancelar cambio de contraseña' : 'Cambiar contraseña'}
+                    </Button>
+                </Box>
+                {showPasswordField && (
+                    <Collapse in={showPasswordField} timeout="auto" unmountOnExit sx={{width: '100%'}}>
+                        <CustomInput
+                            type="password"
+                            label="Contraseña"
+                            isSelect={false}
+                            value="password"
+                            msgError="Por favor ingrese una contraseña"
+                            error={!!errors.password}
+                            helperText={errors.password?.message}
+                            minLength={8}
+                            maxLength={15}
+                        />
+                    </Collapse>
+                )}
             </CustomFormLayout>
         </FormProvider>
     )
