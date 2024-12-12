@@ -55,7 +55,15 @@ export const userApi = createApi({
           }),
           invalidatesTags: ['User']
         }),
+        //  METODO ELIMINAR
+        deleteUser: builder.mutation<IApiResponse<{ message: string }>, string>({
+          query: (id) => ({
+            url: `/auth/user/delete/${id}`,
+            method: 'DELETE',
+          }),
+          invalidatesTags: ['User']
+        }),
     })
 })
 
-export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginMutation , useAddUserMutation, useModifyUserMutation } = userApi
+export const { useGetUserByIdQuery, useGetAllUsersQuery, useLoginMutation , useAddUserMutation, useModifyUserMutation, useDeleteUserMutation } = userApi

@@ -29,9 +29,9 @@ const CustomButton: React.FC<CustomButtonProps> = ({icon, label, onClick, disabl
                 p: '0.5rem',
                 transition: "all 0.3s ease-in-out",
                 '&:hover': {
-                    backgroundColor: isDark ? palette.primary.light : palette.primary.dark,
+                    backgroundColor: isDark ? palette.secondary.dark : palette.primary.dark,
                     border: isDark ? `2px solid ${palette.primary.dark}` : 'none',
-                    color: isDark ? palette.primary.dark : palette.secondary.main,
+                    color: isDark ? palette.grey[100] : palette.secondary.main,
                     boxShadow: `0px 4px 10px ${palette.primary.dark}`,
                     transform: 'scale(1.02)',
                 }

@@ -6,7 +6,6 @@ import useScreenSize from "@/hooks/useScreenSize"
 import { useGetClientPaymentDetailsByIdQuery } from "@/redux/api/clientPaymentApi"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { IClientPayment } from "@/utils/interfaces/IClientPayment"
-import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PersonIcon from '@mui/icons-material/Person'
@@ -35,10 +34,6 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
     const handleClickToClient = (client_id: string) => {
         navigate(`/clients/client/${client_id}`)
     }
-    useEffect(() => {
-        console.log(data);
-        
-    }, [data])
 
     if(isLoading || !payment) return <SpinnerLoading />
 

@@ -6,7 +6,6 @@ import useScreenSize from "@/hooks/useScreenSize"
 import { useGetPaymentsReportByIdQuery } from "@/redux/api/paymentsReportApi"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport"
-import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import AssessmentIcon from '@mui/icons-material/Assessment';
@@ -47,10 +46,6 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
     const columnsDesktop: GridColDef[] = [
         
     ]
-
-    useEffect(() => {
-        console.log(report);
-    },[report])
 
     if(isLoading || !report) return <SpinnerLoading />
 

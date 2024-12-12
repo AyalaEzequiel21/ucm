@@ -13,6 +13,8 @@ import { DropDownMenu } from "@/components/ui-components/DropdownMenu"
 import { UserAddForm } from "@/components/forms/add/UserAddForm"
 import { UserModifyForm } from "@/components/forms/modify/UserModifyForm"
 import { IUser } from "@/utils/interfaces/IUser"
+import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
+import { useDeleteUserMutation } from "@/redux/api/userApi"
 
 type UsersProps = object
 
@@ -26,16 +28,16 @@ const Users: React.FC<UsersProps> = () => {
     // Obtiene la lista de usuarios y el estado de carga desde el store de Redux.
     const {users, usersLoading} = useSelector((state: RootState) => state.user.allUsers)
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
+    const [deleteUser, {isLoading}] = useDeleteUserMutation()
     const isAdmin = userLogin?.role === 'admin'
-    const handleDetailsClick = () => {
-        console.log('_id');
-    };
+
+    const handleDelete = async (id: string) => await deleteUser(id)
 
     const columnsBase: GridColDef<IUser>[] = [
-        { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.username, handleDetailsClick) }},
+        { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.username, ()=>{}) }},
         { field: 'role', headerName: 'Role', flex: 0.7},
         { field: '', headerName: '...', flex: 0.3, renderCell(value){ return (
-            <DropDownMenu formDelete={<></>} formEdit={<UserModifyForm user={value.row}/>} model="Usuario" mode="dark"/>
+            <DropDownMenu formDelete={<DeleteConfirmComponent model="Usuario" onConfirm={() => handleDelete(value.row._id)} isLoading={isLoading}/>} formEdit={<UserModifyForm user={value.row}/>} model="Usuario" mode="dark"/>
             )
         }},
     ]

@@ -6,7 +6,6 @@ import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import useScreenSize from "@/hooks/useScreenSize"
 import { useGetPaymentToSupplierDetailsByIdQuery } from "@/redux/api/paymentToSupplierApi"
 import { IPaymentToSupplierDetails } from "@/utils/interfaces/IPaymentToSupplier"
-import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PersonIcon from '@mui/icons-material/Person'
@@ -29,10 +28,6 @@ const PaymentToSupplierDetails: React.FC<PaymentToSupplierDetailsProps> = () => 
     const paymentToSupplier = data?.data as IPaymentToSupplierDetails
     const navigate = useNavigate()
 
-    useEffect(() => {
-        console.log(paymentToSupplier);
-        
-    }, [paymentToSupplier])
     const handleClickToSupplier = (id: string) => {
         navigate(`/suppliers/supplier/${id}`)
     }

@@ -6,7 +6,7 @@ import { roleOptions } from "@/utils/interfaces/IRole";
 import { IUser, IUserMongo } from "@/utils/interfaces/IUser";
 import { IUpdateUserValues  } from "@/utils/interfaces/registerModels/INewUserValues";
 import { Box, Button, Collapse } from "@mui/material";
-import {  useEffect, useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 interface UserModifyProps {
@@ -20,10 +20,6 @@ const UserModifyForm: React.FC<UserModifyProps> = ({ user }) => {
     const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const { handleSubmit, reset, formState: {errors} } = methods
     const [showPasswordField, setShowPasswordField] = useState(false)
-
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
 
     const onSubmit = async (dataForm: IUpdateUserValues ) => {
         if(dataForm.username !== user.username || dataForm.role !== user.role || dataForm.password) {

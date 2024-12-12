@@ -7,7 +7,6 @@ import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { IPaymentsOfSupplierDetails, IPurchasesOfSupplierDetails, ISupplierDetails } from "@/utils/interfaces/ISupplier"
 import { GridColDef } from "@mui/x-data-grid"
-import { useEffect } from "react"
 import PhoneIcon from '@mui/icons-material/Phone'
 import SellIcon from '@mui/icons-material/Sell'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
@@ -78,11 +77,6 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
             isLoading: isLoading
         }
     ]
-
-    useEffect(() => {
-        console.log(data);
-        
-    }, [data])
 
     if (isLoading || !supplierDetails) return <SpinnerLoading />
 

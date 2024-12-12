@@ -22,12 +22,12 @@ const CustomModal: React.FC<CustomModalProps> = ({element, open, handleClose}) =
             sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
             }}
         >
             <Box
                 sx={{
-
+                    borderRadius: '1rem',
                     backgroundColor: palette.grey[300]
                 }}
             >
