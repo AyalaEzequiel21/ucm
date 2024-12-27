@@ -14,7 +14,8 @@ import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
-import { useModalAlert } from "@/context/ModalContext";
+import { useModalAlert } from "@/hooks/useModalAlert";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 
 
 const PurchaseAddForm: React.FC<object> = () => {
@@ -56,12 +57,13 @@ const PurchaseAddForm: React.FC<object> = () => {
             const data: INewPurchaseValues = {...dataForm, purchaseDetail: detailsPurchase }
             try {
                 await addPurchase(data).unwrap();
-                toggleSuccessAlert();
+                toggleSuccessAlert('Compra agregada exitosamente');
                 toggleModal()
             } catch (error) {
-                setErrorMessage(`Error al agregar la compra`)
+                const err = error as ApiErrorResponseType
+                setErrorMessage(err.data.message)
                 console.log(error)
-                toggleErrorAlert
+                toggleErrorAlert()
             } 
         } else {
             setErrorMessage('Seleccione un proveedor y agregue al menos un detalle.');

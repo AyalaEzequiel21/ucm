@@ -15,7 +15,8 @@ import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { CategoryType } from "@/utils/types/CategoryType";
 import { PaymentInSaleForm } from "./../PaymentInSaleForm";
-import { useModalAlert } from "@/context/ModalContext";
+import { useModalAlert } from "@/hooks/useModalAlert";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 
 const SaleAddForm: React.FC<object> = () => {
 
@@ -59,7 +60,6 @@ const SaleAddForm: React.FC<object> = () => {
     }
 
     const onSubmit = async(dataForm: IOnlySale) => {  
-              
         if(dataForm.client_id && detailsSale.length > 0){
             const data: INewSaleValues = {
                 ...dataForm, 
@@ -73,15 +73,16 @@ const SaleAddForm: React.FC<object> = () => {
             }            
             try {                
                 await addSale(data).unwrap();
-                toggleSuccessAlert()
+                toggleSuccessAlert('Venta agregada exitosamente')
                 toggleModal()
-              } catch (error) {  
-                setErrorMessage(`Error al agregar la venta`)
-                toggleErrorAlert()
-              } 
+            } catch (error) {  
+                const err = error as ApiErrorResponseType
+                setErrorMessage(err.data.message)
+                toggleErrorAlert(`Error al agregar la venta`)
+            } 
         } else {
             setErrorMessage('Seleccione un cliente y agregue al menos un detalle.');
-          }
+        }
     }
 
     const clientsOptions: IAutocompleteOption[] = clients.map((client) => ({

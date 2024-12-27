@@ -45,11 +45,10 @@ const PaymentsReports: React.FC<PaymentsReportsProps> = () => {
 
     return(
         <SceneContainer>
-            <Header title="REPORTES DE PAGOS" subtitle="Lista de reportes de pagos">
+            <Header title="REPORTES DE PAGOS" subtitle="Lista de pagos">
                 <HeaderButton
                     form={<PaymentsReportAddFotm/>}
                     type="add"
-                    model="Reporte de pago"
                 />
             </Header>
             {paymentsReports.length === 0 ? 

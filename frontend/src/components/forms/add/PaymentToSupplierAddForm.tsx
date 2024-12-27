@@ -8,10 +8,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { paymentMethodOptions } from "@/utils/dataUtils/AllOptions";
-import { useModalAlert } from "@/context/ModalContext";
 import { CustomFormLayout } from "@/components/CustomFormLayout";
 import { CustomAutocomplete } from "@/components/CustomAutocomplete";
 import { CustomInput } from "@/components/CustomInput";
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 const PaymentToSupplierAddForm: React.FC<object> = () => {
 
@@ -33,14 +33,13 @@ const PaymentToSupplierAddForm: React.FC<object> = () => {
             total_payment: Number(dataForm.total_payment)
         }
         try{
-            const response = await addPaymentToSupplier(dataProsseced).unwrap()
-            console.log(response);
-            toggleSuccessAlert()
+            await addPaymentToSupplier(dataProsseced).unwrap()
+            toggleSuccessAlert('Pago agregado exitosamente')
             toggleModal()
             reset()
         } catch(e){
             const err = e as ApiErrorResponseType
-            toggleErrorAlert()
+            toggleErrorAlert('Error al agregar el pago')
             console.log(err)
             setErrorMessage(err.data.message)
         }

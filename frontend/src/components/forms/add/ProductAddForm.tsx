@@ -6,7 +6,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { INewProductValues } from "@/utils/interfaces/registerModels/INewProductValue"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
-import { useModalAlert } from "@/context/ModalContext"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 
 const ProductAddForm: React.FC<object> = () => {
@@ -22,7 +22,6 @@ const ProductAddForm: React.FC<object> = () => {
     } = methods
 
     const onSubmit = async (dataForm: INewProductValues) => {
-        console.log(dataForm)
         const processedDataForm = {
             ...dataForm,
             product_name: getCapitalizeString(dataForm.product_name),
@@ -31,12 +30,12 @@ const ProductAddForm: React.FC<object> = () => {
         }
         try{
             await addProduct(processedDataForm).unwrap()
-            toggleSuccessAlert()
+            toggleSuccessAlert('Producto agregado exitosamente')
             toggleModal()
             reset()
         }catch (e){
             const err = e as ApiErrorResponseType
-            toggleErrorAlert()
+            toggleErrorAlert('Error al agregar el producto')
             console.log(err)
             setErrorMessage(err.data.message)
         }

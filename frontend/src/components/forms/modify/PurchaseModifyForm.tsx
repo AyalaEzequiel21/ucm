@@ -1,4 +1,3 @@
-import { useModalAlert } from "@/context/ModalContext";
 import { useModifyPurchaseMutation } from "@/redux/api/purchaseApi";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { IPurchaseDetails, IPurchaseForDetails } from "@/utils/interfaces/IPurchase";
@@ -9,6 +8,8 @@ import { Stack, Typography, useTheme } from "@mui/material";
 import { PurchaseDetailsForm } from "./../PurchaseDetailsForm";
 import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
+import { useModalAlert } from "@/hooks/useModalAlert";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 
 interface PurchaseModifyFormProps {
     purchaseData: IPurchaseForDetails
@@ -64,12 +65,14 @@ const PurchaseModifyForm: React.FC<PurchaseModifyFormProps> = ({ purchaseData })
         try {
             setErrorMessage(undefined);
             await modifyPurchase({ ...purchaseData, purchaseDetail: detailsPurchase }).unwrap()
-            toggleSuccessAlert()
+            toggleSuccessAlert('Compra modificada con éxito')
             reset()
             toggleModal()
         } catch (error) {
+            const err = error as ApiErrorResponseType
             console.error(error);
-            toggleErrorAlert()
+            setErrorMessage(err.data.message)
+            toggleErrorAlert('Error al modificar la compra.')
         }
     }
 

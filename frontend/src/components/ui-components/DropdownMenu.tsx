@@ -3,8 +3,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
-import { useModalAlert } from "@/context/ModalContext";
-
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 interface DropDownMenuProps {
     formEdit: React.ReactNode

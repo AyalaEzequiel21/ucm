@@ -4,9 +4,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import { INewSupplier } from "@/utils/interfaces/registerModels/INewSupplier";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
-import { useModalAlert } from "@/context/ModalContext";
 import { CustomFormLayout } from "@/components/CustomFormLayout";
 import { CustomInput } from "@/components/CustomInput";
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 const SupplierAddForm: React.FC<object> = () => {
 
@@ -29,12 +29,12 @@ const SupplierAddForm: React.FC<object> = () => {
 
         try{
             await addSupplier(processedDataForm).unwrap()
-            toggleSuccessAlert()
+            toggleSuccessAlert('Proveedor agregado exitosamente')
             reset()
             toggleModal()
         } catch(e){
             const err = e as ApiErrorResponseType
-            toggleErrorAlert()
+            toggleErrorAlert('Error al agregar el proveedor')
             console.log(err.data.message);
             setErrorMessage(err.data.message)
         }

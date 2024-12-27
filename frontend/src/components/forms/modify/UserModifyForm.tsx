@@ -1,10 +1,11 @@
 import { CustomFormLayout } from "@/components/CustomFormLayout";
 import { CustomInput } from "@/components/CustomInput";
-import { useModalAlert } from "@/context/ModalContext";
+import { useModalAlert } from "@/hooks/useModalAlert";
 import { useModifyUserMutation } from "@/redux/api/userApi";
 import { roleOptions } from "@/utils/interfaces/IRole";
 import { IUser, IUserMongo } from "@/utils/interfaces/IUser";
 import { IUpdateUserValues  } from "@/utils/interfaces/registerModels/INewUserValues";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { Box, Button, Collapse } from "@mui/material";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -37,13 +38,14 @@ const UserModifyForm: React.FC<UserModifyProps> = ({ user }) => {
                 updatedUser.password
             ) {
                 try {
-                    await modifyUser(updatedUser).unwrap();
-                    toggleSuccessAlert();
-                    reset();
-                    toggleModal();
+                    await modifyUser(updatedUser).unwrap()
+                    toggleSuccessAlert('Usuario modificado con éxito')
+                    reset()
+                    toggleModal()
                 } catch (error) {
-                    toggleErrorAlert();
-                    setErrorMessage('Error al modificar el usuario');
+                    const err = error as ApiErrorResponseType
+                    toggleErrorAlert('Error al modificar el usuario')
+                    setErrorMessage(err.data.message)
                 }
             } 
         } else {

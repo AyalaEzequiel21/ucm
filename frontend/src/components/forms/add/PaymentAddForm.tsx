@@ -8,17 +8,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { IAutocompleteOption } from "@/utils/interfaces/IAutocompleteOptions";
 import { paymentMethodOptions } from "@/utils/dataUtils/AllOptions";
-import { useModalAlert } from "@/context/ModalContext";
 import { CustomFormLayout } from "@/components/CustomFormLayout";
 import { CustomAutocomplete } from "@/components/CustomAutocomplete";
 import { CustomInput } from "@/components/CustomInput";
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 const PaymentAddForm: React.FC<object> = () => {
     
     const [addClientPayment, {isLoading}] = useAddClientPaymentMutation()
     const {clients} = useSelector((state: RootState) => state.client.allClients)
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const methods = useForm<INewClientPaymentValues>()
     const {
         handleSubmit,
@@ -32,14 +32,13 @@ const PaymentAddForm: React.FC<object> = () => {
             amount: Number(dataForm.amount)
         }
         try{
-            const response = await addClientPayment(dataProsseced).unwrap()
-            console.log(response);
-            toggleSuccessAlert()
+            await addClientPayment(dataProsseced).unwrap()
+            toggleSuccessAlert('Pago agregado exitosamente')
             toggleModal()
             reset()
         } catch(e){
             const err = e as ApiErrorResponseType
-            toggleErrorAlert()
+            toggleErrorAlert('Error al agregar el pago')
             setErrorMessage(err.data.message)
         }
     }

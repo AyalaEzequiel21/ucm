@@ -1,4 +1,3 @@
-import { useModalAlert } from "@/context/ModalContext";
 import { useModifySaleMutation } from "@/redux/api/saleApi";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { IDetailsSale, ISaleDetails } from "@/utils/interfaces/ISale";
@@ -11,6 +10,8 @@ import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { useModalAlert } from "@/hooks/useModalAlert";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 
 interface SaleModifyFormProps {
     saleData: IDetailsSale
@@ -77,12 +78,14 @@ const SaleModifyForm: React.FC<SaleModifyFormProps> = ({ saleData }) => {
             void createdAt
             void payment
             await modifySale({...newSale, details: detailsSale}).unwrap()
-            toggleSuccessAlert()
+            toggleSuccessAlert('Venta modificada con éxito')
             reset()
             toggleModal()
         } catch (error) {
-            console.error(error);
-            toggleErrorAlert()
+            const err = error as ApiErrorResponseType
+            console.error(error)
+            setErrorMessage(err.data.message)
+            toggleErrorAlert('Error al modificar la venta.')
         }
     }
 

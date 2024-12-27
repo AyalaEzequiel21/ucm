@@ -5,10 +5,11 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
-import { useModalAlert } from "@/context/ModalContext";
 import { CustomFormLayout } from "@/components/CustomFormLayout";
 import { ReportDetailsForm } from "../ReportDetailsForm";
 import { DetailsFormLayout } from "../DetailsFormLayout";
+import { useModalAlert } from "@/hooks/useModalAlert";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 
 const PaymentsReportAddFotm: React.FC<object> = () => {
     
@@ -38,16 +39,16 @@ const PaymentsReportAddFotm: React.FC<object> = () => {
             const data: Partial<IPaymentsReport> = {...dataForm, payments_dto: detailsReport }  
             try {
                 await addPaymentsReport(data).unwrap();
-                toggleSuccessAlert()
+                toggleSuccessAlert('Reporte de pago agregado exitosamente')
                 toggleModal()
-              } catch (error) {
-                setErrorMessage(`Error al agregar el reporte de pago`)
-                console.log(error)
-                toggleErrorAlert()
-              }
+            } catch (error) {
+                const err = error as ApiErrorResponseType
+                setErrorMessage(err.data.message)
+                toggleErrorAlert(`Error al agregar el reporte de pago`)
+            }
         } else {
             setErrorMessage('Agregue al menos un detalle.');
-          }
+        }
     }
 
     return (

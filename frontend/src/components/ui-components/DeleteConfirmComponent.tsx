@@ -1,7 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material"
 import { CustomButton } from "./buttons/CustomButton"
-import { useModalAlert } from "@/context/ModalContext"
-import { CustomAlert } from "../CustomAlert"
+import { useModalAlert } from "@/hooks/useModalAlert"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 
 interface DeleteConfirmComponentProps {
@@ -12,22 +11,20 @@ interface DeleteConfirmComponentProps {
 
 const DeleteConfirmComponent: React.FC<DeleteConfirmComponentProps> = ({ onConfirm, isLoading, model }) => {
     const {palette} = useTheme()
-    const { toggleModal, toggleSuccessAlert, toggleErrorAlert, successAlertOpen, errorAlertOpen } = useModalAlert()
+    const { toggleModal, toggleSuccessAlert, toggleErrorAlert } = useModalAlert()
 
     const handleClick = async () => {
         try{
             onConfirm()
-            toggleSuccessAlert()
+            toggleSuccessAlert(`${getCapitalizeString(model)} eliminado exitosamente`)
             toggleModal()
         } catch (error) {
-            toggleErrorAlert()
+            toggleErrorAlert(`Error al eliminar el/la ${model}`)
         }
     }
 
-
     return (
-        <>
-            <Box
+        <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -39,20 +36,7 @@ const DeleteConfirmComponent: React.FC<DeleteConfirmComponentProps> = ({ onConfi
             >
                 <Typography variant="h4" sx={{mb: '1rem'}}>Estas seguro de eliminar el/la {model}?</Typography>
                 <CustomButton label="Eliminar" onClick={handleClick} disabled={isLoading} mode='dark'/>
-            </Box>
-            <CustomAlert
-                open={successAlertOpen}
-                label={`${getCapitalizeString(model)} eliminado correctamente`}
-                onCLose={toggleSuccessAlert}
-                type="success"
-            />
-            <CustomAlert
-                open={errorAlertOpen}
-                label="Error al eliminar elemento"
-                onCLose={toggleErrorAlert}
-                type="error"
-            />
-        </>
+        </Box>
     )
 }
 

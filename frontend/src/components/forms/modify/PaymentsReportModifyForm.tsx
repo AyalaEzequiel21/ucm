@@ -1,4 +1,3 @@
-import { useModalAlert } from "@/context/ModalContext";
 import { useModifyPaymentsReportMutation } from "@/redux/api/paymentsReportApi";
 import { IClientPayment } from "@/utils/interfaces/IClientPayment";
 import { IPaymentsReport } from "@/utils/interfaces/IPaymentsReport";
@@ -9,6 +8,8 @@ import { ReportDetailsForm } from "./../ReportDetailsForm";
 import { DetailsFormLayout } from "./../DetailsFormLayout";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue";
+import { useModalAlert } from "@/hooks/useModalAlert";
+import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 
 
 interface PaymentsReportModifyProps {
@@ -57,12 +58,14 @@ const PaymentsReportModifyForm: React.FC<PaymentsReportModifyProps> = ({ payment
         try {
             setErrorMessage(undefined)
             await modifyPaymentsReport({...paymentsReportData, payments_dto: detailsReport}).unwrap()
-            toggleSuccessAlert()
+            toggleSuccessAlert('Reporte de pagos modificado con éxito.')
             reset()
             toggleModal()
         } catch (error) {
-            console.error(error);
-            toggleErrorAlert()
+            const err = error as ApiErrorResponseType 
+            console.error(error)
+            setErrorMessage(err.data.message)
+            toggleErrorAlert('Error al modificar el reporte de pagos.')
         }
     }
 

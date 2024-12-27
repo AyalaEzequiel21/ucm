@@ -6,8 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../../CustomFormLayout";
 import { CustomInput } from "../../CustomInput";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
-import { useModalAlert } from "@/context/ModalContext";
-
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 interface ProductModifyFormProps {
     productData: IProduct
@@ -33,13 +32,13 @@ const ProductModifyForm: React.FC<ProductModifyFormProps> = ({ productData }) =>
         if(updatedProduct.product_name !== productData.product_name || updatedProduct.first_price !== productData.first_price || updatedProduct.second_price !== productData.second_price) {
             try{
                 await modifyProduct(updatedProduct).unwrap()
-                toggleSuccessAlert()
+                toggleSuccessAlert('Producto modificado con éxito')
                 reset()
                 toggleModal(null)
             } catch(e) {
                 const err = e as ApiErrorResponseType
-                toggleErrorAlert()
-                console.log(err.data.message)
+                toggleErrorAlert('Error al modificar el producto')
+                console.error(err.data.message)
                 setErrorMessage(err.data.message)
             }
         }else {

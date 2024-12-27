@@ -6,8 +6,8 @@ import { CustomFormLayout } from "../../CustomFormLayout";
 import { CustomInput } from "../../CustomInput";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
-import { useModalAlert } from "@/context/ModalContext";
 import { roleOptions } from "@/utils/interfaces/IRole";
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 const UserAddForm: React.FC<object> = () => {
 
@@ -28,13 +28,13 @@ const UserAddForm: React.FC<object> = () => {
         }
         try{
             await addUser(processedDataForm).unwrap()            
-            toggleSuccessAlert()
+            toggleSuccessAlert('Usuario agregado exitosamente')
             reset()
             toggleModal()
             
         } catch(e){
             const err = e as ApiErrorResponseType
-            toggleErrorAlert()
+            toggleErrorAlert('Error al agregar el usuario')
             console.log(err.data.message);
             setErrorMessage(err.data.message)
         }

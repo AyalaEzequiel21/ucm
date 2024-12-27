@@ -1,30 +1,38 @@
+import { CustomAlert } from "@/components/CustomAlert";
 import { CustomModal } from "@/components/CustomModal";
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
-interface ModalContextProps {
-    openModal: boolean;
-    modalContent: React.ReactNode | null;
-    successAlertOpen: boolean;
-    errorAlertOpen: boolean;
-    toggleModal: (content?: React.ReactNode) => void;
-    toggleSuccessAlert: () => void;
-    toggleErrorAlert: () => void;
+export interface ModalContextProps {
+  openModal: boolean;
+  modalContent: React.ReactNode | null;
+  successAlertOpen: boolean;
+  errorAlertOpen: boolean;
+  toggleModal: (content?: React.ReactNode) => void;
+  toggleSuccessAlert: (message?: string) => void;
+  toggleErrorAlert: (message?: string) => void;
 }
 
-const ModalContext = createContext<ModalContextProps | undefined>(undefined)
+export const ModalContext = createContext<ModalContextProps | undefined>(undefined)
 
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [openModal, setOpenModal] = useState(false)
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null)
     const [successAlertOpen, setSuccessAlertOpen] = useState(false)
     const [errorAlertOpen, setErrorAlertOpen] = useState(false)
+    const [alertMessage, setAlertMessage] = useState<string | null>(null);
   
     const toggleModal = (content?: React.ReactNode) => {
       setOpenModal(!openModal)
       setModalContent(content||null)
     }
-    const toggleSuccessAlert = () => setSuccessAlertOpen(!successAlertOpen)
-    const toggleErrorAlert = () => setErrorAlertOpen(!errorAlertOpen)
+    const toggleSuccessAlert = (message?: string) => {
+      if(message) setAlertMessage(message)
+      setSuccessAlertOpen(!successAlertOpen)
+    }
+    const toggleErrorAlert = (message?: string) => {
+      if(message) setAlertMessage(message)
+      setErrorAlertOpen(!errorAlertOpen)
+    }
 
     return (
         <ModalContext.Provider
@@ -46,14 +54,19 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     element={modalContent}
                 />
             )}
+            <CustomAlert
+              open={successAlertOpen}
+              label={alertMessage || 'Operación exitosa'}
+              onClose={() => toggleSuccessAlert()}
+              type="success"
+            />
+            <CustomAlert
+              open={errorAlertOpen}
+              label={alertMessage || 'Error al realizar la operación'}
+              onClose={() => toggleErrorAlert()}
+              type="error"
+            />
         </ModalContext.Provider>
       );
 }
 
-export const useModalAlert = (): ModalContextProps => {
-    const context = useContext(ModalContext);
-    if (!context) {
-      throw new Error("useModalAlert debe ser usado dentro de ModalAlertProvider");
-    }
-    return context;
-  };

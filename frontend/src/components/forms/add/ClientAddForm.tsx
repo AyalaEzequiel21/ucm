@@ -7,8 +7,8 @@ import { useState } from "react"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
-import { useModalAlert } from "@/context/ModalContext"
 import { categoriesOptions, inDeliveryOptions } from "@/utils/dataUtils/AllOptions"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 
 const ClientAddForm: React.FC<object> = () => {
@@ -31,13 +31,13 @@ const ClientAddForm: React.FC<object> = () => {
         try{
             // const response = 
             await addClient(processedDataForm).unwrap()
-            toggleSuccessAlert()
+            toggleSuccessAlert('Cliente agregado exitosamente')
             reset()
             toggleModal()
             
         } catch(e){
             const err = e as ApiErrorResponseType
-            toggleErrorAlert()
+            toggleErrorAlert('Error al agregar el cliente')
             console.log(err.data.message);
             setErrorMessage(err.data.message)
         }

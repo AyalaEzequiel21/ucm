@@ -3,13 +3,11 @@ import { CustomButton } from "./CustomButton"
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CustomAlert } from "@/components/CustomAlert"
-import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
-import { useModalAlert } from "@/context/ModalContext";
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 interface HeaderButtonProps {
     form: React.ReactNode,
-    model: string, 
+    // model: string, 
     type: 'add' | 'edit' | 'delete',
     disabled?: boolean,
 }
@@ -36,9 +34,9 @@ const getLabel = (type: HeaderButtonProps['type']) => {
     }
 }
 
-const HeaderButton: React.FC<HeaderButtonProps> = ({form, model, disabled, type}) => {
+const HeaderButton: React.FC<HeaderButtonProps> = ({form, disabled, type}) => {
     
-    const { toggleModal, successAlertOpen, errorAlertOpen, toggleErrorAlert, toggleSuccessAlert } = useModalAlert();
+    const { toggleModal} = useModalAlert();
 
     const onSubmit = () => {
         toggleModal(form)
@@ -52,7 +50,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({form, model, disabled, type}
                 disabled={disabled}
                 mode='light'
             />
-            <CustomAlert
+            {/* <CustomAlert
                 open={successAlertOpen}
                 label={`${getCapitalizeString(model)} agregado correctamente`}
                 onCLose={toggleSuccessAlert}
@@ -63,7 +61,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({form, model, disabled, type}
                 label="Error al agregar elemento"
                 onCLose={toggleErrorAlert}
                 type="error"
-            />
+            /> */}
         </>
     )
 }

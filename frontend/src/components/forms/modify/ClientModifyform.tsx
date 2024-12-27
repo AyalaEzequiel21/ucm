@@ -1,4 +1,3 @@
-import { useModalAlert } from "@/context/ModalContext"
 import { useModifyClientMutation } from "@/redux/api/clientApi"
 import { IClientDetails, IClientMongo } from "@/utils/interfaces/IClient"
 import { useState } from "react"
@@ -9,6 +8,7 @@ import { categoriesOptions, inDeliveryOptions } from "@/utils/dataUtils/AllOptio
 import { CustomInput } from "../../CustomInput"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 interface ClientModifyFormProps {
     clientData: IClientDetails
@@ -33,12 +33,12 @@ const ClientModifyForm: React.FC<ClientModifyFormProps> = ({clientData}) => {
         if(updatedClient.fullname !== clientData.fullname || updatedClient.phone !== clientData.phone || updatedClient.category !== clientData.category || updatedClient.in_delivery !== clientData.in_delivery){
             try{
                 await modifyClient(updatedClient).unwrap()
-                toggleSuccessAlert()
+                toggleSuccessAlert('Cliente modificado con exito')
                 reset()
                 toggleModal()
             } catch(e){
                 const err = e as ApiErrorResponseType
-                toggleErrorAlert()
+                toggleErrorAlert('Error al modificar el cliente')
                 console.log(err.data.message);
                 setErrorMessage(err.data.message)
             }

@@ -1,4 +1,3 @@
-import { useModalAlert } from "@/context/ModalContext";
 import { useModifySupplierMutation } from "@/redux/api/supplierApi";
 import { ISupplier, ISupplierDetails } from "@/utils/interfaces/ISupplier";
 import { INewSupplier } from "@/utils/interfaces/registerModels/INewSupplier";
@@ -7,6 +6,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../../CustomFormLayout";
 import { CustomInput } from "../../CustomInput";
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 
 interface SupplierModifyFormProps {
@@ -32,12 +32,12 @@ const SupplierModifyForm: React.FC<SupplierModifyFormProps> = ({ supplierData })
         if (updatedSupplier.supplier_name !== supplierData.supplier_name || updatedSupplier.primeProduct !== supplierData.primeProduct || updatedSupplier.phone !== supplierData.phone) {
             try {
                 await modifySupplier(updatedSupplier).unwrap()
-                toggleSuccessAlert()
+                toggleSuccessAlert('Proveedor modificado con éxito')
                 reset()
                 toggleModal()
             } catch (e) {
                 const err = e as ApiErrorResponseType
-                toggleErrorAlert()
+                toggleErrorAlert('Error al modificar el proveedor')
                 console.log(err.data.message);
                 setErrorMessage(err.data.message)
             }
