@@ -55,6 +55,10 @@ const PaymentsReportModifyForm: React.FC<PaymentsReportModifyProps> = ({ payment
             setErrorMessage('No se realizaron cambios en el reporte.')
             return
         }
+        if (detailsReport.length === 0) {
+            setErrorMessage('No se han agregado pagos al reporte.');
+            return
+        }
         try {
             setErrorMessage(undefined)
             await modifyPaymentsReport({...paymentsReportData, payments_dto: detailsReport}).unwrap()

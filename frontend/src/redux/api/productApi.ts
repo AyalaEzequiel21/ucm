@@ -43,8 +43,15 @@ export const productApi = createApi({
                 body: product
             }),
             invalidatesTags: ['Product']
+        }), 
+        deleteProduct: builder.mutation<IApiResponse<{ message: string }>, string>({
+            query: (id) => ({
+                url: `/products/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Product']
         })
     })
 })
 
-export const { useGetProductByIdQuery, useGetAllProductsQuery, useAddProductMutation, useModifyProductMutation } = productApi
+export const { useGetProductByIdQuery, useGetAllProductsQuery, useAddProductMutation, useModifyProductMutation, useDeleteProductMutation } = productApi

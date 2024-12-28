@@ -70,7 +70,6 @@ const ProductAddForm: React.FC<object> = () => {
                     error={!!errors.first_price}
                     helperText={errors.first_price?.message}
                     min={1}
-                    max={9999}
                 />
                 <CustomInput 
                     type="number"
@@ -81,7 +80,6 @@ const ProductAddForm: React.FC<object> = () => {
                     error={!!errors.second_price}
                     helperText={errors.second_price?.message}
                     min={1}
-                    max={9999}
                 />
             </CustomFormLayout>
         </FormProvider>

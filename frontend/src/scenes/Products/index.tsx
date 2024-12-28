@@ -10,7 +10,6 @@ import { useSelector } from "react-redux"
 import { ProductAddForm } from "@/components/forms/add/ProductAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 
-
 type ProductsProps = object
 
 /**
@@ -25,6 +24,7 @@ const Products: React.FC<ProductsProps> = () => {
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const isDelivery = userLogin?.role === 'delivery'
     const { isMobile, isDesktop } = useScreenSize()
+    
 
     if(productsLoading || !products) return <SpinnerLoading />
 
@@ -33,7 +33,6 @@ const Products: React.FC<ProductsProps> = () => {
             <Header title={'PRODUCTOS'} subtitle={"Lista de productos"}>
                 {!isDelivery && <HeaderButton
                     form={<ProductAddForm/>}
-                    model="Producto"
                     type="add"
                     disabled={isDelivery}
                 />}

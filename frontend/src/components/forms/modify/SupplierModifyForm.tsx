@@ -7,6 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { CustomFormLayout } from "../../CustomFormLayout";
 import { CustomInput } from "../../CustomInput";
 import { useModalAlert } from "@/hooks/useModalAlert";
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 
 
 interface SupplierModifyFormProps {
@@ -23,7 +24,7 @@ const SupplierModifyForm: React.FC<SupplierModifyFormProps> = ({ supplierData })
     const onSubmit = async (dataForm: INewSupplier) => {
         const updatedSupplier: ISupplier = {
             _id: supplierData._id,
-            supplier_name: dataForm.supplier_name,
+            supplier_name: getCapitalizeString(dataForm.supplier_name),
             primeProduct: dataForm.primeProduct,
             phone: dataForm.phone,
             balance: supplierData.balance,
@@ -38,7 +39,7 @@ const SupplierModifyForm: React.FC<SupplierModifyFormProps> = ({ supplierData })
             } catch (e) {
                 const err = e as ApiErrorResponseType
                 toggleErrorAlert('Error al modificar el proveedor')
-                console.log(err.data.message);
+                console.error(err.data.message)
                 setErrorMessage(err.data.message)
             }
         } else {

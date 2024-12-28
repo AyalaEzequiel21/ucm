@@ -7,6 +7,7 @@ import { CustomFormLayout } from "../../CustomFormLayout";
 import { CustomInput } from "../../CustomInput";
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType";
 import { useModalAlert } from "@/hooks/useModalAlert";
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 
 interface ProductModifyFormProps {
     productData: IProduct
@@ -22,7 +23,7 @@ const ProductModifyForm: React.FC<ProductModifyFormProps> = ({ productData }) =>
     const onSumit = async(dataForm: INewProductValues)=> {
         const updatedProduct: IProduct = {
             _id: productData._id,
-            product_name: dataForm.product_name,
+            product_name: getCapitalizeString(dataForm.product_name),
             first_price: Number(dataForm.first_price),
             second_price: Number(dataForm.second_price),
             stock: productData.stock,

@@ -3,10 +3,11 @@ import { Box, Card, CardContent, Divider, Typography, useTheme } from "@mui/mate
 import { FlexBetween } from "../FlexBetween";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { DropDownMenu } from "./DropdownMenu";
-import { ProductAddForm } from "../forms/add/ProductAddForm";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { ProductModifyForm } from "../forms/modify/ProductModifyForm";
+import { useDeleteUserMutation } from "@/redux/api/userApi";
+import { DeleteConfirmComponent } from "./DeleteConfirmComponent";
 
 /**
  * Componente ProductCard:
@@ -22,6 +23,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
     const {userLogin} = useSelector((state: RootState) => state.user)
     const isDelivery = userLogin?.role === 'delivery'
     const {palette} = useTheme()
+    const [deleteUser, {isLoading}] = useDeleteUserMutation()
+    const handleDelete = async (id: string) => await deleteUser(id)
 
     return (
         <Card
@@ -53,7 +56,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                     {!isDelivery && <DropDownMenu
                         model="Producto"
                         formEdit={<ProductModifyForm productData={product} />}
-                        formDelete={<ProductAddForm/>}
+                        formDelete={<DeleteConfirmComponent model="Producto" onConfirm={()=> handleDelete(product._id)} isLoading={isLoading}/>}
                         mode='light'
                     />}
                 </FlexBetween>
@@ -92,7 +95,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                             width: '100%'
                         }}
                     >
-                        {`Cargador: $${product.second_price?.toFixed(2) || '-'}`}
+                        {`Carnicero: $${product.second_price?.toFixed(2) || '-'}`}
                     </Typography>
                 </FlexBetween>
                     <Box

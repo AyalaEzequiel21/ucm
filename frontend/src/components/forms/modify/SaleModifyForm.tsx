@@ -67,10 +67,13 @@ const SaleModifyForm: React.FC<SaleModifyFormProps> = ({ saleData }) => {
     }
 
     const onSubmit = async() => {
-
         if (!hasChanges()) {
             setErrorMessage('No se realizaron cambios en la compra.');
-            return;
+            return
+        }
+        if (detailsSale.length === 0) {
+            setErrorMessage('No se han agregado productos a la venta.');
+            return
         }
         try {
             setErrorMessage(undefined);

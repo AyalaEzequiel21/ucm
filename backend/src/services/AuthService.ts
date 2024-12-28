@@ -79,7 +79,7 @@ const modifyUser = async (userUpdated: UserMongoType) => {
             _id: { $ne: _id },
         })
         if (existingClient) { 
-            throw new ResourceAlreadyExistsError('El nombre ya está siendo utilizado por otro cliente');
+            throw new ResourceAlreadyExistsError('El nombre ya está siendo utilizado por otro usuario');
         }
         if (Object.keys(updateFields).length === 0) {
             throw new Error('No se proporcionaron campos para actualizar');

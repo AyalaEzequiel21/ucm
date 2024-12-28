@@ -9,6 +9,7 @@ import { CustomInput } from "../../CustomInput"
 import { ApiErrorResponseType } from "@/utils/types/ApiErrorResponeType"
 import { INewClientValues } from "@/utils/interfaces/registerModels/INewCLientValues"
 import { useModalAlert } from "@/hooks/useModalAlert"
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 
 interface ClientModifyFormProps {
     clientData: IClientDetails
@@ -23,7 +24,7 @@ const ClientModifyForm: React.FC<ClientModifyFormProps> = ({clientData}) => {
 
     const onSubmit = async (dataForm: INewClientValues) => {
         const updatedClient: IClientMongo = {
-            fullname: dataForm.fullname,
+            fullname: getCapitalizeString(dataForm.fullname),
             phone: dataForm.phone,
             balance: clientData.balance,
             category: dataForm.category,
@@ -39,7 +40,7 @@ const ClientModifyForm: React.FC<ClientModifyFormProps> = ({clientData}) => {
             } catch(e){
                 const err = e as ApiErrorResponseType
                 toggleErrorAlert('Error al modificar el cliente')
-                console.log(err.data.message);
+                console.error(err.data.message);
                 setErrorMessage(err.data.message)
             }
         } else {

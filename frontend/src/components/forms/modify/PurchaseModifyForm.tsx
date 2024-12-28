@@ -62,6 +62,10 @@ const PurchaseModifyForm: React.FC<PurchaseModifyFormProps> = ({ purchaseData })
             setErrorMessage('No se realizaron cambios en la compra.');
             return;
         }
+        if (detailsPurchase.length === 0) {
+            setErrorMessage('No se han agregado productos a la compra.');
+            return
+        }
         try {
             setErrorMessage(undefined);
             await modifyPurchase({ ...purchaseData, purchaseDetail: detailsPurchase }).unwrap()

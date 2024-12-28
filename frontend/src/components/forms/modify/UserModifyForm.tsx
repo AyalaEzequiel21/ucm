@@ -2,6 +2,7 @@ import { CustomFormLayout } from "@/components/CustomFormLayout";
 import { CustomInput } from "@/components/CustomInput";
 import { useModalAlert } from "@/hooks/useModalAlert";
 import { useModifyUserMutation } from "@/redux/api/userApi";
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
 import { roleOptions } from "@/utils/interfaces/IRole";
 import { IUser, IUserMongo } from "@/utils/interfaces/IUser";
 import { IUpdateUserValues  } from "@/utils/interfaces/registerModels/INewUserValues";
@@ -26,7 +27,7 @@ const UserModifyForm: React.FC<UserModifyProps> = ({ user }) => {
         if(dataForm.username !== user.username || dataForm.role !== user.role || dataForm.password) {
             const updatedUser: IUserMongo = {
                 _id: user._id,
-                username: dataForm.username,
+                username: getCapitalizeString(dataForm.username),
                 role: dataForm.role,
             }
             if (showPasswordField && dataForm.password) {
@@ -45,6 +46,7 @@ const UserModifyForm: React.FC<UserModifyProps> = ({ user }) => {
                 } catch (error) {
                     const err = error as ApiErrorResponseType
                     toggleErrorAlert('Error al modificar el usuario')
+                    console.error(err.data.message)
                     setErrorMessage(err.data.message)
                 }
             } 

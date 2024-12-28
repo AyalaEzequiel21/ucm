@@ -5,7 +5,6 @@ import { NotFoundComponent } from "@/components/ui-components/NotFoundComponent"
 import { SceneContainer } from "@/components/SceneContainer"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import { RootState } from "@/redux/store"
-import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
 import { GridColDef } from "@mui/x-data-grid"
 import { useSelector } from "react-redux"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
@@ -15,6 +14,7 @@ import { UserModifyForm } from "@/components/forms/modify/UserModifyForm"
 import { IUser } from "@/utils/interfaces/IUser"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useDeleteUserMutation } from "@/redux/api/userApi"
+import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 
 type UsersProps = object
 
@@ -34,7 +34,7 @@ const Users: React.FC<UsersProps> = () => {
     const handleDelete = async (id: string) => await deleteUser(id)
 
     const columnsBase: GridColDef<IUser>[] = [
-        { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return renderButtonPrincipal(value.row._id, value.row.username, ()=>{}) }},
+        { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return getCapitalizeString(value.row.username)}},
         { field: 'role', headerName: 'Role', flex: 0.7},
         { field: '', headerName: '...', flex: 0.3, renderCell(value){ return (
             <DropDownMenu formDelete={<DeleteConfirmComponent model="Usuario" onConfirm={() => handleDelete(value.row._id)} isLoading={isLoading}/>} formEdit={<UserModifyForm user={value.row}/>} model="Usuario" mode="dark"/>
@@ -56,7 +56,6 @@ const Users: React.FC<UsersProps> = () => {
             <Header title="USUARIOS" subtitle="Lista de usuarios">
                 {isAdmin && <HeaderButton
                     form={<UserAddForm/>}
-                    model="Usuario"
                     type="add"
                     disabled={!isAdmin}
                 />}
