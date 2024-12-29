@@ -54,7 +54,14 @@ export const saleApi = createApi({
             }),
             invalidatesTags: ['Sale']
         }),
+        deleteSale: builder.mutation<IApiResponse<{message: string}>, string>({
+            query: (id) => ({
+                url: `/sales/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Sale']
+        })
     })
 })
 
-export const { useAddSaleMutation, useGetSaleByIdQuery, useGetSaleDetailsByIdQuery, useGetAllSalesQuery, useGetAllSalesByClientIdQuery, useModifySaleMutation } = saleApi
+export const { useAddSaleMutation, useGetSaleByIdQuery, useGetSaleDetailsByIdQuery, useGetAllSalesQuery, useGetAllSalesByClientIdQuery, useModifySaleMutation, useDeleteSaleMutation } = saleApi

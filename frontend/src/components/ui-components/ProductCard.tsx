@@ -6,8 +6,8 @@ import { DropDownMenu } from "./DropdownMenu";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { ProductModifyForm } from "../forms/modify/ProductModifyForm";
-import { useDeleteUserMutation } from "@/redux/api/userApi";
 import { DeleteConfirmComponent } from "./DeleteConfirmComponent";
+import { useDeleteProductMutation } from "@/redux/api/productApi";
 
 /**
  * Componente ProductCard:
@@ -23,8 +23,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
     const {userLogin} = useSelector((state: RootState) => state.user)
     const isDelivery = userLogin?.role === 'delivery'
     const {palette} = useTheme()
-    const [deleteUser, {isLoading}] = useDeleteUserMutation()
-    const handleDelete = async (id: string) => await deleteUser(id)
+    const [deleteProduct, {isLoading}] = useDeleteProductMutation()
+    const handleDelete = async (id: string) => {
+        try{
+            await deleteProduct(id).unwrap()   
+        } catch (error) {
+            console.error(error)
+    }
+}
 
     return (
         <Card

@@ -16,7 +16,6 @@ type ProductType = z.infer<typeof newProductSchema>
 
 const productMongoSchema = newProductSchema.extend({
     _id: validateObjectId(),
-    is_active: z.boolean()
 })
 
 type ProductMongoType = z.infer<typeof productMongoSchema>

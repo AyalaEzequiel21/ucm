@@ -10,6 +10,7 @@ import { validateClient } from "../utilities/modelUtils/ClientUtils";
 import { addDifferenceToBalanceClient, addSaleToClient, addSaleToPayment, filterSaleForDelivery, getClientPaymentOfSale, processClientPayment, removeSalefromClient } from "../utilities/modelUtils/SaleUtils";
 import { IdType } from "../utilities/types/IdType";
 import { checkId } from "../utilities/validateObjectId";
+import { getClientById } from "./ClientService";
 
 /////////////////////////
 // SALE SERVICE
@@ -48,8 +49,8 @@ const createSale = async (sale: SaleType) => {
             }
         }
     } catch(e) {
-    //     const errr = e as Error
-    //     console.log(errr.message);
+        const errr = e as Error
+        console.log(errr.message);
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
     } finally {
@@ -194,16 +195,17 @@ const removeSaleById = async (saleId: IdType) => {
     const session = await startSession() // INIT A SESSION FOR TRANSACTIONS
     try{
         session.startTransaction() // INIT THE TRANSACTION
-        const sale = await SaleModel.findById(saleId).session(session) //  FIND SALE BY HIS ID
+        const sale = await SaleModel.findById(saleId) //  FIND SALE BY HIS ID
         if(!sale){
             throw new ResourceNotFoundError('Venta') // IF SALE NOT EXISTS, THEN RUN AN EXCEPTION
         }
         if(sale.client_id && sale.total_sale){ // IF CLIENT ID EXISTS, THE SUBTRACT THE SALE FROM CLIENT AND UPDATE BALANCE
             await removeSalefromClient(sale.client_id, saleId, sale.total_sale, session)
         }
-        await sale.deleteOne({session}) // DELETE SALE
-        session.commitTransaction() // COMMIT THE TRANSACTION
+        await sale.deleteOne({session}) // DELETE SALE        
+        await session.commitTransaction() // COMMIT THE TRANSACTION
     } catch(e) {
+        console.error(e)
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
     }finally{

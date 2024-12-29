@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import { ResourceAlreadyExistsError, ResourceNotFoundError } from "../errors/CustomErros";
 import { ErrorsPitcher } from "../errors/ErrorsPitcher";
 import {ProductModel} from "../models";
@@ -56,7 +55,7 @@ const modifyProduct = async (productUpdated: ProductMongoType) => {
 const getAllProducts = async (inDelivery: boolean) => {
 
     const productsFiltered = async (delivery: boolean) => { // FUNCTION TO FILTER PRICE PRODUCTS WHRN INDELIVERY IS ACTIVE
-        const query = ProductModel.find({is_active: true}).lean()
+        const query = ProductModel.find().lean()
         if(delivery) return query.select("-first_price")
         return query
     }
@@ -64,16 +63,6 @@ const getAllProducts = async (inDelivery: boolean) => {
     try {
         const products = await productsFiltered(inDelivery) // FIND ALL FILTERED PRODUCTS
         return products
-    } catch(e) {
-        ErrorsPitcher(e)
-    }
-}
-
-// FIND ALL INACTIVES
-const getAllInactivesProducts = async () => {
-    try {
-        const inactiveProducts = await ProductModel.find({is_active: false}).lean() // FIND INACTIVE PRODUCTS
-        return inactiveProducts
     } catch(e) {
         ErrorsPitcher(e)
     }
@@ -104,18 +93,17 @@ const getProductById = async (productId: IdType) => {
 }
 
 // DELETE BY ID
-
 const removeProductById = async (productId: IdType) => {
     try{
         const productDeleted = await ProductModel.findById(productId) // FIND PRODUCT BY ID 
-        if(!productDeleted || !productDeleted.is_active) { // IF PRODUCT NOT EXISTS OR HIS PROPERTIE IS_ACTIVE IS FALSE, RUN AN EXCEPTION
+        if(!productDeleted) { // IF PRODUCT NOT EXISTS RUN AN EXCEPTION
             throw new ResourceNotFoundError('Producto')
         }
-        productDeleted.is_active = false // SET THE PROPERTIE IS_ACTIVE TO FALSE
-        await productDeleted.save()
+        console.log(productDeleted)
+        await productDeleted.deleteOne() // DELETE PRODUCT
     } catch(e) {
         ErrorsPitcher(e)
     }
 }
 
-export { createProduct, modifyProduct, getAllProducts, getAllInactivesProducts, getProductById, getProductsByName, removeProductById }
+export { createProduct, modifyProduct, getAllProducts, getProductById, getProductsByName, removeProductById }

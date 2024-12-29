@@ -2,9 +2,9 @@ import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { FlexBetween } from "@/components/FlexBetween"
 import useScreenSize from "@/hooks/useScreenSize"
-import { useGetSaleDetailsByIdQuery } from "@/redux/api/saleApi"
+import { useDeleteSaleMutation, useGetSaleDetailsByIdQuery } from "@/redux/api/saleApi"
 import { IDetailsSale } from "@/utils/interfaces/ISale"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PersonIcon from '@mui/icons-material/Person'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -20,6 +20,7 @@ import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { SaleModifyForm } from "@/components/forms/modify/SaleModifyForm"
 import { Box } from "@mui/material"
+import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 
 type SaleDetailsProps = object
 
@@ -30,6 +31,8 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
     const {isMobile} = useScreenSize()
     const { isLoading, data} = useGetSaleDetailsByIdQuery(parsedId)
     const sale = data?.data as IDetailsSale
+    const [deleteSale, {isLoading: isDeleting}] = useDeleteSaleMutation()
+    const navigate = useNavigate()
 
     const columns: GridColDef[] = [
         { field: 'product_name', headerName: 'Producto', flex: 0.5 },
@@ -41,6 +44,15 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
         }},
     ]
 
+    const handleDelete = async (id: string) => {
+        try {
+            await deleteSale(id).unwrap()
+            navigate('/sales')
+        } catch (error) {
+            console.error(error, 'el error pasa aca')
+        }
+    }
+
     if(isLoading || !sale) return <SpinnerLoading />
 
     return (
@@ -48,8 +60,11 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
             <Header title="Detalle de venta" subtitle={sale?.client_name}>
                 <HeaderButton
                     form={<SaleModifyForm saleData={sale}/>}
-                    model="Compra a proveedor"
                     type="edit"
+                />
+                <HeaderButton
+                    form={<DeleteConfirmComponent model="Venta" onConfirm={()=> handleDelete(sale._id)} isLoading={isDeleting} />}
+                    type="delete"
                 />
             </Header>
             <Box marginTop={'1rem'} width={'100%'}>

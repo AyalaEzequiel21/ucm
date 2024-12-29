@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ProductMongoType, ProductType } from "../schemas/ProductsSchema";
-import { createProduct, getAllInactivesProducts, getAllProducts, getProductById, getProductsByName, modifyProduct, removeProductById } from "../services/ProductService";
+import { createProduct, getAllProducts, getProductById, getProductsByName, modifyProduct, removeProductById } from "../services/ProductService";
 import { RequestExtended } from "../utilities/interfaces/RequestExtended";
 
 /////////////////////////
@@ -38,15 +38,7 @@ const findAllProducts = async (req: RequestExtended, res: Response, next: NextFu
         next(e)
     }
 }
-// FIND INACTIVES PRODUCTS
-const findAllInactivesProducts = async (req: Request, res: Response, next: NextFunction) => {
-    try{
-        const inactivesProducts = await getAllInactivesProducts() // FIND ALL INACTIVES PRODUCTS WITH PRODUCT SERVICE
-        res.status(200).json({ok: true, data: inactivesProducts})
-    } catch(e) {
-        next(e)
-    }
-}
+
 // FIND PRODUCT BY NAME
 const findProductByName = async (req: Request, res: Response, next: NextFunction) => {
     const productName = req.params.productName //  GET THE PRODUCT NAME FROM PARAMS REQUEST
@@ -78,4 +70,4 @@ const deleteProduct = async (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
-export { registerProduct, updateProduct, findAllProducts, findAllInactivesProducts,findProductById, findProductByName, deleteProduct }
+export { registerProduct, updateProduct, findAllProducts,findProductById, findProductByName, deleteProduct }

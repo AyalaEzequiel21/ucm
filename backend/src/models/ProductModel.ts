@@ -24,10 +24,6 @@ export const productSchema = new Schema<ProductMongoType>(
             type: Number,
             min: 1,
             default: 300
-        },
-        is_active: {
-            type: Boolean,
-            default: true
         }
     },
     {

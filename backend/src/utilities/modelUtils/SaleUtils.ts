@@ -7,6 +7,7 @@ import { ISalesOfClientDetails } from "../interfaces/IClientDetails";
 import { getClientPaymentBySaleId } from "../../services/ClientPaymentService";
 import { ClientPaymentType } from "../../schemas/ClientPaymentSchema";
 import { processPaymentOfSale } from "./ClientPaymentUtils";
+import { ResourceNotFoundError } from "../../errors/CustomErros";
 
 
 /////////////////////////
@@ -30,7 +31,10 @@ const addSaleToClient = async (clientId: IdType, sale: SaleMongoType, session: C
 const removeSalefromClient = async (clientId: IdType, saleId: IdType, totalSale: number, session: ClientSession) => {
     try {
         const client = await getClientById(clientId) // FIND CLIENT WITH CLIENT SERVICE, CHECK IF EXISTS ASND UPDATE IT
-        if(client && client.sales && client.balance) {
+        if (!client) {
+            throw new ResourceNotFoundError('Cliente'); // Lanza error si no existe
+        }        
+        if(client.sales && client.balance) {
             client.sales = client.sales.filter(sale => sale != saleId) // SUBTRACT SALE TO CLIENT LIST OF SALES
             client.balance -= totalSale // UPDATE THE CLIENT BALANCE
             await client.save({session})        
