@@ -40,6 +40,11 @@ export const supplierApi = createApi({
             query: () => '/suppliers',
             providesTags: ['Supplier']
         }),
+        // METODO LISTAR TODOS LOS INACTIVOS
+        getAllInactiveSuppliers: builder.query<IApiResponse<ISupplier>, void>({
+            query: () => '/suppliers/inactives',
+            providesTags: ['Supplier']
+        }),
         // METODO MODIFICAR
         modifySupplier: builder.mutation<IApiResponse<ISupplier>, ISupplier>( {
             query: (supplier) => ({
@@ -48,8 +53,16 @@ export const supplierApi = createApi({
                 body: supplier
             }),
             invalidatesTags: ['Supplier']
+        }),
+        // METODO ELIMINAR
+        deleteSupplier: builder.mutation<IApiResponse<{message: string}>, string>({
+            query: (id) => ({
+                url: `/suppliers/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Supplier']
         })
     })
 })
 
-export const { useGetSupplierByIdQuery, useGetSupplierDetailsByIdQuery, useGetAllSuppliersQuery, useAddSupplierMutation, useModifySupplierMutation } = supplierApi
+export const { useGetSupplierByIdQuery, useGetSupplierDetailsByIdQuery, useGetAllSuppliersQuery, useGetAllInactiveSuppliersQuery, useAddSupplierMutation, useModifySupplierMutation, useDeleteSupplierMutation } = supplierApi

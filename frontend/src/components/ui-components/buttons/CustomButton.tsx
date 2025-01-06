@@ -38,7 +38,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({icon, label, onClick, disabl
             }}
         >
             {icon && <span style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}} className="icon">{icon}</span>} 
-            {!isMobile &&<span style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}} className="label">{label}</span>}
+            {(!isMobile || icon === undefined) && label}
         </Button>
     )
 }

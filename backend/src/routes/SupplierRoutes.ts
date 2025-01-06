@@ -2,7 +2,7 @@ import express from 'express'
 import { validateUser, validateUserRole } from '../middleware/AuthMidd'
 import { validateSchemaRequest } from '../middleware/RequestMidd'
 import { newSupplierSchema, supplierMongoSchema } from '../schemas/SupplierSchema'
-import { deleteSupplierById, findAllSuppliers, findSupplierById, findSupplierDetailsById, findSuppliersByName, registerSupplier, updateSupplier } from '../controllers/SupplierController'
+import { deleteSupplierById, findAllInactiveSuppliers, findAllSuppliers, findSupplierById, findSupplierDetailsById, findSuppliersByName, registerSupplier, updateSupplier } from '../controllers/SupplierController'
 
 // SUPPLIER ROUTES
 const router = express.Router()
@@ -15,6 +15,8 @@ router.use(validateUserRole(["admin", "biller"]))
 
 // GET ALL SUPPLIER
 router.get("/", findAllSuppliers)
+// GET ALL INACTIVE SUPPLIER
+router.get("/inactives", findAllInactiveSuppliers)
 // SUPPLIER REGISTER
 router.post("/register", validateSchemaRequest(newSupplierSchema), registerSupplier)
 // SUPPLIER UPDATE

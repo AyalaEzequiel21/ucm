@@ -83,6 +83,7 @@ const ClientAddForm: React.FC<object> = () => {
                     error={!!errors.category}
                     helperText={errors.category?.message}
                     selectOptions={categoriesOptions}
+                    defaultValue={'cat_1'}
                 />
                 <CustomRadioGroup 
                     label="Reparto"

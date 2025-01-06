@@ -1,9 +1,8 @@
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
-import { DetailsLayout } from "@/components/DetailsLayout"
 import { FlexBetween } from "@/components/FlexBetween"
 import useScreenSize from "@/hooks/useScreenSize"
-import { useGetClientPaymentDetailsByIdQuery } from "@/redux/api/clientPaymentApi"
+import { useDeleteClientPaymentMutation, useGetClientPaymentDetailsByIdQuery } from "@/redux/api/clientPaymentApi"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { IClientPayment } from "@/utils/interfaces/IClientPayment"
 import { useNavigate, useParams } from "react-router-dom"
@@ -19,6 +18,9 @@ import { Box, Typography } from "@mui/material"
 import { ToolbarButton } from "@/components/ToolbarButton"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
+import { useEffect, useState } from "react"
+import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
+import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 
 type PaymentDetailsProps = object
 
@@ -27,21 +29,46 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
     const {id} = useParams()
     const parsedId = id as string
     const {isMobile} = useScreenSize()
-    const { isLoading, data} = useGetClientPaymentDetailsByIdQuery(parsedId)
+    const [isDeleteTriggered, setDeleteTriggered] = useState(false)
+    const { isLoading, data} = useGetClientPaymentDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const payment = data?.data as IClientPayment
+    const [deleteClientPayment, {isLoading: isDeleting}] = useDeleteClientPaymentMutation()
     const navigate = useNavigate()
 
     const handleClickToClient = (client_id: string) => {
         navigate(`/clients/client/${client_id}`)
     }
+    
+    const handleDelete = () => setDeleteTriggered(true)
 
-    if(isLoading || !payment) return <SpinnerLoading />
+    useEffect(() => {
+        if(isDeleteTriggered) {
+            const deleteClientPaymentAsync = async () => {
+                try {
+                    if (id) {
+                        await deleteClientPayment(id).unwrap();
+                    }
+                    navigate('/clientsPayments', { replace: true });
+                } catch (error) {
+                    console.error('Error al eliminar el pago:', error);
+                }
+            }
+            deleteClientPaymentAsync()
+        }
+    }, [isDeleteTriggered, deleteClientPayment, id, navigate]
+)
+
+    if(isLoading || !payment || isDeleting) return <SpinnerLoading />
 
     return (
         <SceneContainer>
             <Header title="Pago de cliente" subtitle="Detalles">
+                <HeaderButton 
+                    form={<DeleteConfirmComponent model="Pago" onConfirm={handleDelete} isLoading={isDeleting}/>}
+                    type="delete"
+                />
             </Header>
-            <DetailsLayout>
+            <Box marginTop={'1rem'} width={'100%'}>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
                     <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile}>
                         <CustomTextItem isTitle>Información</CustomTextItem>
@@ -80,7 +107,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
                         <ToolbarButton handleClick={()=> handleClickToClient(payment?.client_id || '')} label="Ver detalle" icon={null}/>
                     </Box>
                 </DetailsCard>
-            </DetailsLayout>
+            </Box>
         </SceneContainer>
     )
 }

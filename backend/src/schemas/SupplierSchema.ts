@@ -15,7 +15,8 @@ const supplierMongoSchema = newSupplierSchema.extend({
     _id: validateObjectId(),
     balance: z.number(),
     purchases: z.array(validateObjectId()).optional(),
-    payments: z.array(validateObjectId()).optional(), 
+    payments: z.array(validateObjectId()).optional(),
+    is_active: z.boolean().optional(), 
     createdAt: z.date().optional()
 })
 

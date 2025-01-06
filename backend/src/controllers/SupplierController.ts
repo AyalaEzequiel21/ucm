@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { SupplierMongoType, SupplierType } from "../schemas/SupplierSchema"
-import { createSupplier, getAllSuppliers, getDetailsOfSupplier, getSupplierById, getSuppliersByName, modifySupplier, removeSupplierById } from "../services/SupplierService"
+import { createSupplier, getAllInactiveSuppliers, getAllSuppliers, getDetailsOfSupplier, getSupplierById, getSuppliersByName, modifySupplier, removeSupplierById } from "../services/SupplierService"
 
 
 /////////////////////////
@@ -22,6 +22,16 @@ const registerSupplier = async (req: Request, res: Response, next: NextFunction)
 const findAllSuppliers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const suppliers = await getAllSuppliers() //  FIND ALL SUPPLIERS WITH THE SERVICE
+        res.status(200).json({ok: true, data: suppliers})
+    } catch(e) {
+        next(e)
+    }
+}
+
+// FIND ALL INACTIVE SUPPLIERS
+const findAllInactiveSuppliers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const suppliers = await getAllInactiveSuppliers() //  FIND ALL SUPPLIERS WITH THE SERVICE
         res.status(200).json({ok: true, data: suppliers})
     } catch(e) {
         next(e)
@@ -83,4 +93,4 @@ const deleteSupplierById = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
-export { registerSupplier, findAllSuppliers, findSuppliersByName, findSupplierById, findSupplierDetailsById, updateSupplier, deleteSupplierById }
+export { registerSupplier, findAllSuppliers, findAllInactiveSuppliers, findSuppliersByName, findSupplierById, findSupplierDetailsById, updateSupplier, deleteSupplierById }

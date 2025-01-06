@@ -21,6 +21,7 @@ export interface IClientMongo {
     balance: number,
     category: CategoryType,
     in_delivery: boolean,
+    is_active?: boolean
 }
 
 
@@ -44,6 +45,7 @@ export interface IClientDetails {
     category: CategoryType
     in_delivery: boolean
     balance: number
+    is_active: boolean
     createdAt: string
     sales: ISalesOfClientDetails[]
     lastSale: string|null

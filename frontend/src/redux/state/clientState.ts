@@ -4,6 +4,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 // ESTRUCTURA DEL ESTADO PARA ALMACENAR LOS CLIENTES
 export interface IAllClients {
     clients: IClient[],
+    inactiveClients: IClient[],
     clientsLoading: boolean
 }
 // ESTRUCTURA COMPLETA DEL ESTADO PARA EL SLICE
@@ -14,6 +15,7 @@ interface IClientState {
 const initialState: IClientState = {
     allClients: {
         clients: [],
+        inactiveClients: [],
         clientsLoading: false
     }
 }

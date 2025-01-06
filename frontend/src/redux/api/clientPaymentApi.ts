@@ -45,8 +45,16 @@ export const clientPaymentApi = createApi({
             query: () => '/clientPayments',
             providesTags: ['Client Payment']
         }),
+        // METODO ELIMINAR
+        deleteClientPayment: builder.mutation<IApiResponse<{message: string}>, string>({
+            query: (id) => ({
+                url: `/clientPayments/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Client Payment']
+        }),
     })
 
 })
 
-export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery, useGetClientPaymentDetailsByIdQuery, useAddClientPaymentMutation, useGetAllClientPaymentsByClientIdQuery } = clientPaymentApi
+export const { useGetClientpaymentByIdQuery, useGetAllClientPaymentsQuery, useGetClientPaymentDetailsByIdQuery, useAddClientPaymentMutation, useGetAllClientPaymentsByClientIdQuery, useDeleteClientPaymentMutation } = clientPaymentApi

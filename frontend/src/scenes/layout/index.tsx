@@ -10,11 +10,11 @@ import { jwtDecode } from "jwt-decode"
 import { login, setAllUsers } from "@/redux/state/userState"
 import { IUser } from "@/utils/interfaces/IUser"
 import { useGetAllUsersQuery } from "@/redux/api/userApi"
-import { useGetAllClientsQuery } from "@/redux/api/clientApi"
+import { useGetAllClientsQuery, useGetInactiveClientsQuery } from "@/redux/api/clientApi"
 import { setClients } from "@/redux/state/clientState"
 import { useGetAllProductsQuery } from "@/redux/api/productApi"
 import { setProducts } from "@/redux/state/productState"
-import { useGetAllSuppliersQuery } from "@/redux/api/supplierApi"
+import { useGetAllInactiveSuppliersQuery, useGetAllSuppliersQuery } from "@/redux/api/supplierApi"
 import { setSuppliers } from "@/redux/state/supplierState"
 import { useGetAllClientPaymentsQuery } from "@/redux/api/clientPaymentApi"
 import { setClientsPayments } from "@/redux/state/clientsPaymentsState"
@@ -51,8 +51,10 @@ const Layout: React.FC<LayoutProps> = () => {
     const navigate = useNavigate()
     const { data: users, isLoading: usersLoading } = useGetAllUsersQuery()
     const { data: clients, isLoading: clientsLoading } = useGetAllClientsQuery()
+    const { data: inactiveClients } = useGetInactiveClientsQuery()
     const { data: products, isLoading: productsLoading } = useGetAllProductsQuery()
     const { data: suppliers, isLoading: suppliersLoading } = useGetAllSuppliersQuery()
+    const { data: inactiveSuppliers } = useGetAllInactiveSuppliersQuery()
     const { data: clientsPayments, isLoading: clientsPaymentsLoading } = useGetAllClientPaymentsQuery()
     const { data: purchases, isLoading: purchasesLoading } = useGetAllPurchasesQuery()
     const { data: sales, isLoading: salesLoading } = useGetAllSalesQuery()
@@ -84,14 +86,14 @@ const Layout: React.FC<LayoutProps> = () => {
         if(users){
             dispatch(setAllUsers({users:users.data, usersLoading: usersLoading}))
         }
-        if(clients){
-            dispatch(setClients({clients: clients.data, clientsLoading: clientsLoading}))
+        if(clients && inactiveClients){
+            dispatch(setClients({clients: clients.data, inactiveClients: inactiveClients.data, clientsLoading: clientsLoading}))
         }
         if(products){
             dispatch(setProducts({products: products.data, productsLoading: productsLoading}))
         }
-        if(suppliers){
-            dispatch(setSuppliers({suppliers: suppliers.data, suppliersLoading: suppliersLoading}))
+        if(suppliers && inactiveSuppliers){
+            dispatch(setSuppliers({suppliers: suppliers.data, inactiveSuppliers: inactiveSuppliers.data, suppliersLoading: suppliersLoading}))
         }
         if(clientsPayments){
             dispatch(setClientsPayments({clientsPayments: clientsPayments.data, clientsPaymentsLoading: clientsPaymentsLoading}))
@@ -112,6 +114,7 @@ const Layout: React.FC<LayoutProps> = () => {
         users, 
         clients, 
         clientsPayments, 
+        inactiveClients,
         products, 
         purchases,
         suppliers, 

@@ -8,6 +8,8 @@ import { CustomFormLayout } from "../../CustomFormLayout";
 import { CustomInput } from "../../CustomInput";
 import { useModalAlert } from "@/hooks/useModalAlert";
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString";
+import { inDeliveryOptions } from "@/utils/dataUtils/AllOptions";
+import { CustomRadioGroup } from "@/components/CustomRadioGroup";
 
 
 interface SupplierModifyFormProps {
@@ -28,6 +30,7 @@ const SupplierModifyForm: React.FC<SupplierModifyFormProps> = ({ supplierData })
             primeProduct: dataForm.primeProduct,
             phone: dataForm.phone,
             balance: supplierData.balance,
+            is_active: dataForm.is_active?.toString() === 'true'
         }
 
         if (updatedSupplier.supplier_name !== supplierData.supplier_name || updatedSupplier.primeProduct !== supplierData.primeProduct || updatedSupplier.phone !== supplierData.phone) {
@@ -92,6 +95,13 @@ const SupplierModifyForm: React.FC<SupplierModifyFormProps> = ({ supplierData })
                     maxLength={20}
                     defaultValue={supplierData.primeProduct}
                 />
+                {!supplierData.is_active && <CustomRadioGroup 
+                    label="Reactivar"
+                    propertie="is_active"
+                    error={!!errors.is_active}
+                    options={inDeliveryOptions}
+                    defaultValue={supplierData.is_active}
+                />}
             </CustomFormLayout>
         </FormProvider>
     )

@@ -24,7 +24,7 @@ const createSupplier = async (newSupplier: SupplierType) => {
         if(await validateIfExists(SupplierModel, "phone", phone)){ // CHECK IF EXISTS OTHER SUPPLIER WITH THE SAME PHONE, IS EXISTS RUN AN EXCEPTION
             throw new ResourceAlreadyExistsError('El telefono')
         }
-        const supplier = await SupplierModel.create({ // CRETE THE SUPPLIER
+        const supplier = await SupplierModel.create({ // CREATE THE SUPPLIER
             supplier_name: supplier_name,
             phone: phone,
             primeProduct: primeProduct
@@ -38,7 +38,17 @@ const createSupplier = async (newSupplier: SupplierType) => {
 // FIND ALL 
 const getAllSuppliers = async () => {
     try{
-        const suppliers = await SupplierModel.find().lean() // FIND ALL SUPPLIERS
+        const suppliers = await SupplierModel.find({is_active: true}).lean() // FIND ALL SUPPLIERS
+        return suppliers
+    } catch(e){
+        ErrorsPitcher(e)
+    }
+}
+
+// FIND ALL INACTIVES 
+const getAllInactiveSuppliers = async () => {
+    try{
+        const suppliers = await SupplierModel.find({is_active: false}).lean() // FIND ALL SUPPLIERS
         return suppliers
     } catch(e){
         ErrorsPitcher(e)
@@ -126,13 +136,15 @@ const modifySupplier = async (supplierUpdated: SupplierMongoType) => {
 const removeSupplierById = async (supplierId: IdType) => {
     checkId(supplierId)
     try {
-        const supplier = await SupplierModel.findByIdAndDelete(supplierId) //  DELETE THE SUPPLIER WITH HIS ID
+        const supplier = await SupplierModel.findById(supplierId) //  DELETE THE SUPPLIER WITH HIS ID
         if (!supplier){
             throw new ResourceNotFoundError('Proveedor')
         }
+        supplier.is_active = false
+        await supplier.save()
     } catch(e) {
         ErrorsPitcher(e)
     }
 }
 
-export { createSupplier, getAllSuppliers, getSuppliersByName, getSupplierById, getDetailsOfSupplier, modifySupplier, removeSupplierById }
+export { createSupplier, getAllSuppliers, getAllInactiveSuppliers, getSuppliersByName, getSupplierById, getDetailsOfSupplier, modifySupplier, removeSupplierById }

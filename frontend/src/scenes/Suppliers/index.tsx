@@ -15,7 +15,10 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { SupplierAddForm } from "@/components/forms/add/SupplierAddForm"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
-
+import { useState } from "react"
+import GroupIcon from '@mui/icons-material/Group'
+import PersonOffIcon from '@mui/icons-material/PersonOff'
+import { CustomButton } from "@/components/ui-components/buttons/CustomButton"
 
 type SuppliersProps = object
 
@@ -27,10 +30,11 @@ type SuppliersProps = object
 const Suppliers: React.FC<SuppliersProps> = () => {
 
     // Obtiene la lista de proveedores y el estado de carga desde el store de Redux.
-    const {suppliers, suppliersLoading} = useSelector((state: RootState) => state.supplier.allSuppliers)
+    const {suppliers, inactiveSuppliers, suppliersLoading} = useSelector((state: RootState) => state.supplier.allSuppliers)
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const isDelivery = userLogin?.role === 'delivery'
     const navigate = useNavigate()
+      const [inactiveToggle, setInactiveToggle] = useState(false)
     
     const handleDetailsClick = (id: string) => {
         navigate(`/suppliers/supplier/${id}`)
@@ -56,10 +60,17 @@ const Suppliers: React.FC<SuppliersProps> = () => {
             <Header title="PROVEEDORES" subtitle="Lista de proveedores">
                 {!isDelivery && <HeaderButton
                     form={<SupplierAddForm />}
-                    model="Proveedor"
                     type="add"
                     disabled={isDelivery}
                 />}
+                {!isDelivery && <CustomButton
+                    label={inactiveToggle ? 'Activos' : 'Inactivos'}
+                    icon={inactiveToggle ? <GroupIcon /> : <PersonOffIcon />}
+                    onClick={()=>{setInactiveToggle(!inactiveToggle)}}
+                    disabled={isDelivery || inactiveSuppliers.length === 0}
+                    mode="light"
+                    />
+                }
             </Header>
             {userLogin?.role === 'delivery' ? 
                 <NotAuthorizedComponent />
@@ -68,7 +79,7 @@ const Suppliers: React.FC<SuppliersProps> = () => {
                     <NotFoundComponent />
                     : 
                     <CustomDatGrid<ISupplier>
-                        rows={suppliers || []}
+                        rows={inactiveToggle ? inactiveSuppliers : suppliers || []}
                         isFilterName= {true}
                         fieldValue="supplier_name"
                         isLoading={suppliersLoading}

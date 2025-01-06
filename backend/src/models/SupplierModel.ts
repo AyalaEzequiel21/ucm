@@ -35,6 +35,11 @@ export const supplierSchema = new Schema<SupplierMongoType>(
             ref: "Purchase",
             default: []
         }], 
+        is_active: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
         createdAt: {
             type: Date,
             required: false

@@ -1,7 +1,7 @@
 import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { CustomTextItem } from "@/components/CustomTextItem"
 import { FlexBetween } from "@/components/FlexBetween"
-import { useGetClientDetailsByIdQuery } from "@/redux/api/clientApi"
+import { useDeleteClientMutation, useGetClientDetailsByIdQuery } from "@/redux/api/clientApi"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { IClientDetails, IPaymentsOfClientDetails, ISalesOfClientDetails } from "@/utils/interfaces/IClient"
 import { useNavigate, useParams } from "react-router-dom"
@@ -24,6 +24,8 @@ import { Box } from "@mui/material"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
+import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
+import { useEffect, useState } from "react"
 
 type ClientDetailsProps = object
 
@@ -32,10 +34,12 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     const {id} = useParams()
     const parsedId = id as string
     const {isMobile, isTablet} = useScreenSize()
-    const { isLoading, data} = useGetClientDetailsByIdQuery(parsedId)
+    const [isDeleteTriggered, setDeleteTriggered] = useState(false)
+    const { isLoading, data} = useGetClientDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const client = data?.data as IClientDetails
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const isDelivery = userLogin?.role === 'delivery'
+    const [deleteClient, {isLoading: isDeleting}] = useDeleteClientMutation()
     const navigate = useNavigate()
 
     const handleClickSale = (id: string) => {
@@ -45,6 +49,25 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     const handleClickPayment = (id: string) => {
         navigate(`/clientPayments/payment/${id}`)
     }
+
+    const handleDelete = () => setDeleteTriggered(true)
+
+    useEffect(() => {
+        if(isDeleteTriggered) {
+            const deleteClientAsync = async () => {
+                try {
+                    if (id) {
+                        await deleteClient(id).unwrap();
+                    }
+                    navigate('/clients', { replace: true });
+                } catch (error) {
+                    console.error('Error al eliminar el cliente:', error);
+                }
+            }
+            deleteClientAsync()
+        }
+
+    }, [isDeleteTriggered, id, deleteClient, navigate])
 
     const  columnsBaseSales: GridColDef[] = [
         { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){
@@ -83,7 +106,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
         }
     ]
 
-    if (isLoading || !client) return <SpinnerLoading />
+    if (isLoading || !client || isDeleting) return <SpinnerLoading />
 
     
     return (
@@ -91,9 +114,13 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
             <Header title={getCapitalizeString(client.fullname)} subtitle="Detalles">
                 <HeaderButton 
                     form={<ClientModifyForm clientData={client}/>}
-                    model="Cliente"
                     type="edit"
                     disabled={isDelivery}
+                />
+                <HeaderButton
+                    form={<DeleteConfirmComponent model="Cliente" onConfirm={()=> handleDelete()} isLoading={isLoading} />}
+                    type="delete"
+                    disabled={!client.is_active}
                 />
             </Header>
             <Box marginTop={'1rem'} width={'100%'}>

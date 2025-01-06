@@ -35,6 +35,11 @@ export const clientApi = createApi({
             query: () => '/clients',
             providesTags: ['Client']
         }),
+          // METODO LISTAR TODOS LOS INACTIVOS
+        getInactiveClients: builder.query<IApiResponse<IClient>, void>({
+            query: () => '/clients/inactives',
+            providesTags: ['Client']
+        }),
           // METODO MODIFICAR
         modifyClient: builder.mutation<IApiResponse<IClient>, IClientMongo>({
             query: (client) => ({
@@ -44,7 +49,15 @@ export const clientApi = createApi({
             }),
             invalidatesTags: ['Client']
         }),
+        // METODO ELIMINAR
+        deleteClient: builder.mutation<IApiResponse<{ message: string }>, string>({
+            query: (id) => ({
+                url: `/clients/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Client']
+        })
     })
 })
 
-export const { useGetClientDetailsByIdQuery, useGetAllClientsQuery, useAddClientMutation, useModifyClientMutation } = clientApi
+export const { useGetClientDetailsByIdQuery, useGetAllClientsQuery, useGetInactiveClientsQuery, useAddClientMutation, useModifyClientMutation, useDeleteClientMutation } = clientApi

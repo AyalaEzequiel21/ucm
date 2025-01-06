@@ -6,7 +6,8 @@ export interface ISupplier {
     balance: number,
     purchases?: string[],
     payments?: string[],
-    createdAt?: string
+    createdAt?: string,
+    is_active: boolean
 }
 
 export interface IPurchasesOfSupplierDetails {
@@ -35,4 +36,5 @@ export interface ISupplierDetails {
     payments: IPaymentsOfSupplierDetails[],
     lastPayment: Date|null,
     totalAmountOfPayments: number,
+    is_active: boolean
 }

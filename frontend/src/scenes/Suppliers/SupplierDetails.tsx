@@ -1,7 +1,7 @@
 import { FlexBetween } from "@/components/FlexBetween"
 import { MultiTables, TableExtended } from "@/components/MultiTables"
 import useScreenSize from "@/hooks/useScreenSize"
-import { useGetSupplierDetailsByIdQuery } from "@/redux/api/supplierApi"
+import { useDeleteSupplierMutation, useGetSupplierDetailsByIdQuery } from "@/redux/api/supplierApi"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { renderButtonPrincipal } from "@/utils/functionsHelper/renderButtonPrincipal"
@@ -20,6 +20,8 @@ import { Header } from "@/components/Header"
 import { Box } from "@mui/material"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { SupplierModifyForm } from "@/components/forms/modify/SupplierModifyForm"
+import { useState, useEffect } from "react"
+import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 
 type SupplierDetailsProps = object
 
@@ -28,8 +30,10 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
     const {id} = useParams()
     const parsedId = id as string
     const {isMobile} = useScreenSize()
-    const {isLoading, data} = useGetSupplierDetailsByIdQuery(parsedId)
+    const [isDeleteTriggered, setDeleteTriggered] = useState(false)
+    const {isLoading, data} = useGetSupplierDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const supplierDetails = data?.data as ISupplierDetails
+    const [deleteSupplier, {isLoading: isDeleting}] = useDeleteSupplierMutation()
     const navigate = useNavigate()
 
     const handleClickPurchase = (id: string) => {
@@ -39,6 +43,24 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
     const handleClickPayment = (id: string) => {
         navigate(`/paymentsToSuppliers/payment/${id}`)
     }
+
+    const handleDelete = () => setDeleteTriggered(true)
+
+    useEffect(() => {
+        if(isDeleteTriggered) {
+            const deleteSupplierAsync = async () => {
+                try {
+                    if (id) {
+                        await deleteSupplier(id).unwrap();
+                    }
+                    navigate('/suppliers')
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            deleteSupplierAsync()
+        }
+    }, [isDeleteTriggered, deleteSupplier, id, navigate])
 
     const columnsBasePurchases: GridColDef[] = [
         { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){
@@ -86,8 +108,12 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
             <Header title={supplierDetails.supplier_name} subtitle="Detalles">
                 <HeaderButton 
                     form={<SupplierModifyForm supplierData={supplierDetails}/>}
-                    model="Proveedor"
                     type="edit"
+                />
+                <HeaderButton
+                    form={<DeleteConfirmComponent model="Proveedor" onConfirm={()=> handleDelete()} isLoading={isDeleting} />}
+                    type="delete"
+                    disabled={!supplierDetails.is_active}
                 />
             </Header>    
             <Box marginTop={'1rem'} width={'100%'}>

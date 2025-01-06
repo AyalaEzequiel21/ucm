@@ -4,6 +4,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 // ESTRUCTURA DEL ESTADO PARA ALMACENAR LOS PROVEEDORES
 export interface IAllSuppliers {
     suppliers: ISupplier[],
+    inactiveSuppliers: ISupplier[],
     suppliersLoading: boolean
 }
 // ESTRUCTURA COMPLETA DEL ESTADO PARA EL SLICE
@@ -14,6 +15,7 @@ interface ISupplierState {
 const initialState: ISupplierState = {
     allSuppliers: {
         suppliers: [],
+        inactiveSuppliers: [],
         suppliersLoading: false
     }
 }

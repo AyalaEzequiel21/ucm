@@ -29,9 +29,11 @@ const ClientModifyForm: React.FC<ClientModifyFormProps> = ({clientData}) => {
             balance: clientData.balance,
             category: dataForm.category,
             in_delivery: dataForm.in_delivery.toString() === 'true',
-            _id: clientData._id,         }
+            _id: clientData._id,
+            is_active: dataForm.is_active?.toString() === 'true'
+        }
         
-        if(updatedClient.fullname !== clientData.fullname || updatedClient.phone !== clientData.phone || updatedClient.category !== clientData.category || updatedClient.in_delivery !== clientData.in_delivery){
+        if(updatedClient.fullname !== clientData.fullname || updatedClient.phone !== clientData.phone || updatedClient.category !== clientData.category || updatedClient.in_delivery !== clientData.in_delivery || updatedClient.is_active !== clientData.is_active){
             try{
                 await modifyClient(updatedClient).unwrap()
                 toggleSuccessAlert('Cliente modificado con exito')
@@ -99,6 +101,13 @@ const ClientModifyForm: React.FC<ClientModifyFormProps> = ({clientData}) => {
                     options={inDeliveryOptions}
                     defaultValue={clientData.in_delivery}
                 />
+                {!clientData.is_active && <CustomRadioGroup 
+                    label="Reactivar"
+                    propertie="is_active"
+                    error={!!errors.is_active}
+                    options={inDeliveryOptions}
+                    defaultValue={clientData.is_active}
+                />}
             </CustomFormLayout>
         </FormProvider>
     )

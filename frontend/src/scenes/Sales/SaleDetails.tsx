@@ -21,6 +21,7 @@ import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { SaleModifyForm } from "@/components/forms/modify/SaleModifyForm"
 import { Box } from "@mui/material"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
+import { useEffect, useState } from "react"
 
 type SaleDetailsProps = object
 
@@ -29,7 +30,8 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
     const {id} = useParams()
     const parsedId = id as string
     const {isMobile} = useScreenSize()
-    const { isLoading, data} = useGetSaleDetailsByIdQuery(parsedId)
+    const [isDeleteTriggered, setDeleteTriggered] = useState(false)
+    const { isLoading, data} = useGetSaleDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const sale = data?.data as IDetailsSale
     const [deleteSale, {isLoading: isDeleting}] = useDeleteSaleMutation()
     const navigate = useNavigate()
@@ -44,16 +46,28 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
         }},
     ]
 
-    const handleDelete = async (id: string) => {
-        try {
-            await deleteSale(id).unwrap()
-            navigate('/sales')
-        } catch (error) {
-            console.error(error, 'el error pasa aca')
+    useEffect(() => {
+        if (isDeleteTriggered) {
+            const deleteSaleAsync = async () => {
+            try {
+                if (id) {
+                await deleteSale(id).unwrap();
+            }
+            navigate('/sales', { replace: true });
+            } catch (error) {
+                console.error('Error al eliminar la venta:', error);
+            }
         }
+    
+        deleteSaleAsync();
+        }
+    }, [isDeleteTriggered, id, deleteSale, navigate])
+
+    const handleDelete = () => {
+        setDeleteTriggered(true)
     }
 
-    if(isLoading || !sale) return <SpinnerLoading />
+    if(isLoading || !sale || isDeleting) return <SpinnerLoading />
 
     return (
         <SceneContainer>
@@ -63,7 +77,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
                     type="edit"
                 />
                 <HeaderButton
-                    form={<DeleteConfirmComponent model="Venta" onConfirm={()=> handleDelete(sale._id)} isLoading={isDeleting} />}
+                    form={<DeleteConfirmComponent model="Venta" onConfirm={()=> handleDelete()} isLoading={isDeleting} />}
                     type="delete"
                 />
             </Header>

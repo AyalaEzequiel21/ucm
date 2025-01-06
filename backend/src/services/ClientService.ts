@@ -145,7 +145,7 @@ const getDetailsOfClient = async (clientId: IdType) => {
     checkId(clientId) // CHECK IF ID IS VALID
     try {
         const client = await ClientModel.findById(clientId) // FIND CLIENT BY ID, ONLY SOMES PROEPIRTIES ARE RETURNED
-        .select('_id fullname phone balance category in_delivery createdAt')
+        .select('_id fullname phone balance category in_delivery createdAt is_active')
         .lean()
         if(!client || !client.createdAt) { // IF CLIENT NOT EXISTS, RUN AN EXCEPTION
             throw new ResourceNotFoundError('Cliente')
