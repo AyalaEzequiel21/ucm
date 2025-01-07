@@ -48,8 +48,16 @@ export const purchaseApi = createApi({
                 body: purchase
             }),
             invalidatesTags: ['Purchase']
+        }), 
+        // METODO ELIMINAR
+        deletePurchase: builder.mutation<IApiResponse<{message: string}>, string>({
+            query: (id) => ({
+                url: `/purchases/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Purchase']
         })
     })
 })
 
-export const { useAddPurchaseMutation, useGetAllPurchasesQuery, useGetPurchaseDetailsByIdQuery, useGetPurchaseByIdQuery, useModifyPurchaseMutation } = purchaseApi
+export const { useAddPurchaseMutation, useGetAllPurchasesQuery, useGetPurchaseDetailsByIdQuery, useGetPurchaseByIdQuery, useModifyPurchaseMutation, useDeletePurchaseMutation } = purchaseApi

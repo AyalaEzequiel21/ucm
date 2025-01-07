@@ -152,11 +152,12 @@ const removePurchaseById = async (purchaseId: IdType) => {
         if(!purchase){
             throw new ResourceNotFoundError('Compra a proveedor')
         }
-        const purchaseParsed = purchase as unknown as PurchaseMongoType // PARSE THE PURCHASE AS UNKNOWN FOR CAN PARSE AS PURCHASEMONGOTYPE
-        if(purchase.supplier_id){ // IF SUPPLIER ID EXISTS THEN REMOVE THE PURCHASE FROM THE SUPPLIER
-            await removePurchaseToSupplier(purchase.supplier_id, purchaseParsed, session)
+        // const purchaseParsed = purchase as unknown as PurchaseMongoType // PARSE THE PURCHASE AS UNKNOWN FOR CAN PARSE AS PURCHASEMONGOTYPE
+        if(purchase.supplier_id && purchase.total_purchase){ // IF SUPPLIER ID EXISTS THEN REMOVE THE PURCHASE FROM THE SUPPLIER
+            await removePurchaseToSupplier(purchase.supplier_id, purchaseId, purchase.total_purchase, session)
         }
-         await purchase.deleteOne({session}) // DELETE THE PURCHASE BY HIS ID
+        await purchase.deleteOne({session}) // DELETE THE PURCHASE BY HIS ID
+        await session.commitTransaction() // CONFIRM ALL CHANGES AND THE TRANSACTION
     } catch(e) {
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)

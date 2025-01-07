@@ -3,7 +3,7 @@ import { DetailsCard } from "@/components/ui-components/DetailsCard"
 import { FlexBetween } from "@/components/FlexBetween"
 import { SpinnerLoading } from "@/components/ui-components/SpinnerLoading"
 import useScreenSize from "@/hooks/useScreenSize"
-import { useGetPurchaseDetailsByIdQuery } from "@/redux/api/purchaseApi"
+import { useDeletePurchaseMutation, useGetPurchaseDetailsByIdQuery } from "@/redux/api/purchaseApi"
 import { getFormatedDate } from "@/utils/functionsHelper/getFormatedDate"
 import { getFormatedValue } from "@/utils/functionsHelper/getFormatedValue"
 import { IPurchaseForDetails } from "@/utils/interfaces/IPurchase"
@@ -20,6 +20,8 @@ import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { PurchaseModifyForm } from "@/components/forms/modify/PurchaseModifyForm"
 import { CustomButton } from "@/components/ui-components/buttons/CustomButton"
+import { useEffect, useState } from "react"
+import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 
 
 type PurchaseDetailsProps = object
@@ -29,8 +31,10 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
     const {id} = useParams()
     const parseId = id as string
     const {isMobile} = useScreenSize()
-    const { isLoading, data} = useGetPurchaseDetailsByIdQuery(parseId)
+    const [isDeleteTriggered, setDeleteTriggered] = useState(false)
+    const { isLoading, data} = useGetPurchaseDetailsByIdQuery(parseId, {skip: isDeleteTriggered})
     const purchase = data?.data as IPurchaseForDetails
+    const [deletePurchase, {isLoading: isDeleting}] = useDeletePurchaseMutation()
     const navigate = useNavigate()
 
     const columns: GridColDef[] = [
@@ -42,9 +46,28 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
             return getFormatedValue(total)
         }},
     ]
+
+    const handleDelete = () => setDeleteTriggered(true)
+
     const handleToSupplier = (supplier_id: string) => {
         navigate(`/suppliers/supplier/${supplier_id}`)
     }
+
+    useEffect(() => {
+        if(isDeleteTriggered) {
+            const deletePurchaseAsync = async () => {
+                try {
+                    if (id) {
+                        await deletePurchase(id).unwrap();
+                    }
+                    navigate('/purchases', { replace: true });
+                } catch (error) {
+                    console.error('Error al eliminar la compra:', error);
+                }
+            }
+            deletePurchaseAsync()
+        }
+    }, [isDeleteTriggered, deletePurchase, id, navigate])
 
     if(isLoading || !purchase) return <SpinnerLoading />
 
@@ -53,8 +76,11 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
             <Header title="Compra a proveedor" subtitle="Detalles">
                 <HeaderButton
                     form={<PurchaseModifyForm purchaseData={purchase}/>}
-                    model="Compra a proveedor"
                     type="edit"
+                />
+                <HeaderButton
+                    form={<DeleteConfirmComponent model="Compra" onConfirm={()=> handleDelete()} isLoading={isDeleting} />}
+                    type="delete"
                 />
             </Header>
             <Box marginTop={'1rem'} width={'100%'}>

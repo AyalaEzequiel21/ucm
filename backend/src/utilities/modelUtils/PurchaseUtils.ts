@@ -39,15 +39,15 @@ const addDiferenceToBalanceSupplier = async (supllierId: IdType, diffrence: numb
     }
 }
 
-const removePurchaseToSupplier = async (supplierId: IdType, purchase: PurchaseMongoType, session: ClientSession) => {
+const removePurchaseToSupplier = async (supplierId: IdType, purchaseId: IdType, total_purchase: number, session: ClientSession) => {
     try{
         const supplier = await getSupplierById(supplierId) //  FIND THE SUPPLIER WITH THE SERVICE, IF NOT EXISTS RUN AN EXCEPTION
         if(!supplier){
             throw new ResourceNotFoundError('Proveedor')
         }
-        if(supplier.purchases && supplier.balance && purchase.total_purchase){
-            supplier.purchases = supplier.purchases?.filter(item => item != purchase._id) // SUBTRACT THE PURCHASE FROM THE LIST OF SUPPLIER 
-            supplier.balance -= purchase.total_purchase // UPDATE THE SUPPLIER BALANCE
+        if(supplier.purchases && supplier.balance){
+            supplier.purchases = supplier.purchases?.filter(item => item != purchaseId) // SUBTRACT THE PURCHASE FROM THE LIST OF SUPPLIER 
+            supplier.balance -= total_purchase // UPDATE THE SUPPLIER BALANCE
         }
         await supplier.save({session})
     } catch(e) {

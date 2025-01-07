@@ -54,6 +54,7 @@ export const saleApi = createApi({
             }),
             invalidatesTags: ['Sale']
         }),
+        // METODO ELIMINAR
         deleteSale: builder.mutation<IApiResponse<{message: string}>, string>({
             query: (id) => ({
                 url: `/sales/delete/${id}`,

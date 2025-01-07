@@ -39,8 +39,16 @@ export const paymentToSupplierApi = createApi({
                 body: newPayment
             }),
             invalidatesTags: ['Payment To Supplier']
+        }),
+        // METODO ELIMINAR
+        deletePaymentToSupplier: builder.mutation<IApiResponse<{message: string}>, string>({
+            query: (id) => ({
+                url: `/paymentsToSupplier/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Payment To Supplier']
         })
     })
 })
 
-export const { useGetPaymentToSupplierByIdQuery, useGetPaymentToSupplierDetailsByIdQuery, useGetAllPaymentsToSuppliersQuery, useAddPaymentToSupplierMutation } = paymentToSupplierApi
+export const { useGetPaymentToSupplierByIdQuery, useGetPaymentToSupplierDetailsByIdQuery, useGetAllPaymentsToSuppliersQuery, useAddPaymentToSupplierMutation, useDeletePaymentToSupplierMutation } = paymentToSupplierApi

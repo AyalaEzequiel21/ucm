@@ -32,7 +32,7 @@ const removeSalefromClient = async (clientId: IdType, saleId: IdType, totalSale:
     try {
         const client = await getClientById(clientId) // FIND CLIENT WITH CLIENT SERVICE, CHECK IF EXISTS ASND UPDATE IT
         if (!client) {
-            throw new ResourceNotFoundError('Cliente'); // Lanza error si no existe
+            throw new ResourceNotFoundError('Cliente')
         }        
         if(client.sales && client.balance) {
             client.sales = client.sales.filter(sale => sale != saleId) // SUBTRACT SALE TO CLIENT LIST OF SALES

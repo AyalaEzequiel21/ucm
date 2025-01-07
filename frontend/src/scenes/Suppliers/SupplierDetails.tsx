@@ -92,7 +92,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
             isLoading: isLoading
         },
         {
-            label: 'Ventas',
+            label: 'Compras',
             rows: supplierDetails?.purchases || [],
             isFilterName: false,
             columnsBase: columnsBasePurchases,

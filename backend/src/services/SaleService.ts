@@ -205,7 +205,6 @@ const removeSaleById = async (saleId: IdType) => {
         await sale.deleteOne({session}) // DELETE SALE        
         await session.commitTransaction() // COMMIT THE TRANSACTION
     } catch(e) {
-        console.error(e)
         await session.abortTransaction() //ABORT THE TRANSACTION
         ErrorsPitcher(e)
     }finally{
