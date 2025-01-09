@@ -55,6 +55,7 @@ const Clients: React.FC<ClientsProps> = () => {
     { field: 'phone', headerName: 'Telefono', flex: 0.5 },
     { field: 'createdAt', headerName: 'Registro', flex: 0.5, renderCell(value){return getFormatedDate(value.row.createdAt)} },
   ] 
+
   
   if(clientsLoading || !clients) return <SpinnerLoading />
 
@@ -70,11 +71,13 @@ const Clients: React.FC<ClientsProps> = () => {
           label={inactiveToggle ? 'Activos' : 'Inactivos'}
           icon={inactiveToggle ? <GroupIcon /> : <PersonOffIcon />}
           onClick={()=>{setInactiveToggle(!inactiveToggle)}}
-          disabled={isDelivery || inactiveClients.length === 0}
+          disabled={inactiveClients.length === 0}
           mode="light"
         />
       </Header>
-      {clients.length === 0 ?
+      { (clients.length === 0 && !inactiveToggle) 
+        ||
+        (inactiveClients.length === 0 && inactiveToggle) ?
         <NotFoundComponent /> 
         :
         <CustomDatGrid<IClient>

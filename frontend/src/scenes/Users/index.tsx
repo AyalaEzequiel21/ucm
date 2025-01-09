@@ -15,6 +15,7 @@ import { IUser } from "@/utils/interfaces/IUser"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useDeleteUserMutation } from "@/redux/api/userApi"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 type UsersProps = object
 
@@ -30,8 +31,17 @@ const Users: React.FC<UsersProps> = () => {
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const [deleteUser, {isLoading}] = useDeleteUserMutation()
     const isAdmin = userLogin?.role === 'admin'
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
 
-    const handleDelete = async (id: string) => await deleteUser(id)
+    const handleDelete = async (id: string) => {
+        try{
+            await deleteUser(id).unwrap()
+            toggleSuccessAlert('Usuario eliminado exitosamente')
+        } catch(error) {
+            toggleErrorAlert('Error al eliminar el usuario')
+            console.error(error)
+        }
+    }
 
     const columnsBase: GridColDef<IUser>[] = [
         { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return getCapitalizeString(value.row.username)}},

@@ -22,6 +22,7 @@ import { PurchaseModifyForm } from "@/components/forms/modify/PurchaseModifyForm
 import { CustomButton } from "@/components/ui-components/buttons/CustomButton"
 import { useEffect, useState } from "react"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 
 type PurchaseDetailsProps = object
@@ -34,6 +35,7 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
     const [isDeleteTriggered, setDeleteTriggered] = useState(false)
     const { isLoading, data} = useGetPurchaseDetailsByIdQuery(parseId, {skip: isDeleteTriggered})
     const purchase = data?.data as IPurchaseForDetails
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deletePurchase, {isLoading: isDeleting}] = useDeletePurchaseMutation()
     const navigate = useNavigate()
 
@@ -58,16 +60,18 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
             const deletePurchaseAsync = async () => {
                 try {
                     if (id) {
-                        await deletePurchase(id).unwrap();
+                        await deletePurchase(id).unwrap()
+                        toggleSuccessAlert('Compra eliminada exitosamente')
                     }
-                    navigate('/purchases', { replace: true });
+                    navigate('/purchases', { replace: true })
                 } catch (error) {
-                    console.error('Error al eliminar la compra:', error);
+                    toggleErrorAlert('Error al eliminar la compra')
+                    console.error('Error al eliminar la compra:', error)
                 }
             }
             deletePurchaseAsync()
         }
-    }, [isDeleteTriggered, deletePurchase, id, navigate])
+    }, [isDeleteTriggered, deletePurchase, id, navigate, toggleErrorAlert, toggleSuccessAlert])
 
     if(isLoading || !purchase) return <SpinnerLoading />
 

@@ -8,6 +8,7 @@ import { RootState } from "@/redux/store";
 import { ProductModifyForm } from "../forms/modify/ProductModifyForm";
 import { DeleteConfirmComponent } from "./DeleteConfirmComponent";
 import { useDeleteProductMutation } from "@/redux/api/productApi";
+import { useModalAlert } from "@/hooks/useModalAlert";
 
 /**
  * Componente ProductCard:
@@ -23,14 +24,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
     const {userLogin} = useSelector((state: RootState) => state.user)
     const isDelivery = userLogin?.role === 'delivery'
     const {palette} = useTheme()
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deleteProduct, {isLoading}] = useDeleteProductMutation()
+    
     const handleDelete = async (id: string) => {
         try{
-            await deleteProduct(id).unwrap()   
+            await deleteProduct(id).unwrap()
+            toggleSuccessAlert('Producto eliminado exitosamente')
         } catch (error) {
+            toggleErrorAlert('Error al eliminar el producto')
             console.error(error)
+        }
     }
-}
 
     return (
         <Card
@@ -74,7 +79,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                         color: palette.grey[100],
                     }}
                 >
-                    {`Stock: ${product.stock}`}
+                    {/* {`Stock: ${product.stock}`} */}
                 </Typography>
                 <FlexBetween flexDirection={'column'} gap={1} alignContent={"start"}>
                     <Typography

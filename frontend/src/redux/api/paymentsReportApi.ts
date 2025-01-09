@@ -43,8 +43,24 @@ export const paymentsReportApi = createApi({
                 body: report
             }),
             invalidatesTags: ['Payments Report']
-        })
+        }),
+        // METODO ELIMINAR
+        deletePaymentsReport: builder.mutation<IApiResponse<{message: string}>, string>({
+            query: (id) => ({
+                url: `/paymentsReport/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Payments Report']
+        }),
+        // METODO VALIDAR REPORTE
+        validatePaymentsReport: builder.mutation<IApiResponse<IPaymentsReport>, string>({
+            query: (id) => ({
+                url: `/paymentsReport/validate/${id}`,
+                method: 'PUT'
+            }),
+            invalidatesTags: ['Payments Report']
+        }),
     })
 })
 
-export const { useGetPaymentsReportByIdQuery, useGetAllPaymentsReportsQuery, useAddPaymentsReportMutation, useModifyPaymentsReportMutation } = paymentsReportApi
+export const { useGetPaymentsReportByIdQuery, useGetAllPaymentsReportsQuery, useAddPaymentsReportMutation, useModifyPaymentsReportMutation, useDeletePaymentsReportMutation, useValidatePaymentsReportMutation } = paymentsReportApi

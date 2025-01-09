@@ -22,6 +22,7 @@ import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { SupplierModifyForm } from "@/components/forms/modify/SupplierModifyForm"
 import { useState, useEffect } from "react"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 type SupplierDetailsProps = object
 
@@ -33,6 +34,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
     const [isDeleteTriggered, setDeleteTriggered] = useState(false)
     const {isLoading, data} = useGetSupplierDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const supplierDetails = data?.data as ISupplierDetails
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deleteSupplier, {isLoading: isDeleting}] = useDeleteSupplierMutation()
     const navigate = useNavigate()
 
@@ -51,16 +53,18 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
             const deleteSupplierAsync = async () => {
                 try {
                     if (id) {
-                        await deleteSupplier(id).unwrap();
+                        await deleteSupplier(id).unwrap()
+                        toggleSuccessAlert('Proveedor eliminado exitosamente')
                     }
                     navigate('/suppliers')
                 } catch (error) {
+                    toggleErrorAlert('Error al eliminar el proveedor')
                     console.log(error)
                 }
             }
             deleteSupplierAsync()
         }
-    }, [isDeleteTriggered, deleteSupplier, id, navigate])
+    }, [isDeleteTriggered, deleteSupplier, id, navigate, toggleErrorAlert, toggleSuccessAlert])
 
     const columnsBasePurchases: GridColDef[] = [
         { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){

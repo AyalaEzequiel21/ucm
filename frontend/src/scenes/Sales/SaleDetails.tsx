@@ -22,6 +22,7 @@ import { SaleModifyForm } from "@/components/forms/modify/SaleModifyForm"
 import { Box } from "@mui/material"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useEffect, useState } from "react"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 type SaleDetailsProps = object
 
@@ -33,6 +34,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
     const [isDeleteTriggered, setDeleteTriggered] = useState(false)
     const { isLoading, data} = useGetSaleDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const sale = data?.data as IDetailsSale
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deleteSale, {isLoading: isDeleting}] = useDeleteSaleMutation()
     const navigate = useNavigate()
 
@@ -51,17 +53,19 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
             const deleteSaleAsync = async () => {
             try {
                 if (id) {
-                await deleteSale(id).unwrap();
+                await deleteSale(id).unwrap()
+                toggleSuccessAlert('Venta eliminada exitosamente')
             }
-            navigate('/sales', { replace: true });
+            navigate('/sales', { replace: true })
             } catch (error) {
-                console.error('Error al eliminar la venta:', error);
+                toggleErrorAlert('Error al eliminar la venta')
+                console.error('Error al eliminar la venta:', error)
             }
         }
     
         deleteSaleAsync();
         }
-    }, [isDeleteTriggered, id, deleteSale, navigate])
+    }, [isDeleteTriggered, id, deleteSale, navigate, toggleErrorAlert, toggleSuccessAlert])
 
     const handleDelete = () => {
         setDeleteTriggered(true)

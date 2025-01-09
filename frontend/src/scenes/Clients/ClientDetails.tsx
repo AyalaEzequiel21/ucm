@@ -26,6 +26,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useEffect, useState } from "react"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 type ClientDetailsProps = object
 
@@ -39,6 +40,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
     const client = data?.data as IClientDetails
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const isDelivery = userLogin?.role === 'delivery'
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deleteClient, {isLoading: isDeleting}] = useDeleteClientMutation()
     const navigate = useNavigate()
 
@@ -57,17 +59,19 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
             const deleteClientAsync = async () => {
                 try {
                     if (id) {
-                        await deleteClient(id).unwrap();
+                        await deleteClient(id).unwrap()
+                        toggleSuccessAlert('Cliente eliminado exitosamente')
                     }
-                    navigate('/clients', { replace: true });
+                    navigate('/clients', { replace: true })
                 } catch (error) {
-                    console.error('Error al eliminar el cliente:', error);
+                    toggleErrorAlert('Error al eliminar el cliente')
+                    console.error('Error al eliminar el cliente:', error)
                 }
             }
             deleteClientAsync()
         }
 
-    }, [isDeleteTriggered, id, deleteClient, navigate])
+    }, [isDeleteTriggered, id, deleteClient, navigate, toggleErrorAlert, toggleSuccessAlert])
 
     const  columnsBaseSales: GridColDef[] = [
         { field: 'createdAt', headerName: 'Fecha', flex: 0.5, renderCell(value){

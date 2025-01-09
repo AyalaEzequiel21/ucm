@@ -29,20 +29,20 @@ const ReportDetailsForm: React.FC<ReportDetailsProps> = ({onAddDetail}) => {
         handleSubmit,
         reset,
         formState: { errors },
-      } = methods
+    } = methods
 
-      const onSubmit = (data: Partial<IClientPayment>) => {
+    const onSubmit = (data: Partial<IClientPayment>) => {
         if (data.client_name && data.amount && data.amount > 0) {
             const dataProcessed = {...data, amount: Number(data.amount)}
             onAddDetail(dataProcessed)
             reset();
         }
-      }
+    }
 
-      const clientOptions: IAutocompleteOption[] = clients?.map((client: IClient) => ({
-          label: client.fullname,
-          id: client._id
-      })) || []
+    const clientOptions: IAutocompleteOption[] = clients?.map((client: IClient) => ({
+        label: client.fullname,
+        id: client._id
+    })) || []
 
     return (
         <FormProvider {...methods}>
@@ -64,6 +64,7 @@ const ReportDetailsForm: React.FC<ReportDetailsProps> = ({onAddDetail}) => {
                         error={!!errors.payment_method}
                         helperText={errors.payment_method?.message}
                         min={1}
+                        defaultValue={'efectivo'}
                     />
                     <CustomInput 
                         type="number"

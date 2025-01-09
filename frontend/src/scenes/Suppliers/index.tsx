@@ -75,7 +75,9 @@ const Suppliers: React.FC<SuppliersProps> = () => {
             {userLogin?.role === 'delivery' ? 
                 <NotAuthorizedComponent />
                 :
-                suppliers.length === 0 ?
+                (suppliers.length === 0 && !inactiveToggle) 
+                || 
+                (inactiveSuppliers.length === 0 && inactiveToggle) ?
                     <NotFoundComponent />
                     : 
                     <CustomDatGrid<ISupplier>

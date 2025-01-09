@@ -21,6 +21,7 @@ import { Header } from "@/components/Header"
 import { useEffect, useState } from "react"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 type PaymentDetailsProps = object
 
@@ -32,6 +33,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
     const [isDeleteTriggered, setDeleteTriggered] = useState(false)
     const { isLoading, data} = useGetClientPaymentDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const payment = data?.data as IClientPayment
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deleteClientPayment, {isLoading: isDeleting}] = useDeleteClientPaymentMutation()
     const navigate = useNavigate()
 
@@ -46,16 +48,18 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
             const deleteClientPaymentAsync = async () => {
                 try {
                     if (id) {
-                        await deleteClientPayment(id).unwrap();
+                        await deleteClientPayment(id).unwrap()
+                        toggleSuccessAlert('Pago eliminado exitosamente')
                     }
-                    navigate('/clientsPayments', { replace: true });
+                    navigate('/clientsPayments', { replace: true })
                 } catch (error) {
-                    console.error('Error al eliminar el pago:', error);
+                    toggleErrorAlert('Error al eliminar el pago')
+                    console.error('Error al eliminar el pago:', error)
                 }
             }
             deleteClientPaymentAsync()
         }
-    }, [isDeleteTriggered, deleteClientPayment, id, navigate]
+    }, [isDeleteTriggered, deleteClientPayment, id, navigate, toggleErrorAlert, toggleSuccessAlert]
 )
 
     if(isLoading || !payment || isDeleting) return <SpinnerLoading />

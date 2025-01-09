@@ -19,6 +19,7 @@ import { Header } from "@/components/Header"
 import { useEffect, useState } from "react"
 import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
+import { useModalAlert } from "@/hooks/useModalAlert"
 
 type PaymentToSupplierDetailsProps = object
 
@@ -29,6 +30,7 @@ const PaymentToSupplierDetails: React.FC<PaymentToSupplierDetailsProps> = () => 
     const [isDeleteTriggered, setDeleteTriggered] = useState(false)
     const {data, isLoading} = useGetPaymentToSupplierDetailsByIdQuery(parsedId, {skip: isDeleteTriggered})
     const paymentToSupplier = data?.data as IPaymentToSupplierDetails
+    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deletePaymentToSupplier, {isLoading: isDeleting}] = useDeletePaymentToSupplierMutation()
     const navigate = useNavigate()
 
@@ -43,16 +45,18 @@ const PaymentToSupplierDetails: React.FC<PaymentToSupplierDetailsProps> = () => 
             const deletePaymentToSupplierAsync = async () => {
                 try {
                     if (parsedId) {
-                        await deletePaymentToSupplier(parsedId).unwrap();
+                        await deletePaymentToSupplier(parsedId).unwrap()
+                        toggleSuccessAlert('Pago eliminado exitosamente')
                     }
-                    navigate('/paymentsToSuppliers', { replace: true });
+                    navigate('/paymentsToSuppliers', { replace: true })
                 } catch (error) {
-                    console.error('Error al eliminar el pago:', error);
+                    toggleErrorAlert('Error al eliminar el pago')
+                    console.error('Error al eliminar el pago:', error)
                 }
             }
             deletePaymentToSupplierAsync()
         }
-    }, [isDeleteTriggered, deletePaymentToSupplier, parsedId, navigate])
+    }, [isDeleteTriggered, deletePaymentToSupplier, parsedId, navigate, toggleErrorAlert, toggleSuccessAlert])
 
     if(isLoading || !paymentToSupplier) return <SpinnerLoading />
 
