@@ -20,8 +20,8 @@ import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { useEffect, useState } from "react"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useModalAlert } from "@/hooks/useModalAlert"
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type PaymentDetailsProps = object
 
@@ -68,7 +68,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = () => {
         <SceneContainer>
             <Header title="Pago de cliente" subtitle="Detalles">
                 <HeaderButton 
-                    form={<DeleteConfirmComponent model="Pago" onConfirm={handleDelete} isLoading={isDeleting}/>}
+                    form={<ActionConfirmComponent model="Pago" onConfirm={handleDelete} isLoading={isDeleting} type="delete"/>}
                     type="delete"
                 />
             </Header>

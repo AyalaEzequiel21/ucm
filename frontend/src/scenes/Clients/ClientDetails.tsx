@@ -24,9 +24,9 @@ import { Box } from "@mui/material"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useEffect, useState } from "react"
 import { useModalAlert } from "@/hooks/useModalAlert"
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type ClientDetailsProps = object
 
@@ -122,7 +122,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = () => {
                     disabled={isDelivery}
                 />
                 <HeaderButton
-                    form={<DeleteConfirmComponent model="Cliente" onConfirm={()=> handleDelete()} isLoading={isLoading} />}
+                    form={<ActionConfirmComponent model="Cliente" onConfirm={()=> handleDelete()} isLoading={isLoading} type="delete"/>}
                     type="delete"
                     disabled={!client.is_active}
                 />

@@ -21,8 +21,8 @@ import { Box } from "@mui/material"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { SupplierModifyForm } from "@/components/forms/modify/SupplierModifyForm"
 import { useState, useEffect } from "react"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useModalAlert } from "@/hooks/useModalAlert"
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type SupplierDetailsProps = object
 
@@ -115,7 +115,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = () => {
                     type="edit"
                 />
                 <HeaderButton
-                    form={<DeleteConfirmComponent model="Proveedor" onConfirm={()=> handleDelete()} isLoading={isDeleting} />}
+                    form={<ActionConfirmComponent model="Proveedor" onConfirm={()=> handleDelete()} isLoading={isDeleting} type="delete"/>}
                     type="delete"
                     disabled={!supplierDetails.is_active}
                 />

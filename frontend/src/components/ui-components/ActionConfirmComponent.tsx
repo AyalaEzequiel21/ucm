@@ -3,23 +3,24 @@ import { CustomButton } from "./buttons/CustomButton"
 import { useModalAlert } from "@/hooks/useModalAlert"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 
-interface DeleteConfirmComponentProps {
+interface ActionConfirmComponentProps {
     onConfirm: () => void,
     isLoading: boolean,
-    model: string
+    model: string,
+    type?: 'delete' | 'validate' 
 }
 
-const DeleteConfirmComponent: React.FC<DeleteConfirmComponentProps> = ({ onConfirm, isLoading, model }) => {
+const ActionConfirmComponent: React.FC<ActionConfirmComponentProps> = ({ onConfirm, isLoading, model, type }) => {
     const {palette} = useTheme()
     const { toggleModal, toggleSuccessAlert, toggleErrorAlert } = useModalAlert()
 
     const handleClick = async () => {
         try{
             onConfirm()
-            toggleSuccessAlert(`${getCapitalizeString(model)} eliminado exitosamente`)
+            toggleSuccessAlert(`${getCapitalizeString(model)} ${type === 'delete' ? 'eliminado' : 'validado'} exitosamente`)
             toggleModal()
         } catch (error) {
-            toggleErrorAlert(`Error al eliminar el/la ${model}`)
+            toggleErrorAlert(`Error al ${type === 'delete' ? 'eliminar' : 'validar'} el/la ${model}`)
         }
     }
 
@@ -34,12 +35,12 @@ const DeleteConfirmComponent: React.FC<DeleteConfirmComponentProps> = ({ onConfi
                     p: '4rem 2rem',
                 }}
             >
-                <Typography variant="h4" sx={{mb: '1rem'}}>Estas seguro de eliminar el/la {model}?</Typography>
-                <CustomButton label="Eliminar" onClick={handleClick} disabled={isLoading} mode='dark'/>
+                <Typography variant="h4" sx={{mb: '1rem'}}>Estas seguro de {type === 'delete' ? 'eliminar' : 'validar'} el/la {model}?</Typography>
+                <CustomButton label={type === 'delete' ? 'Eliminar' : 'Validar'} onClick={handleClick} disabled={isLoading} mode='dark'/>
         </Box>
     )
 }
 
-export { DeleteConfirmComponent }
+export { ActionConfirmComponent }
 
 

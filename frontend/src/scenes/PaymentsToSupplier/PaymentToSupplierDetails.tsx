@@ -17,9 +17,9 @@ import { ToolbarButton } from "@/components/ToolbarButton"
 import { SceneContainer } from "@/components/SceneContainer"
 import { Header } from "@/components/Header"
 import { useEffect, useState } from "react"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { useModalAlert } from "@/hooks/useModalAlert"
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type PaymentToSupplierDetailsProps = object
 
@@ -64,7 +64,7 @@ const PaymentToSupplierDetails: React.FC<PaymentToSupplierDetailsProps> = () => 
         <SceneContainer>
             <Header title="Pago a proveedor" subtitle="Detalles">
                 <HeaderButton
-                    form={<DeleteConfirmComponent model="Pago a proveedor" onConfirm={handleDelete} isLoading={isDeleting}/>}
+                    form={<ActionConfirmComponent model="Pago a proveedor" onConfirm={handleDelete} isLoading={isDeleting} type="delete"/>}
                     type="delete"
                 />
             </Header>

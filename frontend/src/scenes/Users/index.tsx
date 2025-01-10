@@ -12,10 +12,10 @@ import { DropDownMenu } from "@/components/ui-components/DropdownMenu"
 import { UserAddForm } from "@/components/forms/add/UserAddForm"
 import { UserModifyForm } from "@/components/forms/modify/UserModifyForm"
 import { IUser } from "@/utils/interfaces/IUser"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useDeleteUserMutation } from "@/redux/api/userApi"
 import { getCapitalizeString } from "@/utils/functionsHelper/getCapitalizeString"
 import { useModalAlert } from "@/hooks/useModalAlert"
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type UsersProps = object
 
@@ -47,7 +47,7 @@ const Users: React.FC<UsersProps> = () => {
         { field: 'username', headerName: 'Usuario', flex: 1.1, renderCell(value){ return getCapitalizeString(value.row.username)}},
         { field: 'role', headerName: 'Role', flex: 0.7},
         { field: '', headerName: '...', flex: 0.3, renderCell(value){ return (
-            <DropDownMenu formDelete={<DeleteConfirmComponent model="Usuario" onConfirm={() => handleDelete(value.row._id)} isLoading={isLoading}/>} formEdit={<UserModifyForm user={value.row}/>} model="Usuario" mode="dark"/>
+            <DropDownMenu formDelete={<ActionConfirmComponent model="Usuario" onConfirm={() => handleDelete(value.row._id)} isLoading={isLoading} type="delete"/>} formEdit={<UserModifyForm user={value.row}/>} model="Usuario" mode="dark"/>
             )
         }},
     ]

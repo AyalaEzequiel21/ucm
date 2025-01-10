@@ -22,8 +22,7 @@ import { RootState } from "@/redux/store"
 import { PaymentsReportModifyForm } from "@/components/forms/modify/PaymentsReportModifyForm"
 import { useEffect, useState } from "react"
 import { useModalAlert } from "@/hooks/useModalAlert"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
-
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type PaymentsReportDetailsProps = object
 
@@ -35,7 +34,7 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
     const [isDeleteTriggered, setDeleteTriggered] = useState(false)
     const { isLoading, data } = useGetPaymentsReportByIdQuery(parsedId, {skip: isDeleteTriggered})
     const report = data?.data as IPaymentsReport
-    const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
+    const { toggleModal, toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const userLogin = useSelector((state: RootState) => state.user.userLogin)
     const [deletePaymentsReport, {isLoading: isDeleting}] = useDeletePaymentsReportMutation()
     const [validatePaymentsReport, {isLoading: isValidating}] = useValidatePaymentsReportMutation()
@@ -43,6 +42,23 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
     const navigate = useNavigate()
 
     const handleDelete = () => setDeleteTriggered(true)
+
+    const handleValidate = async () => {
+        try{ 
+            if(parsedId) {
+                await validatePaymentsReport(parsedId).unwrap()
+                toggleSuccessAlert('Reporte de pagos validado exitosamente')
+            }
+            navigate('/paymentsReport', { replace: true })
+        } catch (error) {
+            toggleErrorAlert('Error al validar el reporte de pagos')
+            console.error('Error al validar el reporte de pagos:', error)
+        }
+    }
+
+    const handleClickButton = () => {
+        toggleModal(<ActionConfirmComponent model="Reporte de pago" onConfirm={handleValidate} isLoading={isValidating} type="validate"/>)
+    }
 
     useEffect(() => {
         if(isDeleteTriggered) {
@@ -86,7 +102,7 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
                     disabled={isDelivery || report?.report_status !== 'pendiente'}
                 />
                 <HeaderButton
-                    form={<DeleteConfirmComponent model="Reporte de pago" onConfirm={handleDelete} isLoading={isDeleting}/>}
+                    form={<ActionConfirmComponent model="Reporte de pago" onConfirm={handleDelete} isLoading={isDeleting} type="delete"/>}
                     type="delete"
                     disabled={isDelivery || report?.report_status !== 'pendiente'}
                 />
@@ -107,7 +123,7 @@ const PaymentsReportDetails: React.FC<PaymentsReportDetailsProps> = () => {
 
                     </DetailsCard>
                     <DetailsCard size={isMobile ? "XXL" : "M"} flexGrow={1} isMobile={isMobile} centerContent>
-                            <Button disabled={report?.report_status !=='pendiente'} variant="contained">Validar reporte</Button>                    
+                            <Button disabled={report?.report_status !=='pendiente'} variant="contained" onClick={handleClickButton}>Validar reporte</Button>                    
                     </DetailsCard>
                 </FlexBetween>
                 <FlexBetween>

@@ -6,7 +6,7 @@ import { DropDownMenu } from "./DropdownMenu";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { ProductModifyForm } from "../forms/modify/ProductModifyForm";
-import { DeleteConfirmComponent } from "./DeleteConfirmComponent";
+import { ActionConfirmComponent } from "./ActionConfirmComponent";
 import { useDeleteProductMutation } from "@/redux/api/productApi";
 import { useModalAlert } from "@/hooks/useModalAlert";
 
@@ -26,7 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
     const {palette} = useTheme()
     const { toggleErrorAlert, toggleSuccessAlert } = useModalAlert()
     const [deleteProduct, {isLoading}] = useDeleteProductMutation()
-    
+
     const handleDelete = async (id: string) => {
         try{
             await deleteProduct(id).unwrap()
@@ -67,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isMobile}) => {
                     {!isDelivery && <DropDownMenu
                         model="Producto"
                         formEdit={<ProductModifyForm productData={product} />}
-                        formDelete={<DeleteConfirmComponent model="Producto" onConfirm={()=> handleDelete(product._id)} isLoading={isLoading}/>}
+                        formDelete={<ActionConfirmComponent model="Producto" onConfirm={()=> handleDelete(product._id)} isLoading={isLoading} type="delete"/>}
                         mode='light'
                     />}
                 </FlexBetween>

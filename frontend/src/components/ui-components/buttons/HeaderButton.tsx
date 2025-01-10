@@ -50,18 +50,6 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({form, disabled, type}) => {
                 disabled={disabled}
                 mode='light'
             />
-            {/* <CustomAlert
-                open={successAlertOpen}
-                label={`${getCapitalizeString(model)} agregado correctamente`}
-                onCLose={toggleSuccessAlert}
-                type="success"
-            />
-            <CustomAlert
-                open={errorAlertOpen}
-                label="Error al agregar elemento"
-                onCLose={toggleErrorAlert}
-                type="error"
-            /> */}
         </>
     )
 }

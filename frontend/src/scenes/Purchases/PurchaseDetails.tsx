@@ -21,9 +21,8 @@ import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { PurchaseModifyForm } from "@/components/forms/modify/PurchaseModifyForm"
 import { CustomButton } from "@/components/ui-components/buttons/CustomButton"
 import { useEffect, useState } from "react"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useModalAlert } from "@/hooks/useModalAlert"
-
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type PurchaseDetailsProps = object
 
@@ -83,7 +82,7 @@ const PurchaseDetails: React.FC<PurchaseDetailsProps> = () => {
                     type="edit"
                 />
                 <HeaderButton
-                    form={<DeleteConfirmComponent model="Compra" onConfirm={()=> handleDelete()} isLoading={isDeleting} />}
+                    form={<ActionConfirmComponent model="Compra" onConfirm={()=> handleDelete()} isLoading={isDeleting} type="delete"/>}
                     type="delete"
                 />
             </Header>

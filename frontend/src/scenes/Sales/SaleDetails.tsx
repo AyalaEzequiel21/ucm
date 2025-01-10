@@ -20,9 +20,9 @@ import { Header } from "@/components/Header"
 import { HeaderButton } from "@/components/ui-components/buttons/HeaderButton"
 import { SaleModifyForm } from "@/components/forms/modify/SaleModifyForm"
 import { Box } from "@mui/material"
-import { DeleteConfirmComponent } from "@/components/ui-components/DeleteConfirmComponent"
 import { useEffect, useState } from "react"
 import { useModalAlert } from "@/hooks/useModalAlert"
+import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
 
 type SaleDetailsProps = object
 
@@ -81,7 +81,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
                     type="edit"
                 />
                 <HeaderButton
-                    form={<DeleteConfirmComponent model="Venta" onConfirm={()=> handleDelete()} isLoading={isDeleting} />}
+                    form={<ActionConfirmComponent model="Venta" onConfirm={()=> handleDelete()} isLoading={isDeleting} type="delete"/>}
                     type="delete"
                 />
             </Header>
