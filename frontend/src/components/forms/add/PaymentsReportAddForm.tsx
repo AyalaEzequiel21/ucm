@@ -24,8 +24,14 @@ const PaymentsReportAddFotm: React.FC<object> = () => {
         }
     })
     const { handleSubmit } = methods
+
     const onAddDetail = (detail: Partial<IClientPayment>) => {
-        setDetailsReport(prev => [...prev, detail])
+        const exists = detailsReport.find(d => d.client_name === detail.client_name && d.payment_method === detail.payment_method)
+        if(!exists){
+            setDetailsReport(prev => [...prev, detail])
+        } else {
+            setErrorMessage('Ya se agrego un pago con el mismo cliente y metodo de pago.')
+        }
     }
 
     const onRemoveDetail = (index: number) => {

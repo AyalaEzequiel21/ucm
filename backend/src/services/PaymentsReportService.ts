@@ -121,7 +121,6 @@ import { IdType } from "../utilities/types/IdType";
             throw new InternalServerError("No se procesaron los datos")
         }
         reportSaved.payments = paymentsProcessed //  SET THE PROCESS PAYMENTS 
-        reportSaved.payments_dto = [] //  SET THE PAYMENTS DTO AS EMPTY LIST
         reportSaved.report_status = "aprobado" //  SET THE NEW REPORT STATUS
         const reportValidated = await reportSaved.save({session}) // SAVE THE CHANGES
         await session.commitTransaction() //  CONFIRM TRANSACTION

@@ -23,6 +23,8 @@ import { Box } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useModalAlert } from "@/hooks/useModalAlert"
 import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import SaleDetailsPDF from "@/components/pdf/SaleDetailsPDF"
 
 type SaleDetailsProps = object
 
@@ -84,6 +86,12 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
                     form={<ActionConfirmComponent model="Venta" onConfirm={()=> handleDelete()} isLoading={isDeleting} type="delete"/>}
                     type="delete"
                 />
+                {sale && (
+                <PDFDownloadLink document={<SaleDetailsPDF sale={sale} />} fileName="detalle_de_venta.pdf">
+                    {/* {({loading }) => (loading ? 'Generando PDF...' : 'Descargar PDF')} */}
+                    descargar
+                </PDFDownloadLink>
+            )}
             </Header>
             <Box marginTop={'1rem'} width={'100%'}>
                 <FlexBetween gap={1} flexDirection={isMobile ? 'column': 'row'} width={'100%'} alignItems={isMobile ? 'stretch' : 'flex-start'} mb={'1rem'}>
