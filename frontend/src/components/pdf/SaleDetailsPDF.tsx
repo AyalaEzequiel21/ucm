@@ -1,20 +1,25 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import { IDetailsSale } from '@/utils/interfaces/ISale';
+import logo from "@/assets/logo.jpeg"
+
 
 const styles = StyleSheet.create({
     page: {
+        border: '1px solid #ccc',
         padding: 30,
         fontSize: 12,
     },
     header: {
-        marginBottom: 20,
-        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
     },
     logo: {
-        width: 100,
+        width: 150,
         height: 100,
-        marginBottom: 10,
     },
     section: {
         marginBottom: 10,
@@ -50,12 +55,11 @@ const SaleDetailsPDF: React.FC<{ sale: IDetailsSale }> = ({ sale }) => {
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.header}>
-                    <Image style={styles.logo} src="/path/to/logo.png" />
-                    <Text>Nombre de la Empresa</Text>
-                </View>
-                <View style={styles.section}>
-                    <Text>Fecha: {new Date(sale.createdAt).toLocaleDateString()}</Text>
-                    <Text>Cliente: {sale.client_name}</Text>
+                    <Image style={styles.logo} src={logo} />
+                    <View style={styles.section}>
+                        <Text>Fecha: {new Date(sale.createdAt).toLocaleDateString()}</Text>
+                        <Text>Cliente: {sale.client_name}</Text>
+                    </View>
                 </View>
                 {sale.payment && (
                     <View style={styles.section}>

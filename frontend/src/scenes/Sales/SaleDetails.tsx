@@ -23,7 +23,7 @@ import { Box } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useModalAlert } from "@/hooks/useModalAlert"
 import { ActionConfirmComponent } from "@/components/ui-components/ActionConfirmComponent"
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import SaleDetailsPDF from "@/components/pdf/SaleDetailsPDF"
 
 type SaleDetailsProps = object
@@ -131,7 +131,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
                         }
                     </DetailsCard>
                 </FlexBetween>
-                <FlexBetween>
+                {/* <FlexBetween>
                     <DetailsCard size="XXL" flexGrow={1} isMobile={isMobile}>
                         <CustomDatGrid
                             rows={sale?.details || []}
@@ -142,7 +142,10 @@ const SaleDetails: React.FC<SaleDetailsProps> = () => {
 
                         />
                     </DetailsCard>
-                </FlexBetween>
+                </FlexBetween> */}
+                <PDFViewer height={600} width="100%">
+                    <SaleDetailsPDF sale={sale} />
+                </PDFViewer>
             </Box>
         </SceneContainer>
     )
