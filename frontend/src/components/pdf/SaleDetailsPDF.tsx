@@ -1,96 +1,37 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
-import { IDetailsSale } from '@/utils/interfaces/ISale';
-import logo from "@/assets/logo.jpeg"
+import { IDetailsSale, ISaleDetails } from '@/utils/interfaces/ISale';
+import { TablePdf } from './components/TablePdf';
+import { getFormatedValue } from '@/utils/functionsHelper/getFormatedValue';
+import { PdfDocument } from './components/PdfDocument';
+import { DataSectionPdf } from './components/DataSectionPdf';
 
-
-const styles = StyleSheet.create({
-    page: {
-        border: '1px solid #ccc',
-        padding: 30,
-        fontSize: 12,
-    },
-    header: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    logo: {
-        width: 150,
-        height: 100,
-    },
-    section: {
-        marginBottom: 10,
-    },
-    table: {
-        // display: 'table',
-        width: 'auto',
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderRightWidth: 0,
-        borderBottomWidth: 0,
-    },
-    tableRow: {
-        flexDirection: 'row',
-    },
-    tableCol: {
-        width: '25%',
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderLeftWidth: 0,
-        borderTopWidth: 0,
-        padding: 5,
-    },
-    tableCell: {
-        margin: 'auto',
-        marginTop: 5,
-        fontSize: 10,
-    },
-});
+const columns = [
+    { header: 'Producto', accessor: (item: ISaleDetails) => item.product_name },
+    { header: 'Precio', accessor: (item: ISaleDetails) => getFormatedValue(item.price)},
+    { header: 'Cantidad', accessor: (item: ISaleDetails) => item.quantity },
+    { header: 'Total', accessor: (item: ISaleDetails) => getFormatedValue(item.price * item.quantity)}
+]
 
 const SaleDetailsPDF: React.FC<{ sale: IDetailsSale }> = ({ sale }) => {
     return (
-        <Document>
-            <Page size="A4" style={styles.page}>
-                <View style={styles.header}>
-                    <Image style={styles.logo} src={logo} />
-                    <View style={styles.section}>
-                        <Text>Fecha: {new Date(sale.createdAt).toLocaleDateString()}</Text>
-                        <Text>Cliente: {sale.client_name}</Text>
-                    </View>
-                </View>
-                {sale.payment && (
-                    <View style={styles.section}>
-                        <Text>Detalles del Pago:</Text>
-                        {sale.payment && (
-                            <Text key={sale._id}>Método de Pago: {sale.payment.payment_method}, Monto: {sale.payment.amount}</Text>
-                        )}
-                    </View>
-                )}
-                <View style={styles.section}>
-                    <Text>Detalles de la Venta:</Text>
-                    <View style={styles.table}>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}><Text style={styles.tableCell}>Producto</Text></View>
-                            <View style={styles.tableCol}><Text style={styles.tableCell}>Precio</Text></View>
-                            <View style={styles.tableCol}><Text style={styles.tableCell}>Cantidad</Text></View>
-                            <View style={styles.tableCol}><Text style={styles.tableCell}>Total</Text></View>
-                        </View>
-                        {sale.details.map((detail, index) => (
-                            <View style={styles.tableRow} key={index}>
-                                <View style={styles.tableCol}><Text style={styles.tableCell}>{detail.product_name}</Text></View>
-                                <View style={styles.tableCol}><Text style={styles.tableCell}>{detail.price}</Text></View>
-                                <View style={styles.tableCol}><Text style={styles.tableCell}>{detail.quantity}</Text></View>
-                                <View style={styles.tableCol}><Text style={styles.tableCell}>{detail.quantity * detail.price}</Text></View>
-                            </View>
-                        ))}
-                    </View>
-                </View>
-            </Page>
-        </Document>
+        <PdfDocument
+            isClient={true}
+            name={sale.client_name}
+            date={sale.createdAt}
+        >
+            <TablePdf
+                title='Detalles de la Venta'
+                data={sale.details}
+                columns={columns}
+            />
+            <DataSectionPdf
+                totalKg={sale.totalQuantity}
+                totalAmount={sale.total_sale}
+                total_payment={sale.payment?.amount}
+                payment_method={sale.payment?.payment_method}
+            />
+        </PdfDocument>
     );
 };
 
-export default SaleDetailsPDF;
+export default SaleDetailsPDF

@@ -1,21 +1,31 @@
 import { Text, View, StyleSheet } from "@react-pdf/renderer"
-import { table } from "console"
-
-interface TablePdfProps {
-    title: string
-    columns: string[]
-    rows: string[]
-}
 
 const styles = StyleSheet.create({
+    section: {
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    title: {
+        fontSize: 14,
+        marginTop: 10,
+        marginBottom: 10,
+        fontWeight: 'bold',
+    },
     table: {
-        width: '100%',
+        width: 'auto',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderRadius: 8, 
+        overflow: 'hidden', 
+        backgroundColor: '#f2f2f2', 
     },
     tableRow: {
         flexDirection: 'row',
     },
     tableCol: {
-        width: '25%',
+        backgroundColor: '#f2f2f2',
+        flex: 1,
+        fontSize: 13,
         borderStyle: 'solid',
         borderWidth: 1,
         borderLeftWidth: 0,
@@ -25,24 +35,49 @@ const styles = StyleSheet.create({
     tableCell: {
         margin: 'auto',
         marginTop: 5,
+        borderRadius: 4,
         fontSize: 10,
     },
-})
+});
 
-const TablePdf: React.FC<TablePdfProps> = ({columns, rows, title}) => {
-    return (
-        <View>
-            <Text>{title}</Text>
-            <View style={styles.table}>
-                <View style={styles.tableRow}>
-                    {columns.map((column, index) => (
-                        <View key={index} style={styles.tableCol}>
-                            <Text style={styles.tableCell}>{column}</Text>
+// Interfaz genérica para las columnas y datos
+interface ColumnConfig<T> {
+    header: string;
+    accessor: (item: T) => React.ReactNode;
+}
+
+interface TableSectionProps<T> {
+    data: T[];
+    columns: ColumnConfig<T>[];
+    title: string;
+}
+
+// Componente genérico de tabla
+const TablePdf = <T extends object>({ data, columns, title }: TableSectionProps<T>) => (
+    <View style={styles.section}>
+        {/* Título de la tabla */}
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.table}>
+            {/* Encabezados */}
+            <View style={styles.tableRow}>
+                {columns.map((col, index) => (
+                    <View key={index} style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{col.header}</Text>
+                    </View>
+                ))}
+            </View>
+            {/* Filas */}
+            {data.map((item, rowIndex) => (
+                <View style={styles.tableRow} key={rowIndex}>
+                    {columns.map((col, colIndex) => (
+                        <View key={colIndex} style={styles.tableCol}>
+                            <Text style={styles.tableCell}>{col.accessor(item)}</Text>
                         </View>
                     ))}
                 </View>
-            </View>
+            ))}
         </View>
-    )
-}
-export { TablePdf }
+    </View>
+);
+
+export {TablePdf}
